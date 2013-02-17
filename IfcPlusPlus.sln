@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Carve", "Carve\Carve.vcxproj", "{851FC60F-62E3-452E-8036-A4E13D551169}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IfcPlusPlus", "IfcPlusPlus\IfcPlusPlus.vcxproj", "{00E10998-A4D8-44CA-AACF-2A25CF041844}"
+	ProjectSection(ProjectDependencies) = postProject
+		{851FC60F-62E3-452E-8036-A4E13D551169} = {851FC60F-62E3-452E-8036-A4E13D551169}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IfcPlusPlusGeometry", "IfcPlusPlusGeometry\IfcPlusPlusGeometry.vcxproj", "{1C4F2CC8-D442-4081-B3B2-2F57D7C3F09E}"
 	ProjectSection(ProjectDependencies) = postProject

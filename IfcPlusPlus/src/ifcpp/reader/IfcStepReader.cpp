@@ -845,6 +845,11 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			args.push_back( "$" );
 			args.push_back( "$" );
 			break;
+		//IfcDocumentReference
+		case IFCDOCUMENTREFERENCE:
+			args.push_back( "$" );
+			args.push_back( "$" );
+			break;
 		case IFCDOOR:
 			args.push_back( "$" );
 			args.push_back( "$" );
@@ -897,10 +902,20 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 		case IFCMATERIALLAYERSETUSAGE:
 			args.push_back( "$" );
 			break;
+		case IFCMECHANICALFASTENER:
+			args.push_back( "$" );
+			break;
+		case IFCMECHANICALFASTENERTYPE:
+			args.push_back( "$" );
+			args.push_back( "$" );
+			args.push_back( "$" );
+			break;
+
 		case IFCMEMBER:
 			args.push_back( "$" );
 			break;
 
+		
 			// O
 		case IFCOPENINGELEMENT:
 			args.push_back( "$" );
