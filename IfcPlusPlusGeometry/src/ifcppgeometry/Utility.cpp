@@ -43,7 +43,7 @@
 
 #include "ifcpp/model/shared_ptr.h"
 #include "ifcpp/model/IfcPPException.h"
-#include "ifcpp/IFC2X4/include/IfcFace.h"
+#include "ifcpp/IFC4/include/IfcFace.h"
 #include "Utility.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

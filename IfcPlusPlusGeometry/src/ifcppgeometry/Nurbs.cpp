@@ -19,10 +19,10 @@
 #include <osg/Geometry>
 #include <osg/Point>
 
-#include <ifcpp/IFC2X4/include/IfcRationalBSplineSurfaceWithKnots.h>
-#include <ifcpp/IFC2X4/include/IfcParameterValue.h>
-#include <ifcpp/IFC2X4/include/IfcLengthMeasure.h>
-#include <ifcpp/IFC2X4/include/IfcCartesianPoint.h>
+#include <ifcpp/IFC4/include/IfcRationalBSplineSurfaceWithKnots.h>
+#include <ifcpp/IFC4/include/IfcParameterValue.h>
+#include <ifcpp/IFC4/include/IfcLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcCartesianPoint.h>
 #include <ifcpp/model/shared_ptr.h>
 #include <ifcpp/model/UnitConverter.h>
 

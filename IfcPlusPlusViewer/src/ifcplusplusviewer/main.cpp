@@ -12,8 +12,16 @@
 */
 
 #include <iostream>
-#include <QtGui/QApplication>
-#include <QSplashScreen>
+
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	#include <QtGui/qapplication.h>
+	#include <QtGui/QSplashScreen>
+#else
+	#include <QtWidgets/qapplication.h>
+	#include <QtWidgets/QSplashScreen>
+#endif
+
 #include "gui/TabReadWrite.h"
 #include "gui/MainWindow.h"
 #include "ifcpp/model/IfcPPException.h"

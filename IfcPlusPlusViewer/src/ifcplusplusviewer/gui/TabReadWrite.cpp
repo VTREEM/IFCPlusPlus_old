@@ -11,7 +11,37 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include <QtGui>
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	#include <QtGui/qboxlayout.h>
+	#include <QtGui/qtreewidget.h>
+	#include <QtGui/qfiledialog.h>
+	#include <QtGui/qlabel.h>
+	#include <QtGui/qcombobox.h>
+	#include <QtGui/qpushbutton.h>
+	#include <QtGui/qprogressbar.h>
+	#include <QtGui/qlineedit.h>
+	#include <QtGui/qsplitter.h>
+	#include <QtGui/qapplication.h>
+	#include <QtGui/qtextedit.h>
+	#include <QtGui/qevent.h>
+	#include <QtCore/qsettings.h>
+#else
+	#include <QtWidgets/qboxlayout.h>
+	#include <QtWidgets/qtreewidget.h>
+	#include <QtWidgets/qfiledialog.h>
+	#include <QtWidgets/qlabel.h>
+	#include <QtWidgets/qcombobox.h>
+	#include <QtWidgets/qpushbutton.h>
+	#include <QtWidgets/qprogressbar.h>
+	#include <QtWidgets/qlineedit.h>
+	#include <QtWidgets/qsplitter.h>
+	#include <QtWidgets/qapplication.h>
+	#include <QtWidgets/qtextedit.h>
+	#include <QtGui/qevent.h>
+	#include <QtCore/qsettings.h>
+#endif
+
 #include <osgGA/OrbitManipulator>
 #include <osg/Quat>
 
@@ -21,18 +51,18 @@
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcpp/guid/CreateGuid_64.h"
-#include "ifcpp/IFC2X4/include/IfcLabel.h"
-#include "ifcpp/IFC2X4/include/IfcObjectDefinition.h"
-#include "ifcpp/IFC2X4/include/IfcSpatialStructureElement.h"
-#include "ifcpp/IFC2X4/include/IfcRelContainedInSpatialStructure.h"
-#include "ifcpp/IFC2X4/include/IfcRelAggregates.h"
-#include "ifcpp/IFC2X4/include/IfcAxis2Placement3D.h"
-#include "ifcpp/IFC2X4/include/IfcGeometricRepresentationContext.h"
-#include "ifcpp/IFC2X4/include/IfcDirection.h"
-#include "ifcpp/IFC2X4/include/IfcProject.h"
-#include "ifcpp/IFC2X4/include/IfcAxis2Placement.h"
-#include "ifcpp/IFC2X4/include/IfcAxis2Placement.h"
-#include "ifcpp/IFC2X4/include/IfcLabel.h"
+#include "ifcpp/IFC4/include/IfcLabel.h"
+#include "ifcpp/IFC4/include/IfcObjectDefinition.h"
+#include "ifcpp/IFC4/include/IfcSpatialStructureElement.h"
+#include "ifcpp/IFC4/include/IfcRelContainedInSpatialStructure.h"
+#include "ifcpp/IFC4/include/IfcRelAggregates.h"
+#include "ifcpp/IFC4/include/IfcAxis2Placement3D.h"
+#include "ifcpp/IFC4/include/IfcGeometricRepresentationContext.h"
+#include "ifcpp/IFC4/include/IfcDirection.h"
+#include "ifcpp/IFC4/include/IfcProject.h"
+#include "ifcpp/IFC4/include/IfcAxis2Placement.h"
+#include "ifcpp/IFC4/include/IfcAxis2Placement.h"
+#include "ifcpp/IFC4/include/IfcLabel.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
 #include "ifcppgeometry/Utility.h"
 
@@ -277,7 +307,6 @@ QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::map<int,sha
 {
 	QTreeWidgetItem* item = NULL;
 
-	shared_ptr<IfcSpatialStructureElement> spatial_ele;
 	std::vector<shared_ptr<IfcObjectDefinition> >::iterator it_object_def;
 	std::vector<shared_ptr<IfcProduct> >::iterator it_product;
 
@@ -324,25 +353,30 @@ QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::map<int,sha
 			}
 		}
 
-		if( spatial_ele=dynamic_pointer_cast<IfcSpatialStructureElement>(obj_def) )
+		shared_ptr<IfcSpatialStructureElement> spatial_ele = dynamic_pointer_cast<IfcSpatialStructureElement>(obj_def);
+		if( spatial_ele )
 		{
 			std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >& vec_contained = spatial_ele->m_ContainsElements_inverse;
-			std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >::iterator it_rel_contained;
-			for( it_rel_contained=vec_contained.begin(); it_rel_contained!=vec_contained.end(); ++it_rel_contained )
+			if( vec_contained.size() > 0 )
 			{
-				shared_ptr<IfcRelContainedInSpatialStructure> rel_contained( *it_rel_contained );
-						
-				std::vector<shared_ptr<IfcProduct> >& vec_related_elements = rel_contained->m_RelatedElements;
-				std::vector<shared_ptr<IfcProduct> >::iterator it;
-			
-				for( it=vec_related_elements.begin(); it!=vec_related_elements.end(); ++it )
+				std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >::iterator it_rel_contained;
+				for( it_rel_contained=vec_contained.begin(); it_rel_contained!=vec_contained.end(); ++it_rel_contained )
 				{
-					shared_ptr<IfcProduct> related_product = (*it);
-				
-					QTreeWidgetItem* child_tree_item = resolveTreeItems( related_product, map_visited );
-					if( child_tree_item != NULL )
+
+					shared_ptr<IfcRelContainedInSpatialStructure> rel_contained( *it_rel_contained );
+						
+					std::vector<shared_ptr<IfcProduct> >& vec_related_elements = rel_contained->m_RelatedElements;
+					std::vector<shared_ptr<IfcProduct> >::iterator it;
+			
+					for( it=vec_related_elements.begin(); it!=vec_related_elements.end(); ++it )
 					{
-						item->addChild( child_tree_item );
+						shared_ptr<IfcProduct> related_product = (*it);
+				
+						QTreeWidgetItem* child_tree_item = resolveTreeItems( related_product, map_visited );
+						if( child_tree_item != NULL )
+						{
+							item->addChild( child_tree_item );
+						}
 					}
 				}
 			}

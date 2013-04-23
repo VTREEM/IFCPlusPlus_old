@@ -39,7 +39,6 @@ IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum )
 		case IFCAIRTOAIRHEATRECOVERYTYPE:return new IfcAirToAirHeatRecoveryType();
 		case IFCALARM:return new IfcAlarm();
 		case IFCALARMTYPE:return new IfcAlarmType();
-		case IFCALIGNMENTELEMENT:return new IfcAlignmentElement();
 		case IFCANNOTATION:return new IfcAnnotation();
 		case IFCANNOTATIONFILLAREA:return new IfcAnnotationFillArea();
 		case IFCAPPLICATION:return new IfcApplication();
@@ -79,14 +78,6 @@ IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum )
 		case IFCBOUNDEDSURFACE:return new IfcBoundedSurface();
 		case IFCBOUNDINGBOX:return new IfcBoundingBox();
 		case IFCBOXEDHALFSPACE:return new IfcBoxedHalfSpace();
-		case IFCBRIDGE:return new IfcBridge();
-		case IFCBRIDGECONTACTELEMENT:return new IfcBridgeContactElement();
-		case IFCBRIDGEELEMENT:return new IfcBridgeElement();
-		case IFCBRIDGEPART:return new IfcBridgePart();
-		case IFCBRIDGEPRISMATICELEMENT:return new IfcBridgePrismaticElement();
-		case IFCBRIDGESEGMENT:return new IfcBridgeSegment();
-		case IFCBRIDGESEGMENTPART:return new IfcBridgeSegmentPart();
-		case IFCBRIDGESTRUCTUREELEMENT:return new IfcBridgeStructureElement();
 		case IFCBUILDING:return new IfcBuilding();
 		case IFCBUILDINGELEMENT:return new IfcBuildingElement();
 		case IFCBUILDINGELEMENTPART:return new IfcBuildingElementPart();
@@ -109,6 +100,7 @@ IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum )
 		case IFCCABLESEGMENTTYPE:return new IfcCableSegmentType();
 		case IFCCARTESIANPOINT:return new IfcCartesianPoint();
 		case IFCCARTESIANPOINTLIST:return new IfcCartesianPointList();
+		case IFCCARTESIANPOINTLIST3D:return new IfcCartesianPointList3D();
 		case IFCCARTESIANTRANSFORMATIONOPERATOR:return new IfcCartesianTransformationOperator();
 		case IFCCARTESIANTRANSFORMATIONOPERATOR2D:return new IfcCartesianTransformationOperator2D();
 		case IFCCARTESIANTRANSFORMATIONOPERATOR2DNONUNIFORM:return new IfcCartesianTransformationOperator2DnonUniform();
@@ -123,14 +115,10 @@ IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum )
 		case IFCCIRCLEHOLLOWPROFILEDEF:return new IfcCircleHollowProfileDef();
 		case IFCCIRCLEPROFILEDEF:return new IfcCircleProfileDef();
 		case IFCCIVILELEMENT:return new IfcCivilElement();
-		case IFCCIVILELEMENTPART:return new IfcCivilElementPart();
-		case IFCCIVILSHEATH:return new IfcCivilSheath();
-		case IFCCIVILSTRUCTUREELEMENT:return new IfcCivilStructureElement();
-		case IFCCIVILVOID:return new IfcCivilVoid();
+		case IFCCIVILELEMENTTYPE:return new IfcCivilElementType();
 		case IFCCLASSIFICATION:return new IfcClassification();
 		case IFCCLASSIFICATIONREFERENCE:return new IfcClassificationReference();
 		case IFCCLOSEDSHELL:return new IfcClosedShell();
-		case IFCCLOTHOID:return new IfcClothoid();
 		case IFCCOIL:return new IfcCoil();
 		case IFCCOILTYPE:return new IfcCoilType();
 		case IFCCOLOURRGB:return new IfcColourRgb();
@@ -208,7 +196,6 @@ IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum )
 		case IFCDERIVEDUNITELEMENT:return new IfcDerivedUnitElement();
 		case IFCDIMENSIONALEXPONENTS:return new IfcDimensionalExponents();
 		case IFCDIRECTION:return new IfcDirection();
-		case IFCDIRECTIONLIST:return new IfcDirectionList();
 		case IFCDISCRETEACCESSORY:return new IfcDiscreteAccessory();
 		case IFCDISCRETEACCESSORYTYPE:return new IfcDiscreteAccessoryType();
 		case IFCDISTRIBUTIONCHAMBERELEMENT:return new IfcDistributionChamberElement();
@@ -259,7 +246,6 @@ IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum )
 		case IFCELEMENTASSEMBLYTYPE:return new IfcElementAssemblyType();
 		case IFCELEMENTCOMPONENT:return new IfcElementComponent();
 		case IFCELEMENTCOMPONENTTYPE:return new IfcElementComponentType();
-		case IFCELEMENTPART:return new IfcElementPart();
 		case IFCELEMENTQUANTITY:return new IfcElementQuantity();
 		case IFCELEMENTTYPE:return new IfcElementType();
 		case IFCELEMENTARYSURFACE:return new IfcElementarySurface();
@@ -537,14 +523,6 @@ IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum )
 		case IFCRECTANGULARTRIMMEDSURFACE:return new IfcRectangularTrimmedSurface();
 		case IFCRECURRENCEPATTERN:return new IfcRecurrencePattern();
 		case IFCREFERENCE:return new IfcReference();
-		case IFCREFERENCECURVE:return new IfcReferenceCurve();
-		case IFCREFERENCECURVE3D:return new IfcReferenceCurve3D();
-		case IFCREFERENCECURVEALIGNMENT2D:return new IfcReferenceCurveAlignment2D();
-		case IFCREFERENCECURVEPLACEMENT:return new IfcReferenceCurvePlacement();
-		case IFCREFERENCECURVEPLACEMENTSYSTEM:return new IfcReferenceCurvePlacementSystem();
-		case IFCREFERENCEELEMENT:return new IfcReferenceElement();
-		case IFCREFERENCEPLACEMENT:return new IfcReferencePlacement();
-		case IFCREFERENCEDSECTIONEDSPINE:return new IfcReferencedSectionedSpine();
 		case IFCREGULARTIMESERIES:return new IfcRegularTimeSeries();
 		case IFCREINFORCEMENTBARPROPERTIES:return new IfcReinforcementBarProperties();
 		case IFCREINFORCEMENTDEFINITIONPROPERTIES:return new IfcReinforcementDefinitionProperties();

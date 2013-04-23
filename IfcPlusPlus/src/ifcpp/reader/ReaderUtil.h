@@ -270,7 +270,7 @@ void readSelectList( std::string& arg_complete, std::vector<shared_ptr<T> >& vec
 			return;
 		}
 		std::stringstream err;
-		err << "readTypeList: num_opening != num_closing : " << arg_complete.c_str() << std::endl;
+		err << "readSelectList: num_opening != num_closing : " << arg_complete.c_str() << std::endl;
 		throw IfcPPException( err.str() );
 	}
 	std::string arg( pos_opening+1, pos_closing-pos_opening-1 );

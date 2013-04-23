@@ -24,7 +24,7 @@
 
 #ifdef __GNUC__
 #include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/IFC2X4/include/AllIfcEntities.h"
+#include "ifcpp/IFC4/include/AllIfcEntities.h"
 #include "RepresentationConverter.h"
 #else
 

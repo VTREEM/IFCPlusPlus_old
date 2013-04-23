@@ -18,14 +18,14 @@
 #include <osgGA/GUIActionAdapter>
 #include <osgDB/Registry>
 
-#include <QFile>
-#include <QTextStream>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcpp/reader/IfcStepReader.h"
 #include "ifcpp/writer/IfcStepWriter.h"
-#include "ifcpp/IFC2X4/include/IfcProduct.h"
+#include "ifcpp/IFC4/include/IfcProduct.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
 
 #include "viewer/CameraMan3D.h"

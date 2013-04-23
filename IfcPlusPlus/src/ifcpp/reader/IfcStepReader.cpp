@@ -34,7 +34,7 @@
 #include "ifcpp/reader/IfcStepReader.h"
 
 //static std::map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPlusPlus_entity, initializers_IfcPlusPlus_entity + sizeof(initializers_IfcPlusPlus_entity)/sizeof(initializers_IfcPlusPlus_entity[0]));
-static std::tr1::unordered_map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPlusPlus_entity, initializers_IfcPlusPlus_entity + sizeof(initializers_IfcPlusPlus_entity)/sizeof(initializers_IfcPlusPlus_entity[0]));
+static std::tr1::unordered_map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
 void applyBackwardCompatibility( IfcPPModel::IfcVersion backward_version, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
@@ -969,7 +969,7 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			args.push_back( "$" );
 			break;
 		case IFCSURFACESTYLE:
-			if( args.size() == 3 )
+			if( args.size() < 3 )
 			{
 				args.insert( args.begin()+1, "$" );
 			}
@@ -1023,6 +1023,12 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 	{
 		switch( type_enum )
 		{
+			// D
+		case IFCDOOR:
+			if( args.size() == 12 )
+				args.push_back( "$" );
+			break;
+
 			// I
 		case IFCISHAPEPROFILEDEF:
 			args.push_back( "$" );
@@ -1032,6 +1038,12 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			// M
 		case IFCMATERIALPROFILESETUSAGE:
 			if( args.size() == 2 )
+				args.push_back( "$" );
+			break;
+
+			// W
+		case IFCWINDOW:
+			if( args.size() == 12 )
 				args.push_back( "$" );
 			break;
 		}

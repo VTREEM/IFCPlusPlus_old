@@ -11,16 +11,33 @@
  * OpenSceneGraph Public License for more details.
 */
 
+
+//#include <QtOpenGL/QGLWidget>
+
+#include <stdlib.h>
 #include <osgGA/GUIEventAdapter>
 #include <osgGA/OrbitManipulator>
-#include <osgQt/GraphicsWindowQt>
+
 #include <osgViewer/ViewerEventHandlers>
 #include <osgViewer/Renderer>
 #include <osg/AnimationPath>
 #include <osg/LightModel>
 
-#include <QtGui>
-#include <QtOpenGL/QGLWidget>
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	#include <QtGui/qboxlayout.h>
+	#include <QtGui/qlabel.h>
+	#include <QtGui/qevent.h>
+#else
+	#include <QtWidgets/qboxlayout.h>
+	#include <QtWidgets/qlabel.h>
+	#include <QtGui/QKeyEvent>
+#endif
+
+
+// D:\lib\Qt\5.0.2\qtbase\src\gui\opengl\qopengl.h(71)://typedef GLfloat GLdouble;
+
+#include <osgQt/GraphicsWindowQt>
 
 #include "ifcppgeometry/Utility.h"
 #include "CameraMan3D.h"
@@ -55,7 +72,11 @@ ViewerWidget::ViewerWidget( QWidget* parent ) : QWidget(parent)
 	traits->sampleBuffers = ds->getMultiSamples();
 	traits->samples = ds->getNumMultiSamples();
 
-	m_gw = new osgQt::GraphicsWindowQt(traits.get());
+	//( osg::GraphicsContext::Traits* traits, QWidget* parent, 
+	// osg::GraphicsContext::Traits* traits, QWidget* parent = NULL, const QGLWidget* shareWidget = NULL, Qt::WindowFlags f = 0 );
+	QGLWidget* shareWidget = NULL;
+	Qt::WindowFlags flags = 0;
+	m_gw = new osgQt::GraphicsWindowQt(traits.get(), parent, shareWidget, flags );
 	m_gw->getGLWidget()->setForwardKeyEvents( true );
 
 	//osg::Light* light = getLight();

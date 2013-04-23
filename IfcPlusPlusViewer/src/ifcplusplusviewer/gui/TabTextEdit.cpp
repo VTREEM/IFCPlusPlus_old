@@ -11,7 +11,18 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include <QtGui>
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	#include <QtGui/QHBoxLayout>
+	#include <QtGui/qmessagebox.h>
+#else
+	#include <QtWidgets/qboxlayout.h>
+	#include <QtWidgets/qmessagebox.h>
+#endif
+
+#include <QtGui/QKeyEvent>
+#include <QtCore/qfile.h>
+#include <QtCore/qtextstream.h>
 #include "StepHighlighter.h"
 #include "TabTextEdit.h"
 

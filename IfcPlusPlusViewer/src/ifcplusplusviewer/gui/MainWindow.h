@@ -13,7 +13,13 @@
 
 #pragma once
 
-#include <QMainWindow>
+#include <QtCore/qglobal.h>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	#include <QtGui/QMainWindow>
+#else
+	#include <QtWidgets/QMainWindow>
+#endif
+
 class QLabel;
 class QSplitter;
 class QToolBar;

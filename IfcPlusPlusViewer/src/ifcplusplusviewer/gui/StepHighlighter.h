@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include <QSyntaxHighlighter>
+#include <QtGui/QSyntaxHighlighter>
 
 class StepHighlighter : public QSyntaxHighlighter
  {

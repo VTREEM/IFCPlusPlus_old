@@ -19,36 +19,36 @@
 #include <osg/LightModel>
 #include <osgFX/SpecularHighlights>
 
-#include "ifcpp/IFC2X4/include/IfcSpecularHighlightSelect.h"
-#include "ifcpp/IFC2X4/include/IfcSpecularExponent.h"
-#include "ifcpp/IFC2X4/include/IfcSpecularRoughness.h"
-#include "ifcpp/IFC2X4/include/IfcColourOrFactor.h"
-#include "ifcpp/IFC2X4/include/IfcColourRgb.h"
-#include "ifcpp/IFC2X4/include/IfcNormalisedRatioMeasure.h"
-#include "ifcpp/IFC2X4/include/IfcDraughtingPreDefinedColour.h"
-#include "ifcpp/IFC2X4/include/IfcLabel.h"
-#include "ifcpp/IFC2X4/include/IfcSurfaceStyleElementSelect.h"
-#include "ifcpp/IFC2X4/include/IfcSurfaceStyle.h"
-#include "ifcpp/IFC2X4/include/IfcSurfaceStyleShading.h"
-#include "ifcpp/IFC2X4/include/IfcSurfaceStyleRendering.h"
-#include "ifcpp/IFC2X4/include/IfcStyledItem.h"
-#include "ifcpp/IFC2X4/include/IfcPresentationStyleAssignment.h"
-#include "ifcpp/IFC2X4/include/IfcPresentationStyleSelect.h"
-#include "ifcpp/IFC2X4/include/IfcPresentationStyle.h"
-#include "ifcpp/IFC2X4/include/IfcCartesianPoint.h"
-#include "ifcpp/IFC2X4/include/IfcProperty.h"
-#include "ifcpp/IFC2X4/include/IfcComplexProperty.h"
-#include "ifcpp/IFC2X4/include/IfcIdentifier.h"
-#include "ifcpp/IFC2X4/include/IfcPropertySingleValue.h"
-#include "ifcpp/IFC2X4/include/IfcInteger.h"
-#include "ifcpp/IFC2X4/include/IfcCurveStyle.h"
-#include "ifcpp/IFC2X4/include/IfcFillAreaStyle.h"
-#include "ifcpp/IFC2X4/include/IfcTextStyle.h"
-#include "ifcpp/IFC2X4/include/IfcNullStyle.h"
-#include "ifcpp/IFC2X4/include/IfcExternallyDefinedSurfaceStyle.h"
-#include "ifcpp/IFC2X4/include/IfcSurfaceStyleLighting.h"
-#include "ifcpp/IFC2X4/include/IfcSurfaceStyleRefraction.h"
-#include "ifcpp/IFC2X4/include/IfcSurfaceStyleWithTextures.h"
+#include "ifcpp/IFC4/include/IfcSpecularHighlightSelect.h"
+#include "ifcpp/IFC4/include/IfcSpecularExponent.h"
+#include "ifcpp/IFC4/include/IfcSpecularRoughness.h"
+#include "ifcpp/IFC4/include/IfcColourOrFactor.h"
+#include "ifcpp/IFC4/include/IfcColourRgb.h"
+#include "ifcpp/IFC4/include/IfcNormalisedRatioMeasure.h"
+#include "ifcpp/IFC4/include/IfcDraughtingPreDefinedColour.h"
+#include "ifcpp/IFC4/include/IfcLabel.h"
+#include "ifcpp/IFC4/include/IfcSurfaceStyleElementSelect.h"
+#include "ifcpp/IFC4/include/IfcSurfaceStyle.h"
+#include "ifcpp/IFC4/include/IfcSurfaceStyleShading.h"
+#include "ifcpp/IFC4/include/IfcSurfaceStyleRendering.h"
+#include "ifcpp/IFC4/include/IfcStyledItem.h"
+#include "ifcpp/IFC4/include/IfcPresentationStyleAssignment.h"
+#include "ifcpp/IFC4/include/IfcPresentationStyleSelect.h"
+#include "ifcpp/IFC4/include/IfcPresentationStyle.h"
+#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
+#include "ifcpp/IFC4/include/IfcProperty.h"
+#include "ifcpp/IFC4/include/IfcComplexProperty.h"
+#include "ifcpp/IFC4/include/IfcIdentifier.h"
+#include "ifcpp/IFC4/include/IfcPropertySingleValue.h"
+#include "ifcpp/IFC4/include/IfcInteger.h"
+#include "ifcpp/IFC4/include/IfcCurveStyle.h"
+#include "ifcpp/IFC4/include/IfcFillAreaStyle.h"
+#include "ifcpp/IFC4/include/IfcTextStyle.h"
+#include "ifcpp/IFC4/include/IfcNullStyle.h"
+#include "ifcpp/IFC4/include/IfcExternallyDefinedSurfaceStyle.h"
+#include "ifcpp/IFC4/include/IfcSurfaceStyleLighting.h"
+#include "ifcpp/IFC4/include/IfcSurfaceStyleRefraction.h"
+#include "ifcpp/IFC4/include/IfcSurfaceStyleWithTextures.h"
 
 #include "StylesConverter.h"
 
@@ -164,10 +164,19 @@ osg::StateSet* StylesConverter::convertIfcSurfaceStyle( shared_ptr<IfcSurfaceSty
 	std::map<int,osg::ref_ptr<osg::StateSet> >::iterator it_styles = m_map_ifc_styles.find(style_id);
 	if( it_styles != m_map_ifc_styles.end() ){	return m_map_ifc_styles[style_id]; }
 
+	if( vec_styles.size() == 0 )
+	{
+		return NULL;
+	}
+
 	osg::StateSet* stateset = NULL;
 	for( it=vec_styles.begin(); it!=vec_styles.end(); ++it )
 	{
 		shared_ptr<IfcSurfaceStyleElementSelect> surf_style_element_select = (*it);
+		if( !surf_style_element_select )
+		{
+			continue;
+		}
 		// TYPE IfcSurfaceStyleElementSelect = SELECT	(IfcExternallyDefinedSurfaceStyle	,IfcSurfaceStyleLighting	,IfcSurfaceStyleRefraction	,IfcSurfaceStyleShading	,IfcSurfaceStyleWithTextures);
 
 		shared_ptr<IfcExternallyDefinedSurfaceStyle> ext_surf_style = dynamic_pointer_cast<IfcExternallyDefinedSurfaceStyle>(surf_style_element_select);

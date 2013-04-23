@@ -11,7 +11,24 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include <QtGui>
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	#include <QtGui/qtoolbutton.h>
+	#include <QtGui/qboxlayout.h>
+	#include <QtGui/qcheckbox.h>
+	#include <QtGui/qradiobutton.h>
+	#include <QtGui/qbuttongroup.h>
+	#include <QtGui/qlabel.h>
+	
+#else
+	#include <QtWidgets/qtoolbutton.h>
+	#include <QtWidgets/qboxlayout.h>
+	#include <QtWidgets/qcheckbox.h>
+	#include <QtWidgets/qradiobutton.h>
+	#include <QtWidgets/qbuttongroup.h>
+	#include <QtWidgets/qlabel.h>
+#endif
+
 #include <osgGA/OrbitManipulator>
 
 #include "ifcpp/reader/IfcPlusPlusReader.h"

@@ -19,8 +19,8 @@
 #include "ifcpp/model/shared_ptr.h"
 #include "ifcpp/model/IfcPPObject.h"
 #include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/IFC2X4/include/IfcProduct.h"
-#include "ifcpp/IFC2X4/include/IfcProject.h"
+#include "ifcpp/IFC4/include/IfcProduct.h"
+#include "ifcpp/IFC4/include/IfcProject.h"
 
 #include "ifcpp/writer/IfcStepWriter.h"
 

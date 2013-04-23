@@ -15,8 +15,16 @@
 
 #include <osgViewer/Viewer>
 namespace osgQt{ class  GraphicsWindowQt; }
-#include <QWidget>
-#include <QtCore/QTimer>
+
+
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	#include <QtGui/qwidget.h>
+	#include <QtCore/QTimer>
+#else
+	#include <QtWidgets/qwidget.h>
+	#include <QtCore/QTimer>
+#endif
 
 class CameraMan3D;
 

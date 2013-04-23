@@ -18,17 +18,17 @@
 #include <math.h>
 
 
-#include "ifcpp/IFC2X4/include/IfcConversionBasedUnit.h"
-#include "ifcpp/IFC2X4/include/IfcLabel.h"
-#include "ifcpp/IFC2X4/include/IfcMeasureWithUnit.h"
-#include "ifcpp/IFC2X4/include/IfcPlaneAngleMeasure.h"
-#include "ifcpp/IFC2X4/include/IfcProject.h"
-#include "ifcpp/IFC2X4/include/IfcRatioMeasure.h"
-#include "ifcpp/IFC2X4/include/IfcSIUnit.h"
-#include "ifcpp/IFC2X4/include/IfcSIUnitName.h"
-#include "ifcpp/IFC2X4/include/IfcSIPrefix.h"
-#include "ifcpp/IFC2X4/include/IfcUnitAssignment.h"
-#include "ifcpp/IFC2X4/include/IfcUnitEnum.h"
+#include "ifcpp/IFC4/include/IfcConversionBasedUnit.h"
+#include "ifcpp/IFC4/include/IfcLabel.h"
+#include "ifcpp/IFC4/include/IfcMeasureWithUnit.h"
+#include "ifcpp/IFC4/include/IfcPlaneAngleMeasure.h"
+#include "ifcpp/IFC4/include/IfcProject.h"
+#include "ifcpp/IFC4/include/IfcRatioMeasure.h"
+#include "ifcpp/IFC4/include/IfcSIUnit.h"
+#include "ifcpp/IFC4/include/IfcSIUnitName.h"
+#include "ifcpp/IFC4/include/IfcSIPrefix.h"
+#include "ifcpp/IFC4/include/IfcUnitAssignment.h"
+#include "ifcpp/IFC4/include/IfcUnitEnum.h"
 
 #include "UnitConverter.h"
 

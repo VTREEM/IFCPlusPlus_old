@@ -11,8 +11,8 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include <QFile>
-#include <QTextStream>
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <osgDB/Registry>
 #include <osg/Switch>
 #include <osgUtil/Optimizer>

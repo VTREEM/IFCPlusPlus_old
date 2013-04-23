@@ -13,7 +13,18 @@
 
 #pragma once
 
-#include <QtGui>
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+//#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	#include <QtGui/QTextEdit>
+	#include <QtGui/qpushbutton.h>
+	#include <QtGui/qlineedit.h>
+#else
+	#include <QtWidgets/QTextEdit>
+	#include <QtWidgets/qpushbutton.h>
+	#include <QtWidgets/qlineedit.h>
+#endif
+
 
 class IfcPlusPlus;
 

@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <osgGA/GUIEventHandler>
 #include "ifcpp/model/shared_ptr.h"
 

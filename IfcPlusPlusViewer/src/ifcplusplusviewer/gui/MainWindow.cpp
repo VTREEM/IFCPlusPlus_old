@@ -11,7 +11,26 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include <QtGui>
+#include <QtCore/qglobal.h>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+	#include <QtGui/qaction.h>
+	#include <QtGui/qtoolbar.h>
+	#include <QtGui/qsplitter.h>
+	#include <QtGui/qstatusbar.h>
+	#include <QtGui/qlabel.h>
+	#include <QtCore/qfile.h>
+	#include <QtCore/qsettings.h>
+#else
+	#include <QtWidgets/qaction.h>
+	#include <QtWidgets/qtoolbar.h>
+	#include <QtWidgets/qsplitter.h>
+	#include <QtWidgets/qstatusbar.h>
+	#include <QtWidgets/qlabel.h>
+	#include <QtCore/qfile.h>
+	#include <QtCore/qsettings.h>
+#endif
+
+
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 #include "viewer/ViewerWidget.h"
@@ -72,7 +91,7 @@ MainWindow::MainWindow( IfcPlusPlusSystem* sys, ViewerWidget* vw, QWidget *paren
 	m_splitter->setStretchFactor( 1, 0 );
 
 	// status bar
-	QStatusBar* status = new QStatusBar;
+	QStatusBar* status = new QStatusBar();
 	m_label_status_cursor = new QLabel( "0.000, 0.000, 0.000" );
 	status->addWidget( m_label_status_cursor, 0 );
 	status->setSizeGripEnabled( true );

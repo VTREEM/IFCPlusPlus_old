@@ -21,25 +21,20 @@
 #include <osgUtil/Optimizer>
 
 #include "carve/input.hpp"
-#include "ifcpp/IFC2X4/include/IfcSectionedSpine.h"
-#include "ifcpp/IFC2X4/include/IfcReferencedSectionedSpine.h"
-#include "ifcpp/IFC2X4/include/IfcReferenceCurve.h"
-#include "ifcpp/IFC2X4/include/IfcReferenceCurve3D.h"
-#include "ifcpp/IFC2X4/include/IfcCompositeCurve.h"
-#include "ifcpp/IFC2X4/include/IfcRationalBSplineCurveWithKnots.h"
-#include "ifcpp/IFC2X4/include/IfcProfileDef.h"
-#include "ifcpp/IFC2X4/include/IfcReferencePlacement.h"
+#include "ifcpp/IFC4/include/IfcSectionedSpine.h"
+#include "ifcpp/IFC4/include/IfcCompositeCurve.h"
+#include "ifcpp/IFC4/include/IfcRationalBSplineCurveWithKnots.h"
+#include "ifcpp/IFC4/include/IfcProfileDef.h"
 
-#include "ifcpp/IFC2X4/include/IfcCartesianPoint.h"
-#include "ifcpp/IFC2X4/include/IfcReferenceCurvePlacement.h"
-#include "ifcpp/IFC2X4/include/IfcArbitraryClosedProfileDef.h"
-#include "ifcpp/IFC2X4/include/IfcPolyline.h"
-#include "ifcpp/IFC2X4/include/IfcParameterValue.h"
-#include "ifcpp/IFC2X4/include/IfcCartesianPoint.h"
-#include "ifcpp/IFC2X4/include/IfcLengthMeasure.h"
-#include "ifcpp/IFC2X4/include/IfcDirection.h"
-#include "ifcpp/IFC2X4/include/IfcArbitraryProfileDefWithVoids.h"
-#include "ifcpp/IFC2X4/include/IfcRationalBSplineSurfaceWithKnots.h"
+#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
+#include "ifcpp/IFC4/include/IfcArbitraryClosedProfileDef.h"
+#include "ifcpp/IFC4/include/IfcPolyline.h"
+#include "ifcpp/IFC4/include/IfcParameterValue.h"
+#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
+#include "ifcpp/IFC4/include/IfcLengthMeasure.h"
+#include "ifcpp/IFC4/include/IfcDirection.h"
+#include "ifcpp/IFC4/include/IfcArbitraryProfileDefWithVoids.h"
+#include "ifcpp/IFC4/include/IfcRationalBSplineSurfaceWithKnots.h"
 
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/UnitConverter.h"
@@ -79,7 +74,7 @@ void RepresentationConverter::convertIfcSectionedSpine( const shared_ptr<IfcSect
 
 }
 
-
+/*
 void RepresentationConverter::convertIfcReferencedSectionedSpine( const shared_ptr<IfcReferencedSectionedSpine>& spine, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
 	std::stringstream err;
@@ -150,7 +145,7 @@ void RepresentationConverter::convertIfcReferencedSectionedSpine( const shared_p
 
 	}
 }
-
+*/
 
 bool RepresentationConverter::bisectingPlane( osg::Vec3d& n, const osg::Vec3d& v1, const osg::Vec3d& v2, const osg::Vec3d& v3)
 {

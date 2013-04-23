@@ -14,7 +14,14 @@
 #pragma once
 
 #include "ifcpp/model/shared_ptr.h"
-#include <QWidget>
+
+#include <QtCore/qglobal.h>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	#include <QtGui/qwidget.h>
+#else
+	#include <QtWidgets/qwidget.h>
+#endif
+
 class QTextEdit;
 class QProgressBar;
 class QComboBox;
