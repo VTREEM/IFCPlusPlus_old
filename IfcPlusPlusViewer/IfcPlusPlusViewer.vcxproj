@@ -35,12 +35,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -134,7 +134,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>IfcPlusPlus.lib;IfcPlusPlusGeometry.lib;QtGui.lib;QtCore.lib;QtMain.lib;QtOpenGL.lib;QtNetwork.lib;OpenThreads.lib;osg.lib;osgDB.lib;osgUtil.lib;osgGA.lib;osgFX.lib;osgSim.lib;osgViewer.lib;osgText.lib;freetype242.lib;Ws2_32.lib;Winmm.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IfcPlusPlus.lib;IfcPlusPlusGeometry.lib;QtGui4.lib;QtCore4.lib;QtMain4.lib;QtOpenGL4.lib;QtNetwork4.lib;OpenThreads.lib;osg.lib;osgDB.lib;osgUtil.lib;osgGA.lib;osgFX.lib;osgSim.lib;osgViewer.lib;osgText.lib;freetype242.lib;Ws2_32.lib;Winmm.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>.\..\IfcPlusPlus\bin;.\..\IfcPlusPlusGeometry\bin;$(QTDIR)\lib;$(OSG_DIR)\bin;$(OSG_DIR)\lib\;$(OSG_DIR)\..\3rdParty\lib;$(OSG_DIR)\..\3rdParty_VC10_x86_x64\x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -193,7 +193,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>IfcPlusPlusd.lib;IfcPlusPlusGeometryd.lib;QtGuid.lib;QtCored.lib;QtMaind.lib;QtOpenGLd.lib;QtNetworkd.lib;OpenThreadsd.lib;osgd.lib;osgDBd.lib;osgUtild.lib;osgGAd.lib;osgFXd.lib;osgSimd.lib;osgViewerd.lib;osgTextd.lib;freetype242_D.lib;Ws2_32.lib;Winmm.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IfcPlusPlusd.lib;IfcPlusPlusGeometryd.lib;QtGuid4.lib;QtCored4.lib;QtMaind4.lib;QtOpenGLd4.lib;QtNetworkd4.lib;OpenThreadsd.lib;osgd.lib;osgDBd.lib;osgUtild.lib;osgGAd.lib;osgFXd.lib;osgSimd.lib;osgViewerd.lib;osgTextd.lib;freetype242_D.lib;Ws2_32.lib;Winmm.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)d.exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(OSG_DIR)\bin;$(OSG_DIR)\lib;$(OSG_DIR)\lib\Debug;$(OSG_PLUGINS_LIB);$(OSG_DIR)\..\3rdParty\lib;..\IfcPlusPlus\bin;..\IfcPlusPlusGeometry\bin;$(OSG_DIR)\..\3rdParty_VC10_x86_x64\x64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -204,8 +204,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\qtmain;$(OSG_DIR)\include;.\src\IfcPlusPlusViewer;.\..\IfcPlusPlus\src;.\..\IfcPlusPlusGeometry\src;.\..\Carve\src;.\..\Carve\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>UNICODE;_WINDOWS;WINDOWS;WIN32;QT_LARGEFILE_SUPPORT;QT_THREAD_SUPPORT;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtOpenGL;$(QTDIR)\include\qtmain;$(OSG_DIR)\include;.\src\IfcPlusPlusViewer;.\..\IfcPlusPlus\src;.\..\IfcPlusPlusGeometry\src;.\..\Carve\src;.\..\Carve\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UNICODE;_WINDOWS;WINDOWS;WIN32;QT_THREAD_SUPPORT;QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -232,6 +232,9 @@
       <PreprocessorDefinitions>QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'">
     <ClCompile>
@@ -239,6 +242,9 @@
       <PreprocessorDefinitions>QT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link />
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bin\GeneratedFiles\Debug\moc_IfcPlusPlusSystem.cpp">
@@ -406,7 +412,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
@@ -434,7 +440,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing TabReadWrite.h...</Message>
@@ -640,7 +646,7 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing %(Identity)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
@@ -666,7 +672,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
@@ -692,7 +698,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
@@ -718,7 +724,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
@@ -744,7 +750,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src"</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -D_WINDOWS -DWINDOWS -DWIN32 -DQT_THREAD_SUPPORT -DQT_DLL -D_MBCS  "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\qtmain" "-I$(OSG_DIR)\include" "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath);$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing %(Identity)...</Message>
@@ -1070,7 +1076,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties lupdateOnBuild="0" MocDir=".\bin\GeneratedFiles\$(ConfigurationName)" MocOptions="" QtVersion_x0020_Win32="5.0.2" RccDir=".\bin\GeneratedFiles" UicDir=".\bin\GeneratedFiles" QtVersion_x0020_x64="5.0.2" Qt5Version_x0020_x64="4.8.4" />
+      <UserProperties lupdateOnBuild="0" MocDir=".\bin\GeneratedFiles\$(ConfigurationName)" MocOptions="" QtVersion_x0020_Win32="4.8.5" RccDir=".\bin\GeneratedFiles" UicDir=".\bin\GeneratedFiles" QtVersion_x0020_x64="4.8.5-VS2010" Qt5Version_x0020_x64="4.8.4" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

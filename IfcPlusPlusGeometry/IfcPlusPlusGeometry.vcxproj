@@ -34,13 +34,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>
     </CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -124,6 +124,7 @@
       <OpenMPSupport>true</OpenMPSupport>
       <BrowseInformation>true</BrowseInformation>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>IfcPlusPlus.lib;OpenThreads.lib;osg.lib;osgDB.lib;osgUtil.lib;osgGA.lib;osgFX.lib;osgSim.lib;osgViewer.lib;osgText.lib;freetype244.lib;Ws2_32.lib;Winmm.lib;glu32.lib;opengl32.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -155,6 +156,7 @@
       <WholeProgramOptimization>
       </WholeProgramOptimization>
       <DisableSpecificWarnings>4267;4244</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>IfcPlusPlus.lib;OpenThreads.lib;osg.lib;osgDB.lib;osgUtil.lib;osgGA.lib;osgFX.lib;osgSim.lib;osgViewer.lib;osgText.lib;freetype244.lib;Ws2_32.lib;Winmm.lib;glu32.lib;opengl32.lib;Imm32.lib;%(AdditionalDependencies)</AdditionalDependencies>

@@ -808,8 +808,8 @@ namespace carve {
       std::vector<std::pair<const face_t *, carve::geom3d::Vector> > manifold_intersections;
 
       for (;;) {
-        double a1 = random() / double(RAND_MAX) * M_TWOPI;
-        double a2 = random() / double(RAND_MAX) * M_TWOPI;
+        double a1 = rand() / double(RAND_MAX) * M_TWOPI;
+        double a2 = rand() / double(RAND_MAX) * M_TWOPI;
 
         carve::geom3d::Vector ray_dir = carve::geom::VECTOR(sin(a1) * sin(a2), cos(a1) * sin(a2), cos(a2));
 

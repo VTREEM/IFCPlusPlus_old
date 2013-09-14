@@ -51,6 +51,7 @@ void tokenizeEntityList( std::string& list_str, std::vector<int>& list_items );
 
 void readIntValue( std::string& str, int& value );
 void readRealValue( std::string& str, double& value );
+void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source );
 
 template<class T>
 void readTypeOfIntList( std::string& str, std::vector<shared_ptr<T> >& vec )

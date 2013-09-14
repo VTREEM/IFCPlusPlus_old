@@ -806,3 +806,39 @@ void tokenizeInlineArgument( std::string arg, std::string& keyword, std::string&
 	keyword = key;
 	inline_arg = inline_argument;
 }
+
+void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source )
+{
+	// string can have escaped ticks: \' and also other escaped characters: \\  \S
+	*(stream_pos++) = *(stream_pos_source++);
+	bool escaped = false;
+	while( *stream_pos_source != '\0' )
+	{
+		escaped = false;
+		if( *stream_pos_source == '\\' )
+		{
+			if( *(stream_pos_source+1) == '\\' )
+			{
+				// we have a double backslash, so copy and continue
+				*(stream_pos++) = *(stream_pos_source++);
+				*(stream_pos++) = *(stream_pos_source++);
+				continue;
+			}
+			*(stream_pos++) = *(stream_pos_source++);
+			escaped = true;
+		}
+
+		if( *stream_pos_source == '\'' )
+		{
+			*(stream_pos++) = *(stream_pos_source++);
+			if( escaped )
+			{
+				continue;
+			}
+			// end of string
+			break;
+		}
+		// copy
+		*(stream_pos++) = *(stream_pos_source++);
+	}
+}

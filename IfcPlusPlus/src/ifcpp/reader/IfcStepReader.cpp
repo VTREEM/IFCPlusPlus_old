@@ -33,8 +33,8 @@
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/reader/IfcStepReader.h"
 
-//static std::map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPlusPlus_entity, initializers_IfcPlusPlus_entity + sizeof(initializers_IfcPlusPlus_entity)/sizeof(initializers_IfcPlusPlus_entity[0]));
 static std::tr1::unordered_map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
+
 void applyBackwardCompatibility( IfcPPModel::IfcVersion backward_version, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
@@ -136,43 +136,10 @@ void readStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entity )
 	}
 }
 
-void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source )
-{
-	// string can have escaped ticks: \' and also other escaped characters: \\  \S
-	*(stream_pos++) = *(stream_pos_source++);
-	bool escaped = false;
-	while( *stream_pos_source != '\0' )
-	{
-		escaped = false;
-		if( *stream_pos_source == '\\' )
-		{
-			if( *(stream_pos_source+1) == '\\' )
-			{
-				// we have a double backslash, so copy and continue
-				*(stream_pos++) = *(stream_pos_source++);
-				*(stream_pos++) = *(stream_pos_source++);
-				continue;
-			}
-			*(stream_pos++) = *(stream_pos_source++);
-			escaped = true;
-		}
-
-		if( *stream_pos_source == '\'' )
-		{
-			*(stream_pos++) = *(stream_pos_source++);
-			if( escaped )
-			{
-				continue;
-			}
-			// end of string
-			break;
-		}
-		// copy
-		*(stream_pos++) = *(stream_pos_source++);
-	}
-}
 
 
+
+// constructor
 IfcStepReader::IfcStepReader()
 {
 }

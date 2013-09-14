@@ -269,10 +269,10 @@ bool IfcPlusPlusSystem::intersectModel( const osgGA::GUIEventAdapter& ea, osgGA:
 						std::stringstream err;
 						try
 						{
-							
 							osg::MatrixTransform* mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 1 ) );
 							shared_ptr<ReaderWriterIFC::ProductShape> read_result( new ReaderWriterIFC::ProductShape() );
 							osg::ref_ptr<ReaderWriterIFC> reader_writer( new ReaderWriterIFC() );
+							reader_writer->setModel( m_ifc_model );
 							reader_writer->convertIfcProduct( product_selected, read_result );
 							mt->addChild( read_result->product_group );
 							m_view_controller->getRootNode()->addChild( mt );
