@@ -39,7 +39,7 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion backward_version, IfcPPE
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
 
-void readStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entity )
+void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entity )
 {
 	char* stream_pos = (char*)line.c_str();
 	if( *stream_pos != '#' )
@@ -391,7 +391,7 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 			try
 			{
 				shared_ptr<IfcPPEntity> entity;
-				readStepLine( step_line,  entity );
+				readSingleStepLine( step_line,  entity );
 
 				if( !entity )
 				{
@@ -411,7 +411,7 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 				try
 				{
 					shared_ptr<IfcPPEntity> entity;
-					readStepLine( step_line, entity );
+					readSingleStepLine( step_line, entity );
 
 					if( entity )
 					{
@@ -457,7 +457,7 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 		try
 		{
 			shared_ptr<IfcPPEntity> entity;
-			readStepLine( step_line, entity );
+			readSingleStepLine( step_line, entity );
 
 			if( !entity )
 			{
@@ -475,7 +475,7 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 			try
 			{
 				shared_ptr<IfcPPEntity> entity;
-				readStepLine( step_line, entity );
+				readSingleStepLine( step_line, entity );
 
 				if( !entity )
 				{
@@ -537,6 +537,9 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 			std::vector<std::string> arguments;
 			tokenizeEntityArguments( argument_str, arguments );
 
+			// character decoding:
+			decodeArgumentStrings( arguments );
+
 			if( m_ifc_version != IfcPPModel::IFC4 )
 			{
 				if( m_ifc_version != IfcPPModel::UNDEFINED && m_ifc_version != IfcPPModel::UNKNOWN )
@@ -591,6 +594,10 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 		std::string& argument_str = entity->m_arguments;
 		std::vector<std::string> arguments;
 		tokenizeEntityArguments( argument_str, arguments );
+		
+		// character decoding:
+		decodeArgumentStrings( arguments );
+	
 
 		if( m_ifc_version != IfcPPModel::IFC4 )
 		{
@@ -726,7 +733,21 @@ void applyBackwardCompatibility( std::string& keyword, std::string& step_line )
 	{
 		size_t pos_find = step_line.find("IFC2DCOMPOSITECURVE");
 		step_line = step_line.erase(pos_find+3,2);
+		return;
 	}
+
+	if( keyword.compare("IFCDATEANDTIME") == 0 )
+	{
+		// TODO: replace IFCDATEANDTIME
+		return;
+	}
+
+	if( keyword.compare("IFCCOORDINATEDUNIVERSALTIMEOFFSET") == 0 )
+	{
+		// TODO: replace IFCDATEANDTIME
+		return;
+	}
+	
 }
 
 void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum type_enum, std::vector<std::string>& args )

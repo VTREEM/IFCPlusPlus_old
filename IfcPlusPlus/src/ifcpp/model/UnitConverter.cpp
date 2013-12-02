@@ -37,22 +37,26 @@ UnitConverter::UnitConverter()
 	m_length_unit_factor = 1.0;
 	m_plane_angle_factor = 1.0; // defaulting to radian
 
-	m_prefix_map[IfcSIPrefix::ENUM_EXA] = 1E18;
-	m_prefix_map[IfcSIPrefix::ENUM_PETA] = 1E15;
-	m_prefix_map[IfcSIPrefix::ENUM_TERA] = 1E12;
-	m_prefix_map[IfcSIPrefix::ENUM_GIGA] = 1E9;
-	m_prefix_map[IfcSIPrefix::ENUM_MEGA] = 1E6;
-	m_prefix_map[IfcSIPrefix::ENUM_KILO] = 1E3;
-	m_prefix_map[IfcSIPrefix::ENUM_HECTO] = 1E2;
-	m_prefix_map[IfcSIPrefix::ENUM_DECA] = 1E1;
-	m_prefix_map[IfcSIPrefix::ENUM_DECI] = 1E-1;
-	m_prefix_map[IfcSIPrefix::ENUM_CENTI] = 1E-2;
-	m_prefix_map[IfcSIPrefix::ENUM_MILLI] = 1E-3;
-	m_prefix_map[IfcSIPrefix::ENUM_MICRO] = 1E-6;
-	m_prefix_map[IfcSIPrefix::ENUM_NANO] = 1E-9;
-	m_prefix_map[IfcSIPrefix::ENUM_PICO] = 1E-12;
-	m_prefix_map[IfcSIPrefix::ENUM_FEMTO] = 1E-15;
-	m_prefix_map[IfcSIPrefix::ENUM_ATTO] = 1E-18;
+	m_prefix_map[IfcSIPrefix::ENUM_EXA]		= 1E18;
+	m_prefix_map[IfcSIPrefix::ENUM_PETA]	= 1E15;
+	m_prefix_map[IfcSIPrefix::ENUM_TERA]	= 1E12;
+	m_prefix_map[IfcSIPrefix::ENUM_GIGA]	= 1E9;
+	m_prefix_map[IfcSIPrefix::ENUM_MEGA]	= 1E6;
+	m_prefix_map[IfcSIPrefix::ENUM_KILO]	= 1E3;
+	m_prefix_map[IfcSIPrefix::ENUM_HECTO]	= 1E2;
+	m_prefix_map[IfcSIPrefix::ENUM_DECA]	= 1E1;
+	m_prefix_map[IfcSIPrefix::ENUM_DECI]	= 1E-1;
+	m_prefix_map[IfcSIPrefix::ENUM_CENTI]	= 1E-2;
+	m_prefix_map[IfcSIPrefix::ENUM_MILLI]	= 1E-3;
+	m_prefix_map[IfcSIPrefix::ENUM_MICRO]	= 1E-6;
+	m_prefix_map[IfcSIPrefix::ENUM_NANO]	= 1E-9;
+	m_prefix_map[IfcSIPrefix::ENUM_PICO]	= 1E-12;
+	m_prefix_map[IfcSIPrefix::ENUM_FEMTO]	= 1E-15;
+	m_prefix_map[IfcSIPrefix::ENUM_ATTO]	= 1E-18;
+}
+
+UnitConverter::~UnitConverter()
+{
 }
 
 void UnitConverter::setIfcProject(shared_ptr<IfcProject> project)
@@ -84,6 +88,7 @@ void UnitConverter::setIfcProject(shared_ptr<IfcProject> project)
 				{
 					if( si_unit->m_Prefix )
 					{
+						m_loaded_prefix = si_unit->m_Prefix;
 						if( m_prefix_map.find( si_unit->m_Prefix->m_enum ) != m_prefix_map.end() )
 						{
 							m_length_unit_factor = m_prefix_map[si_unit->m_Prefix->m_enum];

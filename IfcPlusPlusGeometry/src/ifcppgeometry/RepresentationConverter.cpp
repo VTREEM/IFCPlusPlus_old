@@ -24,8 +24,10 @@
 #include <osg/Material>
 #include <osg/LineStipple>
 #include <osg/MatrixTransform>
+#include <osg/PolygonMode>
 #include <osgText/Text>
-double failed_geom_offset = 10;
+#include <osgGA/TrackballManipulator>
+#include <osgGA/StandardManipulator>
 
 #include <carve/carve.hpp>
 #include <carve/geom3d.hpp>
@@ -78,22 +80,6 @@ double failed_geom_offset = 10;
 #include "ifcpp/IFC4/include/IfcFace.h"
 #include "ifcpp/IFC4/include/IfcFaceSurface.h"
 #include "ifcpp/IFC4/include/IfcFaceBound.h"
-#include "ifcpp/IFC4/include/IfcBoundedCurve.h"
-#include "ifcpp/IFC4/include/IfcPcurve.h"
-#include "ifcpp/IFC4/include/IfcConic.h"
-#include "ifcpp/IFC4/include/IfcCircle.h"
-#include "ifcpp/IFC4/include/IfcEllipse.h"
-#include "ifcpp/IFC4/include/IfcLine.h"
-#include "ifcpp/IFC4/include/IfcOffsetCurve2D.h"
-#include "ifcpp/IFC4/include/IfcOffsetCurve3D.h"
-#include "ifcpp/IFC4/include/IfcCompositeCurve.h"
-#include "ifcpp/IFC4/include/IfcCompositeCurveSegment.h"
-#include "ifcpp/IFC4/include/IfcPolyline.h"
-#include "ifcpp/IFC4/include/IfcTrimmedCurve.h"
-#include "ifcpp/IFC4/include/IfcTrimmingSelect.h"
-#include "ifcpp/IFC4/include/IfcParameterValue.h"
-#include "ifcpp/IFC4/include/IfcBSplineCurve.h"
-#include "ifcpp/IFC4/include/IfcPolyLoop.h"
 #include "ifcpp/IFC4/include/IfcEdgeLoop.h"
 #include "ifcpp/IFC4/include/IfcOrientedEdge.h"
 #include "ifcpp/IFC4/include/IfcVertexPoint.h"
@@ -132,11 +118,11 @@ double failed_geom_offset = 10;
 #include "ifcpp/IFC4/include/IfcRightCircularCylinder.h"
 #include "ifcpp/IFC4/include/IfcSphere.h"
 #include "ifcpp/IFC4/include/IfcPresentationLayerWithStyle.h"
+#include "ifcpp/IFC4/include/IfcPolyLoop.h"
 
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/UnitConverter.h"
 #include "ifcpp/model/IfcPPException.h"
-#include "ifcpp/model/IfcPPUtil.h"
 
 #include "Utility.h"
 #include "ConverterOSG.h"
@@ -145,21 +131,26 @@ double failed_geom_offset = 10;
 #include "StylesConverter.h"
 #include "UnhandledRepresentationException.h"
 #include "RecursiveCallException.h"
+#include "CurveConverter.h"
 #include "RepresentationConverter.h"
 
 RepresentationConverter::RepresentationConverter( shared_ptr<UnitConverter> unit_converter ) 
 	: m_unit_converter(unit_converter)
 {
-	m_styles_converter = shared_ptr<StylesConverter>( new StylesConverter() );
 	m_handle_styled_items = true;
 	m_handle_layer_assignments = true;
+	m_num_vertices_per_circle = 20;
+	m_styles_converter = shared_ptr<StylesConverter>( new StylesConverter() );
+	m_curve_converter = shared_ptr<CurveConverter>( new CurveConverter( m_unit_converter, m_num_vertices_per_circle ) );
 
-	m_debug_group_first = new osg::Group();
-	m_debug_group_second = new osg::Group();
 #ifdef IFCPP_OPENMP
 	omp_init_lock(&m_writelock_profile_cache);
 	omp_init_lock(&m_writelock_detailed_report);
 	omp_init_lock(&m_writelock_styles_converter);
+#endif
+
+#ifdef _DEBUG
+	m_debug_viewer = NULL;
 #endif
 }
 
@@ -170,6 +161,13 @@ RepresentationConverter::~RepresentationConverter()
 	omp_destroy_lock(&m_writelock_detailed_report);
 	omp_destroy_lock(&m_writelock_styles_converter);
 #endif
+}
+
+void RepresentationConverter::setNumVerticesPerCircle( int num_vertices )
+{
+	if( num_vertices < 6 ) { num_vertices = 6; }
+	m_num_vertices_per_circle = num_vertices;
+	m_curve_converter->m_num_vertices_per_circle = m_num_vertices_per_circle;
 }
 
 void RepresentationConverter::convertStyledItem( const shared_ptr<IfcRepresentationItem>& representation_item, shared_ptr<ItemData>& item_data )
@@ -194,7 +192,7 @@ void RepresentationConverter::convertStyledItem( const shared_ptr<IfcRepresentat
 	}
 }
 
-void RepresentationConverter::convertIfcRepresentation( const shared_ptr<IfcRepresentation>& representation, const carve::math::Matrix& pos, shared_ptr<RepresentationData>& input_data, std::set<int>& visited )
+void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRepresentation>& representation, const carve::math::Matrix& pos, shared_ptr<RepresentationData>& input_data, std::set<int>& visited )
 {
 	std::stringstream err;
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
@@ -283,7 +281,11 @@ void RepresentationConverter::convertIfcRepresentation( const shared_ptr<IfcRepr
 				}
 				else
 				{
-					throw IfcPPException( "! dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )" );
+					std::stringstream strs;
+					strs << "#" << mapping_origin_placement->getId() << " = IfcPlacement: !dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )";
+					detailedReport( strs );
+					continue;
+					//throw IfcPPException( "! dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )" );
 				}
 			}
 
@@ -447,7 +449,8 @@ void RepresentationConverter::convertIfcRepresentation( const shared_ptr<IfcRepr
 	}
 	if( err.tellp() > 0 )
 	{
-		throw IfcPPException( err.str().c_str() );
+		detailedReport( err );
+		//throw IfcPPException( err.str().c_str() );
 	}
 }
 
@@ -509,7 +512,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	{
 		std::vector<carve::geom::vector<3> > loops;
 		std::vector<carve::geom::vector<3> > segment_start_points;
-		convertIfcCurve( curve, loops, segment_start_points );
+		m_curve_converter->convertIfcCurve( curve, loops, segment_start_points );
 
 		shared_ptr<carve::input::PolylineSetData> polyline_data( new carve::input::PolylineSetData() );
 		polyline_data->beginPolyline();
@@ -572,7 +575,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	if( poly_line )
 	{
 		std::vector<carve::geom::vector<3> > poly_vertices;
-		convertIfcPolyline( poly_line, poly_vertices );
+		m_curve_converter->convertIfcPolyline( poly_line, poly_vertices );
 
 		const unsigned int num_points = poly_vertices.size();
 		shared_ptr<carve::input::PolylineSetData> polyline_data( new carve::input::PolylineSetData() );
@@ -655,10 +658,24 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 // ENTITY IfcSolidModel ABSTRACT SUPERTYPE OF(ONEOF(IfcCsgSolid, IfcManifoldSolidBrep, IfcSweptAreaSolid, IfcSweptDiskSolid))
 void RepresentationConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>& solid_model, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
+	// TODO: class SolidModelConverter
+
 	shared_ptr<IfcSweptAreaSolid> swept_area_solid = dynamic_pointer_cast<IfcSweptAreaSolid>(solid_model);
 	if( swept_area_solid )
 	{
-		// ENTITY IfcSweptAreaSolid ABSTRACT SUPERTYPE OF(ONEOF(IfcExtrudedAreaSolid, IfcFixedReferenceSweptAreaSolid, IfcRevolvedAreaSolid, IfcSurfaceCurveSweptAreaSolid))
+		//ENTITY IfcSweptAreaSolid
+		//	ABSTRACT SUPERTYPE OF(ONEOF(IfcExtrudedAreaSolid, IfcFixedReferenceSweptAreaSolid, IfcRevolvedAreaSolid, IfcSurfaceCurveSweptAreaSolid))
+		//	SUBTYPE OF IfcSolidModel;
+		//	SweptArea	 :	IfcProfileDef;
+		//	Position	 :	OPTIONAL IfcAxis2Placement3D;
+		//	WHERE
+		//	SweptAreaType	 :	SweptArea.ProfileType = IfcProfileTypeEnum.Area;
+		//END_ENTITY;
+
+		shared_ptr<IfcProfileDef>& swept_area = swept_area_solid->m_SweptArea;
+		shared_ptr<IfcAxis2Placement3D>& solid_position	= swept_area_solid->m_Position;					//optional
+
+
 		shared_ptr<IfcExtrudedAreaSolid> extruded_area = dynamic_pointer_cast<IfcExtrudedAreaSolid>(swept_area_solid);
 		if( extruded_area )
 		{
@@ -673,7 +690,11 @@ void RepresentationConverter::convertIfcSolidModel( const shared_ptr<IfcSolidMod
 			//StartParam	 : OPTIONAL IfcParameterValue;
 			//EndParam	 : OPTIONAL IfcParameterValue;
 			//FixedReference	 : IfcDirection;
+			
 
+#ifdef _DEBUG
+			std::cout << "IfcFixedReferenceSweptAreaSolid not implemented" << std::endl;
+#endif
 			return;
 		}
 
@@ -687,6 +708,9 @@ void RepresentationConverter::convertIfcSolidModel( const shared_ptr<IfcSolidMod
 		shared_ptr<IfcSurfaceCurveSweptAreaSolid> surface_curve_swept_area_solid = dynamic_pointer_cast<IfcSurfaceCurveSweptAreaSolid>(swept_area_solid);
 		if( surface_curve_swept_area_solid )
 		{
+#ifdef _DEBUG
+			std::cout << "IfcSurfaceCurveSweptAreaSolid not implemented" << std::endl;
+#endif
 			return;
 		}
 		
@@ -696,38 +720,65 @@ void RepresentationConverter::convertIfcSolidModel( const shared_ptr<IfcSolidMod
 	shared_ptr<IfcManifoldSolidBrep> manifold_solid_brep = dynamic_pointer_cast<IfcManifoldSolidBrep>(solid_model);	
 	if( manifold_solid_brep )
 	{
-		// ENTITY IfcManifoldSolidBrep ABSTRACT SUPERTYPE OF(ONEOF(IfcAdvancedBrep, IfcFacetedBrep)
+		// IFC4:
+		//ENTITY IfcManifoldSolidBrep 
+		//	ABSTRACT SUPERTYPE OF(ONEOF(IfcAdvancedBrep, IfcFacetedBrep))
+		//	SUBTYPE OF IfcSolidModel;
+		//		Outer	 :	IfcClosedShell;
+		//END_ENTITY;
+
 		shared_ptr<IfcClosedShell>& outer_shell = manifold_solid_brep->m_Outer;
 
-		shared_ptr<IfcFacetedBrep> faceted_brep = dynamic_pointer_cast<IfcFacetedBrep>(solid_model);
-		if( faceted_brep )
+		if( outer_shell )
 		{
-			shared_ptr<IfcClosedShell> shell = faceted_brep->m_Outer;
-			if( !shell )
+			// first convert outer shell
+			std::vector<shared_ptr<IfcFace> >& vec_faces_outer_shell = outer_shell->m_CfsFaces;
+			shared_ptr<ItemData> input_data_outer_shell( new ItemData() );
+			convertIfcFaceList( vec_faces_outer_shell, pos, input_data_outer_shell );
+			std::copy( input_data_outer_shell->open_or_closed_shell_data.begin(), input_data_outer_shell->open_or_closed_shell_data.end(), std::back_inserter(item_data->closed_shell_data) );
+
+
+			//shared_ptr<IfcConnectedFaceSet> face_set = (*it_face_sets);
+			//std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = face_set->m_CfsFaces;
+
+			//shared_ptr<ItemData> input_data_face_set( new ItemData );
+			//convertIfcFaceList( vec_ifc_faces, pos, input_data_face_set );
+			//std::copy( input_data_face_set->open_or_closed_shell_data.begin(), input_data_face_set->open_or_closed_shell_data.end(), std::back_inserter(item_data->open_shell_data) );
+		
+
+			shared_ptr<IfcFacetedBrep> faceted_brep = dynamic_pointer_cast<IfcFacetedBrep>(manifold_solid_brep);
+			if( faceted_brep )
 			{
+				shared_ptr<IfcClosedShell> shell = faceted_brep->m_Outer;
+				if( !shell )
+				{
+					return;
+				}
+				std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = shell->m_CfsFaces;
+
+				shared_ptr<ItemData> input_data_closed_shell( new ItemData() );
+				convertIfcFaceList( vec_ifc_faces, pos, input_data_closed_shell );
+				std::copy( input_data_closed_shell->open_or_closed_shell_data.begin(), input_data_closed_shell->open_or_closed_shell_data.end(), std::back_inserter(item_data->closed_shell_data) );
+
 				return;
 			}
-			std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = shell->m_CfsFaces;
 
-
-			shared_ptr<ItemData> input_data_closed_shell( new ItemData() );
-			convertIfcFaceList( vec_ifc_faces, pos, input_data_closed_shell );
-			std::copy( input_data_closed_shell->open_or_closed_shell_data.begin(), input_data_closed_shell->open_or_closed_shell_data.end(), std::back_inserter(item_data->closed_shell_data) );
-
-			return;
-		}
-
-		shared_ptr<IfcManifoldSolidBrep> advanced_brep = dynamic_pointer_cast<IfcManifoldSolidBrep>(solid_model);
-		if( advanced_brep )
-		{
-			// ENTITY IfcAdvancedBrep	SUPERTYPE OF(IfcAdvancedBrepWithVoids)
-			if( dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(advanced_brep) )
+			shared_ptr<IfcAdvancedBrep> advanced_brep = dynamic_pointer_cast<IfcAdvancedBrep>(manifold_solid_brep);
+			if( advanced_brep )
 			{
-				shared_ptr<IfcAdvancedBrepWithVoids> advanced_brep_with_voids = dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(solid_model);
-				std::vector<shared_ptr<IfcClosedShell> >& vec_voids = advanced_brep_with_voids->m_Voids;
+				// ENTITY IfcAdvancedBrep	SUPERTYPE OF(IfcAdvancedBrepWithVoids)
+				if( dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(advanced_brep) )
+				{
+					shared_ptr<IfcAdvancedBrepWithVoids> advanced_brep_with_voids = dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(solid_model);
+					std::vector<shared_ptr<IfcClosedShell> >& vec_voids = advanced_brep_with_voids->m_Voids;
+
+					// TODO: subtract voids from outer shell
+					std::cout << "IfcAdvancedBrep not implemented" << std::endl;
+				}
+				return;
 			}
-			return;
 		}
+
 			
 		throw UnhandledRepresentationException( solid_model );
 	}
@@ -760,13 +811,200 @@ void RepresentationConverter::convertIfcSolidModel( const shared_ptr<IfcSolidMod
 	shared_ptr<IfcSweptDiskSolid> swept_disp_solid = dynamic_pointer_cast<IfcSweptDiskSolid>(solid_model);
 	if( swept_disp_solid )
 	{
+		//ENTITY IfcSweptDiskSolid;
+		//	ENTITY IfcRepresentationItem;
+		//	INVERSE
+		//		LayerAssignments	 : 	SET OF IfcPresentationLayerAssignment FOR AssignedItems;
+		//		StyledByItem	 : 	SET [0:1] OF IfcStyledItem FOR Item;
+		//	ENTITY IfcGeometricRepresentationItem;
+		//	ENTITY IfcSolidModel;
+		//		DERIVE
+		//		Dim	 : 	IfcDimensionCount :=  3;
+		//	ENTITY IfcSweptDiskSolid;
+		//		Directrix	 : 	IfcCurve;
+		//		Radius	 : 	IfcPositiveLengthMeasure;
+		//		InnerRadius	 : 	OPTIONAL IfcPositiveLengthMeasure;
+		//		StartParam	 : 	OPTIONAL IfcParameterValue;
+		//		EndParam	 : 	OPTIONAL IfcParameterValue;
+		//END_ENTITY;	
+
+		shared_ptr<IfcCurve>& directrix_curve = swept_disp_solid->m_Directrix;
+		shared_ptr<IfcPositiveLengthMeasure>& radius_measure = swept_disp_solid->m_Radius;
+		double length_in_meter = m_unit_converter->getLengthInMeterFactor();
+		double radius = 0.0;
+		if( radius_measure )
+		{
+			radius = radius_measure->m_value*length_in_meter;
+		}
+
+		// TODO: handle inner radius, start param, end param
+
+		std::vector<carve::geom::vector<3> > segment_start_points;
+		std::vector<carve::geom::vector<3> > basis_curve_points;
+		m_curve_converter->convertIfcCurve( directrix_curve, basis_curve_points, segment_start_points );
+
+		shared_ptr<carve::input::PolyhedronData> pipe_data( new carve::input::PolyhedronData() );
+		item_data->closed_shell_data.push_back(pipe_data);
+
+		double angle = 0;
+		double delta_angle = 2.0*M_PI/double(m_num_vertices_per_circle);	// TODO: adapt to model size and complexity
+		std::vector<carve::geom::vector<3> > circle_points;
+		for( int i = 0; i < m_num_vertices_per_circle; ++i )
+		{
+			// cross section (circle) is defined in YZ plane
+			circle_points.push_back( carve::geom::VECTOR(0.0, sin(angle)*radius, cos(angle)*radius) );
+			angle += delta_angle;
+		}
 		
+		int num_base_points = basis_curve_points.size();
+		carve::math::Matrix matrix_sweep;
+		
+		carve::geom::vector<3> local_z;
+
+		if( num_base_points < 2 )
+		{
+			std::cout << "IfcSweptDiskSolid: num curve points < 2";
+			return;
+		}
+
+		bool bend_found = false;
+		if( num_base_points > 3 )
+		{
+			// compute local z vector by dot product of the first bend of the reference line
+			carve::geom::vector<3> vertex_back2 = basis_curve_points.at(0);
+			carve::geom::vector<3> vertex_back1 = basis_curve_points.at(1);
+			for( int i=2; i<num_base_points; ++i )
+			{
+				carve::geom::vector<3> vertex_current = basis_curve_points.at(i);
+				carve::geom::vector<3> section1 = vertex_back1 - vertex_back2;
+				carve::geom::vector<3> section2 = vertex_current - vertex_back1;
+				section1.normalize();
+				section2.normalize();
+
+				double dot_product = dot( section1, section2 );
+				double dot_product_abs = abs(dot_product);
+
+				// if dot == 1 or -1, then points are colinear
+				if( dot_product_abs < (1.0-GEOM_TOLERANCE) || dot_product_abs > (1.0+GEOM_TOLERANCE) )
+				{
+					// bend found, compute cross product
+					carve::geom::vector<3> lateral_vec = cross( section1, section2 );
+					local_z = cross( lateral_vec, section1 );
+					local_z.normalize();
+					bend_found = true;
+					break;
+				}
+			}
+		}
+		
+		if( !bend_found )
+		{
+			// sweeping curve is linear. assume any local z vector
+			local_z = carve::geom::VECTOR( 0, 0, 1 );
+			double dot_normal_local_z = dot( (basis_curve_points.at(1) - basis_curve_points.at(0)), local_z );
+			if( abs(dot_normal_local_z) < GEOM_TOLERANCE )
+			{
+				local_z = carve::geom::VECTOR( 0, 1, 0 );
+				local_z.normalize();
+			}
+		}
+
+		for( int ii=0; ii<num_base_points; ++ii )
+		{
+			carve::geom::vector<3> vertex_current = basis_curve_points.at(ii);
+			carve::geom::vector<3> vertex_next;
+			carve::geom::vector<3> vertex_before;
+			if( ii == 0 )
+			{
+				// first point
+				vertex_next	= basis_curve_points.at(ii+1);
+				carve::geom::vector<3> delta_element = vertex_next - vertex_current;
+				vertex_before = vertex_current - (delta_element);
+			}
+			else if( ii == num_base_points-1 )
+			{
+				// last point
+				vertex_before	= basis_curve_points.at(ii-1);
+				carve::geom::vector<3> delta_element = vertex_current - vertex_before;
+				vertex_next = vertex_before + (delta_element);
+			}
+			else
+			{
+				// inner point
+				vertex_next		= basis_curve_points.at(ii+1);
+				vertex_before	= basis_curve_points.at(ii-1);
+			}
+
+			carve::geom::vector<3> bisecting_normal;
+			bisectingPlane( bisecting_normal, vertex_before, vertex_current, vertex_next );
+
+			carve::geom::vector<3> section1 = vertex_current - vertex_before;
+			carve::geom::vector<3> section2 = vertex_next - vertex_current;
+			section1.normalize();
+			section2.normalize();
+			double dot_product = dot( section1, section2 );
+			double dot_product_abs = abs(dot_product);
+
+			if( dot_product_abs < (1.0-GEOM_TOLERANCE) || dot_product_abs > (1.0+GEOM_TOLERANCE) )
+			{
+				// bend found, compute next local z vector
+				carve::geom::vector<3> lateral_vec = cross( section1, section2 );
+				local_z = cross( lateral_vec, section1 );
+				local_z.normalize();
+			}
+			if( ii == num_base_points -1 )
+			{
+				bisecting_normal *= -1.0;
+			}
+			
+			convertPlane2Matrix( bisecting_normal, vertex_current, local_z, matrix_sweep );
+			matrix_sweep = pos*matrix_sweep;
+						
+			for( int jj = 0; jj < m_num_vertices_per_circle; ++jj )
+			{
+				carve::geom::vector<3> vertex = circle_points.at( jj );
+				vertex = matrix_sweep*vertex;
+				pipe_data->addVertex( vertex );
+			}
+		}
+
+		// front cap
+		std::vector<int> front_face_loop;
+		for( int jj = 0; jj < m_num_vertices_per_circle; ++jj )
+		{
+			front_face_loop.push_back( jj );
+		}
+		pipe_data->addFace( front_face_loop.rbegin(), front_face_loop.rend() );
+
+		// end cap
+		std::vector<int> end_face_loop;
+		const int end_face_begin = (num_base_points-1)*m_num_vertices_per_circle;
+		for( int j = 0; j < m_num_vertices_per_circle; ++j )
+		{
+			end_face_loop.push_back( end_face_begin + j );
+		}
+		pipe_data->addFace( end_face_loop.begin(), end_face_loop.end() );
+				
+
+		int num_vertices = pipe_data->getVertexCount();
+		for( int i=0; i<num_base_points- 1; ++i )
+		{
+			int i_offset = i*m_num_vertices_per_circle;
+			int i_offset_next = (i+1)*m_num_vertices_per_circle;
+			for( int jj = 0; jj < m_num_vertices_per_circle-1; ++jj )
+			{
+				pipe_data->addFace( i_offset + jj, i_offset + jj+1, i_offset_next + jj + 1, i_offset_next + jj );  
+			}
+			pipe_data->addFace( i_offset + m_num_vertices_per_circle-2, i_offset, i_offset_next, i_offset_next + m_num_vertices_per_circle-2 );  
+		}
+
 		return;
 	}
 
 	throw UnhandledRepresentationException( solid_model );
 }
 
+double failed_geom_offset = 10;
 void RepresentationConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanResult>& bool_result, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
 	const int bool_result_id = bool_result->getId();
@@ -820,10 +1058,22 @@ void RepresentationConverter::convertIfcBooleanResult( const shared_ptr<IfcBoole
 			bool show_operands = false;
 			if( show_operands )
 			{
-				osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-				ConverterOSG carve_converter;
-				carve_converter.drawMeshSet( polyhedron, geode );
-				m_debug_group_first->addChild(geode);
+				if( m_debug_viewer )
+				{
+					osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+					ConverterOSG carve_converter;
+					carve_converter.drawMeshSet( polyhedron, geode );
+					osg::Group* group = (osg::Group*)m_debug_viewer->getSceneData();
+					group->addChild(geode);
+
+					//osg::ref_ptr<osg::PolygonMode> polygon_mode = dynamic_cast<osg::PolygonMode*>( geode->getOrCreateStateSet()->getAttribute( osg::StateAttribute::POLYGONMODE ));
+					//if(  !polygon_mode )
+					//{
+						osg::ref_ptr<osg::PolygonMode> polygon_mode = new osg::PolygonMode();
+						geode->getOrCreateStateSet()->setAttribute( polygon_mode );	
+					//}
+					polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE );
+				}
 			}
 #endif
 #endif
@@ -869,6 +1119,50 @@ void RepresentationConverter::convertIfcBooleanResult( const shared_ptr<IfcBoole
 					{
 						strs << "!first_operand_poly->manifold_is_negative[mani]";
 					}
+				}
+
+				if( m_debug_viewer )
+				{
+					osg::Node* root_node = m_debug_viewer->getSceneData();
+					osg::Group* root_node_group = dynamic_cast<osg::Group*>( root_node );
+					if( root_node_group )
+					{
+						osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+						ConverterOSG carve_converter;
+						carve_converter.drawPolyhedron( first_op_polyhedron, geode );
+						
+						//carve_converter.drawMeshSet( second_operand, geode );
+						root_node_group->addChild(geode);
+
+						m_debug_viewer->frame();
+						osg::BoundingSphere bs = root_node_group->computeBound();
+
+						//osgGA::TrackballManipulator* manip = (osgGA::TrackballManipulator*)debug_viewer->getCameraManipulator();
+						osgGA::StandardManipulator* manip = (osgGA::StandardManipulator*)m_debug_viewer->getCameraManipulator();
+
+						osg::Vec3d eye_before;
+						osg::Vec3d lookat_before;
+						osg::Vec3d up_before;
+						manip->getTransformation( eye_before, lookat_before, up_before );
+
+						osg::Vec3d lookat_new = bs.center();
+						osg::Vec3d eye_new = lookat_new - (lookat_before-eye_before);
+						manip->setTransformation( eye_new, lookat_new, up_before );
+
+						//manip->setCenter( bs.center() );
+
+						//zoomToBoundingSphere( m_debug_viewer, bs );
+						//m_debug_viewer->frame();
+						//zoomToBoundingSphere( m_debug_viewer, bs );
+
+						
+					}
+					do
+					{
+						m_debug_viewer->frame();
+					}
+					while( !m_debug_viewer->done() );
+					m_debug_viewer->setDone( false );
 				}
 
 				shared_ptr<carve::poly::Polyhedron> second_op_polyhedron( carve::polyhedronFromMesh(second_operand.get(), -1 ) ); // -1 takes all meshes
@@ -934,7 +1228,22 @@ void RepresentationConverter::convertIfcBooleanResult( const shared_ptr<IfcBoole
 					failed_geom_offset += 3;
 
 					carve_converter.drawMeshSet( second_operand, geode );
-					m_debug_group_second->addChild(mt);
+					
+					if( m_debug_viewer )
+					{
+						osg::Node* root_node = m_debug_viewer->getSceneData();
+						osg::Group* root_node_group = dynamic_cast<osg::Group*>( root_node );
+						if( root_node_group )
+						{
+							root_node_group->addChild(mt);
+						}
+						do
+						{
+							m_debug_viewer->frame();
+						}
+						while( !m_debug_viewer->done() );
+						m_debug_viewer->setDone( false );
+					}
 				}
 #endif
 #endif
@@ -951,7 +1260,8 @@ void RepresentationConverter::convertIfcBooleanResult( const shared_ptr<IfcBoole
 
 	if( err.tellp() > 0 )
 	{
-		throw IfcPPException( err.str().c_str() );
+		detailedReport( err );
+		//throw IfcPPException( err.str().c_str() );
 	}
 }
 
@@ -1024,7 +1334,6 @@ void RepresentationConverter::convertIfcBooleanOperand( const shared_ptr<IfcBool
 		else if( dynamic_pointer_cast<IfcPolygonalBoundedHalfSpace>(half_space_solid) )
 		{
 			shared_ptr<IfcPolygonalBoundedHalfSpace> polygonal_half_space = dynamic_pointer_cast<IfcPolygonalBoundedHalfSpace>(half_space_solid);
-			
 			shared_ptr<IfcAxis2Placement3D>& primitive_placement = polygonal_half_space->m_Position;
 
 			carve::math::Matrix primitive_placement_matrix( carve::math::Matrix::IDENT() );
@@ -1037,8 +1346,7 @@ void RepresentationConverter::convertIfcBooleanOperand( const shared_ptr<IfcBool
 			shared_ptr<IfcBoundedCurve> bounded_curve = polygonal_half_space->m_PolygonalBoundary;
 			std::vector<carve::geom::vector<3> > loops;
 			std::vector<carve::geom::vector<3> > segment_start_points;
-			convertIfcCurve( bounded_curve, loops, segment_start_points );
-
+			m_curve_converter->convertIfcCurve( bounded_curve, loops, segment_start_points );
 
 			shared_ptr<carve::input::PolyhedronData> box_data( new carve::input::PolyhedronData() );
 			item_data->closed_shell_data.push_back(box_data);
@@ -1053,10 +1361,8 @@ void RepresentationConverter::convertIfcBooleanOperand( const shared_ptr<IfcBool
 
 			// TODO: create faces
 
-
-
+			std::cout << "IfcPolygonalBoundedHalfSpace: not implemented" << std::endl;
 		}
-
 		return;
 	}
 	
@@ -1162,7 +1468,7 @@ void RepresentationConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcR
 		if( axis_placement->m_Location )
 		{
 			shared_ptr<IfcCartesianPoint> location_point = axis_placement->m_Location;
-			convertIfcCartesianPoint( location_point, axis_location );
+			m_curve_converter->convertIfcCartesianPoint( location_point, axis_location );
 		}
 
 		if( axis_placement->m_Axis )
@@ -1180,28 +1486,35 @@ void RepresentationConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcR
 
 	// swept area
 	shared_ptr<ProfileConverter> profile_converter = getProfileConverter(swept_area_profile);
-	const std::vector<std::vector<carve::geom::vector<3> > >& coords = profile_converter->getCoordinates();
+	const std::vector<std::vector<carve::geom::vector<3> > >& profile_coords = profile_converter->getCoordinates();
 
-	if( coords.size() == 0 )
+	if( profile_coords.size() == 0 )
 	{
-		throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_loops == 0");
+		std::stringstream strs;
+		strs << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_loops == 0";
+		detailedReport( strs );
+		return;
+		//throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_loops == 0");
 	}
-	if( coords[0].size() < 3 )
+	if( profile_coords[0].size() < 3 )
 	{
-		throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_polygon_points < 3");
+		std::stringstream strs;
+		strs << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_polygon_points < 3";
+		detailedReport( strs );
+		//throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_polygon_points < 3");
 	}
 
 	if( revolution_angle > M_PI*2 ) revolution_angle = M_PI*2;
 	if( revolution_angle < -M_PI*2 ) revolution_angle = M_PI*2;
 
 	// TODO: calculate num segments according to length/width/height ratio and overall size of the object
-	const int num_segments = 48*(abs(revolution_angle)/(2.0*M_PI));
+	const int num_segments = m_num_vertices_per_circle*(abs(revolution_angle)/(2.0*M_PI));
 	double angle = 0.0;
 	double d_angle = revolution_angle/num_segments;
 
 	// check if we have to change the direction
-	carve::geom3d::Vector polygon_normal = computePolygonNormal( coords[0] );
-	carve::geom3d::Vector pt0 = carve::math::Matrix::ROT(d_angle, axis_direction )*(coords[0][0]+base_point);
+	carve::geom3d::Vector polygon_normal = computePolygonNormal( profile_coords[0] );
+	carve::geom3d::Vector pt0 = carve::math::Matrix::ROT(d_angle, axis_direction )*(profile_coords[0][0]+base_point);
 	if( polygon_normal.z*pt0.z > 0 )
 	{
 		angle = revolution_angle;
@@ -1216,9 +1529,9 @@ void RepresentationConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcR
 	for( int i = 0; i <= num_segments; ++i )
 	{
 		m = carve::math::Matrix::ROT( angle, -axis_direction );
-		for( int j=0; j<coords.size(); ++j )
+		for( int j=0; j<profile_coords.size(); ++j )
 		{
-			const std::vector<carve::geom::vector<3> >& loop = coords[j];
+			const std::vector<carve::geom::vector<3> >& loop = profile_coords[j];
 			
 			for( int k=0; k<loop.size(); ++k )
 			{
@@ -1232,9 +1545,9 @@ void RepresentationConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcR
 	// front cap
 	std::vector<int> front_face_loop;
 	int num_polygon_points = 0;
-	for( int j=0; j<coords.size(); ++j )
+	for( int j=0; j<profile_coords.size(); ++j )
 	{
-		const std::vector<carve::geom::vector<3> >& loop = coords[j];
+		const std::vector<carve::geom::vector<3> >& loop = profile_coords[j];
 
 		for( int k=0; k<loop.size(); ++k )
 		{
@@ -1380,28 +1693,28 @@ void RepresentationConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgP
 		polyhedron_data->addVertex( primitive_placement_matrix*carve::geom::VECTOR(0.0, 0.0, height) ); // top
 		polyhedron_data->addVertex( primitive_placement_matrix*carve::geom::VECTOR(0.0, 0.0, 0.0) ); // bottom center
 
-		const int num_segments = 24;
+		//const int num_segments = 24;
 		double angle = 0;
-		double d_angle = 2.0*M_PI/double(num_segments);
-		for( int i = 0; i < num_segments; ++i )
+		double d_angle = 2.0*M_PI/double(m_num_vertices_per_circle);	// TODO: adapt to model size and complexity
+		for( int i = 0; i < m_num_vertices_per_circle; ++i )
 		{
 			polyhedron_data->addVertex( primitive_placement_matrix*carve::geom::VECTOR(sin(angle)*radius, cos(angle)*radius, 0.0) );
 			angle += d_angle;
 		}
 
 		// outer shape
-		for( int i = 0; i < num_segments-1; ++i )
+		for( int i = 0; i < m_num_vertices_per_circle-1; ++i )
 		{
 			polyhedron_data->addFace(0, i+3, i+2);
 		}
-		polyhedron_data->addFace( 0, 2, num_segments+1 );
+		polyhedron_data->addFace( 0, 2, m_num_vertices_per_circle+1 );
 
 		// bottom circle
-		for( int i = 0; i < num_segments-1; ++i )
+		for( int i = 0; i < m_num_vertices_per_circle-1; ++i )
 		{
 			polyhedron_data->addFace(1, i+2, i+3 );
 		}
-		polyhedron_data->addFace(1, num_segments+1, 2 );
+		polyhedron_data->addFace(1, m_num_vertices_per_circle+1, 2 );
 
 		item_data->closed_shell_data.push_back( polyhedron_data );
 		return;
@@ -1425,452 +1738,6 @@ void RepresentationConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgP
 		return;
 	}
 	throw UnhandledRepresentationException(csg_primitive);
-}
-
-void RepresentationConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<3> >& loops, std::vector<carve::geom::vector<3> >& segment_start_points )
-{
-	std::vector<shared_ptr<IfcTrimmingSelect> > trim1_vec;
-	std::vector<shared_ptr<IfcTrimmingSelect> > trim2_vec;
-	convertIfcCurve( ifc_curve, loops, segment_start_points, trim1_vec, trim2_vec, true );
-}
-
-
-void appendPointsToCurve( std::vector<carve::geom::vector<3> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec )
-{
-	// sometimes, sense agreement is not given correctly. try to correct sense of segment if necessary
-	if( target_vec.size() > 0 && points_vec.size() > 1 )
-	{
-		carve::geom::vector<3> first_target_point = target_vec.front();
-		carve::geom::vector<3> last_target_point = target_vec.back();
-
-		carve::geom::vector<3> first_segment_point = points_vec.front();
-		carve::geom::vector<3> last_segment_point = points_vec.back();
-
-		if( (last_target_point-first_segment_point).length() < 0.000001 )
-		{
-			// segment order is as expected, nothing to do
-		}
-		else
-		{
-			if( (last_target_point-last_segment_point).length() < 0.000001 )
-			{
-				// current segment seems to be in wrong order
-				std::reverse( points_vec.begin(), points_vec.end() );
-			}
-			else
-			{
-				// maybe the current segment fits to the beginning of the target vector
-				if( (first_target_point-first_segment_point).length() < 0.000001 )
-				{
-					std::reverse( target_vec.begin(), target_vec.end() );
-				}
-				else
-				{
-					if( (first_target_point-last_segment_point).length() < 0.000001 )
-					{
-						std::reverse( target_vec.begin(), target_vec.end() );
-						std::reverse( points_vec.begin(), points_vec.end() );
-					}
-				}
-			}
-		}
-	}
-
-	bool omit_first = false;
-	if( target_vec.size() > 0 )
-	{
-		carve::geom::vector<3> last_point = target_vec.back();
-		carve::geom::vector<3> first_point_current_segment = points_vec.front();
-		if( (last_point-first_point_current_segment).length() < 0.000001 )
-		{
-			omit_first = true;
-		}
-	}
-
-	if( omit_first )
-	{
-		target_vec.insert( target_vec.end(), points_vec.begin()+1, points_vec.end() );
-	}
-	else
-	{
-		target_vec.insert( target_vec.end(), points_vec.begin(), points_vec.end() );
-	}
-	// TODO: handle all segments separately: std::vector<std::vector<carve::geom::vector<3> > >& target_vec
-}
-
-void RepresentationConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<3> >& target_vec, std::vector<carve::geom::vector<3> >& segment_start_points,
-	std::vector<shared_ptr<IfcTrimmingSelect> >& trim1_vec, std::vector<shared_ptr<IfcTrimmingSelect> >& trim2_vec, bool sense_agreement )
-{
-	double length_factor = m_unit_converter->getLengthInMeterFactor();
-	double plane_angle_factor = m_unit_converter->getAngleInRadianFactor();
-
-	//	ENTITY IfcCurve ABSTRACT SUPERTYPE OF	(ONEOF(IfcBoundedCurve, IfcConic, IfcLine, IfcOffsetCurve2D, IfcOffsetCurve3D, IfcPCurve))
-	shared_ptr<IfcBoundedCurve> bounded_curve = dynamic_pointer_cast<IfcBoundedCurve>(ifc_curve);
-	if( bounded_curve )
-	{
-		shared_ptr<IfcCompositeCurve> composite_curve = dynamic_pointer_cast<IfcCompositeCurve>(bounded_curve);
-		if( composite_curve )
-		{
-			// ENTITY IfcBoundedCurve ABSTRACT SUPERTYPE OF	(ONEOF(IfcCompositeCurve, IfcPolyline, IfcTrimmedCurve, IfcBSplineCurve))
-			std::vector<shared_ptr<IfcCompositeCurveSegment> > segements = composite_curve->m_Segments;
-			std::vector<shared_ptr<IfcCompositeCurveSegment> >::iterator it_segments = segements.begin();
-			for(; it_segments!=segements.end(); ++it_segments )
-			{
-				shared_ptr<IfcCompositeCurveSegment> segement = (*it_segments);
-				shared_ptr<IfcCurve> segement_curve = segement->m_ParentCurve;
-
-				std::vector<carve::geom::vector<3> > segment_vec;
-				convertIfcCurve( segement_curve, segment_vec, segment_start_points );
-				if( segment_vec.size() > 0 )
-				{
-					appendPointsToCurve( segment_vec, target_vec );
-				}
-			}
-			return;
-		}
-
-		shared_ptr<IfcPolyline> poly_line = dynamic_pointer_cast<IfcPolyline>(ifc_curve);
-		if( poly_line )
-		{
-			std::vector<shared_ptr<IfcCartesianPoint> >& points = poly_line->m_Points;
-			if( points.size() > 0 )
-			{
-				convertIfcCartesianPointVector( points, target_vec );
-				segment_start_points.push_back( carve::geom::VECTOR( points[0]->m_Coordinates[0]->m_value*length_factor, points[0]->m_Coordinates[1]->m_value*length_factor, 0 ) );
-			}
-			return;
-		}
-
-		shared_ptr<IfcTrimmedCurve> trimmed_curve = dynamic_pointer_cast<IfcTrimmedCurve>(bounded_curve);
-		if( trimmed_curve )
-		{
-			shared_ptr<IfcCurve> basis_curve = trimmed_curve->m_BasisCurve;
-			std::vector<carve::geom::vector<3> > basis_curve_points;
-
-			std::vector<shared_ptr<IfcTrimmingSelect> > curve_trim1_vec = trimmed_curve->m_Trim1;
-			std::vector<shared_ptr<IfcTrimmingSelect> > curve_trim2_vec = trimmed_curve->m_Trim2;
-			bool trimmed_sense_agreement = trimmed_curve->m_SenseAgreement;
-
-			convertIfcCurve( basis_curve, basis_curve_points, segment_start_points, curve_trim1_vec, curve_trim2_vec, trimmed_sense_agreement );
-			appendPointsToCurve( basis_curve_points, target_vec );
-			return;
-		}
-
-		shared_ptr<IfcBSplineCurve> bspline_curve = dynamic_pointer_cast<IfcBSplineCurve>(bounded_curve);
-		if( bspline_curve )
-		{
-			std::vector<shared_ptr<IfcCartesianPoint> >&	points = bspline_curve->m_ControlPointsList;
-			// TODO: compute bspline curve
-			convertIfcCartesianPointVector( points, target_vec );
-			return;
-		}
-		throw UnhandledRepresentationException(bounded_curve);
-	}
-
-	shared_ptr<IfcConic> conic = dynamic_pointer_cast<IfcConic>(ifc_curve);
-	if( conic )
-	{
-		// ENTITY IfcConic ABSTRACT SUPERTYPE OF(ONEOF(IfcCircle, IfcEllipse))
-		shared_ptr<IfcAxis2Placement> conic_placement = conic->m_Position;
-		carve::math::Matrix conic_position_matrix( carve::math::Matrix::IDENT() );
-
-		shared_ptr<IfcAxis2Placement2D> axis2placement2d = dynamic_pointer_cast<IfcAxis2Placement2D>( conic_placement );
-		if( axis2placement2d )
-		{
-			PlacementConverter::convertIfcAxis2Placement2D( axis2placement2d, conic_position_matrix, length_factor );
-		}
-		else if( dynamic_pointer_cast<IfcAxis2Placement3D>( conic_placement ) )
-		{
-			shared_ptr<IfcAxis2Placement3D> axis2placement3d = dynamic_pointer_cast<IfcAxis2Placement3D>( conic_placement );
-			PlacementConverter::convertIfcAxis2Placement3D( axis2placement3d, conic_position_matrix, length_factor );
-		}
-
-		shared_ptr<IfcCircle> circle = dynamic_pointer_cast<IfcCircle>(conic);
-		if( circle )
-		{
-			double circle_radius = 0.0;
-			if( circle->m_Radius )
-			{
-				circle_radius = circle->m_Radius->m_value*length_factor;
-			}
-
-			carve::geom::vector<3> circle_center = conic_position_matrix*carve::geom::VECTOR( 0, 0, 0 );
-
-			double trim_angle1 = 0.0;
-			double trim_angle2 = M_PI*2.0;
-
-			// check for trimming begin
-			shared_ptr<IfcParameterValue> trim_par1;
-			if( trim1_vec.size() > 0 )
-			{
-				if( findFirstInVector( trim1_vec, trim_par1 ) )
-				{
-					trim_angle1 = trim_par1->m_value*plane_angle_factor;
-				}
-				else
-				{
-					shared_ptr<IfcCartesianPoint> trim_point1;
-					if( findFirstInVector( trim1_vec, trim_point1 ) )
-					{
-						carve::geom::vector<3> trim_point;
-						convertIfcCartesianPoint( trim_point1, trim_point );
-						trim_angle1 = getAngleOnCircle( circle_center, circle_radius, trim_point );
-					}
-				}
-			}
-
-			if( trim2_vec.size() > 0 )
-			{
-				// check for trimming end
-				shared_ptr<IfcParameterValue> trim_par2;
-				if( findFirstInVector( trim2_vec, trim_par2 ) )
-				{
-					trim_angle2 = trim_par2->m_value*plane_angle_factor;
-				}
-				else
-				{
-					shared_ptr<IfcCartesianPoint> ifc_trim_point;
-					if( findFirstInVector( trim2_vec, ifc_trim_point ) )
-					{
-						carve::geom::vector<3> trim_point;
-						convertIfcCartesianPoint( ifc_trim_point, trim_point );
-						trim_angle2 = getAngleOnCircle( circle_center, circle_radius, trim_point );
-					}
-				}
-			}
-
-			double start_angle = trim_angle1;
-			double opening_angle = 0;
-
-			if( sense_agreement )
-			{
-				if( trim_angle1 < trim_angle2 )
-				{
-					opening_angle = trim_angle2 - trim_angle1;
-				}
-				else
-				{
-					// circle passes 0 anlge
-					opening_angle = trim_angle2 - trim_angle1 + 2.0*M_PI;
-				}
-			}
-			else
-			{
-				if( trim_angle1 > trim_angle2 )
-				{
-					opening_angle = trim_angle2 - trim_angle1;
-				}
-				else
-				{
-					// circle passes 0 anlge
-					opening_angle = trim_angle2 - trim_angle1 - 2.0*M_PI;
-				}
-			}
-
-			if( opening_angle > 0 )
-			{
-				while( opening_angle > 2.0*M_PI )
-				{
-					opening_angle -= 2.0*M_PI;
-				}
-			}
-			else
-			{
-				while( opening_angle < -2.0*M_PI )
-				{
-					opening_angle += 2.0*M_PI;
-				}
-			}
-
-			int num_segments = 48*(abs(opening_angle)/(2.0*M_PI));
-			if( num_segments < 4 ) num_segments = 4;
-			const double circle_center_x = 0.0;
-			const double circle_center_y = 0.0;
-			std::vector<carve::geom::vector<3> > circle_points;
-			ProfileConverter::addFullArc( circle_points, circle_radius, start_angle, opening_angle, circle_center_x, circle_center_y, num_segments );
-
-			if( circle_points.size() > 0 )
-			{
-				// apply position
-				for( unsigned int i=0; i<circle_points.size(); ++i )
-				{
-					carve::geom3d::Vector& point = circle_points.at(i);
-					point = conic_position_matrix * point;
-				}
-
-				appendPointsToCurve( circle_points, target_vec );
-				segment_start_points.push_back( circle_points.at(0) );
-			}
-
-			return;
-		}
-
-		shared_ptr<IfcEllipse> ellipse = dynamic_pointer_cast<IfcEllipse>(conic);
-		if( ellipse )
-		{
-			if( ellipse->m_SemiAxis1 )
-			{
-				if( ellipse->m_SemiAxis2 )
-				{
-					double xRadius = ellipse->m_SemiAxis1->m_value*length_factor;
-					double yRadius = ellipse->m_SemiAxis2->m_value*length_factor;
-
-					double radiusMax = std::max(xRadius, yRadius);
-					int segments = (int) (radiusMax*2*M_PI*10);
-					if(segments < 16) segments = 16;
-					if(segments > 100) segments = 100;
-
-					// todo: implement clipping
-
-					std::vector<carve::geom::vector<3> > circle_points;
-					double angle=0;
-					for(int i = 0; i < segments; ++i) 
-					{
-						circle_points.push_back( carve::geom::vector<3>( carve::geom::VECTOR( xRadius * cos(angle), yRadius * sin(angle), 0 ) ) );
-						angle += 2*M_PI / segments;
-					}
-
-					// apply position
-					for( unsigned int i=0; i<circle_points.size(); ++i )
-					{
-						carve::geom::vector<3>& point = circle_points.at(i);
-						point = conic_position_matrix * point;
-					}
-					appendPointsToCurve( circle_points, target_vec );
-
-					//if( segment_start_points != NULL )
-					{
-						carve::geom::vector<3> pt0 = circle_points.at(0);
-						segment_start_points.push_back( pt0 );
-					}
-				}
-			}
-			return;
-		}
-		throw UnhandledRepresentationException(conic);
-	}
-
-	shared_ptr<IfcLine> line = dynamic_pointer_cast<IfcLine>(ifc_curve);
-	if( line )
-	{
-		shared_ptr<IfcCartesianPoint> ifc_line_point = line->m_Pnt;
-		carve::geom::vector<3> line_origin;
-		convertIfcCartesianPoint( ifc_line_point, line_origin );
-		
-		// line: lambda(u) = line_point + u*line_direction
-		shared_ptr<IfcVector> line_vec = line->m_Dir;
-		if( !line_vec )
-		{
-			return;
-		}
-		shared_ptr<IfcDirection> ifc_line_direction = line_vec->m_Orientation;
-
-		std::vector<double>& direction_ratios = ifc_line_direction->m_DirectionRatios;
-		carve::geom::vector<3> line_direction;
-		if( direction_ratios.size() > 1 )
-		{
-			if( direction_ratios.size() > 2 )
-			{
-				line_direction = carve::geom::VECTOR( direction_ratios[0], direction_ratios[1], direction_ratios[2] );
-			}
-			else
-			{
-				line_direction = carve::geom::VECTOR( direction_ratios[0], direction_ratios[1], 0 );
-			}
-		}
-		line_direction.normalize();
-
-		shared_ptr<IfcLengthMeasure> line_magnitude = line_vec->m_Magnitude;
-		double line_magnitude_value = line_magnitude->m_value*length_factor;
-
-		// check for trimming at beginning of line
-		double startParameter = 0.0;
-		shared_ptr<IfcParameterValue> trim_par1;
-		if( findFirstInVector( trim1_vec, trim_par1 ) )
-		{
-			startParameter = trim_par1->m_value;
-			line_origin = line_origin + line_direction*startParameter;
-		}
-		else
-		{
-			shared_ptr<IfcCartesianPoint> ifc_trim_point;
-			if( findFirstInVector( trim1_vec, ifc_trim_point ) )
-			{
-				carve::geom::vector<3> trim_point;
-				convertIfcCartesianPoint( ifc_trim_point, trim_point );
-
-				carve::geom::vector<3> closest_point_on_line;
-				closestPointOnLine( closest_point_on_line, trim_point, line_origin, line_direction );
-
-				if( (closest_point_on_line-trim_point).length() < 0.0001 )
-				{
-					// trimming point is on the line
-					line_origin = trim_point;
-				}
-			}
-		}
-		// check for trimming at end of line
-		carve::geom::vector<3> line_end;
-		shared_ptr<IfcParameterValue> trim_par2;
-		if( findFirstInVector( trim2_vec, trim_par2 ) )
-		{
-			line_magnitude_value = trim_par2->m_value*length_factor;
-			line_end = line_origin + line_direction*line_magnitude_value;
-		}
-		else
-		{
-			shared_ptr<IfcCartesianPoint> ifc_trim_point;
-			if( findFirstInVector( trim2_vec, ifc_trim_point ) )
-			{
-				carve::geom::vector<3> trim_point;
-				convertIfcCartesianPoint( ifc_trim_point, trim_point );
-
-				carve::geom::vector<3> closest_point_on_line;
-				closestPointOnLine( closest_point_on_line, trim_point, line_origin, line_direction );
-
-				if( (closest_point_on_line-trim_point).length() < 0.0001 )
-				{
-					// trimming point is on the line
-					line_end = trim_point;
-				}
-			}
-		}
-
-		std::vector<carve::geom::vector<3> > points_vec;
-		points_vec.push_back( line_origin );
-		points_vec.push_back( line_end );
-
-		appendPointsToCurve( points_vec, target_vec );
-
-		//if( segment_start_points != NULL )
-		{
-			segment_start_points.push_back( line_origin );
-		}
-		return;
-	}
-
-	shared_ptr<IfcOffsetCurve2D> offset_curve_2d = dynamic_pointer_cast<IfcOffsetCurve2D>(ifc_curve);
-	if( offset_curve_2d )
-	{
-		// TODO: implement
-		return;
-	}
-
-	shared_ptr<IfcOffsetCurve3D> offset_curve_3d = dynamic_pointer_cast<IfcOffsetCurve3D>(ifc_curve);
-	if( offset_curve_3d )
-	{
-		// TODO: implement
-		return;
-	}
-
-	shared_ptr<IfcPcurve> pcurve = dynamic_pointer_cast<IfcPcurve>(ifc_curve);
-	if( pcurve )
-	{
-		// TODO: implement
-		return;
-	}
-
-	throw UnhandledRepresentationException(ifc_curve);
 }
 
 
@@ -2055,14 +1922,14 @@ void RepresentationConverter::convertIfcSurface( const shared_ptr<IfcSurface>& s
 			shared_ptr<IfcPositiveLengthMeasure> cylindrical_surface_radius = cylindrical_surface->m_Radius;
 			double circle_radius = cylindrical_surface_radius->m_value;
 
-			int num_segments = 48;
+			int num_segments = m_num_vertices_per_circle;	// TODO: adapt to model size and complexity
 			double start_angle = 0.0;
 			double opening_angle = M_PI*2.0;
 			const double circle_center_x = 0.0;
 			const double circle_center_y = 0.0;
 
 			std::vector<carve::geom::vector<3> > circle_points;
-			ProfileConverter::addFullArc( circle_points, circle_radius, start_angle, opening_angle, circle_center_x, circle_center_y, num_segments );
+			ProfileConverter::addArcWithEndPoint( circle_points, circle_radius, start_angle, opening_angle, circle_center_x, circle_center_y, num_segments );
 
 			// apply position and insert points
 			polyline_data->beginPolyline();
@@ -2176,7 +2043,8 @@ void RepresentationConverter::convertIfcFaceList( const std::vector<shared_ptr<I
 					// TODO: insert two triangles and continue
 				}
 
-				convertIfcCartesianPointVectorSkipDuplicates( ifc_points, vertices_bound );
+				m_curve_converter->convertIfcCartesianPointVectorSkipDuplicates( ifc_points, vertices_bound );
+				//convertIfcCartesianPointVectorSkipDuplicates( ifc_points, vertices_bound );
 
 				// if first and last point have same coordinates, remove last point
 				while( vertices_bound.size() > 2 )
@@ -2237,14 +2105,16 @@ void RepresentationConverter::convertIfcFaceList( const std::vector<shared_ptr<I
 					else
 					{
 						std::stringstream strs;
-						strs << "IfcFace: unable to project to plane: nx" << nx << " ny " << ny << " nz " << nz;
-						strs << "IfcPolyLoop id: " << poly_loop->getId() << std::endl;
+						strs << "#" << poly_loop->getId() << " = IfcPolyLoop: " << poly_loop->getId() << " unable to project to plane: nx" << nx << " ny " << ny << " nz " << nz << std::endl;
 						for( int i=0; i<vertices_bound.size(); ++i )
 						{
 							carve::geom3d::Vector& point = vertices_bound.at(i);
 							strs << "bound vertex i " << i << "=(" << point.x << "," << point.y << "," << point.z << ")\n";
 						}
-						throw IfcPPException( strs.str().c_str() );
+
+						detailedReport( strs );
+						continue;
+						//throw IfcPPException( strs.str().c_str() );
 					}
 				}
 
@@ -2434,7 +2304,8 @@ void RepresentationConverter::convertIfcFaceList( const std::vector<shared_ptr<I
 					strs << "	bound vertex (" << loop_point.x << "," << loop_point.y << ")\n";
 				}
 			}
-			throw IfcPPException( strs.str().c_str() );
+			detailedReport( strs );
+			//throw IfcPPException( strs.str().c_str() );
 			continue;
 		}
 
@@ -2501,175 +2372,6 @@ void RepresentationConverter::convertIfcFaceList( const std::vector<shared_ptr<I
 	item_data->open_or_closed_shell_data.push_back( poly_data );
 }
 
-void RepresentationConverter::convertIfcPolyline( const shared_ptr<IfcPolyline>& poly_line, std::vector<carve::geom::vector<3> >& loop )
-{
-	convertIfcCartesianPointVector( poly_line->m_Points, loop );
-}
-
-void RepresentationConverter::convertIfcCartesianPoint( const shared_ptr<IfcCartesianPoint>& ifc_point,	carve::geom3d::Vector& point )
-{
-	double length_factor = m_unit_converter->getLengthInMeterFactor();
-	std::vector<shared_ptr<IfcLengthMeasure> >& coords1 = ifc_point->m_Coordinates;
-	if( coords1.size() > 2 )
-	{
-		// round to 0.1 mm
-		// TODO: round only when digits are noise
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
-		double z = int(coords1[2]->m_value*length_factor*100000)*0.00001;
-		point = carve::geom::VECTOR( x, y, z );
-	}
-	else if( coords1.size() > 1 )
-	{
-		// round to 0.1 mm
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
-		point = carve::geom::VECTOR( x, y, 0.0 );
-	}
-}
-
-void RepresentationConverter::convertIfcCartesianPoint( const shared_ptr<IfcCartesianPoint>& ifc_point,	carve::geom3d::Vector& point, double length_factor )
-{
-	std::vector<shared_ptr<IfcLengthMeasure> >& coords1 = ifc_point->m_Coordinates;
-	if( coords1.size() > 2 )
-	{
-		// round to 0.1 mm
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
-		double z = int(coords1[2]->m_value*length_factor*100000)*0.00001;
-		point = carve::geom::VECTOR( x, y, z );
-	}
-	else if( coords1.size() > 1 )
-	{
-		// round to 0.1 mm
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
-		point = carve::geom::VECTOR( x, y, 0.0 );
-	}
-}
-
-void RepresentationConverter::convertIfcCartesianPointVector( const std::vector<shared_ptr<IfcCartesianPoint> >& points, std::vector<carve::geom::vector<3> >& loop )
-{
-	double length_factor = m_unit_converter->getLengthInMeterFactor();
-	const unsigned int num_points = points.size();
-	for( unsigned int i_point=0; i_point < num_points; ++i_point )
-	{
-		std::vector<shared_ptr<IfcLengthMeasure> >& coords = points[i_point]->m_Coordinates;
-
-		if( coords.size() > 2  )
-		{
-			// round to 0.1 mm
-			double x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			double y = int(coords[1]->m_value*length_factor*100000)*0.00001;
-			double z = int(coords[2]->m_value*length_factor*100000)*0.00001;
-			loop.push_back( carve::geom::VECTOR( x, y, z ) );
-		}
-		else if( coords.size() > 1  )
-		{
-			// round to 0.1 mm
-			double x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			double y = int(coords[1]->m_value*length_factor*100000)*0.00001;
-			loop.push_back( carve::geom::VECTOR( x, y, 0.0 ) );
-		}
-		else
-		{
-			throw IfcPPException("convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2");
-		}
-	}
-}
-
-void RepresentationConverter::convertIfcCartesianPointVectorSkipDuplicates( const std::vector<shared_ptr<IfcCartesianPoint> >& ifc_points, std::vector<carve::geom::vector<3> >& loop )
-{
-	double length_factor = m_unit_converter->getLengthInMeterFactor();
-	std::vector<shared_ptr<IfcCartesianPoint> >::const_iterator it_cp;
-	int i=0;
-	carve::geom3d::Vector vertex_previous;
-	for( it_cp=ifc_points.begin(); it_cp!=ifc_points.end(); ++it_cp, ++i )
-	{
-		shared_ptr<IfcCartesianPoint> cp = (*it_cp);
-		const int cp_id = cp->getId();
-		double x = 0.0, y = 0.0, z = 0.0;
-		std::vector<shared_ptr<IfcLengthMeasure> >& coords = cp->m_Coordinates;
-
-
-		if( coords.size() > 2 )
-		{
-			x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			y = int(coords[1]->m_value*length_factor*100000)*0.00001;
-			z = int(coords[2]->m_value*length_factor*100000)*0.00001;
-		}
-		else if( coords.size() > 1 )
-		{
-			x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			y = int(coords[1]->m_value*length_factor*100000)*0.00001;
-		}
-		else
-		{
-			std::stringstream strs;
-			strs << "IfcCartesianPoint (#" << cp_id << "): coords.size() < 2";
-			throw IfcPPException( strs.str().c_str() );
-		}
-
-		carve::geom3d::Vector vertex( carve::geom::VECTOR( x, y, z ) );
-
-		// skip duplicate vertices
-		if( it_cp != ifc_points.begin() )
-		{
-			if( abs(vertex.x-vertex_previous.x) < 0.00000001 )
-			{
-				if( abs(vertex.y-vertex_previous.y) < 0.00000001 )
-				{
-					if( abs(vertex.z-vertex_previous.z) < 0.00000001 )
-					{
-						// TODO: is it better to report degenerated loops, or to just omit them?
-						continue;
-					}
-				}
-			}
-		}
-		loop.push_back( vertex );
-		vertex_previous = vertex;
-	}
-}
-
-
-
-// @brief: returns the corresponding angle (radian, 0 is to the right) if the given point lies on the circle. If the point does not lie on the circle, -1 is returned.
-double RepresentationConverter::getAngleOnCircle( const carve::geom::vector<3>& circle_center, double circle_radius, const carve::geom::vector<3>& trim_point )
-{
-	double result_angle = -1.0;
-	carve::geom::vector<3> center_trim_point = trim_point-circle_center;
-	if( abs(center_trim_point.length() - circle_radius) < 0.0001 )
-	{
-		carve::geom::vector<3> center_trim_point_direction = center_trim_point;
-		center_trim_point_direction.normalize();
-		double cos_angle = carve::geom::dot( center_trim_point_direction, carve::geom3d::Vector( carve::geom::VECTOR( 1.0, 0, 0 ) ) );
-
-		if( abs(cos_angle) < 0.0001 )
-		{
-			if( center_trim_point.y > 0 )
-			{
-				result_angle = M_PI_2;
-			}
-			else if( center_trim_point.y < 0 )
-			{
-				result_angle = M_PI*1.5;
-			}
-		}
-		else
-		{
-			if( center_trim_point.y > 0 )
-			{
-				result_angle = acos( cos_angle );
-			}
-			else if( center_trim_point.y < 0 )
-			{
-				result_angle = 2.0*M_PI - acos( cos_angle );
-			}
-		}
-	}
-	return result_angle;
-}
 
 shared_ptr<ProfileConverter> RepresentationConverter::getProfileConverter( shared_ptr<IfcProfileDef>& ifc_profile )
 {
@@ -2682,6 +2384,7 @@ shared_ptr<ProfileConverter> RepresentationConverter::getProfileConverter( share
 	}
 
 	shared_ptr<ProfileConverter> profile_converter = shared_ptr<ProfileConverter>( new ProfileConverter( m_unit_converter ) );
+	profile_converter->setNumVerticesPerCircle( m_num_vertices_per_circle );
 	profile_converter->setProfile( ifc_profile );
 #ifdef IFCPP_OPENMP
 	omp_set_lock(&m_writelock_profile_cache);
@@ -2695,117 +2398,13 @@ shared_ptr<ProfileConverter> RepresentationConverter::getProfileConverter( share
 }
 
 
-// osg
-void RepresentationConverter::convertIfcCartesianPoint( const shared_ptr<IfcCartesianPoint>& ifc_point,	osg::Vec3d& point, double length_factor )
-{
-	std::vector<shared_ptr<IfcLengthMeasure> >& coords1 = ifc_point->m_Coordinates;
-	if( coords1.size() > 2 )
-	{
-		point.set( coords1[0]->m_value*length_factor, coords1[1]->m_value*length_factor, coords1[2]->m_value*length_factor );
-	}
-	else if( coords1.size() > 1 )
-	{
-		point.set( coords1[0]->m_value*length_factor, coords1[1]->m_value*length_factor, 0.0 );
-	}
-	else
-	{
-		point.set(0,0,0);
-	}
-}
-
-void RepresentationConverter::convertIfcCartesianPointVector( const std::vector<shared_ptr<IfcCartesianPoint> >& points, osg::Vec3dArray* vertices )
-{
-	double length_factor = m_unit_converter->getLengthInMeterFactor();
-	std::vector<shared_ptr<IfcCartesianPoint> >::const_iterator it_cp;
-	for( it_cp=points.begin(); it_cp!=points.end(); ++it_cp )
-	{
-		shared_ptr<IfcCartesianPoint> cp = (*it_cp);
-
-		if( !cp )
-		{
-			continue;
-		}
-
-		std::vector<shared_ptr<IfcLengthMeasure> >& coords = cp->m_Coordinates;
-		if( coords.size() > 2 )
-		{
-			vertices->push_back( osg::Vec3d( coords[0]->m_value*length_factor, coords[1]->m_value*length_factor, coords[2]->m_value*length_factor ) );
-		}
-		else if( coords.size() > 1 )
-		{
-			vertices->push_back( osg::Vec3d( coords[0]->m_value*length_factor, coords[1]->m_value*length_factor, 0.0 ) );
-		}
-	}
-}
-
-void RepresentationConverter::convertIfcCartesianPointVector( const std::vector<shared_ptr<IfcCartesianPoint> >& points, osg::Vec3dArray* vertices, double length_factor )
-{
-	std::vector<shared_ptr<IfcCartesianPoint> >::const_iterator it_cp;
-	for( it_cp=points.begin(); it_cp!=points.end(); ++it_cp )
-	{
-		shared_ptr<IfcCartesianPoint> cp = (*it_cp);
-
-		if( !cp )
-		{
-			continue;
-		}
-
-		std::vector<shared_ptr<IfcLengthMeasure> >& coords = cp->m_Coordinates;
-		if( coords.size() > 2 )
-		{
-			vertices->push_back( osg::Vec3d( coords[0]->m_value*length_factor, coords[1]->m_value*length_factor, coords[2]->m_value*length_factor ) );
-		}
-		else if( coords.size() > 1 )
-		{
-			vertices->push_back( osg::Vec3d( coords[0]->m_value*length_factor, coords[1]->m_value*length_factor, 0.0 ) );
-		}
-	}
-}
-
-double RepresentationConverter::getAngleOnCircle( const osg::Vec3d& circle_center, double circle_radius, const osg::Vec3d& trim_point )
-{
-	double result_angle = -1.0;
-	osg::Vec3d center_trim_point = trim_point-circle_center;
-	if( abs(center_trim_point.length2() - circle_radius*circle_radius) < 0.01 )
-	{
-		osg::Vec3d center_trim_point_direction = center_trim_point;
-		center_trim_point_direction.normalize();
-		double cos_angle = center_trim_point_direction*osg::Vec3d( 1.0, 0, 0 );
-
-		if( abs(cos_angle) < 0.0001 )
-		{
-			// trim point is vertically up or down from center
-			if( center_trim_point.y() > 0 )
-			{
-				result_angle = M_PI_2;
-			}
-			else if( center_trim_point.y() < 0 )
-			{
-				result_angle = M_PI*1.5;
-			}
-		}
-		else
-		{
-			if( center_trim_point.y() > 0 )
-			{
-				result_angle = acos( cos_angle );
-			}
-			else if( center_trim_point.y() < 0 )
-			{
-				result_angle = 2.0*M_PI - acos( cos_angle );
-			}
-		}
-	}
-	return result_angle;
-}
-
 void RepresentationConverter::detailedReport( std::stringstream& strs )
 {
 #ifdef IFCPP_OPENMP
 	omp_set_lock(&m_writelock_detailed_report);
-	m_detailed_report << strs.str().c_str();
+	m_detailed_report << strs.str().c_str() << std::endl;
 	omp_unset_lock(&m_writelock_detailed_report);
 #else
-	m_detailed_report << strs.str().c_str();
+	m_detailed_report << strs.str().c_str() << std::endl;
 #endif
 }

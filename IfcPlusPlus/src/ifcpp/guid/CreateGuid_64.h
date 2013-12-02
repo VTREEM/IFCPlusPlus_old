@@ -12,7 +12,7 @@ std::string createGUID32();
 
 #ifndef WIN32
 #include <time.h>
-#include <uuid/uuid.h>
+#include <uuid/uuid.hpp>
 #include <stdlib.h>
 
 typedef struct _GUID {		  // size is 16

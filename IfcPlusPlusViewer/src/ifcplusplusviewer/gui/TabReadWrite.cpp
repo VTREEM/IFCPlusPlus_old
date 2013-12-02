@@ -69,7 +69,7 @@
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 #include "viewer/ViewerWidget.h"
-#include "viewer/CameraMan3D.h"
+#include "viewer/Orbit3DManipulator.h"
 #include "cmd/CmdLoadIfcFile.h"
 #include "cmd/CmdWriteIfcFile.h"
 #include "cmd/CommandManager.h"
@@ -96,15 +96,15 @@ public:
 		//m_vbox->takeAt(removeWidget( m_vbox->widget())
 
 		osg::ref_ptr<ReaderWriterIFC> rw = m_system->getReaderWriterIFC();
-		std::vector<shared_ptr<ReaderWriterIFC::BuildingStoreyGroup> >& vec_building_storeys = rw->getBuildingStoreys();
+//		std::vector<shared_ptr<ReaderWriterIFC::BuildingStoreyGroup> >& vec_building_storeys = rw->getBuildingStoreys();
 
-		for( int i=0; i<vec_building_storeys.size(); ++i )
-		{
-			shared_ptr<ReaderWriterIFC::BuildingStoreyGroup>& building_storey = vec_building_storeys[i];
-			osg::ref_ptr<osg::MatrixTransform> storey_transform = building_storey->storey_transform;
+		//for( int i=0; i<vec_building_storeys.size(); ++i )
+		//{
+		//	shared_ptr<ReaderWriterIFC::BuildingStoreyGroup>& building_storey = vec_building_storeys[i];
+		//	osg::ref_ptr<osg::MatrixTransform> storey_transform = building_storey->storey_transform;
 
-			m_vbox->addWidget( new QLabel( storey_transform->getName().c_str() ) );
-		}
+		//	m_vbox->addWidget( new QLabel( storey_transform->getName().c_str() ) );
+		//}
 
 		
 	}
@@ -212,10 +212,10 @@ TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidge
 	combo_hbox->addWidget( btn_add_file );
 	combo_hbox->addWidget( m_btn_load, 0 );
 
-	QHBoxLayout* write_hbox = new QHBoxLayout();
-	write_hbox->addWidget( m_le_path_write );
-	write_hbox->addWidget( btn_set_out_path );
-	write_hbox->addWidget( btn_write_file );
+	//QHBoxLayout* write_hbox = new QHBoxLayout();
+	//write_hbox->addWidget( m_le_path_write );
+	//write_hbox->addWidget( btn_set_out_path );
+	//write_hbox->addWidget( btn_write_file );
 
 	m_io_widget = new QWidget(this);
 	QVBoxLayout* io_vbox = new QVBoxLayout(m_io_widget);
@@ -223,8 +223,8 @@ TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidge
 	io_vbox->addWidget( new QLabel( "Read IFC file" ), 0 );
 	io_vbox->addLayout( combo_hbox, 1 );
 	io_vbox->addSpacing( 10 );
-	io_vbox->addWidget( new QLabel( "Write IFC file" ), 0 );
-	io_vbox->addLayout( write_hbox );
+	//io_vbox->addWidget( new QLabel( "Write IFC file" ), 0 );
+	//io_vbox->addLayout( write_hbox );
 	io_vbox->addStretch( 1 );
 	io_vbox->addWidget( m_progress_bar,	0 );
 
@@ -242,7 +242,9 @@ TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidge
 	{
 		m_io_splitter->restoreState(settings.value("IOsplitterSizes").toByteArray());
 	}
-	connect( m_system, SIGNAL( signalObjectSelected( shared_ptr<IfcPPEntity> ) ), this, SLOT( slotObjectSelected( shared_ptr<IfcPPEntity> ) ) );
+	//connect( m_system, SIGNAL( signalObjectSelected( shared_ptr<IfcPPEntity> ) ), this, SLOT( slotObjectSelected( shared_ptr<IfcPPEntity> ) ) );
+	//connect( m_system, SIGNAL( signalObjectSelected( shared_ptr<IfcPPEntity> ) ), this, SLOT( slotObjectsSelected( shared_ptr<IfcPPEntity> ) ) );
+	connect( m_system, SIGNAL( signalObjectsSelected(std::map<int, shared_ptr<IfcPPEntity> >&) ),	this, SLOT( slotObjectsSelected(std::map<int, shared_ptr<IfcPPEntity> >&) ) );
 }
 TabReadWrite::~TabReadWrite()
 {
@@ -320,13 +322,13 @@ QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::map<int,sha
 		map_visited[obj_def->getId()] = obj_def;
 
 
-		item = new QTreeWidgetItem;
+		item = new QTreeWidgetItem();
 		
 		if( obj_def->m_Name )
 		{
 			if( obj_def->m_Name->m_value.size() > 0 )
 			{
-				item->setText( 0, obj_def->m_Name->m_value.c_str() );
+				item->setText( 0, QString::fromLocal8Bit( obj_def->m_Name->m_value.c_str() ) );
 			}
 		}
 		item->setText( 1, QString::number( obj_def->getId() ) );
@@ -468,13 +470,24 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 		slotTxtOutError( e.what() );
 	}
 
-	m_viewer->frame();
+	m_viewer->update();
 	osg::BoundingSphere bs = m_system->getViewController()->getModelNode()->computeBound();
-	m_viewer->getCameraManager()->setCenter( bs.center() );
+	//m_viewer->getCameraManager()->setCenter( bs.center() );
 
-	zoomToBoundingSphere( m_viewer, bs );
-	m_viewer->frame();
-	zoomToBoundingSphere( m_viewer, bs );
+	osgViewer::View* main_view = m_viewer->getMainView();
+	if( main_view )
+	{
+		osgGA::CameraManipulator* camera_manip = main_view->getCameraManipulator();
+		Orbit3DManipulator* orbit_manip = dynamic_cast<Orbit3DManipulator*>( camera_manip );
+		if( orbit_manip )
+		{
+			orbit_manip->zoomToBoundingSphere( bs );
+		}
+	}
+
+	//zoomToBoundingSphere( m_viewer, bs );
+	//m_viewer->frame();
+	//zoomToBoundingSphere( m_viewer, bs );
 
 	// TODO: adapt near/far plane according to bounding sphere
 	// TODO: add near clipping plane to be able to look into closed buildings when zooming in
@@ -511,7 +524,7 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 					// if z value < 0, then flip viewer
 					if( world_coordinate_system3d->m_RefDirection->m_DirectionRatios[2] < 0 )
 					{
-						m_viewer->getCameraManager()->setZAxisDown( true );
+						//m_viewer->getCameraManager()->setZAxisDown( true );
 					}
 				}
 			}
@@ -654,12 +667,20 @@ QTreeWidgetItem* findItemByIfcId( QTreeWidgetItem* item, int ifc_id )
 	return 0;
 }
 
-void TabReadWrite::slotObjectSelected( shared_ptr<IfcPPEntity> object )
+void TabReadWrite::slotObjectsSelected( std::map<int, shared_ptr<IfcPPEntity> >& map )
 {
 	if( m_block_selection_signals )
 	{
 		return;
 	}
+
+	if( map.size() < 1 )
+	{
+		return;
+	}
+
+	// take the first object from map and highlight it
+	shared_ptr<IfcPPEntity>& object = (*(map.begin())).second;
 	int selected_id = object->getId();
 
 	for( int i=0; i<m_ifc_tree_widget->topLevelItemCount(); ++i )

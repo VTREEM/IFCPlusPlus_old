@@ -12,28 +12,19 @@
 */
 
 #include <QtCore/qglobal.h>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-	#include <QtGui/qaction.h>
-	#include <QtGui/qtoolbar.h>
-	#include <QtGui/qsplitter.h>
-	#include <QtGui/qstatusbar.h>
-	#include <QtGui/qlabel.h>
-	#include <QtCore/qfile.h>
-	#include <QtCore/qsettings.h>
-#else
-	#include <QtWidgets/qaction.h>
-	#include <QtWidgets/qtoolbar.h>
-	#include <QtWidgets/qsplitter.h>
-	#include <QtWidgets/qstatusbar.h>
-	#include <QtWidgets/qlabel.h>
-	#include <QtCore/qfile.h>
-	#include <QtCore/qsettings.h>
-#endif
 
+#include <QtWidgets/qaction.h>
+#include <QtWidgets/qtoolbar.h>
+#include <QtWidgets/qsplitter.h>
+#include <QtWidgets/qstatusbar.h>
+#include <QtWidgets/qlabel.h>
+#include <QtCore/qfile.h>
+#include <QtCore/qsettings.h>
 
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 #include "viewer/ViewerWidget.h"
+#include "viewer/Orbit3DManipulator.h"
 #include "cmd/CmdRemoveSelectedObjects.h"
 #include "cmd/CommandManager.h"
 #include "ifcppgeometry/Utility.h"
@@ -135,7 +126,7 @@ void MainWindow::closeEvent( QCloseEvent *event )
 
 void MainWindow::createTabWidget()
 {
-	m_tabwidget = new QTabWidget;
+	m_tabwidget = new QTabWidget();
 	m_tabwidget->setIconSize( QSize( 19, 19 ) );
 
 	m_tab_read_write	= new TabReadWrite( m_system, m_viewer_widget, this );
@@ -148,9 +139,21 @@ void MainWindow::createTabWidget()
 void MainWindow::slotBtnZoomBoundingsClicked()
 {
 	osg::BoundingSphere bs = m_system->getViewController()->getModelNode()->computeBound();
-	zoomToBoundingSphere( m_viewer_widget, bs );
-	m_viewer_widget->frame();
-	zoomToBoundingSphere( m_viewer_widget, bs );
+	
+	osgViewer::View* main_view = m_viewer_widget->getMainView();
+	if( main_view )
+	{
+		osgGA::CameraManipulator* camera_manip = main_view->getCameraManipulator();
+		Orbit3DManipulator* orbit_manip = dynamic_cast<Orbit3DManipulator*>( camera_manip );
+		if( orbit_manip )
+		{
+			orbit_manip->zoomToBoundingSphere( bs );
+		}
+	}
+
+	//zoomToBoundingSphere( m_viewer_widget, bs );
+	//m_viewer_widget->frame();
+	//zoomToBoundingSphere( m_viewer_widget, bs );
 	// TODO: fancy animation path, views from x/y/z and isometry
 }
 
@@ -160,11 +163,13 @@ void MainWindow::slotBtnWireframeClicked()
 
 	if( toggle_btn->isChecked() )
 	{
-		m_viewer_widget->setViewerMode( ViewerWidget::VIEWER_MODE_WIREFRAME );
+		m_system->getViewController()->setViewerMode( ViewController::VIEWER_MODE_WIREFRAME );
+		//m_viewer_widget->setViewerMode( ViewerWidget::VIEWER_MODE_WIREFRAME );
 	}
 	else
 	{
-		m_viewer_widget->setViewerMode( ViewerWidget::VIEWER_MODE_SHADED );
+		m_system->getViewController()->setViewerMode( ViewController::VIEWER_MODE_SHADED );
+		//m_viewer_widget->setViewerMode( ViewerWidget::VIEWER_MODE_SHADED );
 	}
 }
 

@@ -22,10 +22,11 @@ public:
 	~StatusObservable();	
 	virtual const char* className() { return "StatusObservable"; }
 
-	//! @brief read progress callback mechanism to update progress bar or similar
+	//! @brief progress callback mechanism to update progress bar or similar
 	void setProgressCallBack( void* obj_ptr, void (*func)(void*, double) );
 	void unsetProgressCallBack();
 
+	//! @brief this callback can be connected to set a message in the status bar
 	void setProgressTextCallBack( void* obj_ptr, void (*func)(void*, const std::string& message) );
 	void unsetProgressTextCallBack();
 

@@ -43,7 +43,7 @@ void readConstCharList( const std::string& str, std::vector<const char*>& vec );
 void readStringList( const std::string& str, std::vector<std::string>& vec );
 
 void checkOpeningClosingParenthesis( const char* ch_check );
-void tokenizeEntityArguments( std::string& argument_str, std::vector<std::string>& entity_arguments );
+void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::string>& entity_arguments );
 void tokenizeInlineArgument( std::string input, std::string& keyword, std::string& inner_argument );
 void findLeadingTrailingParanthesis( char* ch, char*& pos_opening, char*& pos_closing );
 void tokenizeList( std::string& list_str, std::vector<std::string>& list_items );
@@ -52,6 +52,7 @@ void tokenizeEntityList( std::string& list_str, std::vector<int>& list_items );
 void readIntValue( std::string& str, int& value );
 void readRealValue( std::string& str, double& value );
 void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source );
+void decodeArgumentStrings( std::vector<std::string>& entity_arguments );
 
 template<class T>
 void readTypeOfIntList( std::string& str, std::vector<shared_ptr<T> >& vec )

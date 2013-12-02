@@ -36,18 +36,19 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	m_rootnode->setDataVariance( osg::Object::DYNAMIC );
 
 	// background camera
-	osg::Camera* sky = new osg::Camera();
-	sky->setName( "Sky_Camera" );
-	sky->setReferenceFrame( osg::Transform::ABSOLUTE_RF );
-	sky->setViewMatrix( osg::Matrix::identity() );
-	sky->setRenderOrder( osg::Camera::PRE_RENDER );
-	sky->setClearColor( osg::Vec4f( 0.96f,	0.96f,	0.96f,	1.0f ) );
+	//osg::Camera* sky = new osg::Camera();
+	//sky->setName( "Sky_Camera" );
+	//sky->setReferenceFrame( osg::Transform::ABSOLUTE_RF );
+	//sky->setViewMatrix( osg::Matrix::identity() );
+	//sky->setRenderOrder( osg::Camera::PRE_RENDER );
+	//sky->setClearColor( osg::Vec4f( 0.96f,	0.96f,	0.96f,	1.0f ) );
 	//m_rootnode->addChild( sky );
 	// TODO: fancy horizon
 
 	m_sw_bound = new osg::Switch();
 	m_rootnode->addChild( m_sw_bound );
 	m_transparent_model = false;
+	m_viewer_mode = VIEWER_MODE_SHADED;
 
 	m_shinyness = 35.f;
 	m_material_default = new osg::Material();
@@ -109,6 +110,32 @@ void ViewController::toggleModelTransparency()
 	else
 	{
 		m_transform_model->setStateSet( m_stateset_default );
+	}
+}
+
+void ViewController::setViewerMode( ViewerMode mode )
+{
+	if( mode != m_viewer_mode )
+	{
+		// first disable previous mode
+		if( m_viewer_mode == VIEWER_MODE_WIREFRAME )
+		{
+			WireFrameModeOff( m_transform_model.get() );
+		}
+		else if( m_viewer_mode == VIEWER_MODE_HIDDEN_LINE )
+		{
+			HiddenLineModeOff( m_transform_model.get() );
+		}
+
+		m_viewer_mode = mode;
+		if( m_viewer_mode == VIEWER_MODE_WIREFRAME )
+		{
+			WireFrameModeOn( m_transform_model.get() );
+		}
+		else if( m_viewer_mode == VIEWER_MODE_HIDDEN_LINE )
+		{
+			HiddenLineModeOn( m_transform_model.get() );
+		}
 	}
 }
 

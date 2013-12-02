@@ -17,78 +17,10 @@
 #include <cmath>
 #endif
 #include <limits>
+#include <codecvt>
 
 #include "ifcpp/model/IfcPPException.h"
 #include "ReaderUtil.h"
-
-
-int hex2int(char c)
-{
-	int first = c / 16 - 3;
-	int second = c % 16;
-	int result = first*10 + second;
-	if(result > 9) result--;
-	return result;
-}
-
-std::string decodeStepString( std::string arg_str )
-{
-	char* stream_pos = (char*)arg_str.c_str();
-	std::string result_str;
-
-	while( *stream_pos != '\0' )
-	{
-		if( *stream_pos == '\\' )
-		{
-			++stream_pos;
-			if( *stream_pos == 'S' )
-			{
-				++stream_pos;
-				if( *stream_pos == '\\' )
-				{
-					++stream_pos;
-					char char_from_8859 = *(stream_pos)+128;
-					result_str.push_back( char_from_8859 );
-					++stream_pos;
-					continue;
-				}
-			}
-			else if( *stream_pos == 'X' )
-			{
-				++stream_pos;
-				if( *stream_pos == '\\' )
-				{
-					++stream_pos;
-					char c = *stream_pos;
-					int result_ascii = hex2int( c );
-					char char_ascii = result_ascii;
-					result_str.push_back( char_ascii );
-					continue;
-				}
-				else if( *stream_pos == '0' )
-				{
-					++stream_pos;
-					if( *stream_pos == '\\' )
-					{
-					}
-				}
-				else if( *stream_pos == '2' )
-				{
-					++stream_pos;
-					if( *stream_pos == '\\' )
-					{
-						// the following sequence of multiples of four hexadecimal characters shall be interpreted as encoding the 
-						// two-octet representation of characters from the BMP in ISO 10646
-					}
-				}
-			}
-		}
-		result_str.push_back( *stream_pos );
-		++stream_pos;
-
-	}
-	return result_str;
-}
 
 void checkOpeningClosingParenthesis( const char* ch_check )
 {
@@ -531,12 +463,12 @@ void readConstCharList( const std::string& str, std::vector<const char*>& vec )
 	{
 		if( ch[i] == ',' )
 		{
-			vec.push_back( decodeStepString( str.substr( last_token, i-last_token ) ).c_str() );
+			vec.push_back( str.substr( last_token, i-last_token ).c_str() );
 			last_token = i+1;
 		}
 		else if( ch[i] == ')' )
 		{
-			vec.push_back( decodeStepString( str.substr( last_token, i-last_token ) ).c_str() );
+			vec.push_back( str.substr( last_token, i-last_token ).c_str() );
 			return;
 		}
 		++i;
@@ -566,12 +498,12 @@ void readStringList( const std::string& str, std::vector<std::string>& vec )
 	{
 		if( ch[i] == ',' )
 		{
-			vec.push_back( decodeStepString( str.substr( last_token, i-last_token ) ) );
+			vec.push_back( str.substr( last_token, i-last_token ) );
 			last_token = i+1;
 		}
 		else if( ch[i] == ')' )
 		{
-			vec.push_back( decodeStepString( str.substr( last_token, i-last_token ) ) );
+			vec.push_back( str.substr( last_token, i-last_token ) );
 			return;
 		}
 		++i;
@@ -579,7 +511,126 @@ void readStringList( const std::string& str, std::vector<std::string>& vec )
 }
 
 
-void tokenizeEntityArguments( std::string& argument_str, std::vector<std::string>& entity_arguments )
+void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
+{
+	std::vector<std::string>::iterator it = entity_arguments.begin();
+	for( ; it != entity_arguments.end(); ++it )
+	{
+		std::string& argument_str = (*it);
+		const size_t arg_length = argument_str.length();
+		
+		std::string arg_str_new( argument_str );
+
+		if( arg_length > 0 )
+		{
+			char* stream_pos = (char*)argument_str.c_str();				// ascii characters from STEP file
+			char* stream_pos_new = (char*)arg_str_new.c_str();				// ascii characters from STEP file
+			{
+				while( *stream_pos != '\0' )
+				{
+					
+
+					if( *stream_pos == '\\' )
+					{
+						if( *(stream_pos+1) == 'S' )
+						{
+							if( *(stream_pos+2) == '\\' )
+							{
+								if( *(stream_pos+3) != '\0' )
+								{
+									if( *(stream_pos+4) == '\\' )
+									{
+										if( *(stream_pos+5) == 'S' )
+										{
+											if( *(stream_pos+6) == '\\' )
+											{
+												if( *(stream_pos+7) != '\0' )
+												{
+													char first = *(stream_pos+3);
+													char second = *(stream_pos+7);
+
+													*stream_pos_new = char(125 + first + second);
+													++stream_pos_new;
+
+													stream_pos += 8;
+													continue;
+												}
+											}
+										}
+									}
+									else 
+									{
+										// next characters code value v shall be interpreted as v + 128
+										char char_pos = *(stream_pos+3);
+										char char_pos_128 =  char_pos + 128;
+
+										*stream_pos_new = char_pos_128;
+										++stream_pos_new;
+										stream_pos += 4;
+										continue;
+									}
+								}
+							}
+						}
+						else
+							if( *(stream_pos+1) == 'X' )
+						{
+							//++stream_pos;
+							if( *(stream_pos+2) == '\\' )
+							{
+								//++stream_pos;
+								char c = *(stream_pos+3);
+
+								int first = int(c) / 16 - 3;
+								int second = c % 16;
+								int result = first*10 + second;
+								if(result > 9) result--;
+								//int result_ascii = hex2int( c );
+								char char_ascii = result;
+
+								*stream_pos_new = char_ascii;
+								++stream_pos_new;
+
+								stream_pos += 4;
+								continue;
+
+								//result_str.push_back( char_ascii );
+								//continue;
+							}
+							else if( *(stream_pos+2) == '0' )
+							{
+								if( *(stream_pos+3) == '\\' )
+								{
+								}
+							}
+							else if( *(stream_pos+2) == '2' )
+							{
+								if( *(stream_pos+3) == '\\' )
+								{
+									// the following sequence of multiples of four hexadecimal characters shall be interpreted as encoding the 
+									// two-octet representation of characters from the BMP in ISO 10646
+								}
+							}
+						}
+					}
+					
+
+					*stream_pos_new = *stream_pos;
+					++stream_pos_new;
+					++stream_pos;
+				}
+
+				*stream_pos_new = '\0';
+			}
+		}
+
+		argument_str.assign( arg_str_new );
+	}
+}
+
+// @brief split one string into a vector of argument strings
+// caution: this method runs in OpenMP parallel threads
+void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::string>& entity_arguments )
 {
 	char* stream_pos = (char*)argument_str.c_str();
 	if( *stream_pos != '(' )
@@ -647,9 +698,7 @@ void tokenizeEntityArguments( std::string& argument_str, std::vector<std::string
 				char* end_arg = stream_pos-1;
 				if( *begin_arg == '\'' && *end_arg == '\'' )
 				{
-					// TODO: 
 					std::string arg_str( begin_arg+1, end_arg-begin_arg-1 );
-					arg_str = decodeStepString( arg_str );
 					entity_arguments.push_back( arg_str );
 				}
 				else
@@ -696,6 +745,7 @@ void tokenizeEntityArguments( std::string& argument_str, std::vector<std::string
 		++stream_pos;
 	}
 }
+
 
 void tokenizeInlineArgument( std::string arg, std::string& keyword, std::string& inline_arg )
 {

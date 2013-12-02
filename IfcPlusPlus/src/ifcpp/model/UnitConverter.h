@@ -19,11 +19,13 @@
 #include <map>
 #include "shared_ptr.h"
 class IfcProject;
+class IfcSIPrefix;
 
 class UnitConverter
 {
 public:
 	UnitConverter();
+	~UnitConverter();
 	void setIfcProject( shared_ptr<IfcProject> project);
 
 	double getLengthInMeterFactor()
@@ -35,9 +37,12 @@ public:
 	{
 		return m_plane_angle_factor;
 	}
+	shared_ptr<IfcSIPrefix>& getLoadedPrefix() { return m_loaded_prefix; }
 
 private:
 	std::map<int, double> m_prefix_map;
+
+	shared_ptr<IfcSIPrefix>	m_loaded_prefix;
 	double m_length_unit_factor;
 	double m_plane_angle_factor;
 };

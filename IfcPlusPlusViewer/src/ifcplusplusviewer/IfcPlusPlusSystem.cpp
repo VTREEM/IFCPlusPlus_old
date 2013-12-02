@@ -13,9 +13,14 @@
 
 #include <osg/Group>
 #include <osg/Material>
+#include <osg/PolygonMode>
+#include <osg/PolygonOffset>
+#include <osgFX/Scribe>
 #include <osgUtil/Optimizer>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 #include <osgGA/GUIActionAdapter>
+#include <osgGA/TrackballManipulator>
 #include <osgDB/Registry>
 
 #include <QtCore/QFile>
@@ -28,7 +33,7 @@
 #include "ifcpp/IFC4/include/IfcProduct.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
 
-#include "viewer/CameraMan3D.h"
+#include "viewer/Orbit3DManipulator.h"
 #include "cmd/CmdRemoveSelectedObjects.h"
 #include "cmd/CommandManager.h"
 #include "ViewController.h"
@@ -38,12 +43,7 @@ IfcPlusPlusSystem::IfcPlusPlusSystem()
 {
 	m_view_controller = shared_ptr<ViewController>( new ViewController( this ) );
 	m_command_manager = shared_ptr<CommandManager>( new CommandManager() );
-
-	m_drag = false;
-	m_ga_t0 = NULL;
-
-	m_ifc_model		= shared_ptr<IfcPPModel>( new IfcPPModel() );//m_reader_writer->getIfcPPModel();
-	//
+	m_ifc_model		= shared_ptr<IfcPPModel>( new IfcPPModel() );
 
 	if( osgDB::Registry::instance() )
 	{
@@ -141,30 +141,30 @@ bool IfcPlusPlusSystem::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 			}
 			case osgGA::GUIEventAdapter::PUSH :
 			{
-				m_drag = false;
+				//m_drag = false;
 				// TODO: set camera center to first intersection point
 				break;
 			}
 			case osgGA::GUIEventAdapter::RELEASE :
 			{
-				if( m_ga_t0 != NULL  )
-				{
-					if( !m_drag )
-					{
-						unsigned int buttonMask = m_ga_t0->getButtonMask();
-						if( buttonMask==osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON )
-						{
-							handled = intersectModel( ea, aa, false, false );
-						}
-					}
-				}
+				//if( m_ga_t0 != NULL  )
+				//{
+				//	if( !m_drag )
+				//	{
+				//		unsigned int buttonMask = m_ga_t0->getButtonMask();
+				//		if( buttonMask==osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON )
+				//		{
+				//			handled = intersectModel( ea, aa, false, false );
+				//		}
+				//	}
+				//}
 
-				m_drag = false;
+				//m_drag = false;
 				break;
 			}
 			case osgGA::GUIEventAdapter::DRAG :
 			{
-				m_drag = true;
+//				m_drag = true;
 				break;
 			}
 
@@ -182,7 +182,7 @@ bool IfcPlusPlusSystem::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 		std::cout << e.what();
 	}
 #endif
-	m_ga_t0 = &ea;
+//	m_ga_t0 = &ea;
 	return handled;
 }
 
@@ -190,110 +190,6 @@ bool IfcPlusPlusSystem::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 #define _DEBUG_GEOMETRY
 #endif
 
-//#define POLYTOPE_INTERSECTOR
-bool IfcPlusPlusSystem::intersectModel( const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa, bool click, bool doubleclick )
-{
-	osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
-	if( !view )
-	{
-		return false;
-	}
-	double mx = ea.getXnormalized();
-	double my = ea.getYnormalized();
-	
-	double w = 0.005;
-	double h = 0.005;
-	
-#ifdef POLYTOPE_INTERSECTOR
-	osg::ref_ptr<osgUtil::PolytopeIntersector> picker = new osgUtil::PolytopeIntersector( osgUtil::Intersector::PROJECTION, mx-w, my-h, mx+w, my+h );
-#else
-	osg::ref_ptr<osgUtil::LineSegmentIntersector> picker = new osgUtil::LineSegmentIntersector( osgUtil::Intersector::PROJECTION, ea.getXnormalized(),ea.getYnormalized() );
-#endif
-	picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_ONE_PER_DRAWABLE );
-	osgUtil::IntersectionVisitor iv( picker.get() );
-	osg::Camera* cam = view->getCamera();
-	cam->accept(iv);
-
-	if( picker->containsIntersections() )
-	{
-#ifdef POLYTOPE_INTERSECTOR
-		osgUtil::PolytopeIntersector::Intersection intersection = picker->getFirstIntersection();
-#else
-		osgUtil::LineSegmentIntersector::Intersection intersection = picker->getFirstIntersection();
-#endif
-		
-		osg::NodePath& nodePath = intersection.nodePath;
-
-		for( unsigned int i=0; i<nodePath.size(); ++i )
-		{
-			osg::Node* node = nodePath[nodePath.size()-i-1];
-			const std::string node_name = node->getName();
-
-			// check if picked object is a representation of an IfcProduct
-			if( node_name.length() == 0 ) continue;
-			if( node_name.at(0) != '#' ) continue;
-
-			osg::Group* group = dynamic_cast<osg::Group*>( node );
-			if( !group )
-			{
-				continue;
-			}
-
-			std::string id_str = node_name.substr(1,node_name.length()-1);
-			int id = atoi( id_str.c_str() );
-
-			std::map<int, shared_ptr<selectedEntity> >::iterator it_selected = m_map_selected.find( id );
-
-			if( it_selected != m_map_selected.end() )
-			{
-				shared_ptr<selectedEntity> selected_entity = it_selected->second;
-				// is already selected, so deselect
-				setObjectSelected( selected_entity->entity, false, selected_entity->osg_group );
-				return true;
-			}
-			else
-			{
-				// select
-				const std::map<int,shared_ptr<IfcPPEntity> >& map_ifc_objects = m_ifc_model->getMapIfcObjects();
-				std::map<int,shared_ptr<IfcPPEntity> >::const_iterator it_find = map_ifc_objects.find(id);
-				if( it_find != map_ifc_objects.end() )
-				{
-					shared_ptr<IfcPPEntity> entitiy_selected = it_find->second;
-					setObjectSelected( entitiy_selected, true, group );
-
-#ifdef _DEBUG_GEOMETRY
-					shared_ptr<IfcProduct> product_selected = dynamic_pointer_cast<IfcProduct>(entitiy_selected);
-					
-					if( product_selected )
-					{
-						std::stringstream err;
-						try
-						{
-							osg::MatrixTransform* mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 1 ) );
-							shared_ptr<ReaderWriterIFC::ProductShape> read_result( new ReaderWriterIFC::ProductShape() );
-							osg::ref_ptr<ReaderWriterIFC> reader_writer( new ReaderWriterIFC() );
-							reader_writer->setModel( m_ifc_model );
-							reader_writer->convertIfcProduct( product_selected, read_result );
-							mt->addChild( read_result->product_group );
-							m_view_controller->getRootNode()->addChild( mt );
-						}
-						catch( IfcPPException& e )
-						{
-							err << e.what();
-						}
-					}
-#endif
-
-					return true;
-				}
-			}
-
-			return true;
-		}
-		return true;
-	}
-	return false;
-}
 
 osg::Group* findNodeByIfcId( osg::Group* group, int ifc_id )
 {
@@ -343,45 +239,96 @@ void IfcPlusPlusSystem::setObjectSelected( shared_ptr<IfcPPEntity> ifc_object, b
 
 	if( selected )
 	{
-		// insert into set of selected objects
 		if( grp )
 		{
+			// insert into set of selected objects
 			shared_ptr<selectedEntity> selected_entity( new selectedEntity() );
 			selected_entity->entity = ifc_object;
 			selected_entity->osg_group = grp;
-			selected_entity->original_stateset = grp->getOrCreateStateSet();
 			m_map_selected[id] = selected_entity;
 
-			// now overwrite stateset of object
-			grp->setStateSet( m_view_controller->getStateSetSelected() );
+			for( int child_ii = 0; child_ii < grp->getNumChildren(); ++child_ii )
+			{
+				osg::Node* child_node = grp->getChild( child_ii );
+
+				osgFX::Scribe* child_as_scribe = dynamic_cast<osgFX::Scribe*>(child_node);
+				if( !child_as_scribe )
+				{
+					// highlight object with an osgFX::Scribe
+					osgFX::Scribe* scribe = new osgFX::Scribe();
+					scribe->addChild(child_node);
+					scribe->setWireframeColor( osg::Vec4f( 0.98f, 0.98f, 0.22f, 0.9f ) );
+					grp->replaceChild(child_node,scribe);
+				}
+			}
 		}
-		emit( signalObjectSelected( ifc_object ) );
+
+		std::map<int, shared_ptr<IfcPPEntity> > map_objects;
+		map_objects[id] = ifc_object;
+		emit( signalObjectsSelected( map_objects ) );
 	}
 	else
 	{
 		// deselect
 		if( grp )
 		{
-			std::map<int, shared_ptr<selectedEntity> >::iterator it_selected = m_map_selected.find( id );
-
+ 			std::map<int, shared_ptr<selectedEntity> >::iterator it_selected = m_map_selected.find( id );
 			if( it_selected != m_map_selected.end() )
 			{
 				shared_ptr<selectedEntity> selected_entity = it_selected->second;
-
-				osg::StateSet* state_original = selected_entity->original_stateset.get();
-				if( state_original )
+				for( int child_ii = 0; child_ii < grp->getNumChildren(); ++child_ii )
 				{
-					grp->setStateSet( state_original );
+					osg::Node* child_node = grp->getChild( child_ii );
+					osg::Group* child_as_group = dynamic_cast<osg::Group*>(child_node);
+					if( child_as_group )
+					{
+						osgFX::Scribe* child_as_scribe = dynamic_cast<osgFX::Scribe*>(child_as_group);
+						if( child_as_scribe )
+						{
+							if( child_as_scribe->getNumChildren() > 0 )
+							{
+								osg::Node* original_child = child_as_scribe->getChild(0);
+								grp->replaceChild( child_node, original_child );
+							}
+						}
+					}
 				}
 				m_map_selected.erase( it_selected );
 			}
+			
 		}
-		emit( signalObjectUnSelected( ifc_object ) );
+		std::map<int, shared_ptr<IfcPPEntity> > map_objects;
+		map_objects[id] = ifc_object;
+		emit( signalObjectsUnselected( map_objects ) );
 	}
 }
 
+
 void IfcPlusPlusSystem::clearSelection()
 {
-	m_map_selected.clear();
+	for( std::map<int, shared_ptr<selectedEntity> >::iterator it = m_map_selected.begin(); it != m_map_selected.end(); ++it )
+	{
+		shared_ptr<selectedEntity>& selected_entity = (*it).second;
+		shared_ptr<IfcPPEntity> entity = selected_entity->entity;
+		osg::Group* grp = selected_entity->osg_group;
 
+		for( int child_ii = 0; child_ii < grp->getNumChildren(); ++child_ii )
+		{
+			osg::Node* child_node = grp->getChild( child_ii );
+			osg::Group* child_as_group = dynamic_cast<osg::Group*>(child_node);
+			if( child_as_group )
+			{
+				osgFX::Scribe* child_as_scribe = dynamic_cast<osgFX::Scribe*>(child_as_group);
+				if( child_as_scribe )
+				{
+					if( child_as_scribe->getNumChildren() > 0 )
+					{
+						osg::Node* original_child = child_as_scribe->getChild(0);
+						grp->replaceChild( child_node, original_child );
+					}
+				}
+			}
+		}
+	}
+	m_map_selected.clear();
 }

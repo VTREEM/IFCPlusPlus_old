@@ -27,6 +27,13 @@ namespace osg { class Material; }
 class ViewController
 {
 public:
+	enum ViewerMode
+	{
+		VIEWER_MODE_SHADED,
+		VIEWER_MODE_WIREFRAME,
+		VIEWER_MODE_HIDDEN_LINE
+	};
+
 	ViewController( IfcPlusPlusSystem*	system );
 	~ViewController();
 
@@ -39,6 +46,8 @@ public:
 	void toggleSceneLight();
 	void toggleModelTransparency();
 	void toggleBoundingSphere();
+	void setViewerMode( ViewerMode mode );
+	ViewerMode getViewerMode() { return m_viewer_mode; }
 
 private:
 	IfcPlusPlusSystem*		m_system;
@@ -53,6 +62,7 @@ private:
 	float								m_shinyness;
 	double								m_factor_graphics_scale;
 	bool								m_transparent_model;
+	ViewerMode							m_viewer_mode;
 
 	osg::ref_ptr<osg::Material>			m_material_default;
 	osg::ref_ptr<osg::StateSet>			m_stateset_selected;

@@ -25,6 +25,8 @@
 #include <osg/PolygonOffset>
 #include <osg/AnimationPath>
 #include <osgGA/CameraManipulator>
+#include <osgGA/AnimationPathManipulator>
+#include <osgViewer/CompositeViewer>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -44,6 +46,7 @@
 #include "ifcpp/model/shared_ptr.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcpp/IFC4/include/IfcFace.h"
+#include "RepresentationConverter.h"
 #include "Utility.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,7 +55,7 @@ void WireFrameModeOn( osg::StateSet* state )
 	osg::ref_ptr<osg::PolygonMode> polygon_mode = dynamic_cast<osg::PolygonMode*>( state->getAttribute( osg::StateAttribute::POLYGONMODE ));
 	if(  !polygon_mode )
 	{
-		polygon_mode = new osg::PolygonMode;
+		polygon_mode = new osg::PolygonMode();
 		state->setAttribute( polygon_mode );	
 	}
 	polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE );
@@ -81,7 +84,7 @@ void WireFrameModeOff( osg::StateSet* state )
 
 	if(  !polygon_mode )
 	{
-		polygon_mode = new osg::PolygonMode;
+		polygon_mode = new osg::PolygonMode();
 		state->setAttribute( polygon_mode );	
 	}
 	polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL );
@@ -234,17 +237,17 @@ osg::ref_ptr<osg::Geode> createCoordinateAxes()
 		colors->push_back( osg::Vec4f( 0.f, 1.f, 0.f, alpha ) );
 		colors->push_back( osg::Vec4f( 0.f, 1.f, 0.f, alpha ) );
 		colors->push_back( osg::Vec4f( 0.f, 0.f, 1.f, alpha ) );
-		colors->push_back( osg::Vec4f( 0.f, 1.f, 1.f, alpha ) );
+		colors->push_back( osg::Vec4f( 0.f, 0.f, 1.f, alpha ) );
 
 		geom->setColorArray( colors );
 		geom->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
 #endif
 		geom->setVertexArray( vertices );
-		geom->addPrimitiveSet( new osg::DrawArrays(osg::PrimitiveSet::LINE_STRIP, 0, 6 ) );
+		geom->addPrimitiveSet( new osg::DrawArrays( osg::PrimitiveSet::LINE_STRIP, 0, 6 ) );
 
 		// make negative axed dotted
 		osg::ref_ptr<osg::StateSet> stateset_negative = geom->getOrCreateStateSet();
-		osg::ref_ptr<osg::LineStipple> linestipple = new osg::LineStipple;
+		osg::ref_ptr<osg::LineStipple> linestipple = new osg::LineStipple();
 		linestipple->setFactor( 2 );
 		linestipple->setPattern( 0xAAAA );
 		stateset_negative->setAttributeAndModes( linestipple, osg::StateAttribute::ON );
@@ -266,6 +269,39 @@ osg::ref_ptr<osg::Geode> createCoordinateAxes()
 		geode->addDrawable( label_x );
 	}
 	
+	return geode;
+}
+
+osg::ref_ptr<osg::Geode> createCoordinateGrid()
+{
+	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+	osg::ref_ptr<osg::StateSet> stateset = geode->getOrCreateStateSet();
+	stateset->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
+
+	{
+		osg::ref_ptr<osg::Geometry> geom	= new osg::Geometry();
+		geode->addDrawable( geom );
+
+		osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array();
+
+		for( int i=0; i<=20; ++i )
+		{
+			vertices->push_back( osg::Vec3f( -10, -10+i, 0.0 ) );
+			vertices->push_back( osg::Vec3f(  10, -10+i, 0.0 ) );
+
+			vertices->push_back( osg::Vec3f( -10+i, -10, 0.0 ) );
+			vertices->push_back( osg::Vec3f( -10+i, 10, 0.0 ) );
+		}
+		
+		osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array();
+		colors->push_back( osg::Vec4f( 0.7f,	0.7f,	0.7f, 0.5f ) );
+		geom->setColorArray( colors );
+		geom->setColorBinding( osg::Geometry::BIND_OVERALL );
+
+		geom->setVertexArray( vertices );
+		geom->addPrimitiveSet( new osg::DrawArrays(osg::PrimitiveSet::LINES, 0, vertices->size() ) );
+	}
+
 	return geode;
 }
 
@@ -472,6 +508,12 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, c
 		const std::vector<carve::geom::vector<3> >& path = (*it_paths);
 		const unsigned int num_points_in_loop = path.size();
 
+		if( num_points_in_loop < 2 )
+		{
+			std::cout << "extrude: num_points_in_loop < 2"  << std::endl;
+			continue;
+		}
+
 		// check if path has correct winding direction
 		carve::geom::vector<3> normal = computePolygonNormal( path );
 
@@ -521,6 +563,11 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, c
 
 		poly_data.addFace(top_loop.rbegin(), top_loop.rend());
 		poly_data.addFace(bottom_loop.begin(), bottom_loop.end());
+
+		if( top_loop.size() < path.size() )
+		{
+			throw std::exception( "top_loop.size() < path.size()" );
+		}
 
 		for( size_t i = 0; i < path.size()-1; ++i )
 		{
@@ -780,113 +827,401 @@ bool LineSegmentToLineSegmentIntersection(carve::geom::vector<2>& v1, carve::geo
 }
 
 
-void zoomToBoundingSphere( osgViewer::Viewer* viewer, const osg::BoundingSphere& bs, double ratio_w )
+void appendPointsToCurve( std::vector<carve::geom::vector<3> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec )
 {
-	osgGA::CameraManipulator* camera_manipulator = viewer->getCameraManipulator();
-	if( !camera_manipulator )
+	// sometimes, sense agreement is not given correctly. try to correct sense of segment if necessary
+	if( target_vec.size() > 0 && points_vec.size() > 1 )
 	{
-		return;
-	}
+		carve::geom::vector<3> first_target_point = target_vec.front();
+		carve::geom::vector<3> last_target_point = target_vec.back();
 
-	osg::Camera* cam = viewer->getCamera();
+		carve::geom::vector<3> first_segment_point = points_vec.front();
+		carve::geom::vector<3> last_segment_point = points_vec.back();
 
-	const osg::Matrixd vp( cam->getViewport()->computeWindowMatrix() );
-	const osg::Matrixd vm( cam->getViewMatrix() );
-	const double screen_width = vp( 0, 0 )*2.0f;
-	const double screen_height = vp( 1, 1 )*2.0f;
-	const double target_width = screen_width*ratio_w;
-	const double target_height = screen_height;
-
-	osg::Matrix matrix;
-	osg::Matrixd pm( cam->getProjectionMatrix() );
-	if(  vp.valid() ) matrix.preMult( vp );
-	if(  pm.valid() ) matrix.preMult( pm );
-	if(  vm.valid() ) matrix.preMult( vm );
-
-	// scale
-	{
-		osg::Matrix inverse;
-		inverse.invert( matrix );
-
-		osg::Vec3f p1( 0.0, 0.0, 0.0);
-		osg::Vec3d p2;
-		if( target_height > target_width )
+		if( (last_target_point-first_segment_point).length() < 0.000001 )
 		{
-			p2.set( target_width*0.5f, 0.0, 0.0);
+			// segment order is as expected, nothing to do
 		}
 		else
 		{
-			p2.set( target_height*0.5f, 0.0, 0.0);
+			if( (last_target_point-last_segment_point).length() < 0.000001 )
+			{
+				// current segment seems to be in wrong order
+				std::reverse( points_vec.begin(), points_vec.end() );
+			}
+			else
+			{
+				// maybe the current segment fits to the beginning of the target vector
+				if( (first_target_point-first_segment_point).length() < 0.000001 )
+				{
+					std::reverse( target_vec.begin(), target_vec.end() );
+				}
+				else
+				{
+					if( (first_target_point-last_segment_point).length() < 0.000001 )
+					{
+						std::reverse( target_vec.begin(), target_vec.end() );
+						std::reverse( points_vec.begin(), points_vec.end() );
+					}
+				}
+			}
 		}
-
-		p1 = p1 * inverse;
-		p2 = p2 * inverse;
-
-		double d_model = (p2 - p1).length();
-		double scale_factor = 1.0;
-		if( bs.radius() != 0.0 )
-		{
-			scale_factor = d_model/bs.radius();
-		}
-		scale_factor *= 0.85f;
-
-		// scale
-		osg::Matrix scale;
-		scale.makeScale( scale_factor, scale_factor, 1 );
-
-		cam->setProjectionMatrix( pm*scale );
 	}
 
-	// move
+	bool omit_first = false;
+	if( target_vec.size() > 0 )
 	{
-		pm.set( cam->getProjectionMatrix() );
-		osg::Vec3f bs_center( bs.center() );
-		// project point p1 to screen coordinates
-		bs_center = bs_center*matrix;
-
-		//float dx = target_width*0.5f - bs_center.x();
-		double target_x = target_width*0.5f;
-		double dx = target_x - bs_center.x();
-		dx = dx/(screen_width)*2.0f;
-		double dy = (screen_height - bs_center.y()*2.0f)/(screen_height);
-
-		osg::Matrix trans;
-		trans.makeTranslate( dx, dy, 0 );
-		// animation
+		carve::geom::vector<3> last_point = target_vec.back();
+		carve::geom::vector<3> first_point_current_segment = points_vec.front();
+		if( (last_point-first_point_current_segment).length() < 0.000001 )
 		{
-			//osg::AnimationPath* path = new osg::AnimationPath();
-			//osg::Vec3d position;
-			//osg::Quat rotation = pm.getRotate();
-			//int num_steps = 10;
-			//double time=0.0;
-			//double time_delta = 5.0/(double)num_steps;
-			//for(int i=0;i<num_steps;++i)
-			//{
-			//	path->insert(time,osg::AnimationPath::ControlPoint(position,rotation));
-			//	position._v[0] += dx/(double)num_steps*100;
-			//	position._v[1] += dy/(double)num_steps*1000;
-			//	time += time_delta;
-			//}
-			//path->setLoopMode( osg::AnimationPath::NO_LOOPING );
+			omit_first = true;
+		}
+	}
 
-			//osg::AnimationPathCallback* apc = new osg::AnimationPathCallback( path );
+	if( omit_first )
+	{
+		target_vec.insert( target_vec.end(), points_vec.begin()+1, points_vec.end() );
+	}
+	else
+	{
+		target_vec.insert( target_vec.end(), points_vec.begin(), points_vec.end() );
+	}
+	// TODO: handle all segments separately: std::vector<std::vector<carve::geom::vector<3> > >& target_vec
+}
 
-			//cam->setUpdateCallback( apc );
 
-			//camera_manipulator->setAnimationPath( path );
+void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m )
+{
+	carve::geom::vector<3> f(center-eye);
+    f.normalize();
+    carve::geom::vector<3> s = cross(f,up);
+    s.normalize();
+    carve::geom::vector<3> u = cross(s, f);
+    u.normalize();
 
+	//m.m[0][0] = s[0];
+	//m.m[0][1] = u[0];
+	//m.m[0][2] = -f[0];
+	//m.m[0][3] = 0.0;
+	//m.m[1][0] = s[1];
+	//m.m[1][1] = u[1];
+	//m.m[1][2] = -f[1];
+	//m.m[1][3] = 0.0;
+	//m.m[2][0] = s[2];
+	//m.m[2][1] = u[2];
+	//m.m[2][2] = -f[2];
+	//m.m[2][3] = 0.0;
+	//m.m[3][0] = 0.0;
+	//m.m[3][1] = 0.0;
+	//m.m[3][2] = 0.0;
+	//m.m[3][3] = 1.0;
+
+	m._11 = s[0];
+	m._12 = u[0];
+	m._13 = -f[0];
+	m._14 = 0.0;
+	m._21 = s[1];
+	m._22 = u[1];
+	m._23 = -f[1];
+	m._24 = 0.0;
+	m._31 = s[2];
+	m._32 = u[2];
+	m._33 = -f[2];
+	m._34 = 0.0;
+	m._41 = 0.0;
+	m._42 = 0.0;
+	m._43 = 0.0;
+	m._44 = 1.0;
+
+	for (unsigned i = 0; i < 3; ++i)
+    {
+        double tmp = -eye[i];
+        if (tmp == 0)
+            continue;
+        m.m[3][0] += tmp*m.m[i][0];
+        m.m[3][1] += tmp*m.m[i][1];
+        m.m[3][2] += tmp*m.m[i][2];
+        m.m[3][3] += tmp*m.m[i][3];
+    }
+}
+
+void makeRotate( const carve::geom::vector<3>& from, const carve::geom::vector<3>& to, carve::math::Quaternion quat )
+{
+
+    // This routine takes any vector as argument but normalized
+    // vectors are necessary, if only for computing the dot product.
+    // Too bad the API is that generic, it leads to performance loss.
+    // Even in the case the 2 vectors are not normalized but same length,
+    // the sqrt could be shared, but we have no way to know beforehand
+    // at this point, while the caller may know.
+    // So, we have to test... in the hope of saving at least a sqrt
+    carve::geom::vector<3> sourceVector = from;
+    carve::geom::vector<3> targetVector = to;
+
+    double fromLen2 = from.length2();
+    double fromLen;
+    // normalize only when necessary, epsilon test
+    if ((fromLen2 < 1.0-1e-7) || (fromLen2 > 1.0+1e-7)) {
+        fromLen = sqrt(fromLen2);
+        sourceVector /= fromLen;
+    } else fromLen = 1.0;
+
+    double toLen2 = to.length2();
+    // normalize only when necessary, epsilon test
+    if ((toLen2 < 1.0-1e-7) || (toLen2 > 1.0+1e-7)) {
+        double toLen;
+        // re-use fromLen for case of mapping 2 vectors of the same length
+        if ((toLen2 > fromLen2-1e-7) && (toLen2 < fromLen2+1e-7)) {
+            toLen = fromLen;
+        }
+        else toLen = sqrt(toLen2);
+        targetVector /= toLen;
+    }
+
+
+    // Now let's get into the real stuff
+    // Use "dot product plus one" as test as it can be re-used later on
+    //double dotProdPlus1 = 1.0 + sourceVector * targetVector;
+	double dotProdPlus1 = 1.0 + dot( sourceVector, targetVector );
+
+    // Check for degenerate case of full u-turn. Use epsilon for detection
+    if (dotProdPlus1 < 1e-7) {
+
+        // Get an orthogonal vector of the given vector
+        // in a plane with maximum vector coordinates.
+        // Then use it as quaternion axis with pi angle
+        // Trick is to realize one value at least is >0.6 for a normalized vector.
+        if (fabs(sourceVector.x) < 0.6) {
+            const double norm = sqrt(1.0 - sourceVector.x * sourceVector.x);
+			quat.x = 0.0;
+            quat.y = sourceVector.z / norm;
+            quat.z = -sourceVector.y / norm;
+            quat.w = 0.0;
+        } else if (fabs(sourceVector.y) < 0.6) {
+            const double norm = sqrt(1.0 - sourceVector.y * sourceVector.y);
+            quat.x = -sourceVector.z / norm;
+            quat.y = 0.0;
+            quat.z = sourceVector.x / norm;
+            quat.w = 0.0;
+        } else {
+            const double norm = sqrt(1.0 - sourceVector.z * sourceVector.z);
+            quat.x = sourceVector.y / norm;
+            quat.y = -sourceVector.x / norm;
+            quat.z = 0.0;
+            quat.w = 0.0;
+        }
+    }
+
+    else {
+        // Find the shortest angle quaternion that transforms normalized vectors
+        // into one other. Formula is still valid when vectors are colinear
+        const double s = sqrt(0.5 * dotProdPlus1);
+        //const carve::geom::vector<3> tmp = sourceVector ^ targetVector / (2.0*s);
+		const carve::geom::vector<3> tmp = cross(sourceVector , targetVector) / (2.0*s);
+        quat.x = tmp.x;
+        quat.y = tmp.y;
+        quat.z = tmp.z;
+        quat.w = s;
+    }
+}
+
+void getMatrixRotate( const carve::math::Matrix mat, carve::math::Quaternion q )
+{
+    double s;
+    double tq[4];
+    int    i, j;
+
+    // Use tq to store the largest trace
+	tq[0] = 1 + mat._11 + mat._22 + mat._33;
+    tq[1] = 1 + mat._11 - mat._22 - mat._33;
+    tq[2] = 1 - mat._11 + mat._22 - mat._33;
+    tq[3] = 1 - mat._11 - mat._22 + mat._33;
+
+    // Find the maximum (could also use stacked if's later)
+    j = 0;
+    for(i=1;i<4;i++) j = (tq[i]>tq[j])? i : j;
+
+    // check the diagonal
+    if (j==0)
+    {
+        /* perform instant calculation */
+		q.w = tq[0];
+        q.x = mat._23 - mat._32;
+        q.y = mat._31 - mat._13;
+        q.z = mat._12 - mat._21;
+    }
+    else if (j==1)
+    {
+        q.w = mat._23 - mat._32;
+        q.x = tq[1];
+        q.y = mat._12 + mat._21;
+        q.z = mat._31 + mat._13;
+    }
+    else if (j==2)
+    {
+        q.w = mat._31 - mat._13;
+        q.x = mat._12 + mat._21;
+        q.y = tq[2];
+        q.z = mat._23 + mat._32;
+    }
+    else /* if (j==3) */
+    {
+        q.w = mat._12 - mat._21;
+        q.x = mat._31 + mat._13;
+        q.y = mat._23 + mat._32;
+        q.z = tq[3];
+    }
+
+    s = sqrt(0.25/tq[j]);
+    q.w *= s;
+    q.x *= s;
+    q.y *= s;
+    q.z *= s;
+}
+
+
+bool bisectingPlane( osg::Vec3d& n, const osg::Vec3d& v1, const osg::Vec3d& v2, const osg::Vec3d& v3)
+{
+	bool valid = false;
+	osg::Vec3d v21 = v2 - v1;
+	osg::Vec3d v32 = v3 - v2;
+	double len21 = v21.length();
+	double len32 = v32.length();
+
+	if( len21 <= GEOM_TOLERANCE * len32)
+	{
+		if( len32 == 0.0)
+		{
+			// all three points lie ontop of one-another
+			n.set( 0.0, 0.0, 0.0 );
+			valid = false;
+		}
+		else
+		{
+			// return a normalized copy of v32 as bisector
+			len32 = 1.0 / len32;
+			n = v32*len32;
+			valid = true;
 		}
 
-		//osg::AnimationPathCallback* apc = new osg::AnimationPathCallback( bs.center(), osg::Vec3(0.0f,0.0f,1.0f), osg::inDegrees(45.0f) );
-		//modelGroupTransform->setUpdateCallback(apc);
-		//keyboardEventHandler->registerAnimationPathCallback(apc);
-
-		// now move to ratio
-		//float dx_move = 
-		//osg::Matrix m1;
-		//m1.makeTranslate( dx, dy, 0 );
-
-		//osg::Matrix cm = m_cam->getProjectionMatrix();
-		cam->setProjectionMatrix( pm*trans );
 	}
+	else
+	{
+		valid = true;
+		if( len32 <= GEOM_TOLERANCE * len21)
+		{
+			// return v21 as bisector
+			v21.normalize();
+			n = v21;
+		}
+		else
+		{
+			v21.normalize();
+			v32.normalize();
+
+			double dot_product = v32*v21;
+			double dot_product_abs = abs( dot_product );
+			
+			if( dot_product_abs > (1.0+GEOM_TOLERANCE) || dot_product_abs < (1.0-GEOM_TOLERANCE) )
+			{
+				n = (v32 + v21)*dot_product - v32 - v21;
+				n.normalize();
+			}
+			else
+			{
+				// dot == 1 or -1, points are colinear
+				n = -v21;
+			}
+		}
+	}
+	return valid;
+}
+
+bool bisectingPlane( carve::geom::vector<3>& n, const carve::geom::vector<3>& v1, 
+											 const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3)
+{
+	bool valid = false;
+	carve::geom::vector<3> v21 = v2 - v1;
+	carve::geom::vector<3> v32 = v3 - v2;
+	double len21 = v21.length();
+	double len32 = v32.length();
+
+	if( len21 <= GEOM_TOLERANCE * len32)
+	{
+		if( len32 == 0.0)
+		{
+			// all three points lie ontop of one-another
+			n = carve::geom::VECTOR( 0.0, 0.0, 0.0 );
+			valid = false;
+		}
+		else
+		{
+			// return a normalized copy of v32 as bisector
+			len32 = 1.0 / len32;
+			n = v32*len32;
+			valid = true;
+		}
+
+	}
+	else
+	{
+		valid = true;
+		if( len32 <= GEOM_TOLERANCE * len21)
+		{
+			// return v21 as bisector
+			v21.normalize();
+			n = v21;
+		}
+		else
+		{
+			v21.normalize();
+			v32.normalize();
+
+			double dot_product = dot( v32, v21 );
+			double dot_product_abs = abs( dot_product );
+
+			if( dot_product_abs > (1.0+GEOM_TOLERANCE) || dot_product_abs < (1.0-GEOM_TOLERANCE) )
+			{
+				n = (v32 + v21)*dot_product - v32 - v21;
+				n.normalize();
+			}
+			else
+			{
+				// dot == 1 or -1, points are colinear
+				n = -v21;
+			}
+		}
+	}
+	return valid;
+}
+
+void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
+						 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix )
+{
+	carve::geom::vector<3> local_x( plane_normal );
+	local_x.normalize();
+	carve::geom::vector<3> local_z_new( local_z );
+
+	carve::geom::vector<3> local_y = cross( local_x, local_z_new );
+	local_z_new = cross( local_y, local_x );
+	local_z_new.normalize();
+	local_y.normalize();
+
+	resulting_matrix._11 = local_x.x;
+	resulting_matrix._12 = local_x.y;
+	resulting_matrix._13 = local_x.z,
+	resulting_matrix._14 = 0;
+	resulting_matrix._21 = local_y.x;
+	resulting_matrix._22 = local_y.y;
+	resulting_matrix._23 =	local_y.z;
+	resulting_matrix._24 =	0;
+	resulting_matrix._31 = local_z_new.x;
+	resulting_matrix._32 = local_z_new.y;
+	resulting_matrix._33 = local_z_new.z;
+	resulting_matrix._34 = 0;
+	resulting_matrix._41 = plane_position.x;
+	resulting_matrix._42 = plane_position.y;
+	resulting_matrix._43 = plane_position.z;
+	resulting_matrix._44 = 1;
 }

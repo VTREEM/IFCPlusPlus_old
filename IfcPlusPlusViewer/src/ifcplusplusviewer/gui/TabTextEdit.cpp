@@ -28,7 +28,7 @@
 
 TabTextEdit::TabTextEdit()
 {
-	m_le_path_schema_file = new QLineEdit;
+	m_le_path_schema_file = new QLineEdit();
 	m_le_path_schema_file->setReadOnly( true );
 
 	QFont font;
@@ -36,7 +36,7 @@ TabTextEdit::TabTextEdit()
 	font.setFixedPitch(true);
 	font.setPointSize(10);
 	
-	m_textedit = new QTextEdit;
+	m_textedit = new QTextEdit();
 	m_textedit->setFont(font);
 	m_textedit->setTabStopWidth( 20 );
 #ifndef _DEBUG
@@ -50,11 +50,11 @@ TabTextEdit::TabTextEdit()
 	m_btn_save->setContentsMargins( 2, 2, 2, 2 );
 	connect( m_btn_save, SIGNAL( clicked() ), this, SLOT( slotSaveClicked() ) );
 
-	QHBoxLayout* hbox = new QHBoxLayout;
+	QHBoxLayout* hbox = new QHBoxLayout();
 	hbox->addWidget( m_le_path_schema_file, 1 );
 	hbox->addWidget( m_btn_save, 0 );
 
-	QVBoxLayout* vbox = new QVBoxLayout;
+	QVBoxLayout* vbox = new QVBoxLayout();
 	vbox->addLayout( hbox ); 
 	vbox->addWidget( m_textedit, 0 );
 	setLayout( vbox );

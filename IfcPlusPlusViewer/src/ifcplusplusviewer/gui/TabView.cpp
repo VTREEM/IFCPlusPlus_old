@@ -38,7 +38,7 @@
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 #include "viewer/ViewerWidget.h"
-#include "viewer/CameraMan3D.h"
+#include "viewer/Orbit3DManipulator.h"
 
 #include "MainWindow.h"
 #include "TabView.h"
@@ -65,13 +65,13 @@ TabView::TabView( IfcPlusPlusSystem* sys, ViewerWidget* vw ) : m_system(sys), m_
 	connect( cull_back_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullBackFaces( int ) ) );
 
 	// perspective/parallel projection
-	QRadioButton* radio_perspective = new QRadioButton("Perspective");
-	QRadioButton* radio_parallel = new QRadioButton("Parallel");
-	radio_parallel->setChecked(true);
-	QButtonGroup* btn_group_projection = new QButtonGroup();
-	btn_group_projection->addButton( radio_perspective, 0 );
-	btn_group_projection->addButton( radio_parallel, 1 );
-	connect( btn_group_projection, SIGNAL( buttonClicked( int ) ), this, SLOT( slotProjectionButtonClicked( int ) ) );
+	//QRadioButton* radio_perspective = new QRadioButton("Perspective");
+	//QRadioButton* radio_parallel = new QRadioButton("Parallel");
+	//radio_parallel->setChecked(true);
+	//QButtonGroup* btn_group_projection = new QButtonGroup();
+	//btn_group_projection->addButton( radio_perspective, 0 );
+	//btn_group_projection->addButton( radio_parallel, 1 );
+	//connect( btn_group_projection, SIGNAL( buttonClicked( int ) ), this, SLOT( slotProjectionButtonClicked( int ) ) );
 
 	// positive z axis
 	QCheckBox* check_pos_z_down = new QCheckBox("Positive z-axis down");
@@ -85,16 +85,16 @@ TabView::TabView( IfcPlusPlusSystem* sys, ViewerWidget* vw ) : m_system(sys), m_
 	hbox->addWidget( check_pos_z_down, 0 );
 	hbox->addStretch( 1 );
 
-	QHBoxLayout* hbox_projection = new QHBoxLayout();
-	hbox_projection->addWidget( new QLabel("<b>Projection:</b>") );
-	hbox_projection->addSpacing(10);
-	hbox_projection->addWidget( radio_perspective );
-	hbox_projection->addWidget( radio_parallel );
-	hbox_projection->addStretch( 1 );
+	//QHBoxLayout* hbox_projection = new QHBoxLayout();
+	//hbox_projection->addWidget( new QLabel("<b>Projection:</b>") );
+	//hbox_projection->addSpacing(10);
+	//hbox_projection->addWidget( radio_perspective );
+	//hbox_projection->addWidget( radio_parallel );
+	//hbox_projection->addStretch( 1 );
 
 	QVBoxLayout* vbox = new QVBoxLayout();
 	vbox->addLayout( hbox );
-	vbox->addLayout( hbox_projection );
+//	vbox->addLayout( hbox_projection );
 	vbox->addStretch(1);
 
 	setLayout( vbox );
@@ -148,10 +148,10 @@ void TabView::slotZAxisDown( int state )
 {
 	if( state == Qt::Checked )
 	{
-		m_vw->getCameraManager()->setZAxisDown( true );
+//		m_vw->getCameraManager()->setZAxisDown( true );
 	}
 	else
 	{
-		m_vw->getCameraManager()->setZAxisDown( false );
+	//	m_vw->getCameraManager()->setZAxisDown( false );
 	}
 }

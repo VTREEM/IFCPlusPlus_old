@@ -11,6 +11,10 @@
  * OpenSceneGraph Public License for more details.
 */
 
+#ifdef _WIN32
+#pragma warning(disable : 4267)
+#endif
+
 #include <carve/carve.hpp>
 #include <carve/csg.hpp>
 #include <carve/csg_triangulator.hpp>
@@ -24,7 +28,6 @@
 #include <carve/triangulator.hpp>
 #include <common/geometry.hpp>
 #include <common/rgb.hpp>
-
 
 #include <osgDB/Registry>
 #include <osgDB/ReadFile>
@@ -44,33 +47,34 @@
 #endif
 
 
-#include "ifcpp/IFC4/include/IfcProduct.h"
-#include "ifcpp/IFC4/include/IfcProject.h"
-#include "ifcpp/IFC4/include/IfcElement.h"
-#include "ifcpp/IFC4/include/IfcRelVoidsElement.h"
-#include "ifcpp/IFC4/include/IfcRelAggregates.h"
-#include "ifcpp/IFC4/include/IfcRelContainedInSpatialStructure.h"
-#include "ifcpp/IFC4/include/IfcFeatureElementSubtraction.h"
-#include "ifcpp/IFC4/include/IfcRepresentation.h"
-#include "ifcpp/IFC4/include/IfcProductRepresentation.h"
-#include "ifcpp/IFC4/include/IfcPropertySet.h"
-#include "ifcpp/IFC4/include/IfcPropertySetDefinition.h"
-#include "ifcpp/IFC4/include/IfcPropertySetDefinitionSet.h"
-#include "ifcpp/IFC4/include/IfcRelDefinesByProperties.h"
-#include "ifcpp/IFC4/include/IfcSpace.h"
-#include "ifcpp/IFC4/include/IfcBeam.h"
-#include "ifcpp/IFC4/include/IfcCurtainWall.h"
-#include "ifcpp/IFC4/include/IfcWindow.h"
-#include "ifcpp/IFC4/include/IfcBuildingStorey.h"
-#include "ifcpp/IFC4/include/IfcSite.h"
-#include "ifcpp/IFC4/include/IfcLengthMeasure.h"
+#include <ifcpp/IFC4/include/IfcProduct.h>
+#include <ifcpp/IFC4/include/IfcProject.h>
+#include <ifcpp/IFC4/include/IfcElement.h>
+#include <ifcpp/IFC4/include/IfcRelVoidsElement.h>
+#include <ifcpp/IFC4/include/IfcRelAggregates.h>
+#include <ifcpp/IFC4/include/IfcRelContainedInSpatialStructure.h>
+#include <ifcpp/IFC4/include/IfcFeatureElementSubtraction.h>
+#include <ifcpp/IFC4/include/IfcRepresentation.h>
+#include <ifcpp/IFC4/include/IfcProductRepresentation.h>
+#include <ifcpp/IFC4/include/IfcPropertySet.h>
+#include <ifcpp/IFC4/include/IfcPropertySetDefinition.h>
+#include <ifcpp/IFC4/include/IfcPropertySetDefinitionSet.h>
+#include <ifcpp/IFC4/include/IfcRelDefinesByProperties.h>
+#include <ifcpp/IFC4/include/IfcSpace.h>
+#include <ifcpp/IFC4/include/IfcBeam.h>
+#include <ifcpp/IFC4/include/IfcCurtainWall.h>
+#include <ifcpp/IFC4/include/IfcWindow.h>
+#include <ifcpp/IFC4/include/IfcBuildingStorey.h>
+#include <ifcpp/IFC4/include/IfcSite.h>
+#include <ifcpp/IFC4/include/IfcLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcLabel.h>
 
-#include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/model/IfcPPException.h"
-#include "ifcpp/reader/IfcStepReader.h"
-#include "ifcpp/reader/IfcPlusPlusReader.h"
-#include "ifcpp/writer/IfcStepWriter.h"
-#include "ifcpp/model/UnitConverter.h"
+#include <ifcpp/model/IfcPPModel.h>
+#include <ifcpp/model/IfcPPException.h>
+#include <ifcpp/reader/IfcStepReader.h>
+#include <ifcpp/reader/IfcPlusPlusReader.h>
+#include <ifcpp/writer/IfcStepWriter.h>
+#include <ifcpp/model/UnitConverter.h>
 
 #include "RepresentationConverter.h"
 #include "PlacementConverter.h"
@@ -88,6 +92,8 @@ ReaderWriterIFC::ReaderWriterIFC()
 	m_step_reader->setProgressCallBack( this, &ReaderWriterIFC::slotProgressValueWrapper );
 	m_step_reader->setMessageCallBack( this, &ReaderWriterIFC::slotMessageWrapper );
 	m_step_reader->setErrorCallBack( this, &ReaderWriterIFC::slotErrorWrapper );
+	m_keep_geom_input_data = true;
+	resetNumVerticesPerCircle();
 
 	//osg::Material* material = new osg::Material();
 	//float shinyness = 35.f;
@@ -120,8 +126,13 @@ void ReaderWriterIFC::reset()
 	m_processed_products.clear();
 
 	m_group_result->removeChildren( 0, m_group_result->getNumChildren() );
-	m_vec_building_storeys.clear();
+//	m_vec_building_storeys.clear();
 	m_recent_progress = 0.0;
+}
+
+void ReaderWriterIFC::resetNumVerticesPerCircle()
+{
+	m_num_vertices_per_circle = 20;
 }
 
 void ReaderWriterIFC::setModel( shared_ptr<IfcPPModel> model )
@@ -134,6 +145,17 @@ void ReaderWriterIFC::setModel( shared_ptr<IfcPPModel> model )
 
 	m_unit_converter = m_ifc_model->getUnitConverter();
 	m_representation_converter = shared_ptr<RepresentationConverter>( new RepresentationConverter( m_unit_converter ) );
+	m_representation_converter->setNumVerticesPerCircle( m_num_vertices_per_circle );
+}
+
+void ReaderWriterIFC::setNumVerticesPerCircle( int num_vertices )
+{
+	if( num_vertices < 6 ) { num_vertices = 6; }
+	m_num_vertices_per_circle = num_vertices;
+	if( m_representation_converter )
+	{
+		m_representation_converter->setNumVerticesPerCircle( m_num_vertices_per_circle );
+	}
 }
 
 osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& filename, const osgDB::ReaderWriter::Options*)
@@ -165,7 +187,7 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 	infile.close();
 	
 	m_ifc_model->clearIfcModel();
-//	m_geom_tree.clear();
+
 	
 	int millisecs_read_start = clock();
 	m_step_reader->readStreamHeader( buffer, m_ifc_model );
@@ -174,6 +196,8 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 	
 	m_err.clear();
 	m_err.str( std::string() );
+
+	progressTextCallback( "Reading STEP data..." );
 
 	try
 	{
@@ -222,6 +246,7 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 
 		m_unit_converter = m_ifc_model->getUnitConverter();
 		m_representation_converter = shared_ptr<RepresentationConverter>( new RepresentationConverter( m_unit_converter ) );
+		m_representation_converter->setNumVerticesPerCircle( m_num_vertices_per_circle );
 	}
 	catch( IfcPPException& e )
 	{
@@ -236,9 +261,10 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 		m_err << "An error occured in ReaderWriterIFC::readNode";
 	}
 
+	progressTextCallback( "Creating geometry..." );
 	try
 	{
-		convertIfcModel();
+		createGeometry();
 	}
 	catch( IfcPPException& e )
 	{
@@ -253,23 +279,13 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 		m_err << "An error occured in ReaderWriterIFC::readNode";
 	}
 
-	for( int i=0; i<m_vec_building_storeys.size(); ++i )
-	{
-		shared_ptr<ReaderWriterIFC::BuildingStoreyGroup>& storey_group = m_vec_building_storeys[i];
+	//for( int i=0; i<m_vec_building_storeys.size(); ++i )
+	//{
+	//	shared_ptr<ReaderWriterIFC::BuildingStoreyGroup>& storey_group = m_vec_building_storeys[i];
+	//	osg::ref_ptr<osg::MatrixTransform> storey_transform = storey_group->storey_transform;
+	//	m_group_result->addChild( storey_transform );
+	//}
 
-		osg::ref_ptr<osg::MatrixTransform> storey_transform = storey_group->storey_transform;
-
-		m_group_result->addChild( storey_transform );
-
-	}
-
-	
-//	group_result->addChild( m_geom_tree.products.get() );
-	//group_result->addChild( m_geom_tree.terrain.get() );
-
-	// osg ReadResult assumes that there is either a valid read object, or an error message.
-	// however, often there are warnings or errors and still a valid read result
-	// this needs to be done via ReaderWriterIFC::getWarnings and ReaderWriterIFC::getErrors
 	osgDB::ReaderWriter::ReadResult::ReadStatus status = osgDB::ReaderWriter::ReadResult::FILE_LOADED;
 	m_err.seekp(0, std::ios::end);
 	std::stringstream::pos_type err_length = m_err.tellp();
@@ -284,7 +300,7 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 
 
 //#define SHOW_ENTITIES_OUTSIDE_SPATIAL_STRUCTURE
-void ReaderWriterIFC::convertIfcModel()
+void ReaderWriterIFC::createGeometry()
 {
 	shared_ptr<IfcProject> project = m_ifc_model->getIfcProject();
 	if( !project )
@@ -293,7 +309,7 @@ void ReaderWriterIFC::convertIfcModel()
 	}
 
 	m_product_shapes.clear();
-	//m_geom_tree.clear();
+
 	std::vector<shared_ptr<IfcProduct> > vec_products;
 	std::stringstream err;
 
@@ -440,98 +456,24 @@ void ReaderWriterIFC::convertIfcModel()
 	}
 #endif
 
-	// now resolve spatial structure
-	//ModelGeomTree result_geom;
+	
 	try
 	{
-		//resolveSpatialStructure( project, result_geom );
-		//const int num_products = m_product_shapes.size();
-		//for( int i=0; i<num_products; ++i )
-		std::map<int,shared_ptr<ProductShape> >::iterator it_product_shapes;
-		for( it_product_shapes = m_product_shapes.begin(); it_product_shapes!=m_product_shapes.end(); ++it_product_shapes )
+		// now resolve spatial structure
+		shared_ptr<IfcProject> ifc_project = m_ifc_model->getIfcProject();
+		if( ifc_project )
 		{
-			shared_ptr<ProductShape> product_shape = it_product_shapes->second;
-			shared_ptr<IfcProduct> ifc_product = product_shape->ifc_product;
-
-			shared_ptr<IfcBuildingStorey> building_storey = dynamic_pointer_cast<IfcBuildingStorey>(ifc_product);
-			if( building_storey )
-			{
-				int building_storey_id = building_storey->getId();
-				double elevation = 0.0;
-				if( building_storey->m_Elevation )
-				{
-					elevation = building_storey->m_Elevation->m_value;
-				}
-				osg::ref_ptr<osg::MatrixTransform> transform_building_storey = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, elevation ) );
-
-				std::stringstream storey_name;
-				storey_name << "#" << building_storey_id << " IfcBuildingStorey group";
-				transform_building_storey->setName( storey_name.str().c_str() );
-
-				m_group_result->addChild( transform_building_storey );
-
-				std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >& vec_rel_contained = building_storey->m_ContainsElements_inverse;
-				std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >::iterator it_rel_contained;
-
-				// TODO: collect all products for one building storey and then create geometry for products in each storey in parallel
-
-				for( it_rel_contained=vec_rel_contained.begin(); it_rel_contained!=vec_rel_contained.end(); ++it_rel_contained )
-				{
-					shared_ptr<IfcRelContainedInSpatialStructure> rel_spatial_structure( *it_rel_contained );
-					//if( rel->getId() == rel_spatial_structure->getId() )
-					//{
-					//	continue;
-					//}
-
-					std::vector<shared_ptr<IfcProduct> >& vec_related_elements = rel_spatial_structure->m_RelatedElements;
-					std::vector<shared_ptr<IfcProduct> >::iterator it_product;
-					std::vector<weak_ptr<IfcRelAggregates> >::iterator it_rel_aggregates;
-					std::map<int,shared_ptr<ProductShape> >::iterator it_product_map;
-					std::stringstream err;
-
-					for( it_product=vec_related_elements.begin(); it_product!=vec_related_elements.end(); ++it_product )
-					{
-						shared_ptr<IfcProduct> ifc_product = (*it_product);
-						if( !ifc_product )
-						{
-							continue;
-						}
-						shared_ptr<IfcFeatureElementSubtraction> opening = dynamic_pointer_cast<IfcFeatureElementSubtraction>(ifc_product);
-						if( opening )
-						{
-							continue;
-						}
-
-						const int product_id = ifc_product->getId();
-
-						it_product_map = m_product_shapes.find(product_id);
-						if( it_product_map != m_product_shapes.end() )
-						{
-							shared_ptr<ProductShape>& product_shape = it_product_map->second;
-							product_shape->added_to_storey = true;
-							osg::ref_ptr<osg::Group> product_group = product_shape->product_group;
-							if( product_group.valid() )
-							{
-								transform_building_storey->addChild( product_group );
-							}
-						}
-					}
-				}
-
-					//try
-					//{
-					//	convertIfcRelContainedInSpatialStructure( rel, result_geom, visited_rel );
-
-				
-			}
-
+			m_map_visited.clear();
+			resolveProjectStructure( ifc_project, m_group_result );
 		}
 
+		// check if there are items outside of spatial structure
 		osg::ref_ptr<osg::Group> group_outside_spatial_structure = new osg::Group();
-		group_outside_spatial_structure->setName( "IfcProduct outside spatial structure" );
+		std::string group_name = group_outside_spatial_structure->getName();
+		group_outside_spatial_structure->setName( group_name.append( ", IfcProduct outside spatial structure" ) );
 		m_group_result->addChild( group_outside_spatial_structure );
 
-		for( it_product_shapes = m_product_shapes.begin(); it_product_shapes!=m_product_shapes.end(); ++it_product_shapes )
+		for( std::map<int,shared_ptr<ProductShape> >::iterator it_product_shapes = m_product_shapes.begin(); it_product_shapes!=m_product_shapes.end(); ++it_product_shapes )
 		{
 			shared_ptr<ProductShape> product_shape = it_product_shapes->second;
 			shared_ptr<IfcProduct> ifc_product = product_shape->ifc_product;
@@ -543,10 +485,10 @@ void ReaderWriterIFC::convertIfcModel()
 					continue;
 				}
 
-				osg::ref_ptr<osg::Group> product_group = product_shape->product_group;
-				if( product_group.valid() )
+				osg::ref_ptr<osg::Switch> product_switch = product_shape->product_switch;
+				if( product_switch.valid() )
 				{
-					group_outside_spatial_structure->addChild( product_group );
+					group_outside_spatial_structure->addChild( product_switch );
 				}
 				product_shape->added_to_storey = true;
 			}
@@ -565,59 +507,9 @@ void ReaderWriterIFC::convertIfcModel()
 		err << "error in ReaderWriterIFC::convertIfcProject" << std::endl;
 	}
 
-	// now process products that are not in the spatial structure
-//#ifdef SHOW_ENTITIES_OUTSIDE_SPATIAL_STRUCTURE
-//	std::map<int,shared_ptr<IfcProduct> >::iterator it_product;
-//	for( it_product=m_product_shapes.begin(); it_product!=m_product_shapes.end(); ++it_product )
-//	{
-//		shared_ptr<IfcProduct> product = it_product->second;
-//
-//		if( m_processed_products.find( product->getId() ) == m_processed_products.end() )
-//		{
-//			try
-//			{
-//				convertIfcProduct( product, result_geom );
-//			}
-//			catch( IfcPPException& e)
-//			{
-//				err << e.what();
-//			}
-//			catch(std::exception& e)
-//			{
-//				err << e.what();
-//			}
-//			catch( ... )
-//			{
-//				err << "ReaderWriterIFC::convertIfcProduct at product id " << product->getId() << " failed" << std::endl;
-//			}
-//		}
-//	}
-//#endif
-
-//	m_geom_tree.products->addChild( result_geom.products );
-	//m_geom_tree.storeys->addChild( result_geom.storeys );
-	//m_geom_tree.spaces->addChild( result_geom.spaces );
-	//m_geom_tree.terrain->addChild( result_geom.terrain );
-
-	float z_shift = 0;
-	if( m_representation_converter->getDebugGroupFirst()->getNumChildren() > 0 )
-	{
-		osg::MatrixTransform* mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, z_shift) );
-		//m_geom_tree.products->addChild(mt);
-		mt->addChild( m_representation_converter->getDebugGroupFirst() );
-	}
-	if( m_representation_converter->getDebugGroupSecond()->getNumChildren() > 0 )
-	{
-		osg::Group* group_second = m_representation_converter->getDebugGroupSecond();
-		osg::MatrixTransform* mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, z_shift) );
-		//m_geom_tree.products->addChild(mt);
-		mt->addChild( group_second );
-
-		//WireFrameModeOn( debug_group_copy );
-		group_second->setStateSet(m_glass_stateset);
-	}
 
 	progressCallback( 1.0 );
+	progressTextCallback( "Loading file done" );
 
 	if( err.tellp() > 0 )
 	{
@@ -625,48 +517,139 @@ void ReaderWriterIFC::convertIfcModel()
 	}
 }
 
-/*
-void ReaderWriterIFC::resolveSpatialStructure( shared_ptr<IfcProject> project )//, ModelGeomTree& result_geom )
+
+
+void ReaderWriterIFC::resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg::Group* parent_group )
 {
-	if( !project )
+	shared_ptr<IfcObjectDefinition> obj_def = dynamic_pointer_cast<IfcObjectDefinition>(obj);
+	if( !obj_def )
 	{
 		return;
 	}
-	std::string err;
-	double progress = 0.0;
-	progressCallback( progress );
 
-	// resolve aggregated elements
-	std::vector<weak_ptr<IfcRelAggregates> >& vec_decomposed = project->m_IsDecomposedBy_inverse;
-	std::vector<weak_ptr<IfcRelAggregates> >::iterator it_rel_dec;
 
-	for( it_rel_dec=vec_decomposed.begin(); it_rel_dec!=vec_decomposed.end(); ++it_rel_dec )
+	int entity_id = obj_def->getId();
+	if( m_map_visited.find( entity_id ) != m_map_visited.end() )
 	{
-		shared_ptr<IfcRelAggregates> rel( *it_rel_dec );
-		try
+		return;
+	}
+	m_map_visited[entity_id] = obj_def;
+
+	osg::Group* item_grp = NULL;
+
+	shared_ptr<IfcBuildingStorey> building_storey = dynamic_pointer_cast<IfcBuildingStorey>(obj_def);
+	if( building_storey )
+	{
+		int building_storey_id = building_storey->getId();
+		double elevation = 0.0;
+		if( building_storey->m_Elevation )
 		{
-			std::set<int> visited_rel_aggregates;
-			convertIfcRelAggregates( rel, result_geom, visited_rel_aggregates );
+			elevation = building_storey->m_Elevation->m_value;
 		}
-		catch( IfcPPException& e )
+		osg::Switch* switch_building_storey = new osg::Switch();
+		std::stringstream storey_switch_name;
+		storey_switch_name << "#" << building_storey_id << " IfcBuildingStorey switch";
+		switch_building_storey->setName( storey_switch_name.str().c_str() );
+
+		osg::ref_ptr<osg::MatrixTransform> transform_building_storey = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, elevation ) );
+		switch_building_storey->addChild( transform_building_storey );
+				
+		std::stringstream storey_name;
+		storey_name << "#" << building_storey_id << " IfcBuildingStorey transform";
+		transform_building_storey->setName( storey_name.str().c_str() );
+
+		item_grp = transform_building_storey;
+		parent_group->addChild( switch_building_storey );
+	}
+		
+	shared_ptr<IfcProduct> ifc_product = dynamic_pointer_cast<IfcProduct>(obj_def);
+	if( ifc_product )
+	{
+		std::map<int,shared_ptr<ProductShape> >::iterator it_product_map = m_product_shapes.find(entity_id);
+		if( it_product_map != m_product_shapes.end() )
 		{
-			err.append( e.what() );
+			shared_ptr<ProductShape>& product_shape = it_product_map->second;
+			product_shape->added_to_storey = true;
+			osg::ref_ptr<osg::Switch> product_switch = product_shape->product_switch;
+			if( product_switch.valid() )
+			{
+				//item_grp->addChild( product_switch );
+				if( item_grp == NULL )
+				{
+					item_grp = product_switch;
+				}
+				else
+				{
+					item_grp->addChild( product_switch );
+				}
+				parent_group->addChild( item_grp );
+			}
 		}
 	}
-	if( err.size() > 0 )
+
+	if( item_grp == NULL )
 	{
-		throw IfcPPException( err );
+		item_grp = new osg::Switch();
+		parent_group->addChild( item_grp );
+	}
+	
+	
+	if( item_grp->getName().size() < 1 )
+	{
+		std::stringstream switch_name;
+		switch_name << "#" << entity_id << "=" << obj_def->classname();
+		item_grp->setName( switch_name.str().c_str() );
+	}
+	
+	if( obj_def->m_IsDecomposedBy_inverse.size() > 0 )
+	{
+		std::vector<weak_ptr<IfcRelAggregates> >& vec_IsDecomposedBy = obj_def->m_IsDecomposedBy_inverse;
+		for( std::vector<weak_ptr<IfcRelAggregates> >::iterator it=vec_IsDecomposedBy.begin(); it!=vec_IsDecomposedBy.end(); ++it )
+		{
+			shared_ptr<IfcRelAggregates> rel_agg( *it );
+			std::vector<shared_ptr<IfcObjectDefinition> >& vec = rel_agg->m_RelatedObjects;
+	
+			for( std::vector<shared_ptr<IfcObjectDefinition> >::iterator it_object_def=vec.begin(); it_object_def!=vec.end(); ++it_object_def )
+			{
+				shared_ptr<IfcObjectDefinition> child_obj_def = (*it_object_def);
+				resolveProjectStructure( child_obj_def, item_grp );
+			}
+		}
+	}
+
+	shared_ptr<IfcSpatialStructureElement> spatial_ele = dynamic_pointer_cast<IfcSpatialStructureElement>(obj_def);
+	if( spatial_ele )
+	{
+		std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >& vec_contained = spatial_ele->m_ContainsElements_inverse;
+		if( vec_contained.size() > 0 )
+		{
+			std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >::iterator it_rel_contained;
+			for( it_rel_contained=vec_contained.begin(); it_rel_contained!=vec_contained.end(); ++it_rel_contained )
+			{
+
+				shared_ptr<IfcRelContainedInSpatialStructure> rel_contained( *it_rel_contained );
+				std::vector<shared_ptr<IfcProduct> >& vec_related_elements = rel_contained->m_RelatedElements;
+				std::vector<shared_ptr<IfcProduct> >::iterator it;
+			
+				for( it=vec_related_elements.begin(); it!=vec_related_elements.end(); ++it )
+				{
+					shared_ptr<IfcProduct> related_product = (*it);
+					resolveProjectStructure( related_product, item_grp );
+				}
+			}
+		}
 	}
 }
-*/
 
 
 #ifdef _DEBUG
 double failed_geom_z = -20;
 #endif
 // @brief creates geometry objects from an IfcProduct object
+// caution: this method runs in OpenMP parallel threads
 void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_ptr<ProductShape>& product_shape )
 {
+	
 	// IfcProduct needs to have a representation
 	if( !product->m_Representation )
 	{
@@ -681,10 +664,10 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 
 	const int product_id = product->getId();
 	std::stringstream err;
-	osg::ref_ptr<osg::Group> product_group = new osg::Group();
+	osg::ref_ptr<osg::Switch> product_switch = new osg::Switch();
 	std::stringstream group_name;
 	group_name << "#" << product_id << " IfcProduct group";
-	product_group->setName( group_name.str().c_str() );
+	product_switch->setName( group_name.str().c_str() );
 
 	// IfcProduct has an ObjectPlacement that can be local or global
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
@@ -698,8 +681,9 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	}
 
 	// evaluate geometry
-	ConverterOSG carve_converter;
-	shared_ptr<RepresentationData> product_representation_data( new RepresentationData() );
+	ConverterOSG converter_carve_osg;
+	//shared_ptr<RepresentationData> product_representation_data( new RepresentationData() );
+	product_shape->representation_data = shared_ptr<RepresentationData>( new RepresentationData() );
 	shared_ptr<IfcProductRepresentation> product_representation = product->m_Representation;
 	std::vector<shared_ptr<IfcRepresentation> >& vec_representations = product_representation->m_Representations;
 	std::vector<shared_ptr<IfcRepresentation> >::iterator it_representations;
@@ -710,7 +694,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		try
 		{
 			std::set<int> visited_representation;
-			m_representation_converter->convertIfcRepresentation( representation, product_placement_matrix, product_representation_data, visited_representation );
+			m_representation_converter->convertIfcRepresentation( representation, product_placement_matrix, product_shape->representation_data, visited_representation );
 		}
 		catch( IfcPPException& e )
 		{
@@ -726,7 +710,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		}
 	}
 
-	std::vector<shared_ptr<ItemData> >& product_items = product_representation_data->vec_item_data;
+	std::vector<shared_ptr<ItemData> >& product_items = product_shape->representation_data->vec_item_data;
 	for( int i_item=0; i_item<product_items.size(); ++i_item )
 	{
 		shared_ptr<ItemData> item_data = product_items[i_item];
@@ -758,11 +742,26 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 			carve::input::Options carve_options;
 			shared_ptr<carve::poly::Polyhedron> poly( open_shell_data->create(carve_options) );
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			carve_converter.drawPolyhedron( poly, geode );
+			converter_carve_osg.drawPolyhedron( poly, geode );
 			item_group->addChild(geode);
 		}
 
-		// TODO: handle open_or_closed_shells
+		// create shape for open shells
+		for( int i=0; i<item_data->open_or_closed_shell_data.size(); ++i )
+		{
+			shared_ptr<carve::input::PolyhedronData>& open_shell_data = item_data->open_or_closed_shell_data[i];
+			if( open_shell_data->getVertexCount() < 3 )
+			{
+				continue;
+			}
+
+			carve::input::Options carve_options;
+			shared_ptr<carve::poly::Polyhedron> poly( open_shell_data->create(carve_options) );
+			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+			converter_carve_osg.drawPolyhedron( poly, geode );
+			item_group->addChild(geode);
+		}
+
 
 		// now go through all polyhedrons of the product
 		for( int i=0; i<item_data->polyhedrons.size(); ++i )
@@ -921,14 +920,14 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 
 #ifdef _DEBUG
 							osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-							carve_converter.drawMeshSet( product_meshset, geode );
+							converter_carve_osg.drawMeshSet( product_meshset, geode );
 							osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, failed_geom_z ) );
 							mt->addChild(geode);
-							product_group->addChild(mt);
+							product_switch->addChild(mt);
 							failed_geom_z -= 1;
 
 							osg::ref_ptr<osg::Geode> geode_opnening = new osg::Geode();
-							carve_converter.drawMeshSet( polyhedron_openings, geode_opnening );
+							converter_carve_osg.drawMeshSet( polyhedron_openings, geode_opnening );
 							mt->addChild(geode_opnening);
 #endif
 							}
@@ -951,10 +950,10 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 						err << "convertIfcProduct: csg operation failed at product id " << product_id << std::endl;
 #ifdef _DEBUG
 						osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-						carve_converter.drawMeshSet( product_meshset, geode );
+						converter_carve_osg.drawMeshSet( product_meshset, geode );
 						osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, failed_geom_z ) );
 						mt->addChild(geode);
-						product_group->addChild(mt);
+						product_switch->addChild(mt);
 						failed_geom_z -= 1;
 #endif
 					}
@@ -962,7 +961,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 			}
 
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
-			carve_converter.drawMeshSet( product_meshset, geode_result );
+			converter_carve_osg.drawMeshSet( product_meshset, geode_result );
 			item_group->addChild(geode_result);
 		}
 
@@ -970,7 +969,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		{
 			shared_ptr<carve::input::PolylineSetData>& polyline_data = item_data->polyline_data.at(polyline_i);
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			carve_converter.drawPolyline( polyline_data, geode );
+			converter_carve_osg.drawPolyline( polyline_data, geode );
 			item_group->addChild(geode);
 		}
 
@@ -1002,7 +1001,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 
 		if( item_group->getNumChildren() > 0 )
 		{
-			product_group->addChild(item_group);
+			product_switch->addChild(item_group);
 		}
 	}
 
@@ -1021,7 +1020,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 				shared_ptr<IfcPropertySet> property_set = dynamic_pointer_cast<IfcPropertySet>(property_set_def);
 				if( property_set )
 				{
-					m_representation_converter->convertIfcPropertySet( property_set, product_group.get() );
+					m_representation_converter->convertIfcPropertySet( property_set, product_switch.get() );
 				}
 				continue;
 			}
@@ -1039,7 +1038,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 						shared_ptr<IfcPropertySet> property_set = dynamic_pointer_cast<IfcPropertySet>(property_set_def);
 						if( property_set )
 						{
-							m_representation_converter->convertIfcPropertySet( property_set, product_group.get() );
+							m_representation_converter->convertIfcPropertySet( property_set, product_switch.get() );
 						}
 					}
 				}
@@ -1050,26 +1049,26 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		}
 	}
 
-	for( int i=0; i<product_representation_data->statesets.size(); ++i )
+	for( int i=0; i<product_shape->representation_data->statesets.size(); ++i )
 	{
-		osg::StateSet* next_product_stateset = product_representation_data->statesets[i];
+		osg::StateSet* next_product_stateset = product_shape->representation_data->statesets[i];
 		if( !next_product_stateset )
 		{
 			continue;
 		}
 
-		osg::StateSet* existing_item_stateset = product_group->getStateSet();
+		osg::StateSet* existing_item_stateset = product_switch->getStateSet();
 
 
 		if( existing_item_stateset )
 		{
 			osg::StateSet* merged_product_stateset = new osg::StateSet( *existing_item_stateset );
 			merged_product_stateset->merge( *next_product_stateset );
-			product_group->setStateSet( merged_product_stateset );
+			product_switch->setStateSet( merged_product_stateset );
 		}
 		else
 		{
-			product_group->setStateSet( next_product_stateset );
+			product_switch->setStateSet( next_product_stateset );
 		}
 	}
 
@@ -1078,29 +1077,29 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	// enable transparency for certain objects
 	if( dynamic_pointer_cast<IfcSpace>(product) )
 	{
-		//product_shape->space_group = product_group;
-		product_group->setStateSet( m_glass_stateset );
+		//product_shape->space_group = product_switch;
+		product_switch->setStateSet( m_glass_stateset );
 	}
 	else if( dynamic_pointer_cast<IfcCurtainWall>(product) || dynamic_pointer_cast<IfcWindow>(product) )
 	{
 		// TODO: make only glass part of window transparent
-		product_group->setStateSet( m_glass_stateset );
-		//product_shape->product_group = product_group;
+		product_switch->setStateSet( m_glass_stateset );
+		//product_shape->product_switch = product_switch;
 	}
 	// TODO: handle storeys separately
 	else if( dynamic_pointer_cast<IfcSite>(product) )
 	{
 		std::stringstream group_name;
 		group_name << "#" << product_id << " IfcSite-Representation-Terrain";
-		product_group->setName( group_name.str().c_str() );
-		//product_shape->terrain_group = product_group;
-		//product_shape->product_group = product_group;
+		product_switch->setName( group_name.str().c_str() );
+		//product_shape->terrain_group = product_switch;
+		//product_shape->product_switch = product_switch;
 	}
 	//else
 	{
-		if( product_group->getNumChildren() > 0 )
+		if( product_switch->getNumChildren() > 0 )
 		{
-			product_shape->product_group = product_group;
+			product_shape->product_switch = product_switch;
 		}
 	}
 	
@@ -1110,274 +1109,17 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	}
 }
 
-
-/*
-void ReaderWriterIFC::convertIfcRelContainedInSpatialStructure( shared_ptr<IfcRelContainedInSpatialStructure> rel_spatial_structure, ModelGeomTree& result_geom, std::set<int>& visited_rel )
-{
-	if( visited_rel.find( rel_spatial_structure->getId() ) != visited_rel.end() )
-	{
-		return;
-	}
-	visited_rel.insert( rel_spatial_structure->getId() );
-
-	std::vector<shared_ptr<IfcProduct> >& vec_related_elements = rel_spatial_structure->m_RelatedElements;
-	std::vector<shared_ptr<IfcProduct> >::iterator it_product;
-	std::vector<weak_ptr<IfcRelAggregates> >::iterator it_rel_aggregates;
-	std::map<int,shared_ptr<ProductShape> >::iterator it_product_map;
-	std::stringstream err;
-
-	for( it_product=vec_related_elements.begin(); it_product!=vec_related_elements.end(); ++it_product )
-	{
-		shared_ptr<IfcProduct> product = (*it_product);
-		if( !product )
-		{
-			continue;
-		}
-		const int product_id = product->getId();
-
-		it_product_map = m_product_shapes.find(product_id);
-		if( it_product_map != m_product_shapes.end() )
-		{
-			shared_ptr<ProductShape>& product_group = it_product_map->second;
-
-			if( product_group->space_group.valid() )
-			{
-				result_geom.spaces->addChild( product_group->space_group );
-			}
-			if( product_group->terrain_group.valid() )
-			{
-				result_geom.terrain->addChild( product_group->terrain_group );
-			}
-			if( product_group->product_group.valid() )
-			{
-				result_geom.products->addChild( product_group->product_group );
-			}
-		}
-
-		if( dynamic_pointer_cast<IfcSpatialStructureElement>(product) )
-		{
-			shared_ptr<IfcSpatialStructureElement> spatial_structure_element = dynamic_pointer_cast<IfcSpatialStructureElement>(product);
-
-			// check for Elevation attribute in case of a building storey
-			shared_ptr<IfcBuildingStorey> building_storey = dynamic_pointer_cast<IfcBuildingStorey>(spatial_structure_element);
-			if( building_storey )
-			{
-				if( building_storey->m_Elevation )
-				{
-					double elevation = building_storey->m_Elevation->m_value;
-					osg::ref_ptr<osg::MatrixTransform> transform_building_storey = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, elevation ) );
-					
-
-					// TODO: assign to result transform group
-				}
-
-				//int building_storey_id = building_storey->getId();
-				//if( m_building_storeys.find(building_storey_id) == m_building_storeys.end() )
-				//{
-				//	m_building_storeys[building_storey_id] = shared_ptr<BuildingStoreyGroup>( new BuildingStoreyGroup() );
-				//}
-			}
-
-			if( spatial_structure_element->m_ContainsElements_inverse.size() > 0 )
-			{
-				std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >& vec_rel_contained = spatial_structure_element->m_ContainsElements_inverse;
-				std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >::iterator it_rel_contained;
-
-				// TODO: collect all products for one building storey and then create geometry for products in each storey in parallel
-
-				for( it_rel_contained=vec_rel_contained.begin(); it_rel_contained!=vec_rel_contained.end(); ++it_rel_contained )
-				{
-					shared_ptr<IfcRelContainedInSpatialStructure> rel( *it_rel_contained );
-					if( rel->getId() == rel_spatial_structure->getId() )
-					{
-						continue;
-					}
-
-					try
-					{
-						convertIfcRelContainedInSpatialStructure( rel, result_geom, visited_rel );
-					}
-					catch( IfcPPException& e )
-					{
-						err << e.what();
-					}
-					catch( carve::exception& ce )
-					{
-						err << ce.str();
-					}
-					catch( std::exception& e )
-					{
-						err << e.what();
-					}
-					catch( ... )
-					{
-						err << "error in ReaderWriterIFC::convertIfcRelContainedInSpatialStructure, product id " << product->getId() << std::endl;
-					}
-				}
-			}
-		}
-
-		// further child object related by IfcRelAggregates
-		if( product->m_IsDecomposedBy_inverse.size() > 0 )
-		{
-			std::vector<weak_ptr<IfcRelAggregates> >& vec_rel_aggregates = product->m_IsDecomposedBy_inverse;
-			for( it_rel_aggregates=vec_rel_aggregates.begin(); it_rel_aggregates!=vec_rel_aggregates.end(); ++it_rel_aggregates )
-			{
-				shared_ptr<IfcRelAggregates> rel_aggregates( *it_rel_aggregates );
-				try
-				{
-					convertIfcRelAggregates( rel_aggregates, result_geom, visited_rel );
-				}
-				catch( IfcPPException& e )
-				{
-					err << e.what();
-				}
-				catch( carve::exception& ce )
-				{
-					err << ce.str();
-				}
-				catch( std::exception& e )
-				{
-					err << e.what();
-				}
-				catch( ... )
-				{
-					err << "error in ReaderWriterIFC::convertIfcRelContainedInSpatialStructure, product id " << product->getId() << std::endl;
-				}
-			}
-		}
-	}
-	if( err.tellp() > 0 )
-	{
-		throw IfcPPException( err.str().c_str() );
-	}
-}
-*/
-
-/*
-void ReaderWriterIFC::convertIfcRelAggregates( shared_ptr<IfcRelAggregates> rel_aggregates, ModelGeomTree& result_geom, std::set<int>& visited_rel )
-{
-	if( visited_rel.find( rel_aggregates->getId() ) != visited_rel.end() )
-	{
-		return;
-	}
-	visited_rel.insert( rel_aggregates->getId() );
-
-	std::vector<shared_ptr<IfcObjectDefinition> >::iterator				it_rel_obj;
-	std::vector<weak_ptr<IfcRelAggregates> >::iterator					it_rel_aggregates;
-	std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >::iterator it_rel_contained;
-	std::vector<shared_ptr<IfcProduct> >::iterator						it_ifc_product;
-	std::map<int,shared_ptr<ProductShape> >::iterator					it_product_map;
-	std::stringstream err;
-
-	std::vector<shared_ptr<IfcObjectDefinition> >& vec_related_objects = rel_aggregates->m_RelatedObjects;
-	for( it_rel_obj=vec_related_objects.begin(); it_rel_obj!=vec_related_objects.end(); ++it_rel_obj )
-	{
-		shared_ptr<IfcObjectDefinition> obj_def = (*it_rel_obj);
-
-		// check if object is an IfcProduct and if it has a representation
-		shared_ptr<IfcProduct> product = dynamic_pointer_cast<IfcProduct>(obj_def);
-		if( product )
-		{
-			const int product_id = product->getId();
-			if( product->m_Representation )
-			{
-				it_product_map = m_product_shapes.find(product_id);
-				if( it_product_map != m_product_shapes.end() )
-				{
-					shared_ptr<ProductShape>& product_group = it_product_map->second;
-
-					if( product_group->space_group.valid() )
-					{
-						result_geom.spaces->addChild( product_group->space_group );
-					}
-					if( product_group->terrain_group.valid() )
-					{
-						result_geom.terrain->addChild( product_group->terrain_group );
-					}
-					if( product_group->product_group.valid() )
-					{
-						result_geom.products->addChild( product_group->product_group );
-					}
-				}
-			}
-		}
-
-		// further child object related by IfcSpatialStructureElement
-		shared_ptr<IfcSpatialStructureElement> spatial_structure_element = dynamic_pointer_cast<IfcSpatialStructureElement>(obj_def);
-		if( spatial_structure_element )
-		{
-			if( spatial_structure_element->m_ContainsElements_inverse.size() > 0 )
-			{
-				std::vector<weak_ptr<IfcRelContainedInSpatialStructure> >& vec_rel_contained = spatial_structure_element->m_ContainsElements_inverse;
-
-				for( it_rel_contained=vec_rel_contained.begin(); it_rel_contained!=vec_rel_contained.end(); ++it_rel_contained )
-				{
-					shared_ptr<IfcRelContainedInSpatialStructure> rel_contained( *it_rel_contained );
-					try
-					{
-						convertIfcRelContainedInSpatialStructure( rel_contained, result_geom, visited_rel );
-					}
-					catch( IfcPPException& e )
-					{
-						err << e.what();
-					}
-					catch(std::exception& e)
-					{
-						err << e.what();
-					}
-					catch( ... )
-					{
-						err << "ReaderWriterIFC::convertIfcRelContainedInSpatialStructure failed" << std::endl;
-					}
-				}
-			}
-		}
-
-		// further child object related by IfcRelAggregates
-		if( obj_def->m_IsDecomposedBy_inverse.size() > 0 )
-		{
-			std::vector<weak_ptr<IfcRelAggregates> >& vec_rel_aggregates = obj_def->m_IsDecomposedBy_inverse;
-
-			for( it_rel_aggregates=vec_rel_aggregates.begin(); it_rel_aggregates!=vec_rel_aggregates.end(); ++it_rel_aggregates )
-			{
-				shared_ptr<IfcRelAggregates> rel( *it_rel_aggregates );
-				if( rel->getId() == rel_aggregates->getId() )
-				{
-					continue;
-				}
-
-				try
-				{
-					convertIfcRelAggregates( rel, result_geom, visited_rel );
-				}
-				catch( IfcPPException& e )
-				{
-					err << e.what();
-				}
-				catch(std::exception& e)
-				{
-					err << e.what();
-				}
-				catch( ... )
-				{
-					err << "ReaderWriterIFC::convertIfcRelAggregates failed" << std::endl;
-				}
-			}
-		}
-	}
-	if( err.tellp() > 0 )
-	{
-		throw IfcPPException( err.str().c_str() );
-	}
-}
-*/
-
 void ReaderWriterIFC::slotProgressValueWrapper( void* ptr, double progress_value )
 {
 	ReaderWriterIFC* myself = (ReaderWriterIFC*)ptr;
 
 	myself->progressCallback( progress_value );
+}
+
+void ReaderWriterIFC::slotProgressTextWrapper( void* ptr, const std::string& str )
+{
+	ReaderWriterIFC* myself = (ReaderWriterIFC*)ptr;
+	myself->progressTextCallback( str );
 }
 
 void ReaderWriterIFC::slotMessageWrapper( void* ptr, const std::string& str )

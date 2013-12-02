@@ -27,6 +27,7 @@
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcppgeometry/Utility.h"
 #include "viewer/ViewerWidget.h"
+#include "viewer/Orbit3DManipulator.h"
 #include "ViewController.h"
 #include "IfcPlusPlusSystem.h"
 
@@ -51,18 +52,18 @@ protected:
 		catch( std::exception& e )
 		{
 			std::cout << " * ApplicationEx::notify :" << std::endl;
-			std::cout << "exception occurred : " << e.what() << std::endl;
+			std::cout << "IfcPlusPlusApplication: exception occurred : " << e.what() << std::endl;
 			// TODO: write file with error report
 		}
 		catch( std::exception* e )
 		{
 			std::cout << " * ApplicationEx::notify :" << std::endl;
-			std::cout << "exception occurred : " << e->what() << std::endl;
+			std::cout << "IfcPlusPlusApplication: exception occurred : " << e->what() << std::endl;
 			// TODO: write file with error report
 		}
 		catch(...)
 		{
-
+			std::cout << "IfcPlusPlusApplication: exception occurred. " << std::endl;
 		}
 		return errRet;
 	}
@@ -82,16 +83,16 @@ int main(int argc, char *argv[])
 
 	IfcPlusPlusSystem* sys = new IfcPlusPlusSystem();
 	ViewerWidget* viewer_widget = new ViewerWidget();
-	
+	Orbit3DManipulator* camera_manip = new Orbit3DManipulator( sys );
+	viewer_widget->getMainView()->setCameraManipulator( camera_manip );
 	viewer_widget->setRootNode( sys->getViewController()->getRootNode() );
-	viewer_widget->setModelNode( sys->getViewController()->getModelNode() );
 
 	MainWindow* window = new MainWindow( sys, viewer_widget );
 	app.connect( &app,		SIGNAL(lastWindowClosed()),				&app,	SLOT(quit()) );
 	window->show();
 	viewer_widget->setFocus();
 	viewer_widget->startTimer();
-	viewer_widget->addEventHandler( sys );
+	viewer_widget->getMainView()->addEventHandler( sys );
 	
 	if( argc > 1 )
 	{
@@ -129,7 +130,7 @@ int main(int argc, char *argv[])
 	}
 #endif
 
-	viewer_widget->setDone(true);
+	viewer_widget->getViewer().setDone(true);
 	viewer_widget->stopTimer();
 
 	return re;

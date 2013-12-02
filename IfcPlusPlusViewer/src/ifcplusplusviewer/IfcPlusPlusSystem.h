@@ -27,7 +27,7 @@ namespace osg { class Material; }
 struct selectedEntity 
 {
 	shared_ptr<IfcPPEntity> entity;
-	osg::ref_ptr<osg::StateSet> original_stateset;
+	//osg::ref_ptr<osg::StateSet> original_stateset;
 	osg::ref_ptr<osg::Group> osg_group;
 };
 
@@ -58,11 +58,9 @@ private:
 	osg::ref_ptr<ReaderWriterIFC>		m_reader_writer;
 	shared_ptr<CommandManager>			m_command_manager;
 	shared_ptr<ViewController>			m_view_controller;
-	bool								m_drag;
 	std::map<int, shared_ptr<selectedEntity> > m_map_selected;
-	osg::ref_ptr<const osgGA::GUIEventAdapter> m_ga_t0;
 
 signals:
-	void signalObjectSelected( shared_ptr<IfcPPEntity> object );
-	void signalObjectUnSelected( shared_ptr<IfcPPEntity> object );
+	void signalObjectsSelected( std::map<int, shared_ptr<IfcPPEntity> >& map_objects );
+	void signalObjectsUnselected( std::map<int, shared_ptr<IfcPPEntity> >& map_objects );
 };

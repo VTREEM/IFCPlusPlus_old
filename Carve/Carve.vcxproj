@@ -19,36 +19,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{851FC60F-62E3-452E-8036-A4E13D551169}</ProjectGuid>
+    <ProjectGuid>{B3C35BB8-0E24-4F96-8D1C-47F777EF9EA1}</ProjectGuid>
     <RootNamespace>Carve</RootNamespace>
-    <ProjectName>Carve</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -66,37 +65,25 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\bin\</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>.\bin\</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>.\bin\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>.\bin\$(Configuration)\</IntDir>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>bin\</OutDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>bin\$(Configuration)\intermediate\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)d</TargetName>
+    <OutDir>bin/$(Configuration)\</OutDir>
+    <IntDir>bin/$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\</OutDir>
-    <IntDir>.\bin\$(Configuration)\</IntDir>
+    <IntDir>bin\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin\</OutDir>
+    <IntDir>bin\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\src\include\;.\src\include\carve\external\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./src/include/;./src/include/carve/external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>UNICODE;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -106,12 +93,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\src\include\;.\src\include\carve\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <AdditionalIncludeDirectories>./src/include/;./src/include/carve/external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UNICODE;WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableSpecificWarnings>4267;4244</DisableSpecificWarnings>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
-      <MinimalRebuild>false</MinimalRebuild>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -123,8 +108,6 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>.\src\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -135,20 +118,21 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Full</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>.\src\include\;.\src\include\carve\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>UNICODE;WIN32;_WINDOWS;NDEBUG;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>UNICODE;WIN32;_WINDOWS;NDEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
       <DisableSpecificWarnings>4267;4244</DisableSpecificWarnings>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FloatingPointExceptions>true</FloatingPointExceptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ImportLibrary>$(Outdir)Carve.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -180,76 +164,10 @@
     <ClCompile Include="src\lib\triangulator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\include\carve\aabb.hpp" />
-    <ClInclude Include="src\include\carve\aabb_impl.hpp" />
-    <ClInclude Include="src\include\carve\carve.hpp" />
-    <ClInclude Include="src\include\carve\cbrt.h" />
-    <ClInclude Include="src\include\carve\classification.hpp" />
-    <ClInclude Include="src\include\carve\collection.hpp" />
-    <ClInclude Include="src\include\carve\collection_types.hpp" />
-    <ClInclude Include="src\include\carve\colour.hpp" />
-    <ClInclude Include="src\include\carve\convex_hull.hpp" />
-    <ClInclude Include="src\include\carve\csg.hpp" />
-    <ClInclude Include="src\include\carve\csg_triangulator.hpp" />
-    <ClInclude Include="src\include\carve\debug_hooks.hpp" />
-    <ClInclude Include="src\include\carve\djset.hpp" />
-    <ClInclude Include="src\include\carve\edge_decl.hpp" />
-    <ClInclude Include="src\include\carve\edge_impl.hpp" />
-    <ClInclude Include="src\include\carve\exact.hpp" />
-    <ClInclude Include="src\include\carve\faceloop.hpp" />
-    <ClInclude Include="src\include\carve\face_decl.hpp" />
-    <ClInclude Include="src\include\carve\face_impl.hpp" />
-    <ClInclude Include="src\include\carve\geom.hpp" />
-    <ClInclude Include="src\include\carve\geom2d.hpp" />
-    <ClInclude Include="src\include\carve\geom3d.hpp" />
-    <ClInclude Include="src\include\carve\geom_impl.hpp" />
-    <ClInclude Include="src\include\carve\gnu_cxx.h" />
-    <ClInclude Include="src\include\carve\heap.hpp" />
-    <ClInclude Include="src\include\carve\input.hpp" />
-    <ClInclude Include="src\include\carve\interpolator.hpp" />
-    <ClInclude Include="src\include\carve\intersection.hpp" />
-    <ClInclude Include="src\include\carve\iobj.hpp" />
-    <ClInclude Include="src\include\carve\kd_node.hpp" />
-    <ClInclude Include="src\include\carve\math.hpp" />
-    <ClInclude Include="src\include\carve\math_constants.hpp" />
-    <ClInclude Include="src\include\carve\matrix.hpp" />
-    <ClInclude Include="src\include\carve\mesh.hpp" />
-    <ClInclude Include="src\include\carve\mesh_impl.hpp" />
-    <ClInclude Include="src\include\carve\mesh_ops.hpp" />
-    <ClInclude Include="src\include\carve\mesh_simplify.hpp" />
-    <ClInclude Include="src\include\carve\octree_decl.hpp" />
-    <ClInclude Include="src\include\carve\octree_impl.hpp" />
-    <ClInclude Include="src\include\carve\pointset.hpp" />
-    <ClInclude Include="src\include\carve\pointset_decl.hpp" />
-    <ClInclude Include="src\include\carve\pointset_impl.hpp" />
-    <ClInclude Include="src\include\carve\pointset_iter.hpp" />
-    <ClInclude Include="src\include\carve\poly.hpp" />
-    <ClInclude Include="src\include\carve\polyhedron_base.hpp" />
-    <ClInclude Include="src\include\carve\polyhedron_decl.hpp" />
-    <ClInclude Include="src\include\carve\polyhedron_impl.hpp" />
-    <ClInclude Include="src\include\carve\polyline.hpp" />
-    <ClInclude Include="src\include\carve\polyline_decl.hpp" />
-    <ClInclude Include="src\include\carve\polyline_impl.hpp" />
-    <ClInclude Include="src\include\carve\polyline_iter.hpp" />
-    <ClInclude Include="src\include\carve\poly_decl.hpp" />
-    <ClInclude Include="src\include\carve\poly_impl.hpp" />
-    <ClInclude Include="src\include\carve\rescale.hpp" />
-    <ClInclude Include="src\include\carve\rtree.hpp" />
-    <ClInclude Include="src\include\carve\shewchuk_predicates.hpp" />
-    <ClInclude Include="src\include\carve\spacetree.hpp" />
-    <ClInclude Include="src\include\carve\tag.hpp" />
-    <ClInclude Include="src\include\carve\timing.hpp" />
-    <ClInclude Include="src\include\carve\tree.hpp" />
-    <ClInclude Include="src\include\carve\triangle_intersection.hpp" />
-    <ClInclude Include="src\include\carve\triangulator.hpp" />
-    <ClInclude Include="src\include\carve\triangulator_impl.hpp" />
-    <ClInclude Include="src\include\carve\util.hpp" />
-    <ClInclude Include="src\include\carve\vcpp_config.h" />
-    <ClInclude Include="src\include\carve\vector.hpp" />
-    <ClInclude Include="src\include\carve\vertex_decl.hpp" />
-    <ClInclude Include="src\include\carve\vertex_impl.hpp" />
-    <ClInclude Include="src\include\carve\win32.h" />
-    <ClInclude Include="src\include\carve\xcode_config.h" />
+    <ClInclude Include="src\common\geometry.hpp" />
+    <ClInclude Include="src\common\opts.hpp" />
+    <ClInclude Include="src\common\rgb.hpp" />
+    <ClInclude Include="src\common\stringfuncs.hpp" />
     <ClInclude Include="src\lib\csg_collector.hpp" />
     <ClInclude Include="src\lib\csg_data.hpp" />
     <ClInclude Include="src\lib\csg_detail.hpp" />
@@ -257,9 +175,6 @@
     <ClInclude Include="src\lib\intersect_classify_common_impl.hpp" />
     <ClInclude Include="src\lib\intersect_common.hpp" />
     <ClInclude Include="src\lib\intersect_debug.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,7 +14,8 @@
 #pragma once
 
 #include <osgViewer/Viewer>
-namespace osgQt{ class  GraphicsWindowQt; }
+#include <osgViewer/CompositeViewer>
+#include <osgQt/GraphicsWindowQt>
 
 
 #include <QtCore/qglobal.h>
@@ -26,76 +27,49 @@ namespace osgQt{ class  GraphicsWindowQt; }
 	#include <QtCore/QTimer>
 #endif
 
-class CameraMan3D;
+class Orbitmanipulator;
+
 
 //! @brief class to combine OSG Viewer and Qt widget
 //! @author Fabian Gerold, Bauhaus University Weimar
-//! @date 2011-07-02
+//! @date 2013-10-27
 
-class ViewerWidget : public QWidget, public osgViewer::Viewer
+
+class ViewerWidget : public QWidget
 {
-	Q_OBJECT
-
 public:
 	enum ViewerProjection
 	{
 		PROJECTION_PARALLEL,
 		PROJECTION_PERSPECTIVE
 	};
-	enum ViewerMode
-	{
-		VIEWER_MODE_SHADED,
-		VIEWER_MODE_WIREFRAME,
-		VIEWER_MODE_HIDDEN_LINE
-	};
-	ViewerWidget( QWidget * parent = 0 );
-	~ViewerWidget();
 
+    ViewerWidget( QWidget* parent = NULL );
+	~ViewerWidget();
+		
 	QSize minimumSizeHint() const;
 	QSize sizeHint() const;
-
-	osgQt::GraphicsWindowQt* getGraphicsWindow() const { return m_gw; }
-	void setRootNode( osg::Group* node );
-	void setModelNode( osg::Group* node );
-	void setHudNode( osg::Group* node );
-	void setProjection( ViewerProjection p );
-	void zoomToBoundingSphere( const osg::BoundingSphere& bs );
-	void setViewerMode( ViewerMode mode );
-
+	virtual void paintEvent( QPaintEvent* event );
 	
-	void getFocus() { setFocus(); }
-	void addViewerWidget( QWidget* widget, int x, int y, int w, int h );
-	osg::Camera* getCamera() { return _camera; }
-	CameraMan3D* getCameraManager();
-
+	void setProjection( ViewerProjection p );
+	void setRootNode( osg::Group* node );
 	void stopTimer();
 	void startTimer();
-	
-signals:
-	void signalViewerWidgetResized( int w, int h );
-	void signalKeyPressEvent( QKeyEvent* e );
-	void signalKeyReleaseEvent( QKeyEvent* e );
+	osgViewer::CompositeViewer& getViewer()	{ return m_viewer; }
+	osgViewer::View* getMainView() {  return m_main_view.get(); }
 
 protected:
-	QTimer					  m_timer;
-	CameraMan3D*			    m_camera_manager;
-	osgQt::GraphicsWindowQt*	m_gw;
-	osg::ref_ptr<osg::Group>	m_rootnode;
-	osg::ref_ptr<osg::Group>	m_model_node;
-	osg::ref_ptr<osg::Camera>       m_hud_camera;
-	ViewerProjection			m_projection;
-	double					  m_near_plane;
-	double					  m_far_plane;
-	ViewerMode				      m_viewer_mode;
+	osgViewer::CompositeViewer		m_viewer;
+	osg::ref_ptr<osgViewer::View>	m_main_view;
 
-	void init();
-	virtual void resizeGL( int width, int height );
-	virtual void mousePressEvent( QMouseEvent* e );
-	virtual void mouseReleaseEvent( QMouseEvent* e );
-	virtual void mouseMoveEvent( QMouseEvent* e );
-	virtual void wheelEvent( QWheelEvent* e );
-	virtual void keyPressEvent( QKeyEvent* e );
-	virtual void keyReleaseEvent( QKeyEvent* e );
-	virtual void mouseDoubleClickEvent ( QMouseEvent * e );
-	virtual void paintEvent( QPaintEvent* e );
+	osgQt::GLWidget*				m_gl_widget;
+	ViewerProjection				m_projection;
+
+    QTimer							m_timer;
+	double							m_near_plane;
+	double							m_far_plane;
+	osg::ref_ptr<osg::Group>		m_rootnode;
+	osg::ref_ptr<osg::Group>		m_model_node;
+	osg::ref_ptr<osg::Camera>		m_hud_camera;
+	virtual void resizeEvent(QResizeEvent *);
 };

@@ -17,7 +17,6 @@
 #pragma once
 
 #include "ifcpp/model/shared_ptr.h"
-
 #include <carve/geom3d.hpp>
 
 class UnitConverter;
@@ -27,7 +26,6 @@ class IfcArbitraryOpenProfileDef;
 class IfcCompositeProfileDef;
 class IfcDerivedProfileDef;
 class IfcParameterizedProfileDef;
-class IfcNurbsProfile;
 
 class ProfileConverter
 {
@@ -37,20 +35,23 @@ public:
 
 	void setProfile( shared_ptr<IfcProfileDef> profile_def );
 	const std::vector<std::vector<carve::geom::vector<3> > >& getCoordinates() { return m_paths; }
-	static void addArc( std::vector<carve::geom::vector<3> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int segments = 12 );
-	static void addFullArc( std::vector<carve::geom::vector<3> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int segments = 12 );
-	void mirrorCopyPath( std::vector<carve::geom::vector<3> >& coords, bool horizontally, bool vertically ) const;
-	void mirrorCopyPathBack( std::vector<carve::geom::vector<3> >& coords, bool horizontally, bool vertically ) const;
+	void addArc(					std::vector<carve::geom::vector<3> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int segments = -1 ) const;
+	void addArcWithEndPoint(		std::vector<carve::geom::vector<3> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM ) const;
+	static void addArcWithEndPoint(	std::vector<carve::geom::vector<3> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int segments );
+	void mirrorCopyPath(			std::vector<carve::geom::vector<3> >& coords, bool horizontally, bool vertically ) const;
+	void mirrorCopyPathBack(		std::vector<carve::geom::vector<3> >& coords, bool horizontally, bool vertically ) const;
+	void setNumVerticesPerCircle( int num_circles ) { m_num_vertices_per_circle = num_circles; }
 
-private:
+protected:
 	shared_ptr<UnitConverter> m_unit_converter;
 	std::vector<std::vector<carve::geom::vector<3> > > m_paths;
+	int	m_num_vertices_per_circle;
 	
-	void convertIfcArbitraryClosedProfileDef(	const shared_ptr<IfcArbitraryClosedProfileDef>& profile_def,	std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
-	void convertIfcArbitraryOpenProfileDef(		const shared_ptr<IfcArbitraryOpenProfileDef>& profile_def,		std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
-	void convertIfcCompositeProfileDef(			const shared_ptr<IfcCompositeProfileDef>& profile_def,			std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
-	void convertIfcDerivedProfileDef(			const shared_ptr<IfcDerivedProfileDef>& profile_def,			std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
-	void convertIfcParameterizedProfileDef(		const shared_ptr<IfcParameterizedProfileDef>& profile_def,		std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
+	void convertIfcArbitraryClosedProfileDef(				const shared_ptr<IfcArbitraryClosedProfileDef>& profile_def,	std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
+	void convertIfcArbitraryOpenProfileDef(					const shared_ptr<IfcArbitraryOpenProfileDef>& profile_def,		std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
+	void convertIfcCompositeProfileDef(						const shared_ptr<IfcCompositeProfileDef>& profile_def,			std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
+	void convertIfcDerivedProfileDef(						const shared_ptr<IfcDerivedProfileDef>& profile_def,			std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
+	void convertIfcParameterizedProfileDef(					const shared_ptr<IfcParameterizedProfileDef>& profile_def,		std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
 	void convertIfcParameterizedProfileDefWithPosition(		const shared_ptr<IfcParameterizedProfileDef>& profile_def,		std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;
 	void deleteLastPoint( std::vector<carve::geom::vector<3> >& polygon ) const;
 	void addAvoidingDuplicates( const std::vector<carve::geom::vector<3> >& polygon, std::vector<std::vector<carve::geom::vector<3> > >& paths ) const;

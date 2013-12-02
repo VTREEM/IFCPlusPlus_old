@@ -136,7 +136,7 @@ namespace carve {
 
 
 
-    static inline int operator-(const polyline_edge_iter&a, const polyline_edge_iter &b) { return a.idx - b.idx; }
+    static inline int operator-(const polyline_edge_iter&a, const polyline_edge_iter &b) { return int(a.idx - b.idx); }
                 
     static inline bool operator==(const polyline_edge_iter&a, const polyline_edge_iter &b) { return a.idx == b.idx; }
     static inline bool operator!=(const polyline_edge_iter&a, const polyline_edge_iter &b) { return a.idx != b.idx; }
@@ -172,7 +172,7 @@ namespace carve {
 
 
 
-    static inline int operator-(const polyline_edge_const_iter&a, const polyline_edge_const_iter &b) { return a.idx - b.idx; }
+    static inline int operator-(const polyline_edge_const_iter&a, const polyline_edge_const_iter &b) { return int(a.idx - b.idx); }
                 
     static inline bool operator==(const polyline_edge_const_iter&a, const polyline_edge_const_iter &b) { return a.idx == b.idx; }
     static inline bool operator!=(const polyline_edge_const_iter&a, const polyline_edge_const_iter &b) { return a.idx != b.idx; }

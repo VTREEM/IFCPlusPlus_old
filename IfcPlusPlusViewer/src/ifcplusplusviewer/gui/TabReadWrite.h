@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include <map>
 #include "ifcpp/model/shared_ptr.h"
 
 #include <QtCore/qglobal.h>
@@ -59,7 +60,7 @@ public slots:
 	void slotLoadIfcFile( std::string& path );
 	void slotRecentFilesIndexChanged(int);
 	void updateRecentFilesCombo();
-	void slotObjectSelected( shared_ptr<IfcPPEntity> object );
+	void slotObjectsSelected( std::map<int, shared_ptr<IfcPPEntity> >& map );
 	void slotTreewidgetSelectionChanged( QTreeWidgetItem* current, QTreeWidgetItem* previous );
 	void slotTreewidgetSelectionChanged();
 
