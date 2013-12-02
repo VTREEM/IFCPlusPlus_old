@@ -544,7 +544,7 @@ void ReaderWriterIFC::resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg:
 		double elevation = 0.0;
 		if( building_storey->m_Elevation )
 		{
-			elevation = building_storey->m_Elevation->m_value;
+			//elevation = building_storey->m_Elevation->m_value*m_unit_converter->getLengthInMeterFactor();
 		}
 		osg::Switch* switch_building_storey = new osg::Switch();
 		std::stringstream storey_switch_name;
