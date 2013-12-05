@@ -76,6 +76,7 @@
 #include <ifcpp/writer/IfcStepWriter.h>
 #include <ifcpp/model/UnitConverter.h>
 
+#include "UnhandledRepresentationException.h"
 #include "RepresentationConverter.h"
 #include "PlacementConverter.h"
 #include "ConverterOSG.h"
@@ -126,7 +127,6 @@ void ReaderWriterIFC::reset()
 	m_processed_products.clear();
 
 	m_group_result->removeChildren( 0, m_group_result->getNumChildren() );
-//	m_vec_building_storeys.clear();
 	m_recent_progress = 0.0;
 }
 
@@ -146,6 +146,9 @@ void ReaderWriterIFC::setModel( shared_ptr<IfcPPModel> model )
 	m_unit_converter = m_ifc_model->getUnitConverter();
 	m_representation_converter = shared_ptr<RepresentationConverter>( new RepresentationConverter( m_unit_converter ) );
 	m_representation_converter->setNumVerticesPerCircle( m_num_vertices_per_circle );
+#ifdef _DEBUG
+	m_representation_converter->m_debug_view = m_debug_view;
+#endif
 }
 
 void ReaderWriterIFC::setNumVerticesPerCircle( int num_vertices )
@@ -247,6 +250,9 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 		m_unit_converter = m_ifc_model->getUnitConverter();
 		m_representation_converter = shared_ptr<RepresentationConverter>( new RepresentationConverter( m_unit_converter ) );
 		m_representation_converter->setNumVerticesPerCircle( m_num_vertices_per_circle );
+#ifdef _DEBUG
+		m_representation_converter->m_debug_view = m_debug_view;
+#endif
 	}
 	catch( IfcPPException& e )
 	{
@@ -279,20 +285,11 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 		m_err << "An error occured in ReaderWriterIFC::readNode";
 	}
 
-	//for( int i=0; i<m_vec_building_storeys.size(); ++i )
-	//{
-	//	shared_ptr<ReaderWriterIFC::BuildingStoreyGroup>& storey_group = m_vec_building_storeys[i];
-	//	osg::ref_ptr<osg::MatrixTransform> storey_transform = storey_group->storey_transform;
-	//	m_group_result->addChild( storey_transform );
-	//}
-
 	osgDB::ReaderWriter::ReadResult::ReadStatus status = osgDB::ReaderWriter::ReadResult::FILE_LOADED;
-	m_err.seekp(0, std::ios::end);
-	std::stringstream::pos_type err_length = m_err.tellp();
-	m_err.clear();
-	if( err_length > 0 )
+	if( m_err.tellp() > 0 )
 	{
 		status = osgDB::ReaderWriter::ReadResult::ERROR_IN_READING_FILE;
+		std::cout << m_err.str().c_str();
 	}
 
 	return osgDB::ReaderWriter::ReadResult( m_group_result, status );
@@ -434,6 +431,13 @@ void ReaderWriterIFC::createGeometry()
 		{
 			err << e.str();
 		}
+#ifdef _DEBUG
+		catch( DebugBreakException& e )
+		{
+			// pass exception up so that only the geometry with errors is shown
+			throw DebugBreakException( e.what() );
+		}
+#endif
 		catch( std::exception& e )
 		{
 			err << e.what();
@@ -517,8 +521,6 @@ void ReaderWriterIFC::createGeometry()
 	}
 }
 
-
-
 void ReaderWriterIFC::resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg::Group* parent_group )
 {
 	shared_ptr<IfcObjectDefinition> obj_def = dynamic_pointer_cast<IfcObjectDefinition>(obj);
@@ -526,7 +528,6 @@ void ReaderWriterIFC::resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg:
 	{
 		return;
 	}
-
 
 	int entity_id = obj_def->getId();
 	if( m_map_visited.find( entity_id ) != m_map_visited.end() )
@@ -689,10 +690,9 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	std::vector<shared_ptr<IfcRepresentation> >::iterator it_representations;
 	for( it_representations=vec_representations.begin(); it_representations!=vec_representations.end(); ++it_representations )
 	{
-		shared_ptr<IfcRepresentation> representation = (*it_representations);
-
 		try
 		{
+			shared_ptr<IfcRepresentation> representation = (*it_representations);
 			std::set<int> visited_representation;
 			m_representation_converter->convertIfcRepresentation( representation, product_placement_matrix, product_shape->representation_data, visited_representation );
 		}
@@ -700,6 +700,13 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		{
 			err << e.what();
 		}
+#ifdef _DEBUG
+			catch( DebugBreakException& e )
+			{
+				// pass exception up so that only the geometry with errors is shown
+				throw DebugBreakException( e.what() );
+			}
+#endif
 		catch( std::exception& e)
 		{
 			err << e.what();
@@ -767,9 +774,10 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		for( int i=0; i<item_data->polyhedrons.size(); ++i )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> >& product_meshset = item_data->polyhedrons[i];
-			bool product_polyhedron_ok = ConverterOSG::checkPolyHedron( product_meshset, err, product_id );
+			bool product_polyhedron_ok = ConverterOSG::checkMeshSet( product_meshset, err, product_id );
 			if( !product_polyhedron_ok )
 			{
+				std::cout << "ReaderWriterIFC::convertIfcProduct: Meshset check failed" << std::endl;
 				continue;
 			}
 
@@ -863,28 +871,57 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 									}
 									else
 									{
+										bool csg_operation_successful = true;
 										try
 										{
 											if( polyhedron_openings->meshes.size() && opening_poly_single->meshes.size() > 0 )
 											{
 												polyhedron_openings =  shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( polyhedron_openings.get(), opening_poly_single.get(), carve::csg::CSG::UNION, NULL, carve::csg::CSG::CLASSIFY_NORMAL) );
+												
+												bool result_polyhedron_ok = ConverterOSG::checkMeshSet( polyhedron_openings, err, product_id );
+						
+												if( !result_polyhedron_ok )
+												{
+													csg_operation_successful = false;
+												}
 											}
 										}
 										catch( IfcPPException& e )
 										{
 											err << e.what();
+											csg_operation_successful = false;
 										}
 										catch( carve::exception& ce )
 										{
 											err << ce.str();
+											csg_operation_successful = false;
 										}
 										catch( std::exception& e )
 										{
 											err << e.what();
+											csg_operation_successful = false;
 										}
 										catch(...)
 										{
 											err << "convertIfcProduct: opening csg operation failed at product id " << product_id << std::endl;
+											csg_operation_successful = false;
+										}
+
+										if( !csg_operation_successful )
+										{
+											err << "convertIfcProduct: csg operation failed at product id " << product_id << std::endl;
+#ifdef _DEBUG
+											osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+											converter_carve_osg.drawMeshSet( product_meshset, geode );
+											osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, failed_geom_z ) );
+											mt->addChild(geode);
+											product_switch->addChild(mt);
+											failed_geom_z -= 1;
+
+											osg::ref_ptr<osg::Geode> geode_opnening = new osg::Geode();
+											converter_carve_osg.drawMeshSet( polyhedron_openings, geode_opnening );
+											mt->addChild(geode_opnening);
+#endif
 										}
 									}
 								}
@@ -893,7 +930,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 					}
 
 					
-					bool opening_polyhedron_ok = ConverterOSG::checkPolyHedron( polyhedron_openings, err, product_id );
+					bool opening_polyhedron_ok = ConverterOSG::checkMeshSet( polyhedron_openings, err, product_id );
 
 					if( !opening_polyhedron_ok )
 					{
@@ -903,12 +940,13 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 
 					// do the subtraction
 					carve::csg::CSG csg;
+					bool csg_operation_successful = true;
 					try
 					{
 						if( product_meshset->meshes.size() && polyhedron_openings->meshes.size() > 0 )
 						{
 							shared_ptr<carve::mesh::MeshSet<3> > result( csg.compute( product_meshset.get(), polyhedron_openings.get(), carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_NORMAL) );
-							bool result_polyhedron_ok = ConverterOSG::checkPolyHedron( result, err, product_id );
+							bool result_polyhedron_ok = ConverterOSG::checkMeshSet( result, err, product_id );
 						
 							if( result_polyhedron_ok )
 							{
@@ -917,35 +955,31 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 							}
 							else
 							{
-
-#ifdef _DEBUG
-							osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-							converter_carve_osg.drawMeshSet( product_meshset, geode );
-							osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, failed_geom_z ) );
-							mt->addChild(geode);
-							product_switch->addChild(mt);
-							failed_geom_z -= 1;
-
-							osg::ref_ptr<osg::Geode> geode_opnening = new osg::Geode();
-							converter_carve_osg.drawMeshSet( polyhedron_openings, geode_opnening );
-							mt->addChild(geode_opnening);
-#endif
+								csg_operation_successful = false;
 							}
 						}
 					}
 					catch( IfcPPException& e )
 					{
 						err << e.what();
+						csg_operation_successful = false;
 					}
 					catch( carve::exception& ce )
 					{
 						err << ce.str();
+						csg_operation_successful = false;
 					}
 					catch( std::exception& e )
 					{
 						err << e.what();
+						csg_operation_successful = false;
 					}
 					catch(...)
+					{
+						csg_operation_successful = false;
+					}
+						
+					if( !csg_operation_successful )
 					{
 						err << "convertIfcProduct: csg operation failed at product id " << product_id << std::endl;
 #ifdef _DEBUG
@@ -955,6 +989,10 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 						mt->addChild(geode);
 						product_switch->addChild(mt);
 						failed_geom_z -= 1;
+
+						osg::ref_ptr<osg::Geode> geode_opnening = new osg::Geode();
+						converter_carve_osg.drawMeshSet( polyhedron_openings, geode_opnening );
+						mt->addChild(geode_opnening);
 #endif
 					}
 				}

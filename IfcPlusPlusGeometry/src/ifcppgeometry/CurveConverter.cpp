@@ -206,7 +206,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				}
 				else
 				{
-					// circle passes 0 anlge
+					// circle passes 0 angle
 					opening_angle = trim_angle2 - trim_angle1 + 2.0*M_PI;
 				}
 			}
@@ -218,7 +218,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				}
 				else
 				{
-					// circle passes 0 anlge
+					// circle passes 0 angle
 					opening_angle = trim_angle2 - trim_angle1 - 2.0*M_PI;
 				}
 			}
@@ -239,7 +239,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 			}
 
 			int num_segments = m_num_vertices_per_circle*(abs(opening_angle)/(2.0*M_PI));
-			if( num_segments < 4 ) num_segments = 4;
+			if( num_segments < 5 ) num_segments = 5;
 			const double circle_center_x = 0.0;
 			const double circle_center_y = 0.0;
 			std::vector<carve::geom::vector<3> > circle_points;
@@ -340,12 +340,12 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 		double line_magnitude_value = line_magnitude->m_value*length_factor;
 
 		// check for trimming at beginning of line
-		double startParameter = 0.0;
+		double start_parameter = 0.0;
 		shared_ptr<IfcParameterValue> trim_par1;
 		if( findFirstInVector( trim1_vec, trim_par1 ) )
 		{
-			startParameter = trim_par1->m_value;
-			line_origin = line_origin + line_direction*startParameter;
+			start_parameter = trim_par1->m_value;
+			line_origin = line_origin + line_direction*start_parameter;
 		}
 		else
 		{

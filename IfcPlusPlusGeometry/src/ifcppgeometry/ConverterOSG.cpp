@@ -395,7 +395,7 @@ void ConverterOSG::drawPolyline( const shared_ptr<carve::input::PolylineSetData>
 
 }
 
-bool ConverterOSG::checkPolyHedron( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id )
+bool ConverterOSG::checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id )
 {
 	// check opening polyhedron
 	if( !mesh_set )
@@ -454,7 +454,7 @@ bool ConverterOSG::checkPolyHedron( shared_ptr<carve::poly::Polyhedron>& poly, s
 		}
 		if( poly->manifold_is_negative[mani] )
 		{
-			err << "!manifold_is_negative[" << mani << "]";
+			err << "manifold_is_negative[" << mani << "]";
 		}
 	}
 	for( int i=0; i<poly->faces.size(); ++i )

@@ -42,3 +42,15 @@ public:
 	shared_ptr<IfcPPAbstractSelect> m_select;
 };
 
+#ifdef _DEBUG
+
+class DebugBreakException : public std::exception
+{
+public:
+	DebugBreakException( std::string reason ) { m_reason = reason; }
+	~DebugBreakException() throw() {}
+	virtual const char* what() const throw() { return m_reason.c_str(); }
+	std::string m_reason;
+};
+
+#endif

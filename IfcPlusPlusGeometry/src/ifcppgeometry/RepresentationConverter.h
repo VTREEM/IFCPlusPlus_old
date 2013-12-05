@@ -26,7 +26,7 @@
 #include <osg/Array>
 #include <osg/Geode>
 #include <osg/Group>
-#include <osgViewer/Viewer>
+#include <osgViewer/View>
 
 #ifdef IFCPP_OPENMP
 #include <omp.h>
@@ -117,7 +117,8 @@ public:
 	void setNumVerticesPerCircle( int num_vertices );
 
 #ifdef _DEBUG
-	osgViewer::Viewer* m_debug_viewer;
+	osgViewer::View* m_debug_view;
+	void renderPolyhedronInDebugViewer( shared_ptr<carve::poly::Polyhedron>& polyhedron, osg::Vec4f& color, bool wireframe );
 #endif
 
 protected:

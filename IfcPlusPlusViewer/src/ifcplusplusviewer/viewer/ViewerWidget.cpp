@@ -35,7 +35,6 @@
 
 #include <osgQt/GraphicsWindowQt>
 
-//#include "Orbit3DManipulator.h"
 #include "ViewerWidget.h"
 
 

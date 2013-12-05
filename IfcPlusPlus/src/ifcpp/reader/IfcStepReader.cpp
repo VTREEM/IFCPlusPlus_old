@@ -319,13 +319,15 @@ void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::s
 						++stream_pos;
 						continue;
 					}
+					++stream_pos;
 					escaped = true;
 				}
-				else if( *stream_pos == '\'' )
+				
+				if( *stream_pos == '\'' )
 				{
+					++stream_pos;
 					if( escaped )
 					{
-						++stream_pos;
 						continue;
 					}
 					// end of string
@@ -808,7 +810,10 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			args.push_back( "$" );
 			break;
 		case IFCCLASSIFICATIONREFERENCE:
-			args.push_back( "$" );
+			if( args.size() < 5 )
+				args.push_back( "$" );	//Description	 :	OPTIONAL IfcText;
+			if( args.size() < 6 )
+				args.push_back( "$" );	//Sort	 :	OPTIONAL IfcIdentifier;
 			break;
 		case IFCCOLUMN:
 			args.push_back( "$" );
@@ -973,6 +978,14 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 				args.pop_back();
 			}
 			break;
+		
+		case IFCTEXTSTYLE:
+			if( args.size() == 13 )
+			{
+				args.pop_back();	//ModelOrDraughting	 :	OPTIONAL BOOLEAN;
+			}
+			break;
+			
 
 			// U
 		case IFCUSHAPEPROFILEDEF:

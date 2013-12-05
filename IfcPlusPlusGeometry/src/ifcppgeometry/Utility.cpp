@@ -46,6 +46,7 @@
 #include "ifcpp/model/shared_ptr.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcpp/IFC4/include/IfcFace.h"
+#include "ProfileConverter.h"
 #include "RepresentationConverter.h"
 #include "Utility.h"
 
@@ -437,6 +438,23 @@ osg::ref_ptr<osg::Geode> createQuarterCircles()
 	return geode_circle;
 }
 
+carve::geom::vector<3> computePolygonCentroid( const std::vector<carve::geom::vector<3> >& polygon )
+{
+	carve::geom::vector<3> polygon_centroid( carve::geom::VECTOR(0, 0, 0) );
+	for( std::vector<carve::geom::vector<3> >::const_iterator it = polygon.begin(); it != polygon.end(); ++it )
+	{
+		const carve::geom::vector<3>& vertex_current = (*it);
+		//++it;
+		//if( it != polygon.end() )
+		//{
+		//	const carve::geom::vector<3>& vertex_next = (*it);
+		//}
+		polygon_centroid += vertex_current;
+	}
+	polygon_centroid /= double(polygon.size());
+	return polygon_centroid;
+}
+
 osg::Vec3d computePolygonNormal( const osg::Vec3dArray* polygon )
 {
 	const int num_points = polygon->size();
@@ -452,6 +470,7 @@ osg::Vec3d computePolygonNormal( const osg::Vec3dArray* polygon )
 	polygon_normal.normalize();
 	return polygon_normal;
 }
+
 osg::Vec3f computePolygonNormal( const osg::Vec3Array* polygon )
 {
 	const int num_points = polygon->size();
@@ -470,19 +489,43 @@ osg::Vec3f computePolygonNormal( const osg::Vec3Array* polygon )
 
 carve::geom::vector<3> computePolygonNormal( const std::vector<carve::geom::vector<3> >& polygon )
 {
-	const int num_points = polygon.size();
 	carve::geom::vector<3> polygon_normal( carve::geom::VECTOR(0, 0, 0) );
-	for( int k=0; k<num_points; ++k )
+	bool last_loop = false;
+	for( std::vector<carve::geom::vector<3> >::const_iterator it = polygon.begin(); ;  )
 	{
-		const carve::geom::vector<3>& vertex_current = polygon.at(k);
-		const carve::geom::vector<3>& vertex_next = polygon.at((k+1)%num_points);
+		const carve::geom::vector<3>& vertex_current = (*it);
+		++it;
+		if( it == polygon.end() )
+		{
+			it = polygon.begin();
+			last_loop = true;
+		}
+		const carve::geom::vector<3>& vertex_next = (*it);
 		polygon_normal[0] += (vertex_current.y-vertex_next.y )*(vertex_current.z+vertex_next.z );
 		polygon_normal[1] += (vertex_current.z-vertex_next.z )*(vertex_current.x+vertex_next.x );
 		polygon_normal[2] += (vertex_current.x-vertex_next.x )*(vertex_current.y+vertex_next.y );
+		if( last_loop )
+		{
+			break;
+		}
 	}
 	polygon_normal.normalize();
 	return polygon_normal;
+
+	//const int num_points = polygon.size();
+	//carve::geom::vector<3> polygon_normal( carve::geom::VECTOR(0, 0, 0) );
+	//for( int k=0; k<num_points; ++k )
+	//{
+	//	const carve::geom::vector<3>& vertex_current = polygon.at(k);
+	//	const carve::geom::vector<3>& vertex_next = polygon.at((k+1)%num_points);
+	//	polygon_normal[0] += (vertex_current.y-vertex_next.y )*(vertex_current.z+vertex_next.z );
+	//	polygon_normal[1] += (vertex_current.z-vertex_next.z )*(vertex_current.x+vertex_next.x );
+	//	polygon_normal[2] += (vertex_current.x-vertex_next.x )*(vertex_current.y+vertex_next.y );
+	//}
+	//polygon_normal.normalize();
+	//return polygon_normal;
 }
+
 carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::vector<2> >& polygon )
 {
 	const int num_points = polygon.size();
@@ -499,29 +542,36 @@ carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::ve
 	return polygon_normal;
 }
 
-void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> dir, carve::input::PolyhedronData& poly_data )
+void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> extrusion_vector, carve::input::PolyhedronData& poly_data )
 {
 	std::vector<std::vector<carve::geom::vector<3> > >::const_iterator it_paths;
 	std::vector<carve::geom::vector<3> >::const_iterator it_loop;
 	for( it_paths=paths.begin(); it_paths!=paths.end(); ++it_paths )
 	{
-		const std::vector<carve::geom::vector<3> >& path = (*it_paths);
-		const unsigned int num_points_in_loop = path.size();
+		const std::vector<carve::geom::vector<3> >& path_original = (*it_paths);
+		std::vector<carve::geom::vector<3> > path;
+		std::copy( path_original.begin(), path_original.end(), std::back_inserter( path ) );
+		
+		// if first and last point have same coordinates, remove last point
+		ProfileConverter::deleteLastPointIfEqualToFirst( path );
 
+		// we need at least 3 points to extrude
+		const unsigned int num_points_in_loop = path.size();
 		if( num_points_in_loop < 2 )
 		{
 			std::cout << "extrude: num_points_in_loop < 2"  << std::endl;
 			continue;
 		}
-
+		
 		// check if path has correct winding direction
-		carve::geom::vector<3> normal = computePolygonNormal( path );
+		carve::geom::vector<3> loop_normal = computePolygonNormal( path );
 
+		double cos_angle = dot( loop_normal, extrusion_vector );
 		bool reverse = false;
 		if( it_paths == paths.begin() )
 		{
 			// polygon normal and extrusion vector should point into OPPOSITE halfspaces
-			if( (normal.z*dir.z) > 0 )
+			if( cos_angle > 0 )//if( (normal.z*dir.z) > 0 )
 			{
 				reverse = true;
 			}
@@ -529,10 +579,17 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, c
 		else
 		{
 			// polygon normal and extrusion vector should point into SAME halfspaces
-			if( (normal.z*dir.z) < 0 )
+			if( cos_angle < 0 )
 			{
 				reverse = true;
 			}
+		}
+
+		if( reverse )
+		{
+			std::reverse( path.begin(), path.end() );
+		//	std::reverse( top_loop.begin(), top_loop.end() );
+		//	std::reverse( bottom_loop.begin(), bottom_loop.end() );
 		}
 
 		// TODO: incorporate holes into polygon
@@ -546,7 +603,7 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, c
 		for( it_loop=path.begin(); it_loop!=path.end(); ++it_loop )
 		{
 			const carve::geom3d::Vector& loop_point = (*it_loop);
-			poly_data.addVertex( carve::geom::VECTOR(loop_point.x, loop_point.y, loop_point.z) + dir );
+			poly_data.addVertex( carve::geom::VECTOR(loop_point.x, loop_point.y, loop_point.z) + extrusion_vector );
 			int vertex_id = poly_data.getVertexCount()-1;
 			top_loop.push_back( vertex_id );
 
@@ -555,18 +612,12 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, c
 			bottom_loop.push_back( vertex_id );
 		}
 		
-		if( reverse )
-		{
-			std::reverse( top_loop.begin(), top_loop.end() );
-			std::reverse( bottom_loop.begin(), bottom_loop.end() );
-		}
-
 		poly_data.addFace(top_loop.rbegin(), top_loop.rend());
 		poly_data.addFace(bottom_loop.begin(), bottom_loop.end());
 
 		if( top_loop.size() < path.size() )
 		{
-			throw std::exception( "top_loop.size() < path.size()" );
+			throw std::exception( "extrude: top_loop.size() < path.size()" );
 		}
 
 		for( size_t i = 0; i < path.size()-1; ++i )
@@ -900,23 +951,6 @@ void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& 
     carve::geom::vector<3> u = cross(s, f);
     u.normalize();
 
-	//m.m[0][0] = s[0];
-	//m.m[0][1] = u[0];
-	//m.m[0][2] = -f[0];
-	//m.m[0][3] = 0.0;
-	//m.m[1][0] = s[1];
-	//m.m[1][1] = u[1];
-	//m.m[1][2] = -f[1];
-	//m.m[1][3] = 0.0;
-	//m.m[2][0] = s[2];
-	//m.m[2][1] = u[2];
-	//m.m[2][2] = -f[2];
-	//m.m[2][3] = 0.0;
-	//m.m[3][0] = 0.0;
-	//m.m[3][1] = 0.0;
-	//m.m[3][2] = 0.0;
-	//m.m[3][3] = 1.0;
-
 	m._11 = s[0];
 	m._12 = u[0];
 	m._13 = -f[0];
@@ -945,141 +979,6 @@ void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& 
         m.m[3][3] += tmp*m.m[i][3];
     }
 }
-
-void makeRotate( const carve::geom::vector<3>& from, const carve::geom::vector<3>& to, carve::math::Quaternion quat )
-{
-
-    // This routine takes any vector as argument but normalized
-    // vectors are necessary, if only for computing the dot product.
-    // Too bad the API is that generic, it leads to performance loss.
-    // Even in the case the 2 vectors are not normalized but same length,
-    // the sqrt could be shared, but we have no way to know beforehand
-    // at this point, while the caller may know.
-    // So, we have to test... in the hope of saving at least a sqrt
-    carve::geom::vector<3> sourceVector = from;
-    carve::geom::vector<3> targetVector = to;
-
-    double fromLen2 = from.length2();
-    double fromLen;
-    // normalize only when necessary, epsilon test
-    if ((fromLen2 < 1.0-1e-7) || (fromLen2 > 1.0+1e-7)) {
-        fromLen = sqrt(fromLen2);
-        sourceVector /= fromLen;
-    } else fromLen = 1.0;
-
-    double toLen2 = to.length2();
-    // normalize only when necessary, epsilon test
-    if ((toLen2 < 1.0-1e-7) || (toLen2 > 1.0+1e-7)) {
-        double toLen;
-        // re-use fromLen for case of mapping 2 vectors of the same length
-        if ((toLen2 > fromLen2-1e-7) && (toLen2 < fromLen2+1e-7)) {
-            toLen = fromLen;
-        }
-        else toLen = sqrt(toLen2);
-        targetVector /= toLen;
-    }
-
-
-    // Now let's get into the real stuff
-    // Use "dot product plus one" as test as it can be re-used later on
-    //double dotProdPlus1 = 1.0 + sourceVector * targetVector;
-	double dotProdPlus1 = 1.0 + dot( sourceVector, targetVector );
-
-    // Check for degenerate case of full u-turn. Use epsilon for detection
-    if (dotProdPlus1 < 1e-7) {
-
-        // Get an orthogonal vector of the given vector
-        // in a plane with maximum vector coordinates.
-        // Then use it as quaternion axis with pi angle
-        // Trick is to realize one value at least is >0.6 for a normalized vector.
-        if (fabs(sourceVector.x) < 0.6) {
-            const double norm = sqrt(1.0 - sourceVector.x * sourceVector.x);
-			quat.x = 0.0;
-            quat.y = sourceVector.z / norm;
-            quat.z = -sourceVector.y / norm;
-            quat.w = 0.0;
-        } else if (fabs(sourceVector.y) < 0.6) {
-            const double norm = sqrt(1.0 - sourceVector.y * sourceVector.y);
-            quat.x = -sourceVector.z / norm;
-            quat.y = 0.0;
-            quat.z = sourceVector.x / norm;
-            quat.w = 0.0;
-        } else {
-            const double norm = sqrt(1.0 - sourceVector.z * sourceVector.z);
-            quat.x = sourceVector.y / norm;
-            quat.y = -sourceVector.x / norm;
-            quat.z = 0.0;
-            quat.w = 0.0;
-        }
-    }
-
-    else {
-        // Find the shortest angle quaternion that transforms normalized vectors
-        // into one other. Formula is still valid when vectors are colinear
-        const double s = sqrt(0.5 * dotProdPlus1);
-        //const carve::geom::vector<3> tmp = sourceVector ^ targetVector / (2.0*s);
-		const carve::geom::vector<3> tmp = cross(sourceVector , targetVector) / (2.0*s);
-        quat.x = tmp.x;
-        quat.y = tmp.y;
-        quat.z = tmp.z;
-        quat.w = s;
-    }
-}
-
-void getMatrixRotate( const carve::math::Matrix mat, carve::math::Quaternion q )
-{
-    double s;
-    double tq[4];
-    int    i, j;
-
-    // Use tq to store the largest trace
-	tq[0] = 1 + mat._11 + mat._22 + mat._33;
-    tq[1] = 1 + mat._11 - mat._22 - mat._33;
-    tq[2] = 1 - mat._11 + mat._22 - mat._33;
-    tq[3] = 1 - mat._11 - mat._22 + mat._33;
-
-    // Find the maximum (could also use stacked if's later)
-    j = 0;
-    for(i=1;i<4;i++) j = (tq[i]>tq[j])? i : j;
-
-    // check the diagonal
-    if (j==0)
-    {
-        /* perform instant calculation */
-		q.w = tq[0];
-        q.x = mat._23 - mat._32;
-        q.y = mat._31 - mat._13;
-        q.z = mat._12 - mat._21;
-    }
-    else if (j==1)
-    {
-        q.w = mat._23 - mat._32;
-        q.x = tq[1];
-        q.y = mat._12 + mat._21;
-        q.z = mat._31 + mat._13;
-    }
-    else if (j==2)
-    {
-        q.w = mat._31 - mat._13;
-        q.x = mat._12 + mat._21;
-        q.y = tq[2];
-        q.z = mat._23 + mat._32;
-    }
-    else /* if (j==3) */
-    {
-        q.w = mat._12 - mat._21;
-        q.x = mat._31 + mat._13;
-        q.y = mat._23 + mat._32;
-        q.z = tq[3];
-    }
-
-    s = sqrt(0.25/tq[j]);
-    q.w *= s;
-    q.x *= s;
-    q.y *= s;
-    q.z *= s;
-}
-
 
 bool bisectingPlane( osg::Vec3d& n, const osg::Vec3d& v1, const osg::Vec3d& v2, const osg::Vec3d& v3)
 {

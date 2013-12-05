@@ -242,8 +242,6 @@ TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidge
 	{
 		m_io_splitter->restoreState(settings.value("IOsplitterSizes").toByteArray());
 	}
-	//connect( m_system, SIGNAL( signalObjectSelected( shared_ptr<IfcPPEntity> ) ), this, SLOT( slotObjectSelected( shared_ptr<IfcPPEntity> ) ) );
-	//connect( m_system, SIGNAL( signalObjectSelected( shared_ptr<IfcPPEntity> ) ), this, SLOT( slotObjectsSelected( shared_ptr<IfcPPEntity> ) ) );
 	connect( m_system, SIGNAL( signalObjectsSelected(std::map<int, shared_ptr<IfcPPEntity> >&) ),	this, SLOT( slotObjectsSelected(std::map<int, shared_ptr<IfcPPEntity> >&) ) );
 }
 TabReadWrite::~TabReadWrite()
@@ -472,7 +470,6 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 
 	m_viewer->update();
 	osg::BoundingSphere bs = m_system->getViewController()->getModelNode()->computeBound();
-	//m_viewer->getCameraManager()->setCenter( bs.center() );
 
 	osgViewer::View* main_view = m_viewer->getMainView();
 	if( main_view )
@@ -484,10 +481,6 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 			orbit_manip->zoomToBoundingSphere( bs );
 		}
 	}
-
-	//zoomToBoundingSphere( m_viewer, bs );
-	//m_viewer->frame();
-	//zoomToBoundingSphere( m_viewer, bs );
 
 	// TODO: adapt near/far plane according to bounding sphere
 	// TODO: add near clipping plane to be able to look into closed buildings when zooming in

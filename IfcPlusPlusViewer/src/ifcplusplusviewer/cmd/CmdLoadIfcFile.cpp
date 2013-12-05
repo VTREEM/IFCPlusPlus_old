@@ -126,13 +126,14 @@ bool CmdLoadIfcFile::doCmd()
 		err << reader_writer->getErrors().str();
 	}
 
+	shared_ptr<IfcPPModel> ifc_model = reader_writer->getIfcPPModel();
+	m_system->setIfcModel( ifc_model );
+
 	if( err.tellp() > 0 )
 	{
 		throw IfcPPException( err.str().c_str() );
 	}
 
-	shared_ptr<IfcPPModel> ifc_model = reader_writer->getIfcPPModel();
-	m_system->setIfcModel( ifc_model );
 	return true;
 }
 

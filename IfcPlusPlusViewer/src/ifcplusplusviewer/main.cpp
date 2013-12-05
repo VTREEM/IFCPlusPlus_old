@@ -18,14 +18,17 @@
 	#include <QtGui/qapplication.h>
 	#include <QtGui/QSplashScreen>
 #else
-	#include <QtWidgets/qapplication.h>
+	#include <QtWidgets/QApplication>
 	#include <QtWidgets/QSplashScreen>
 #endif
 
+#include <osgViewer/CompositeViewer>
 #include "gui/TabReadWrite.h"
 #include "gui/MainWindow.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcppgeometry/Utility.h"
+#include "ifcppgeometry/ReaderWriterIFC.h"
+#include "ifcppgeometry/RepresentationConverter.h"
 #include "viewer/ViewerWidget.h"
 #include "viewer/Orbit3DManipulator.h"
 #include "ViewController.h"
@@ -93,7 +96,11 @@ int main(int argc, char *argv[])
 	viewer_widget->setFocus();
 	viewer_widget->startTimer();
 	viewer_widget->getMainView()->addEventHandler( sys );
-	
+
+#ifdef _DEBUG
+	sys->getReaderWriterIFC()->m_debug_view = viewer_widget->getMainView();
+#endif
+
 	if( argc > 1 )
 	{
 		std::string arg1 = argv[1];

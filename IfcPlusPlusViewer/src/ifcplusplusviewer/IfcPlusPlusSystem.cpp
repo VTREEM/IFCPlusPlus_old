@@ -32,6 +32,7 @@
 #include "ifcpp/writer/IfcStepWriter.h"
 #include "ifcpp/IFC4/include/IfcProduct.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
+#include "ifcppgeometry/RepresentationConverter.h"
 
 #include "viewer/Orbit3DManipulator.h"
 #include "cmd/CmdRemoveSelectedObjects.h"
@@ -266,6 +267,32 @@ void IfcPlusPlusSystem::setObjectSelected( shared_ptr<IfcPPEntity> ifc_object, b
 		std::map<int, shared_ptr<IfcPPEntity> > map_objects;
 		map_objects[id] = ifc_object;
 		emit( signalObjectsSelected( map_objects ) );
+
+#ifdef _DEBUG
+		shared_ptr<IfcProduct> product = dynamic_pointer_cast<IfcProduct>( ifc_object );
+		if( product )
+		{
+			const int product_id = product->getId();
+			shared_ptr<ReaderWriterIFC::ProductShape> product_shape( new ReaderWriterIFC::ProductShape() );
+			product_shape->ifc_product = product;
+
+			if( product->m_Representation )
+			{
+				m_reader_writer->convertIfcProduct( product, product_shape );
+			}
+
+
+			osg::MatrixTransform* mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 5 ) );
+			m_view_controller->getModelNode()->addChild( mt );
+
+			osg::ref_ptr<osg::Switch> product_switch = product_shape->product_switch;
+			if( product_switch.valid() )
+			{
+				mt->addChild( product_switch );
+			}
+		}
+
+#endif
 	}
 	else
 	{

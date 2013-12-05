@@ -29,6 +29,7 @@
 #include "RepresentationConverter.h"
 #else
 
+class IfcPPObject;
 class IfcPPModel;
 class IfcPlusPlusReader;
 class IfcStepWriter;
@@ -85,7 +86,7 @@ public:
 	static void slotErrorWrapper( void* obj_ptr, const std::string& str );
 
 #ifdef _DEBUG
-	osgViewer::Viewer* m_debug_viewer;
+	osgViewer::View* m_debug_view;
 #endif
 
 protected:

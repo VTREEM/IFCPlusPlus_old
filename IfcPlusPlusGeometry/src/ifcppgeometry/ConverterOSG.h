@@ -54,7 +54,7 @@ public:
 	void drawPolyhedron( const shared_ptr<carve::poly::Polyhedron>& polyhedron,			osg::Geode* geode );
 	void drawPolyline(	const shared_ptr<carve::input::PolylineSetData>& polyline_data, osg::Geode* geode );
 
-	static bool checkPolyHedron( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id );
+	static bool checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id );
 	static bool checkPolyHedron( shared_ptr<carve::poly::Polyhedron>& poly, std::stringstream& err_poly, int entity_id );
 
 	void convertOsgGroup( const osg::Group* src, carve::input::PolyhedronData& target );

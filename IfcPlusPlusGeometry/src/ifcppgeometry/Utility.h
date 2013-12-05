@@ -54,6 +54,7 @@ void cullFrontBack( bool front, bool back, osg::StateSet* stateset );
 
 osg::Vec3d computePolygonNormal( const osg::Vec3dArray* polygon );
 osg::Vec3f computePolygonNormal( const osg::Vec3Array* polygon );
+carve::geom::vector<3> computePolygonCentroid( const std::vector<carve::geom::vector<3> >& polygon );
 carve::geom::vector<3> computePolygonNormal( const std::vector<carve::geom::vector<3> >& polygon );
 carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::vector<2> >& polygon );
 
@@ -67,8 +68,6 @@ void closestPointOnLine( osg::Vec3d& closest, const osg::Vec3d& point, const osg
 bool isPointOnLineSegment( double& lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
 void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> dir, carve::input::PolyhedronData& poly_data );
 void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m );
-void makeRotate( const carve::geom::vector<3>& from, const carve::geom::vector<3>& to, carve::math::Quaternion quat );
-void getMatrixRotate( const carve::math::Matrix mat, carve::math::Quaternion q );
 bool bisectingPlane( osg::Vec3d& n, const osg::Vec3d& v1, const osg::Vec3d& v2, const osg::Vec3d& v3);
 bool bisectingPlane( carve::geom::vector<3>& n, const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3);
 void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 

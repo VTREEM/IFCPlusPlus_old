@@ -75,7 +75,7 @@ ProfileConverter::~ProfileConverter()
 {
 }
 
-void ProfileConverter::setProfile( shared_ptr<IfcProfileDef> profile_def )
+void ProfileConverter::computeProfile( shared_ptr<IfcProfileDef> profile_def )
 {
 	// ENTITY IfcProfileDef SUPERTYPE OF(ONEOF(IfcArbitraryClosedProfileDef, IfcArbitraryOpenProfileDef, IfcCompositeProfileDef,
 	//IfcDerivedProfileDef, IfcParameterizedProfileDef));
@@ -127,23 +127,37 @@ void ProfileConverter::setProfile( shared_ptr<IfcProfileDef> profile_def )
 	throw IfcPPException( sstr.str() );
 }
 
-void ProfileConverter::addAvoidingDuplicates( const std::vector<carve::geom::vector<3> >& polygon, std::vector<std::vector<carve::geom::vector<3> > >& paths ) const
+void ProfileConverter::addAvoidingDuplicates( const std::vector<carve::geom::vector<3> >& polygon, std::vector<std::vector<carve::geom::vector<3> > >& paths )
 {
 	if( polygon.size() < 1 )
 	{
 		return;
 	}
 
-	carve::geom3d::Vector point_previous = polygon.at(0);
 	std::vector<carve::geom::vector<3> > polygon_add;
-	polygon_add.push_back( point_previous );
+	polygon_add.push_back( polygon.at(0) );
 	for( int i=1; i<polygon.size(); ++i )
 	{
-		carve::geom3d::Vector point = polygon.at(i);
+		const carve::geom3d::Vector& point = polygon.at(i);
+		const carve::geom3d::Vector& point_previous = polygon.at(i-1);
+		
 		// omit duplicate points
-		if( (point-point_previous).length() > 0.00001 )
+		if( abs(point.x - point_previous.x) > 0.00001 )
 		{
 			polygon_add.push_back( point );
+			continue;
+		}
+		
+		if( abs(point.y - point_previous.y) > 0.00001 )
+		{
+			polygon_add.push_back( point );
+			continue;
+		}
+
+		if( abs(point.z - point_previous.z) > 0.00001 )
+		{
+			polygon_add.push_back( point );
+			continue;
 		}
 	}
 	paths.push_back(polygon_add);
@@ -154,12 +168,11 @@ void ProfileConverter::convertIfcArbitraryClosedProfileDef( const shared_ptr<Ifc
 	shared_ptr<IfcCurve> outer_curve = profile->m_OuterCurve;
 	std::vector<carve::geom::vector<3> > curve_polygon;
 	std::vector<carve::geom::vector<3> > segment_start_points;
-	//RepresentationConverter representation_converter( m_unit_converter );
-	//representation_converter.convertIfcCurve( outer_curve, curve_polygon, segment_start_points );
+
 	CurveConverter c_conv( m_unit_converter, m_num_vertices_per_circle );
 	c_conv.convertIfcCurve( outer_curve, curve_polygon, segment_start_points );
 
-	deleteLastPoint( curve_polygon );
+	deleteLastPointIfEqualToFirst( curve_polygon );
 	addAvoidingDuplicates( curve_polygon, paths );
 
 	// IfcArbitraryProfileDefWithVoids
@@ -172,9 +185,9 @@ void ProfileConverter::convertIfcArbitraryClosedProfileDef( const shared_ptr<Ifc
 			shared_ptr<IfcCurve> inner_ifc_curve = inner_curves[i];
 			std::vector<carve::geom::vector<3> > inner_curve_polygon;
 			std::vector<carve::geom::vector<3> > segment_start_points;
-			//representation_converter.convertIfcCurve( inner_ifc_curve, inner_curve_polygon, segment_start_points );
+
 			c_conv.convertIfcCurve( inner_ifc_curve, inner_curve_polygon, segment_start_points );
-			deleteLastPoint( inner_curve_polygon );
+			deleteLastPointIfEqualToFirst( inner_curve_polygon );
 			addAvoidingDuplicates( inner_curve_polygon, paths );
 		}
 	}
@@ -182,20 +195,28 @@ void ProfileConverter::convertIfcArbitraryClosedProfileDef( const shared_ptr<Ifc
 	
 void ProfileConverter::convertIfcArbitraryOpenProfileDef( const shared_ptr<IfcArbitraryOpenProfileDef>& profile,	std::vector<std::vector<carve::geom::vector<3> > >& paths ) const
 {
+	// ENTITY IfcArbitraryOpenProfileDef
+	//	SUPERTYPE OF(IfcCenterLineProfileDef)
+	//	SUBTYPE OF IfcProfileDef;
+	//	Curve	 :	IfcBoundedCurve;
+
 	shared_ptr<IfcCurve> ifc_curve = profile->m_Curve;
 	std::vector<carve::geom::vector<3> > polygon;
 	std::vector<carve::geom::vector<3> > segment_start_points;
 
-	//RepresentationConverter representation_converter( m_unit_converter );
-	//representation_converter.convertIfcCurve( ifc_curve, polygon, segment_start_points );
 	CurveConverter c_converter( m_unit_converter, m_num_vertices_per_circle );
 	c_converter.convertIfcCurve( ifc_curve, polygon, segment_start_points );
 	addAvoidingDuplicates( polygon, paths );
 
 	//TODO IfcCenterLineProfileDef
-	if( dynamic_pointer_cast<IfcCenterLineProfileDef>(profile))
+	shared_ptr<IfcCenterLineProfileDef> center_line_profile_def = dynamic_pointer_cast<IfcCenterLineProfileDef>(profile);
+	if( center_line_profile_def )
 	{
-//			double t = unitConverter.getLengthInMeter(((IfcCenterLineProfileDef) profileDef).Thickness.value);
+		if( center_line_profile_def->m_Thickness )
+		{
+			double t = center_line_profile_def->m_Thickness->m_value * m_unit_converter->getLengthInMeterFactor();
+			// TODO: sweep along curve
+		}
 	}
 }
 	
@@ -255,7 +276,7 @@ void ProfileConverter::convertIfcCompositeProfileDef( const shared_ptr<IfcCompos
 void ProfileConverter::convertIfcDerivedProfileDef( const shared_ptr<IfcDerivedProfileDef>& derived_profile, std::vector<std::vector<carve::geom::vector<3> > >& paths ) const
 {
 	ProfileConverter temp_profiler( m_unit_converter );
-	temp_profiler.setProfile( derived_profile->m_ParentProfile );
+	temp_profiler.computeProfile( derived_profile->m_ParentProfile );
 	const std::vector<std::vector<carve::geom::vector<3> > >& parent_paths = temp_profiler.getCoordinates();
 
 	shared_ptr<IfcCartesianTransformationOperator2D> transf_op_2D = derived_profile->m_Operator;
@@ -980,25 +1001,25 @@ void ProfileConverter::convertIfcNurbsProfile( const shared_ptr<IfcNurbsProfile>
 }
 */
 	
-void ProfileConverter::deleteLastPoint( std::vector<carve::geom::vector<3> >& coords ) const
+void ProfileConverter::deleteLastPointIfEqualToFirst( std::vector<carve::geom::vector<3> >& coords )
 {
-	while(true)
+	while( coords.size() > 2 )
 	{
-		if( coords.size() < 1 )
-		{
-			return;
-		}
-		carve::geom::vector<3>& first = coords.at(0);
-		carve::geom::vector<3>& last = coords.at(coords.size()-1);
+		carve::geom3d::Vector& first = coords.front();
+		carve::geom3d::Vector& last = coords.back();
 
-		if( (last-first).length() < 0.0001 )
+		if( abs(first.x-last.x) < 0.00000001 )
 		{
-			coords.erase(coords.end()-1);
+			if( abs(first.y-last.y) < 0.00000001 )
+			{
+				if( abs(first.z-last.z) < 0.00000001 )
+				{
+					coords.pop_back();
+					continue;
+				}
+			}
 		}
-		else
-		{
-			return;
-		}
+		break;
 	}
 }
 
