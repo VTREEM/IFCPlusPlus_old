@@ -32,7 +32,6 @@ using std::tr1::enable_shared_from_this;
 #elif defined __GNUC__
 
 #include <tr1/memory>
-#include <strings.h>
 using std::tr1::shared_ptr;
 using std::tr1::weak_ptr;
 using std::tr1::dynamic_pointer_cast;

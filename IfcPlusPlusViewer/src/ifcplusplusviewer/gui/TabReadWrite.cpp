@@ -42,9 +42,6 @@
 	#include <QtCore/qsettings.h>
 #endif
 
-#include <osgGA/OrbitManipulator>
-#include <osg/Quat>
-
 #include "ifcpp/reader/IfcPlusPlusReader.h"
 #include "ifcpp/writer/IfcStepWriter.h"
 #include "ifcpp/model/shared_ptr.h"
@@ -397,8 +394,9 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 	m_system->getIfcModel()->clearIfcModel();
 	slotTxtOut( QString( "loading file: " ) + path_in.c_str() );
 	QApplication::processEvents();
-	int millisecs = clock();
-
+	
+	clock_t millisecs = clock();
+	
 	m_ifc_tree_widget->blockSignals(true);
 	m_ifc_tree_widget->clear();
 	m_ifc_tree_widget->blockSignals(false);
@@ -483,10 +481,10 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 	}
 
 	// TODO: adapt near/far plane according to bounding sphere
-	// TODO: add near clipping plane to be able to look into closed buildings when zooming in
-	int time_diff = clock() - millisecs;
-	slotTxtOut( "file loaded (" + QString::number( time_diff*0.001 ) + " sec)" );
-	
+
+	clock_t time_diff = clock() - millisecs;
+	slotTxtOut( tr("File loaded") + " (" + QString::number( int(time_diff*0.1)*0.01 ) + " sec)" );
+
 	shared_ptr<IfcProject> project = m_system->getIfcModel()->getIfcProject();
 	if( project )
 	{

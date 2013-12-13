@@ -629,7 +629,7 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 }
 
 // @brief split one string into a vector of argument strings
-// caution: this method runs in OpenMP parallel threads
+// caution: when using OpenMP, this method runs in parallel threads
 void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::string>& entity_arguments )
 {
 	char* stream_pos = (char*)argument_str.c_str();

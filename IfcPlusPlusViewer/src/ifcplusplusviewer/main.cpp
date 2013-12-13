@@ -29,6 +29,7 @@
 #include "ifcppgeometry/Utility.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
 #include "ifcppgeometry/RepresentationConverter.h"
+#include "ifcppgeometry/ConverterOSG.h"
 #include "viewer/ViewerWidget.h"
 #include "viewer/Orbit3DManipulator.h"
 #include "ViewController.h"
@@ -97,9 +98,8 @@ int main(int argc, char *argv[])
 	viewer_widget->startTimer();
 	viewer_widget->getMainView()->addEventHandler( sys );
 
-#ifdef _DEBUG
-	sys->getReaderWriterIFC()->m_debug_view = viewer_widget->getMainView();
-#endif
+	sys->getReaderWriterIFC()->setDebugView( viewer_widget->getMainView() );
+	//ConverterOSG::createTest4( sys->getViewController()->getModelNode() );
 
 	if( argc > 1 )
 	{
@@ -126,7 +126,6 @@ int main(int argc, char *argv[])
 	{
 		std::cout << "IfcPPException in app.exec(): " << e.what();
 	}
-#ifndef _DEBUG
 	catch( std::exception& e )
 	{
 		std::cout << "std::exception in app.exec(): " << e.what();
@@ -135,7 +134,6 @@ int main(int argc, char *argv[])
 	{
 		std::cout << "std::exception in app.exec(): " << e->what();
 	}
-#endif
 
 	viewer_widget->getViewer().setDone(true);
 	viewer_widget->stopTimer();

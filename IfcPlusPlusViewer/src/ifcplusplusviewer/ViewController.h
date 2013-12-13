@@ -19,7 +19,6 @@
 
 class IfcPPModel;
 class IfcPPEntity;
-class ReaderWriterIFC;
 class CommandManager;
 class IfcPlusPlusSystem;
 namespace osg { class Material; }

@@ -18,7 +18,11 @@
 #include <map>
 #include "ifcpp/model/shared_ptr.h"
 
+#ifdef __GNUC__
+#include "ifcpp/IfcPPEntityEnums.h"
+#else
 enum IfcPPEntityEnum;
+#endif
 
 class IfcPPObject
 {

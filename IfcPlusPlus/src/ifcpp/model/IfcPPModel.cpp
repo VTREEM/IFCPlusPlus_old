@@ -261,23 +261,23 @@ void IfcPPModel::initFileHeader( std::string file_name )
 	strs << "HEADER;" << std::endl;
 	strs << "FILE_DESCRIPTION(('IFC4'),'2;1');" << std::endl;
 	strs << "FILE_NAME('" << file_name.c_str() << "','";
-	
+	char buffer [80];
+
 	//2011-04-21T14:25:12
 	time_t rawtime;
-	struct tm timeinfo;
-	time( &rawtime );
-
 #ifdef _WIN32
-	errno_t err_time;
-	err_time = localtime_s( &timeinfo, &rawtime );
-#else
-	timeinfo = localtime( &rawtime );
-#endif
-
-	char buffer [80];
+    struct tm timeinfo;
+	time( &rawtime );
+	localtime_s( &timeinfo, &rawtime );
 	strftime(buffer,80,"%Y-%m-%dT%H:%M:%S", &timeinfo);
+#else
+	struct tm* timeinfo;
+	time( &rawtime );
+	timeinfo = localtime( &rawtime );
+	strftime(buffer,80,"%Y-%m-%dT%H:%M:%S", timeinfo);
+#endif
+	
 	strs << buffer;
-
 	strs << "',(''),('',''),'','IfcPlusPlus','');" << std::endl;
 	strs << "FILE_SCHEMA(('IFC4'));" << std::endl;
 	strs << "ENDSEC;" << std::endl;

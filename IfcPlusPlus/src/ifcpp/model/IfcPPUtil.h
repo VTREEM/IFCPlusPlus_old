@@ -17,10 +17,10 @@
 #include "shared_ptr.h"
 
 // @brief: finds the first occurrence of T in vector
-template<class T, class U>
+template<typename T, typename U>
 bool findFirstInVector( std::vector<shared_ptr<U> > vec, shared_ptr<T>& ptr )
 {
-	std::vector<shared_ptr<U> >::iterator it_trim = vec.begin();
+	typename std::vector<shared_ptr<U> >::iterator it_trim = vec.begin();
 	for( ; it_trim != vec.end(); ++it_trim )
 	{
 		shared_ptr<U> item = *(it_trim);

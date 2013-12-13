@@ -80,9 +80,10 @@ ViewerWidget::ViewerWidget( QWidget* parent) : QWidget(parent)
 	m_gl_widget = gw->getGLWidget();
 
 	QVBoxLayout* vbox = new QVBoxLayout();
+	vbox->setContentsMargins( 0, 0, 0, 1 );
 	vbox->addWidget( m_gl_widget );
     setLayout( vbox );
-
+	
     connect( &m_timer, SIGNAL(timeout()), this, SLOT(update()) );
 }
 ViewerWidget::~ViewerWidget()
@@ -159,10 +160,5 @@ void ViewerWidget::resizeEvent( QResizeEvent * ev )
 	QSize s = ev->size();
 	int width = s.width();
 	int height = s.height();
-
-	osgViewer::View* main_view = m_viewer.getView(0);
-	if( main_view )
-	{
-		main_view->getEventQueue()->windowResize(0, 0, width, height );
-	}
+	m_main_view->getEventQueue()->windowResize(0, 0, width, height );
 }

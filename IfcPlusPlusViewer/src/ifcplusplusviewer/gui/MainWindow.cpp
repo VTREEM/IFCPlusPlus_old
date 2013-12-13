@@ -76,6 +76,7 @@ MainWindow::MainWindow( IfcPlusPlusSystem* sys, ViewerWidget* vw, QWidget *paren
 	addToolBar( Qt::LeftToolBarArea, m_file_toolbar );
 
 	m_splitter = new QSplitter( Qt::Vertical );
+	m_splitter->setContentsMargins( 0, 0, 0, 0 );
 	m_splitter->addWidget( m_viewer_widget );
 	m_splitter->addWidget( m_tabwidget );
 	m_splitter->setStretchFactor( 0, 1 );

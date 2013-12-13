@@ -23,7 +23,11 @@
 #include <omp.h>
 #endif
 
+#ifdef _WIN32
 #include <unordered_map>
+#else
+#include <tr1/unordered_map>
+#endif
 
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPObject.h"
@@ -33,7 +37,7 @@
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/reader/IfcStepReader.h"
 
-static std::tr1::unordered_map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
+static std::unordered_map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
 
 void applyBackwardCompatibility( IfcPPModel::IfcVersion backward_version, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
@@ -113,7 +117,7 @@ void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entit
 	if( keyword.size() > 0 )
 	{
 		//std::map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
-		std::tr1::unordered_map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
+		std::unordered_map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
 		if( it_entity_enum == map_string2entity_enum.end() )
 		{
 			throw UnknownEntityException( keyword );
@@ -844,8 +848,10 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			args.push_back( "$" );
 			break;
 		case IFCDOOR:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 13 )
+			{
+				args.push_back( "$" );
+			}
 			break;
 		case IFCDOORLININGPROPERTIES:
 			args.push_back( "$" );
@@ -861,8 +867,11 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 
 			// I
 		case IFCISHAPEPROFILEDEF:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 10 )
+			{
+				args.push_back( "$" );
+			}
+			
 			break;
 
 			// L
@@ -996,14 +1005,19 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			break;
 			// W
 		case IFCWALL:
-			args.push_back( "$" );
+			while( args.size() < 13 )
+			{
+				args.push_back( "$" );
+			}
 			break;
 		case IFCWALLSTANDARDCASE:
 			args.push_back( "$" );
 			break;
 		case IFCWINDOW:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 13 )
+			{
+				args.push_back( "$" );
+			}
 			break;
 		case IFCWINDOWLININGPROPERTIES:
 			args.push_back( "$" );
@@ -1020,35 +1034,38 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 		}
 	}
 
-	if( version <= IfcPPModel::IFC4 )
-	{
-		switch( type_enum )
-		{
-			// D
-		case IFCDOOR:
-			if( args.size() == 12 )
-				args.push_back( "$" );
-			break;
+	//if( version <= IfcPPModel::IFC4 )
+	//{
+	//	switch( type_enum )
+	//	{
+	//		// D
+	//	case IFCDOOR:
+	//		if( args.size() == 12 )
+	//			args.push_back( "$" );
+	//		break;
 
-			// I
-		case IFCISHAPEPROFILEDEF:
-			args.push_back( "$" );
-			args.push_back( "$" );
-			break;
+	//		// I
+	//	case IFCISHAPEPROFILEDEF:
+	//		while( args.size() < 10 )
+	//		{
+	//			args.push_back( "$" );
+	//			args.push_back( "$" );
+	//		}
+	//		break;
 
-			// M
-		case IFCMATERIALPROFILESETUSAGE:
-			if( args.size() == 2 )
-				args.push_back( "$" );
-			break;
+	//		// M
+	//	case IFCMATERIALPROFILESETUSAGE:
+	//		if( args.size() == 2 )
+	//			args.push_back( "$" );
+	//		break;
 
-			// W
-		case IFCWINDOW:
-			if( args.size() == 12 )
-				args.push_back( "$" );
-			break;
-		}
-	}
+	//		// W
+	//	case IFCWINDOW:
+	//		if( args.size() == 12 )
+	//			args.push_back( "$" );
+	//		break;
+	//	}
+	//}
 	
 	//IfcRelDecomposes -> IfcRelAggregates
 }

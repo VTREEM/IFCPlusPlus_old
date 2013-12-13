@@ -17,8 +17,6 @@
 #include "Command.h"
 
 class IfcPlusPlusSystem;
-class IfcPPEntity;
-class ReaderWriterIFC;
 
 class CmdLoadIfcFile : public Command
 {

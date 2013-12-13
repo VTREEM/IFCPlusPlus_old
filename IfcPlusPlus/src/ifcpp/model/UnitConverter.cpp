@@ -121,7 +121,19 @@ void UnitConverter::setIfcProject(shared_ptr<IfcProject> project)
 						shared_ptr<IfcUnitEnum> type = unit_component_si->m_UnitType;
 						if( type )
 						{
-							if( type->m_enum == IfcUnitEnum::ENUM_PLANEANGLEUNIT )
+							if( type->m_enum == IfcUnitEnum::ENUM_LENGTHUNIT )
+							{
+								if( conversion_factor->m_ValueComponent )
+								{
+									shared_ptr<IfcValue> length_value = conversion_factor->m_ValueComponent;
+									if( dynamic_pointer_cast<IfcRatioMeasure>(length_value) )
+									{
+										shared_ptr<IfcRatioMeasure> length_measure = dynamic_pointer_cast<IfcRatioMeasure>(length_value);
+										m_length_unit_factor = length_measure->m_value;
+									}
+								}
+							}
+							else if( type->m_enum == IfcUnitEnum::ENUM_PLANEANGLEUNIT )
 							{
 								if( conversion_factor->m_ValueComponent )
 								{
