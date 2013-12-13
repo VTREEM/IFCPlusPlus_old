@@ -11,17 +11,10 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include <osg/Group>
-#include <osg/Geode>
-#include <osg/Geometry>
-#include <osg/ShapeDrawable>
-#include <osg/LineWidth>
-#include <osg/Point>
-#include <osgUtil/Tessellator>
-#include <osgUtil/Optimizer>
-
+#pragma warning (disable: 4267)
 #include "carve/input.hpp"
 #include "carve/geom3d.hpp"
+
 #include "ifcpp/IFC4/include/IfcSectionedSpine.h"
 #include "ifcpp/IFC4/include/IfcCompositeCurve.h"
 #include "ifcpp/IFC4/include/IfcRationalBSplineCurveWithKnots.h"
@@ -75,6 +68,5 @@ void RepresentationConverter::convertIfcSectionedSpine( const shared_ptr<IfcSect
 	//CurveConverter cconv( m_unit_converter );
 	m_curve_converter->convertIfcCurve( spine_curve, curve_polygon, segment_start_points );
 
+	std::cout << "IfcSectionedSpine not implemented." << std::endl;
 }
-
-

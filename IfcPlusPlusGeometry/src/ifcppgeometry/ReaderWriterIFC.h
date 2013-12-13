@@ -25,8 +25,10 @@
 
 #ifdef __GNUC__
 #include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/IFC4/include/AllIfcEntities.h"
+#include "ifcpp/IfcPPEntities.h"
 #include "RepresentationConverter.h"
+#include "ifcpp/reader/IfcPlusPlusReader.h"
+#include "ifcpp/writer/IfcStepWriter.h"
 #else
 
 class IfcPPObject;
@@ -42,6 +44,7 @@ class IfcRelContainedInSpatialStructure;
 class IfcRelAggregates;
 class IfcBuildingStorey;
 #endif
+class GeometrySettings;
 
 class ReaderWriterIFC : public osgDB::ReaderWriter, public StatusObservable
 {
@@ -59,15 +62,15 @@ public:
 		bool added_to_storey;
 	};
 
-	void createGeometry();
-	void convertIfcProduct(	shared_ptr<IfcProduct> product, shared_ptr<ProductShape>& product_shape );
-	void resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg::Group* parent_group );
-
 	ReaderWriterIFC();
 	~ReaderWriterIFC();	
+	
 	virtual const char* className() { return "ReaderWriterIFC"; }
 	virtual osgDB::ReaderWriter::ReadResult readNode(const std::string& filename, const osgDB::ReaderWriter::Options*);
 
+	void createGeometry();
+	void convertIfcProduct(	shared_ptr<IfcProduct> product, shared_ptr<ProductShape>& product_shape );
+	void resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg::Group* parent_group );
 	void reset();
 	void setModel( shared_ptr<IfcPPModel> model );
 	shared_ptr<IfcPPModel> getIfcPPModel() { return m_ifc_model; }
@@ -85,9 +88,8 @@ public:
 	static void slotMessageWrapper( void* obj_ptr, const std::string& str );
 	static void slotErrorWrapper( void* obj_ptr, const std::string& str );
 
-#ifdef _DEBUG
+	void setDebugView( osgViewer::View* view );
 	osgViewer::View* m_debug_view;
-#endif
 
 protected:
 	shared_ptr<IfcPPModel>				m_ifc_model;
@@ -96,7 +98,7 @@ protected:
 	std::stringstream					m_err;
 	std::stringstream					m_messages;
 	bool								m_keep_geom_input_data;
-	int									m_num_vertices_per_circle;
+	shared_ptr<GeometrySettings>		m_geom_settings;
 
 	shared_ptr<UnitConverter>			m_unit_converter;
 	shared_ptr<RepresentationConverter> m_representation_converter;

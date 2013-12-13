@@ -46,22 +46,15 @@ public:
 	ConverterOSG();
 	~ConverterOSG();
 
-	void setAddColors( bool add_colors ) { m_add_colors = add_colors; }
-	void drawFace(		const carve::mesh::Face<3>* face,								osg::Geode* geode );
-	void drawMesh(		const carve::mesh::Mesh<3>* mesh,								osg::Geode* geode );
-	void drawOpenMesh(	const shared_ptr<carve::input::PolyhedronData>& poly_data,		osg::Geode* geode );
-	void drawMeshSet(	const shared_ptr<carve::mesh::MeshSet<3> >& mesh_set,			osg::Geode* geode );
-	void drawPolyhedron( const shared_ptr<carve::poly::Polyhedron>& polyhedron,			osg::Geode* geode );
-	void drawPolyline(	const shared_ptr<carve::input::PolylineSetData>& polyline_data, osg::Geode* geode );
-
+	static void drawFace(		const carve::mesh::Face<3>* face,								osg::Geode* geode, bool add_color_array = false );
+	static void drawMesh(		const carve::mesh::Mesh<3>* mesh,								osg::Geode* geode, bool add_color_array = false );
+	static void drawOpenMesh(	const shared_ptr<carve::input::PolyhedronData>& poly_data,		osg::Geode* geode, bool add_color_array = false );
+	static void drawMeshSet(	const shared_ptr<carve::mesh::MeshSet<3> >& mesh_set,			osg::Geode* geode, bool add_color_array = false );
+	static void drawPolyhedron( const shared_ptr<carve::poly::Polyhedron>& polyhedron,			osg::Geode* geode, bool add_color_array = false );
+	static void drawPolyline(	const shared_ptr<carve::input::PolylineSetData>& polyline_data, osg::Geode* geode, bool add_color_array = false );
 	static bool checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id );
-	static bool checkPolyHedron( shared_ptr<carve::poly::Polyhedron>& poly, std::stringstream& err_poly, int entity_id );
-
-	void convertOsgGroup( const osg::Group* src, carve::input::PolyhedronData& target );
-	void createTest( osg::Group* group );
-	void createTest2( osg::Group* group );
-	void createTest4( osg::Group* group );
-
-protected:
-	bool m_add_colors;
+	static void convertOsgGroup( const osg::Group* src, carve::input::PolyhedronData& target );
+	static void createTest( osg::Group* group );
+	static void createTest2( osg::Group* group );
+	static void createTest4( osg::Group* group );
 };

@@ -41,10 +41,11 @@
 
 void PlacementConverter::convertIfcAxis2Placement2D( const shared_ptr<IfcAxis2Placement2D> axis2placement2d, carve::math::Matrix& resulting_matrix, double length_factor )
 {
-	carve::geom3d::Vector translate( carve::geom::VECTOR(0.0, 0.0, 0.0) );
-	carve::geom3d::Vector local_x( carve::geom::VECTOR(1.0, 0.0, 0.0) );
-	carve::geom3d::Vector local_y( carve::geom::VECTOR(0.0, 1.0, 0.0) );
-	carve::geom3d::Vector local_z( carve::geom::VECTOR(0.0, 0.0, 1.0) );
+	carve::geom::vector<3>  translate(		carve::geom::VECTOR(0.0, 0.0, 0.0) );
+	carve::geom::vector<3>  local_x(		carve::geom::VECTOR(1.0, 0.0, 0.0) );
+	carve::geom::vector<3>  local_y(		carve::geom::VECTOR(0.0, 1.0, 0.0) );
+	carve::geom::vector<3>  local_z(		carve::geom::VECTOR(0.0, 0.0, 1.0) );
+	carve::geom::vector<3>  ref_direction(	carve::geom::VECTOR(1.0, 0.0, 0.0) );
 
 	if( axis2placement2d->m_Location )
 	{
@@ -57,13 +58,23 @@ void PlacementConverter::convertIfcAxis2Placement2D( const shared_ptr<IfcAxis2Pl
 
 	if( axis2placement2d->m_RefDirection )
 	{
-		shared_ptr<IfcDirection>& ifc_placement_direction = axis2placement2d->m_RefDirection;
-		std::vector<double>& direction_ratios = ifc_placement_direction->m_DirectionRatios;
-
-		if( direction_ratios.size() > 1 )
+		if( axis2placement2d->m_RefDirection->m_DirectionRatios.size() > 1 )
 		{
-			local_x = carve::geom::VECTOR(direction_ratios[0], direction_ratios[1], 0 );
-			carve::geom3d::Vector z_axis( carve::geom::VECTOR(0.0, 0.0, 1.0) );
+			ref_direction.x = axis2placement2d->m_RefDirection->m_DirectionRatios[0];
+			ref_direction.y = axis2placement2d->m_RefDirection->m_DirectionRatios[1];
+			ref_direction.z = 0;
+		}
+	}
+
+	//if( axis2placement2d->m_RefDirection )
+	{
+		//shared_ptr<IfcDirection>& ifc_placement_direction = axis2placement2d->m_RefDirection;
+		//std::vector<double>& direction_ratios = ifc_placement_direction->m_DirectionRatios;
+
+		//if( direction_ratios.size() > 1 )
+		{
+			local_x = ref_direction;//carve::geom::VECTOR(direction_ratios[0], direction_ratios[1], 0 );
+			carve::geom::vector<3>  z_axis( carve::geom::VECTOR(0.0, 0.0, 1.0) );
 			local_y = carve::geom::cross( z_axis, local_x );
 			// ref_direction can be just in the x-z-plane, not perpendicular to y and z. so re-compute local x
 			local_x = carve::geom::cross( local_y, local_z );
@@ -82,10 +93,11 @@ void PlacementConverter::convertIfcAxis2Placement2D( const shared_ptr<IfcAxis2Pl
 
 void PlacementConverter::convertIfcAxis2Placement3D( const shared_ptr<IfcAxis2Placement3D> axis2placement3d, carve::math::Matrix& resulting_matrix, double length_factor )
 {
-	carve::geom3d::Vector translate( carve::geom::VECTOR(0.0, 0.0, 0.0) );
-	carve::geom3d::Vector local_x( carve::geom::VECTOR(1.0, 0.0, 0.0) );
-	carve::geom3d::Vector local_y( carve::geom::VECTOR(0.0, 1.0, 0.0) );
-	carve::geom3d::Vector local_z( carve::geom::VECTOR(0.0, 0.0, 1.0) );
+	carve::geom::vector<3>  translate(		carve::geom::VECTOR(0.0, 0.0, 0.0) );
+	carve::geom::vector<3>  local_x(		carve::geom::VECTOR(1.0, 0.0, 0.0) );
+	carve::geom::vector<3>  local_y(		carve::geom::VECTOR(0.0, 1.0, 0.0) );
+	carve::geom::vector<3>  local_z(		carve::geom::VECTOR(0.0, 0.0, 1.0) );
+	carve::geom::vector<3>  ref_direction(	carve::geom::VECTOR(1.0, 0.0, 0.0) );
 
 	if( axis2placement3d->m_Location )
 	{
@@ -112,15 +124,19 @@ void PlacementConverter::convertIfcAxis2Placement3D( const shared_ptr<IfcAxis2Pl
 
 	if( axis2placement3d->m_RefDirection )
 	{
-		std::vector<double>& ref_direction = axis2placement3d->m_RefDirection->m_DirectionRatios;
-		if( ref_direction.size() > 2 )
+		if( axis2placement3d->m_RefDirection->m_DirectionRatios.size() > 2 )
 		{
-			local_x = carve::geom::VECTOR( ref_direction[0], ref_direction[1], ref_direction[2] );
-			local_y = carve::geom::cross( local_z, local_x );
-			// ref_direction can be just in the x-z-plane, not perpendicular to y and z. so re-compute local x
-			local_x = carve::geom::cross( local_y, local_z );
+			ref_direction.x = axis2placement3d->m_RefDirection->m_DirectionRatios[0];
+			ref_direction.y = axis2placement3d->m_RefDirection->m_DirectionRatios[1];
+			ref_direction.z = axis2placement3d->m_RefDirection->m_DirectionRatios[2];
 		}
 	}
+
+	local_x = ref_direction;
+	local_y = carve::geom::cross( local_z, local_x );
+	// ref_direction can be just in the x-z-plane, not perpendicular to y and z. so re-compute local x
+	local_x = carve::geom::cross( local_y, local_z );
+	
 	local_x.normalize();
 	local_y.normalize();
 	local_z.normalize();
@@ -144,10 +160,10 @@ void PlacementConverter::convertMatrix( const carve::math::Matrix& matrix, share
 		vec_entities.push_back( axis2placement3d );
 	}
 
-	carve::geom3d::Vector local_x( carve::geom::VECTOR( 1.0, 0.0, 0.0 ) );
-	carve::geom3d::Vector local_y( carve::geom::VECTOR( 0.0, 1.0, 0.0 ) );
-	carve::geom3d::Vector local_z( carve::geom::VECTOR( 0.0, 0.0, 1.0 ) );
-	carve::geom3d::Vector translate( carve::geom::VECTOR( 0.0, 0.0, 0.0 ) );
+	carve::geom::vector<3>  local_x( carve::geom::VECTOR( 1.0, 0.0, 0.0 ) );
+	carve::geom::vector<3>  local_y( carve::geom::VECTOR( 0.0, 1.0, 0.0 ) );
+	carve::geom::vector<3>  local_z( carve::geom::VECTOR( 0.0, 0.0, 1.0 ) );
+	carve::geom::vector<3>  translate( carve::geom::VECTOR( 0.0, 0.0, 0.0 ) );
 
 	local_x.x = matrix._11;//(0,0);
 	local_x.y = matrix._12;//(0,1);
@@ -268,10 +284,10 @@ void PlacementConverter::convertIfcObjectPlacement( const shared_ptr<IfcObjectPl
 void PlacementConverter::convertTransformationOperator( const shared_ptr<IfcCartesianTransformationOperator> transform_operator, carve::math::Matrix& resulting_matrix, double length_factor )
 {
 	// ENTITY IfcCartesianTransformationOperator  ABSTRACT SUPERTYPE OF(ONEOF(IfcCartesianTransformationOperator2D, IfcCartesianTransformationOperator3D))
-	carve::geom3d::Vector translate( carve::geom::VECTOR(0.0, 0.0, 0.0) );
-	carve::geom3d::Vector local_x( carve::geom::VECTOR(1.0, 0.0, 0.0) );
-	carve::geom3d::Vector local_y( carve::geom::VECTOR(0.0, 1.0, 0.0) );
-	carve::geom3d::Vector local_z( carve::geom::VECTOR(0.0, 0.0, 1.0) );
+	carve::geom::vector<3>  translate( carve::geom::VECTOR(0.0, 0.0, 0.0) );
+	carve::geom::vector<3>  local_x( carve::geom::VECTOR(1.0, 0.0, 0.0) );
+	carve::geom::vector<3>  local_y( carve::geom::VECTOR(0.0, 1.0, 0.0) );
+	carve::geom::vector<3>  local_z( carve::geom::VECTOR(0.0, 0.0, 1.0) );
 
 	double scale = 1.0;
 	double scale_y = 1.0;

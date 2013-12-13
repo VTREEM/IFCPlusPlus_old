@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <set>
 #include <osg/Matrix>
 #include "ifcpp/model/shared_ptr.h"
 

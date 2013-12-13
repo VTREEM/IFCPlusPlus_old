@@ -18,25 +18,24 @@
 #include <osg/Geode>
 #include <osg/Group>
 #include <osgViewer/Viewer>
+#include <ifcpp/model/shared_ptr.h>
 
 namespace carve
 {
-	namespace math
-	{
-		struct Quaternion;
-		struct Matrix;
-	}
-	namespace geom
-	{
-		template<unsigned ndim> struct vector;
-	}
-
-	namespace input
-	{
-		struct PolyhedronData;
-		struct PolylineSetData;
-	}
+	namespace geom		{ 	template<unsigned ndim> struct vector;	}
+	namespace mesh		{	template<unsigned ndim> class MeshSet;	}
+	namespace math		{	struct Quaternion;	struct Matrix;	}
+	namespace input		{	struct PolyhedronData;	struct PolylineSetData;	}
+	namespace poly		{	class Polyhedron;	}
 }
+
+enum FaceProjectionPlane
+{
+	UNDEFINED,
+	XY_PLANE,
+	YZ_PLANE,
+	XZ_PLANE
+};
 
 osg::ref_ptr<osg::Geode> createCoordinateAxes();
 osg::ref_ptr<osg::Group> createCoordinateAxesArrows();
@@ -66,9 +65,12 @@ void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& i
 void closestPointOnLine( carve::geom::vector<3>& closest, const carve::geom::vector<3>& point, const carve::geom::vector<3>& line_origin, const carve::geom::vector<3>& line_direction );
 void closestPointOnLine( osg::Vec3d& closest, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
 bool isPointOnLineSegment( double& lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
-void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> dir, carve::input::PolyhedronData& poly_data );
+void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
 void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m );
-bool bisectingPlane( osg::Vec3d& n, const osg::Vec3d& v1, const osg::Vec3d& v2, const osg::Vec3d& v3);
-bool bisectingPlane( carve::geom::vector<3>& n, const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3);
+bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal );
 void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
 						 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix );
+
+void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_loops, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
+void renderMeshsetInDebugViewer( osgViewer::View* view, shared_ptr<carve::mesh::MeshSet<3> >& meshset, osg::Vec4f& color, bool wireframe );
+void renderPolylineInDebugViewer( osgViewer::View* view, shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color );
