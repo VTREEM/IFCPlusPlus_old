@@ -17,6 +17,8 @@
 #define _USE_MATH_DEFINES 
 #include <math.h>
 
+#include "CurveConverter.h"
+
 #include "ifcpp/model/shared_ptr.h"
 #include "ifcpp/model/UnitConverter.h"
 #include "ifcpp/model/IfcPPException.h"
@@ -54,7 +56,6 @@
 #include "UnhandledRepresentationException.h"
 #include "PlacementConverter.h"
 #include "ProfileConverter.h"
-#include "CurveConverter.h"
 
 CurveConverter::CurveConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> uc )
 	: m_geom_settings(geom_settings), m_unit_converter( uc )

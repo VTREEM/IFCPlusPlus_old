@@ -23,10 +23,14 @@
 #include <omp.h>
 #endif
 
-#ifdef _WIN32
+#ifdef _LIBCPP_VERSION
+// using libc++
 #include <unordered_map>
+#define UNORDERED_MAP std::unordered_map
 #else
+// using libstdc++
 #include <tr1/unordered_map>
+#define UNORDERED_MAP std::tr1::unordered_map
 #endif
 
 #include "ifcpp/model/IfcPPModel.h"
@@ -37,7 +41,7 @@
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/reader/IfcStepReader.h"
 
-static std::unordered_map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
+static UNORDERED_MAP<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
 
 void applyBackwardCompatibility( IfcPPModel::IfcVersion backward_version, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
@@ -117,7 +121,7 @@ void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entit
 	if( keyword.size() > 0 )
 	{
 		//std::map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
-		std::unordered_map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
+		UNORDERED_MAP<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
 		if( it_entity_enum == map_string2entity_enum.end() )
 		{
 			throw UnknownEntityException( keyword );
@@ -792,6 +796,8 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 				args.push_back( "$" );
 			}
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -1028,9 +1034,8 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 		case IFCZONE:
 			args.push_back( "$" );
 			break;
-
-
-
+		default:
+			break;
 		}
 	}
 
