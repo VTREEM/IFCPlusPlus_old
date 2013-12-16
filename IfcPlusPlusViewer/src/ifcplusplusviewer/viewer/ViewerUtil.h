@@ -18,6 +18,7 @@
 #include <osg/Geode>
 #include <osg/Group>
 #include <osgViewer/Viewer>
+#include <osgViewer/CompositeViewer>
 
 void zoomToBoundingSphere( osgViewer::Viewer* viewer, const osg::BoundingSphere& bs, double ratio_w = 1.0 );
 void zoomToBoundingSphere( osgViewer::CompositeViewer* viewer, const osg::BoundingSphere& bs, double ratio_w = 1.0 );
