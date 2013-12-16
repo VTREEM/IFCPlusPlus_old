@@ -4,7 +4,4 @@ project (IFCPP)
 
 add_subdirectory (IfcPlusPlus)
 add_subdirectory (IfcPlusPlusGeometry)
-
-if (BUILD_IFCPP_VIEWER)
-    add_subdirectory (IfcPlusPlusViewer)
-endif()
+add_subdirectory (IfcPlusPlusViewer)
