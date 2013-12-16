@@ -102,7 +102,7 @@ void SolidModelConverter::detailedReport( std::stringstream& strs )
 // ENTITY IfcSolidModel ABSTRACT SUPERTYPE OF(ONEOF(IfcCsgSolid, IfcManifoldSolidBrep, IfcSweptAreaSolid, IfcSweptDiskSolid))
 void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>& solid_model, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
-	// TODO: class SolidModelConverter
+	
 
 	shared_ptr<IfcSweptAreaSolid> swept_area_solid = dynamic_pointer_cast<IfcSweptAreaSolid>(solid_model);
 	if( swept_area_solid )
@@ -165,7 +165,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			//  shared_ptr<IfcAxis2Placement3D>				m_Position;					//optional
 
 			shared_ptr<ProfileConverter> profile_converter = m_profile_cache->getProfileConverter( swept_area );
-			const std::vector<std::vector<carve::geom::vector<3> > >& paths = profile_converter->getCoordinates();
+			const std::vector<std::vector<carve::geom::vector<2> > >& paths = profile_converter->getCoordinates();
 			shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData );
 
 						
@@ -596,7 +596,7 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 	shared_ptr<ProfileConverter> profile_converter = m_profile_cache->getProfileConverter(swept_area);
 
 	std::stringstream err;
-	const std::vector<std::vector<carve::geom::vector<3> > >& paths = profile_converter->getCoordinates();
+	const std::vector<std::vector<carve::geom::vector<2> > >& paths = profile_converter->getCoordinates();
 
 	if( paths.size() == 0 )
 	{
@@ -630,11 +630,12 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 		polyline_data->beginPolyline();
 		if( paths.size() > 0 )
 		{
-			const std::vector<carve::geom::vector<3> >& loop = paths[0]; 
+			const std::vector<carve::geom::vector<2> >& loop = paths[0]; 
 			for( int i=0; i<loop.size(); ++i )
 			{
-				const carve::geom::vector<3> & point = loop.at(i);
-				polyline_data->addVertex( point );
+				const carve::geom::vector<2>& point = loop.at(i);
+				carve::geom::vector<3> point3d( carve::geom::VECTOR( point.x, point.y, 0 ) );
+				polyline_data->addVertex( point3d );
 				polyline_data->addPolylineIndex(i);
 			}
 
@@ -892,19 +893,19 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 
 	// swept area
 	shared_ptr<ProfileConverter> profile_converter = m_profile_cache->getProfileConverter(swept_area_profile);
-	const std::vector<std::vector<carve::geom::vector<3> > >& profile_coords = profile_converter->getCoordinates();
+	const std::vector<std::vector<carve::geom::vector<2> > >& profile_coords = profile_converter->getCoordinates();
 
 	// tesselate
 	std::vector<std::vector<carve::geom::vector<2> > > profile_coords_2d;
 	for( int i = 0; i<profile_coords.size(); ++i )
 	{
-		const std::vector<carve::geom::vector<3> >& profile_loop = profile_coords[i];
-		std::vector<carve::geom::vector<2> > profile_loop_2d;
-		for( int j = 0; j<profile_loop.size(); ++j )
-		{
-			profile_loop_2d.push_back( carve::geom::VECTOR( profile_loop[j].x, profile_loop[j].y ) );
-		}
-		profile_coords_2d.push_back( profile_loop_2d );
+		const std::vector<carve::geom::vector<2> >& profile_loop = profile_coords[i];
+		//std::vector<carve::geom::vector<2> > profile_loop_2d;
+		//for( int j = 0; j<profile_loop.size(); ++j )
+		//{
+		//	profile_loop_2d.push_back( carve::geom::VECTOR( profile_loop[j].x, profile_loop[j].y ) );
+		//}
+		profile_coords_2d.push_back( profile_loop );
 	}
 
 	std::vector<carve::geom::vector<2> > merged;
@@ -920,7 +921,7 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 			
 			if( loop_number >= profile_coords_2d.size() )
 			{
-				std::cout << "tesselatePathLoops3D: loop_number >= face_loops_projected.size()" << std::endl;
+				std::cout << "convertIfcRevolvedAreaSolid: loop_number >= face_loops_projected.size()" << std::endl;
 				continue;
 			}
 
@@ -969,8 +970,10 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 	double d_angle = revolution_angle/num_segments;
 
 	// check if we have to change the direction
-	carve::geom::vector<3>  polygon_normal = computePolygonNormal( profile_coords[0] );
-	carve::geom::vector<3>  pt0 = carve::math::Matrix::ROT(d_angle, axis_direction )*(profile_coords[0][0]+base_point);
+	carve::geom::vector<3>  polygon_normal = computePolygon2DNormal( profile_coords[0] );
+	const carve::geom::vector<2>&  pt0_2d = profile_coords[0][0];
+	carve::geom::vector<3>  pt0_3d( carve::geom::VECTOR( pt0_2d.x, pt0_2d.y, 0 ) );
+	carve::geom::vector<3>  pt0 = carve::math::Matrix::ROT(d_angle, axis_direction )*(pt0_3d + base_point);
 	if( polygon_normal.z*pt0.z > 0 )
 	{
 		angle = revolution_angle;
@@ -987,11 +990,13 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 		m = carve::math::Matrix::ROT( angle, -axis_direction );
 		for( int j=0; j<profile_coords.size(); ++j )
 		{
-			const std::vector<carve::geom::vector<3> >& loop = profile_coords[j];
+			const std::vector<carve::geom::vector<2> >& loop = profile_coords[j];
 			
 			for( int k=0; k<loop.size(); ++k )
 			{
-				carve::geom::vector<3>  vertex= m*(loop[k]+base_point) - base_point;
+				const carve::geom::vector<2>& point = loop[k];
+
+				carve::geom::vector<3>  vertex= m*( carve::geom::VECTOR( point.x, point.y, 0 ) + base_point) - base_point;
 				polyhedron_data->addVertex( pos*vertex );
 			}
 		}
@@ -1003,7 +1008,7 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 	int num_polygon_points = 0;
 	for( int j=0; j<profile_coords.size(); ++j )
 	{
-		const std::vector<carve::geom::vector<3> >& loop = profile_coords[j];
+		const std::vector<carve::geom::vector<2> >& loop = profile_coords[j];
 
 		for( int k=0; k<loop.size(); ++k )
 		{
@@ -1336,7 +1341,6 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 			}
 
 			// project 2D boundary into base surface
-			//std::vector<carve::geom::vector<3> > boundary_points_projected;
 			const int num_boundary_points = (int)polygonal_boundary.size();
 			for( int k=0; k<num_boundary_points; ++k )
 			{
@@ -1353,56 +1357,59 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 
 				boundary_points.push_back( boundary_point_in_surface );
 			}
+		}
+		else
+		{
+			// else, its an unbounded half space solid
+			carve::geom::vector<3>  polygon_centroid = computePolygonCentroid( base_surface_points );
+			double box_depth = HALF_SPACE_BOX_SIZE;		// TODO: adapt to model bounding box
 
-			/*
-			// project 2D boundary into base surface
-			std::vector<carve::geom::vector<3> > boundary_points_projected;
-			const int num_boundary_points = (int)boundary_points.size();
-			for( int k=0; k<num_boundary_points; ++k )
+			const int num_vertices = base_surface_points.size();
+			for( int k=0; k<num_vertices; ++k )
 			{
-				carve::geom::vector<3> boundary_point = boundary_points.at(k);
-				carve::geom::vector<3>  boundary_point_in_surface;
-				carve::geom3d::LineSegment ray( boundary_point, boundary_point + half_space_extrusion_direction );
-				double t;
-				carve::IntersectionClass intersects = carve::geom3d::rayPlaneIntersection(base_surface_plane_eqn, ray.v1, ray.v2, boundary_point_in_surface, t);
+				carve::geom::vector<3>  point = base_surface_points.at(k);
 
-				if( intersects == carve::INTERSECT_NONE || intersects == carve::INTERSECT_BAD )
-				{
-					std::cout << "IfcPolygonalBoundedHalfSpace: PolygonalBoundary cannot be projected into BaseSurface" << std::endl;
-				}
-
-				boundary_points_projected.push_back( boundary_point_in_surface );
+				// move the point far away so that it becomes practically unbounded
+				carve::geom::vector<3>  centroid_to_point_vec = point - polygon_centroid;
+				centroid_to_point_vec.normalize();
+				carve::geom::vector<3>  point_far = polygon_centroid + centroid_to_point_vec*HALF_SPACE_BOX_SIZE;
+				boundary_points.push_back( point_far );
 			}
 
-			// extrude the polyhedron
-			std::stringstream err;
-			shared_ptr<carve::input::PolyhedronData> box_data( new carve::input::PolyhedronData() );
-			item_data->closed_mesh_data.push_back(box_data);
-			std::vector<std::vector<carve::geom::vector<3> > > vec_boundary_paths;
-			vec_boundary_paths.push_back( boundary_points_projected );
-			carve::geom::vector<3>  half_space_extrusion_vector = half_space_extrusion_direction*HALF_SPACE_BOX_SIZE;
-			extrude( vec_boundary_paths, half_space_extrusion_vector, box_data, err );
+			half_space_extrusion_direction = -base_surface_normal;
+		}
 
-			// apply object coordinate system
-			std::vector<carve::geom::vector<3> >& half_space_solid_points = box_data->points;
-			for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_solid_points.begin(); it_points != half_space_solid_points.end(); ++it_points )
-			{
-				carve::geom::vector<3> & vertex = (*it_points);
-				vertex = pos*vertex;
-			}
+		// extrude the polyhedron
+		std::stringstream err;
+		shared_ptr<carve::input::PolyhedronData> box_data( new carve::input::PolyhedronData() );
+		item_data->closed_mesh_data.push_back(box_data);
+		std::vector<std::vector<carve::geom::vector<3> > > vec_boundary_paths;
+		vec_boundary_paths.push_back( boundary_points );
+		carve::geom::vector<3>  half_space_extrusion_vector = half_space_extrusion_direction*HALF_SPACE_BOX_SIZE;
+		extrude3D( vec_boundary_paths, half_space_extrusion_vector, box_data, err );
+
+		// apply object coordinate system
+		std::vector<carve::geom::vector<3> >& half_space_solid_points = box_data->points;
+		for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_solid_points.begin(); it_points != half_space_solid_points.end(); ++it_points )
+		{
+			carve::geom::vector<3> & vertex = (*it_points);
+			vertex = pos*vertex;
+		}
 			
 #ifdef _DEBUG
-			carve::input::Options carve_options;
-			std::stringstream strs_err;
-			shared_ptr<carve::mesh::MeshSet<3> > mesh_set( box_data->createMesh(carve_options) );
-			if( mesh_set->meshes.size() != 1 )
-			{
-				std::cout << "IfcPolygonalBoundedHalfSpace: mesh_set->meshes.size() != 1" << std::endl;
-			}
-			bool poly_ok = ConverterOSG::checkMeshSet( mesh_set, strs_err, -1 );
-			if( !poly_ok )
-			{
-				std::cout << strs_err.str().c_str() << std::endl;
+		carve::input::Options carve_options;
+		std::stringstream strs_err;
+		shared_ptr<carve::mesh::MeshSet<3> > mesh_set( box_data->createMesh(carve_options) );
+		if( mesh_set->meshes.size() != 1 )
+		{
+			std::cout << "IfcPolygonalBoundedHalfSpace: mesh_set->meshes.size() != 1" << std::endl;
+		}
+		bool poly_ok = ConverterOSG::checkMeshSet( mesh_set, strs_err, -1 );
+
+		//renderMeshsetInDebugViewer( m_debug_view, mesh_set, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+		if( !poly_ok )
+		{
+			std::cout << strs_err.str().c_str() << std::endl;
 
 #ifdef GEOM_DEBUG
 			shared_ptr<carve::input::PolylineSetData> polyline_data( new carve::input::PolylineSetData() );
@@ -1423,262 +1430,13 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 				renderPolylineInDebugViewer( m_debug_view, polyline_data, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f) );
 			}
 #endif
-			}
-#endif
-
-#ifdef GEOM_DEBUG
-			
-			{
-				carve::input::Options carve_options;
-				shared_ptr<carve::mesh::MeshSet<3> > box_meshset( box_data->createMesh(carve_options) );
-				renderMeshsetInDebugViewer( m_debug_view, box_meshset, osg::Vec4f( 1.f, 1.f, 0.f, 1.f ), true );
-
-				std::stringstream strs_err;
-				bool meshset_ok = ConverterOSG::checkMeshSet( box_meshset, strs_err, -1 );
-				
-				if( !meshset_ok )
-				{
-					std::cout << strs_err.str().c_str() << std::endl;
-				}
-			}
-#endif
-			if( err.tellp() > 0 )
-			{
-				throw IfcPPException( err.str().c_str() );
-			}
-			return;
-			*/
 		}
-		else
+#endif
+
+		if( err.tellp() > 0 )
 		{
-			// else, its an unbounded half space solid
-		
-		
-		//carve::geom::vector<3>  polygon_centroid = computePolygonCentroid( base_surface_points );
-		//carve::geom::vector<3>  plane_normal = computePolygonNormal( base_surface_points );
-		//base_surface_plane_eqn
-		/*
-		carve::geom::vector<3> local_z = base_surface_points[0] - base_surface_points[1];
-		carve::math::Matrix plane_matrix;
-		convertPlane2Matrix( base_surface_normal, point_on_base_surface, local_z, plane_matrix );
-		//plane_matrix = plane_matrix*pos;
-		carve::geom::vector<3> p1( carve::geom::VECTOR( 0.0, HALF_SPACE_BOX_SIZE*0.5,  0 ) );
-		carve::geom::vector<3> p2( carve::geom::VECTOR( 0.0,-HALF_SPACE_BOX_SIZE*0.5,  0 ) );
-		carve::geom::vector<3> p3( carve::geom::VECTOR( 0.0, 0, -HALF_SPACE_BOX_SIZE*0.5 ) );
-		carve::geom::vector<3> p4( carve::geom::VECTOR( 0.0, 0, HALF_SPACE_BOX_SIZE*0.5 ) );
-		p1 = plane_matrix*p1;
-		p2 = plane_matrix*p2;
-		p3 = plane_matrix*p3;
-		p4 = plane_matrix*p4;
-		 double d1 = carve::geom::distance( base_surface_plane_eqn, p1);
-		 double d2 = carve::geom::distance( base_surface_plane_eqn, p2);
-		 double d3 = carve::geom::distance( base_surface_plane_eqn, p3);
-		 double d4 = carve::geom::distance( base_surface_plane_eqn, p4);
-		carve::geom::vector<3>  half_space_extrusion_vector = base_surface_normal*HALF_SPACE_BOX_SIZE;
-		carve::geom::vector<3> p5 = p1 + half_space_extrusion_vector;
-		carve::geom::vector<3> p6 = p2 + half_space_extrusion_vector;
-		carve::geom::vector<3> p7 = p3 + half_space_extrusion_vector;
-		carve::geom::vector<3> p8 = p4 + half_space_extrusion_vector;
-		 double d5 = carve::geom::distance( base_surface_plane_eqn, p5);
-		 double d6 = carve::geom::distance( base_surface_plane_eqn, p6);
-		 double d7 = carve::geom::distance( base_surface_plane_eqn, p7);
-		 double d8 = carve::geom::distance( base_surface_plane_eqn, p8);
-
-		shared_ptr<carve::input::PolyhedronData> box_data( new carve::input::PolyhedronData() );
-		item_data->closed_mesh_data.push_back(box_data);
-		box_data->addVertex( p1 );
-		box_data->addVertex( p2 );
-		box_data->addVertex( p3 );
-		box_data->addVertex( p4 );
-		box_data->addVertex( p5 );
-		box_data->addVertex( p6 );
-		box_data->addVertex( p7 );
-		box_data->addVertex( p8 );
-
-		double A1 = 0.5*( cross( p1-p2, p1-p4 ).length() );
-		double A2 = 0.5*( cross( p1-p2, p1-p5 ).length() );
-
-		box_data->addFace(0,1,4);
-		box_data->addFace(1,5,4);
-		box_data->addFace(5,1,2);
-		box_data->addFace(2,6,5);
-		box_data->addFace(6,2,3);
-		box_data->addFace(3,7,6);
-		box_data->addFace(7,3,0);
-		box_data->addFace(0,4,7);
-		box_data->addFace(4,5,6);
-		box_data->addFace(6,7,4);
-		box_data->addFace(3,2,1);
-		box_data->addFace(1,0,3);
-		*/
-
-		//box_data->addFace(4,5,6);
-		//box_data->addFace(6,7,4);
-		//box_data->addFace(1,2,3);
-		//box_data->addFace(3,0,1);
-		//box_data->addFace(6,5,0);
-		//box_data->addFace(0,3,6);
-		//box_data->addFace(1,4,7);
-		//box_data->addFace(7,2,1);
-		//box_data->addFace(7,6,3);
-		//box_data->addFace(3,2,7);
-		//box_data->addFace(5,4,1);
-		//box_data->addFace(1,0,5);
-
-			carve::geom::vector<3>  polygon_centroid = computePolygonCentroid( base_surface_points );
-			//std::vector<carve::geom::vector<3> > base_surface_points_big;
-			double box_depth = HALF_SPACE_BOX_SIZE;		// TODO: adapt to model bounding box
-			//int begin_face_index;
-
-		//	std::vector<carve::geom::vector<3> > boundary_loop;
-			//boundary_points.push_back( boundary_loop );
-
-			const int num_vertices = base_surface_points.size();
-			for( int k=0; k<num_vertices; ++k )
-			{
-				carve::geom::vector<3>  point = base_surface_points.at(k);
-
-				// move the point far away so that it becomes practically unbounded
-				carve::geom::vector<3>  centroid_to_point_vec = point - polygon_centroid;
-				centroid_to_point_vec.normalize();
-				carve::geom::vector<3>  point_far = polygon_centroid + centroid_to_point_vec*HALF_SPACE_BOX_SIZE;
-				//base_surface_points_big.push_back( point_far );
-				boundary_points.push_back( point_far );
-			}
-
-			half_space_extrusion_direction = -base_surface_normal;
+			throw IfcPPException( err.str().c_str() );
 		}
-
-		
-
-		//std::vector<std::vector<carve::geom::vector<3> > > vec_boundary_paths;
-		//vec_boundary_paths.push_back( base_surface_points_big );
-		//carve::geom::vector<3>  half_space_extrusion_vector = -base_surface_normal*HALF_SPACE_BOX_SIZE;
-
-		//std::stringstream err;
-		//shared_ptr<carve::input::PolyhedronData> box_data( new carve::input::PolyhedronData() );
-		//item_data->closed_mesh_data.push_back(box_data);
-		//extrude( vec_boundary_paths, half_space_extrusion_vector, box_data, err );
-
-
-	
-
-
-			// extrude the polyhedron
-			std::stringstream err;
-			shared_ptr<carve::input::PolyhedronData> box_data( new carve::input::PolyhedronData() );
-			item_data->closed_mesh_data.push_back(box_data);
-			std::vector<std::vector<carve::geom::vector<3> > > vec_boundary_paths;
-			vec_boundary_paths.push_back( boundary_points );
-			carve::geom::vector<3>  half_space_extrusion_vector = half_space_extrusion_direction*HALF_SPACE_BOX_SIZE;
-			extrude( vec_boundary_paths, half_space_extrusion_vector, box_data, err );
-
-			// apply object coordinate system
-			std::vector<carve::geom::vector<3> >& half_space_solid_points = box_data->points;
-			for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_solid_points.begin(); it_points != half_space_solid_points.end(); ++it_points )
-			{
-				carve::geom::vector<3> & vertex = (*it_points);
-				vertex = pos*vertex;
-			}
-			
-#ifdef _DEBUG
-			carve::input::Options carve_options;
-			std::stringstream strs_err;
-			shared_ptr<carve::mesh::MeshSet<3> > mesh_set( box_data->createMesh(carve_options) );
-			if( mesh_set->meshes.size() != 1 )
-			{
-				std::cout << "IfcPolygonalBoundedHalfSpace: mesh_set->meshes.size() != 1" << std::endl;
-			}
-			bool poly_ok = ConverterOSG::checkMeshSet( mesh_set, strs_err, -1 );
-
-			//renderMeshsetInDebugViewer( m_debug_view, mesh_set, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-			if( !poly_ok )
-			{
-				std::cout << strs_err.str().c_str() << std::endl;
-
-#ifdef GEOM_DEBUG
-				shared_ptr<carve::input::PolylineSetData> polyline_data( new carve::input::PolylineSetData() );
-				polyline_data->beginPolyline();
-				if( vec_boundary_paths.size() > 0 )
-				{
-					const std::vector<carve::geom::vector<3> >& loop = vec_boundary_paths[0]; 
-					for( int i=0; i<loop.size(); ++i )
-					{
-						const carve::geom::vector<3> & point = loop.at(i);
-						polyline_data->addVertex( point );
-						polyline_data->addPolylineIndex(i);
-					}
-
-					osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-					ConverterOSG::drawPolyline( polyline_data, geode );
-			
-					renderPolylineInDebugViewer( m_debug_view, polyline_data, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f) );
-				}
-#endif
-			}
-#endif
-
-//#ifdef GEOM_DEBUG
-//			
-//			{
-//				carve::input::Options carve_options;
-//				shared_ptr<carve::mesh::MeshSet<3> > box_meshset( box_data->createMesh(carve_options) );
-//				renderMeshsetInDebugViewer( m_debug_view, box_meshset, osg::Vec4f( 1.f, 1.f, 0.f, 1.f ), true );
-//
-//				std::stringstream strs_err;
-//				bool meshset_ok = ConverterOSG::checkMeshSet( box_meshset, strs_err, -1 );
-//				
-//				if( !meshset_ok )
-//				{
-//					std::cout << strs_err.str().c_str() << std::endl;
-//				}
-//			}
-//#endif
-			if( err.tellp() > 0 )
-			{
-				throw IfcPPException( err.str().c_str() );
-			}
-	
-//		
-//#ifdef _DEBUG
-//		
-//		carve::input::Options carve_options;
-//		//shared_ptr<carve::poly::Polyhedron> poly( box_data->create(carve_options) );
-//		
-//		std::stringstream strs_err;
-//		shared_ptr<carve::mesh::MeshSet<3> > mesh_set( box_data->createMesh(carve_options) );
-//		if( mesh_set->meshes.size() != 1 )
-//		{
-//			std::cout << "IfcHalfSpaceSolid: mesh_set->meshes.size() != 1" << std::endl;
-//		}
-//
-//
-//		
-//		bool meshset_ok = ConverterOSG::checkMeshSet( mesh_set, strs_err, -1 );
-//		if( show_first )
-//		{
-//			renderMeshsetInDebugViewer( m_debug_view, mesh_set, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-//			show_first = false;
-//		}
-//
-//		double box_volume = 0;
-//		for( size_t k = 0; k < mesh_set->meshes.size(); ++k )
-//		{
-//			carve::mesh::Mesh<3>* mesh = mesh_set->meshes[k];
-//			double mesh_volume = mesh->volume();
-//
-//			box_volume += mesh_volume;
-//		}
-//
-//		if( !meshset_ok )
-//		{
-//			std::cout << strs_err.str().c_str() << std::endl;
-//#ifdef GEOM_DEBUG
-//			renderMeshsetInDebugViewer( m_debug_view, mesh_set, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-//#endif
-//		}
-//#endif
-
 		return;
 	}
 	

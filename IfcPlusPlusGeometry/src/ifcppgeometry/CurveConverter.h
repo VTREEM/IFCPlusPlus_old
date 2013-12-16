@@ -38,6 +38,11 @@ public:
 	void convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<3> >& loops, std::vector<carve::geom::vector<3> >& segment_start_points ) const;
 	void convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<3> >& loops, std::vector<carve::geom::vector<3> >& segment_start_points,
 		std::vector<shared_ptr<IfcTrimmingSelect> >& trim1_vec, std::vector<shared_ptr<IfcTrimmingSelect> >& trim2_vec, bool sense_agreement ) const;
+
+	void convertIfcCurve2D( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<2> >& loops, std::vector<carve::geom::vector<2> >& segment_start_points ) const;
+	void convertIfcCurve2D( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<2> >& loops, std::vector<carve::geom::vector<2> >& segment_start_points,
+		std::vector<shared_ptr<IfcTrimmingSelect> >& trim1_vec, std::vector<shared_ptr<IfcTrimmingSelect> >& trim2_vec, bool sense_agreement ) const;
+
 	void convertIfcPolyline( const shared_ptr<IfcPolyline>& poly_line,	std::vector<carve::geom::vector<3> >& loops ) const;
 	void convertIfcLoop( const shared_ptr<IfcLoop>& loop,	std::vector<carve::geom::vector<3> >& loop_points ) const;
 

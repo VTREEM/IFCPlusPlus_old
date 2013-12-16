@@ -524,9 +524,333 @@ carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::ve
 	return polygon_normal;
 }
 
-void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& face_loops, const carve::geom::vector<3> extrusion_vector, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
+void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loops_input, const carve::geom::vector<3> extrusion_vector, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
 {
-	// TODO: simplify, assume face_loops only in 2D
+	if( face_loops_input.size() == 0 )
+	{
+		std::cout << "extrude: face_loops_input.size() == 0" << std::endl;
+		return;
+	}
+	if( poly_data->points.size() > 0 )
+	{
+		std::cout << "extrude: points vec should be empty" << std::endl;
+		return;
+	}
+	if( poly_data->getFaceCount() > 0 )
+	{
+		std::cout << "extrude: PolyhedronData::faceCount should be 0" << std::endl;
+		return;
+	}
+
+	// figure 1: loops and indexes
+	//  3----------------------------2
+	//  |                            |
+	//  |   1-------------------2    |3---------2
+	//  |   |                   |    |          |
+	//  |   |                   |    |          |face_loops[2]
+	//  |   0---face_loops[1]---3    |0---------1
+	//  |                            |
+	//  0-------face_loops[0]--------1
+
+	carve::geom::vector<3> normal_first_loop;
+	std::vector<std::vector<carve::geom2d::P2> >	face_loops;
+	for( std::vector<std::vector<carve::geom::vector<2> > >::const_iterator it_face_loops = face_loops_input.begin(); it_face_loops != face_loops_input.end(); ++it_face_loops )
+	{
+		const std::vector<carve::geom::vector<2> >& loop = (*it_face_loops);
+
+		if( loop.size() < 3 )
+		{
+			err << "loop.size() < 3" << std::endl;
+			if( it_face_loops == face_loops_input.begin() )
+			{
+				break;
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		if( it_face_loops == face_loops_input.begin() )
+		{
+			normal_first_loop = computePolygon2DNormal( loop );
+		}
+
+		std::vector<carve::geom2d::P2> loop_2d( loop );
+
+		// check winding order
+		bool reverse_loop = false;
+		carve::geom::vector<3>  normal_2d = computePolygon2DNormal( loop_2d );
+		if( it_face_loops == face_loops_input.begin() )
+		{
+			if( normal_2d.z < 0 )
+			{
+				reverse_loop = true;
+				normal_first_loop = -normal_first_loop;
+			}
+		}
+		else
+		{
+			if( normal_2d.z > 0 )
+			{
+				reverse_loop = true;
+			}
+		}
+		if( reverse_loop )
+		{
+			std::reverse( loop_2d.begin(), loop_2d.end() );
+		}
+				
+		if( loop_2d.size() < 3 )
+		{
+			err << "extrude: loop_2d.size() < 3" << std::endl;
+		}
+		
+		// if last point is equal to first, remove it
+		while( loop_2d.size() > 2 )
+		{
+			carve::geom::vector<2> & first = loop_2d.front();
+			carve::geom::vector<2> & last = loop_2d.back();
+
+			if( abs(first.x-last.x) < 0.00001 )
+			{
+				if( abs(first.y-last.y) < 0.00001 )
+				{
+					loop_2d.pop_back();
+					continue;
+				}
+			}
+			break;
+		}
+
+		face_loops.push_back(loop_2d);
+	}
+
+	bool flip_faces = false;
+	double extrusion_dot_normal = dot( extrusion_vector, normal_first_loop );
+	if( extrusion_dot_normal > 0 )
+	{
+		flip_faces = true;
+	}
+
+	// triangulate
+	std::vector<carve::geom2d::P2> merged_path;
+	std::vector<carve::triangulate::tri_idx> triangulated;
+	std::vector<std::pair<size_t, size_t> > path_all_loops;
+	try
+	{
+		path_all_loops = carve::triangulate::incorporateHolesIntoPolygon(face_loops);
+		// figure 2: path wich incorporates holes, described by path_all_loops
+		// (0/0) -> (1/3) -> (1/0) -> (1/1) -> (1/2) -> (1/3) -> (0/0) -> (0/1) -> (0/2) -> (0/3)
+		//  0/3<-----------------------0/2
+		//  |                            ^
+		//  |   1/0-------------->1/1    |
+		//  |   ^                   |    |
+		//  |   |                   v    |
+		//  |   1/3<--------------1/2    |
+		//  v                            |
+		//  0/0------------------------>0/1
+
+		merged_path.reserve(path_all_loops.size());
+		for( size_t i = 0; i < path_all_loops.size(); ++i )
+		{
+			int loop_number = path_all_loops[i].first;
+			int index_in_loop = path_all_loops[i].second;
+			
+			if( loop_number >= face_loops.size() )
+			{
+				err << "extrude: loop_number >= face_loops_projected.size()" << std::endl;
+				continue;
+			}
+			std::vector<carve::geom2d::P2>& loop = face_loops[loop_number];
+			carve::geom2d::P2& point_projected = loop[index_in_loop];
+			merged_path.push_back( point_projected );
+
+		}
+		// figure 3: merged path for triangulation
+		//  9<---------------------------8
+		//  |                            ^
+		//  |   2------------------>3    |
+		//  |   ^                   |    |
+		//  |   |                   v    |
+		//  |   1, 5<---------------4    |
+		//  | /                          |
+		//  0,6------------------------->7
+		carve::triangulate::triangulate(merged_path, triangulated);
+		carve::triangulate::improve(merged_path, triangulated);
+		// triangles: (9,0,1)  (5,6,7)  (4,5,7)  (4,7,8)  (9,1,2)  (8,9,2)  (3,4,8)  (2,3,8)
+	}
+	catch(...)
+	{
+		err << "carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
+		return;
+	}
+
+	// now insert points to polygon, avoiding points with same coordinates
+	std::map<double, std::map<double, int> > existing_vertices_coords;
+	std::map<double, std::map<double, int> >::iterator vert_it;
+	std::map<double, int>::iterator it_find_y;
+
+	std::map<int,int> map_merged_idx;
+	for( size_t i = 0; i != merged_path.size(); ++i )
+	{
+		const carve::geom::vector<2>&  v = merged_path[i];
+		
+		vert_it = existing_vertices_coords.find( v.x );
+		if( vert_it == existing_vertices_coords.end() )
+		{
+			existing_vertices_coords.insert( std::pair<double, std::map<double, int> >(v.x, std::map<double,int>() ) );
+			vert_it = existing_vertices_coords.find( v.x );
+		}
+
+		std::map<double, int>& map_y_index = (*vert_it).second;
+
+		it_find_y = map_y_index.find( v.y );
+		if( it_find_y != map_y_index.end() )
+		{
+			// vertex already exists in polygon. remember its index for triangles
+			map_merged_idx[i] = (*it_find_y).second;
+			continue;
+		}
+
+		carve::geom::vector<3>  vertex3D( carve::geom::VECTOR( v.x, v.y, 0 ) );
+		poly_data->addVertex(vertex3D);
+		int vertex_id = poly_data->getVertexCount()-1;
+		map_y_index[v.y] = vertex_id;  // TODO: check if we have to round here
+		map_merged_idx[i] = vertex_id;
+	}
+
+	// figure 4: points in poly_data (merged path without duplicate vertices):
+	//  7<---------------------------6
+	//  |                            ^
+	//  |   2------------------>3    |
+	//  |   ^                   |    |     map_merged_idx: figure 3 -> figure 4
+	//  |   |                   v    |
+	//  |   1<------------------4    |
+	//  | /                          |
+	//  0--------------------------->5
+
+	// copy points from base to top
+	std::vector<carve::geom::vector<3> >& points = poly_data->points;
+	const int num_points_base = points.size();
+	for( int i=0; i<num_points_base; ++i )
+	{
+		carve::geom::vector<3>& pt = points[i];
+		poly_data->addVertex( pt + extrusion_vector );
+	}
+
+	// collect vertex indexes of loops
+	std::map<int, std::vector<int> > loop_vert_idx;
+	for( size_t merged_idx = 0; merged_idx < path_all_loops.size(); ++merged_idx )
+	{
+		int loop_number = path_all_loops[merged_idx].first;
+		int point_idx_merged = map_merged_idx[merged_idx];
+	
+		std::map<int, std::vector<int> >::iterator it_result_loops = loop_vert_idx.find( loop_number );
+		if( it_result_loops == loop_vert_idx.end() )
+		{
+			loop_vert_idx.insert( std::pair<int, std::vector<int> >( loop_number, std::vector<int>() ) );
+		}
+		std::vector<int>& result_loop_vec = loop_vert_idx[loop_number];
+		
+		// check if point index is already in loop
+		bool already_in_loop = false;
+		for( int i2 = 0; i2 < result_loop_vec.size(); ++i2 )
+		{
+			if( point_idx_merged == result_loop_vec[i2] )
+			{
+				already_in_loop = true;
+				break;
+			}
+		}
+		if( !already_in_loop )
+		{
+			result_loop_vec.push_back( point_idx_merged );
+		}
+	}
+
+	// add faces along outer and inner loops
+	for( std::map<int, std::vector<int> >::iterator it_result_loop = loop_vert_idx.begin(); it_result_loop != loop_vert_idx.end(); ++it_result_loop )
+	{
+		const std::vector<int>& loop_idx = (*it_result_loop).second;
+		const int num_points_in_loop = loop_idx.size();
+		
+		for( int i=0; i<num_points_in_loop; ++i )
+		{
+			int point_idx		= loop_idx[i];
+			int point_idx_next	= loop_idx[(i+1)%num_points_in_loop];
+			int point_idx_up = point_idx + num_points_base;
+			int point_idx_next_up = point_idx_next + num_points_base;
+
+			if( point_idx_next_up >= 2*num_points_base )
+			{
+				std::cout << "point_idx_next_up >= 2*num_points_base" << std::endl;
+				continue;
+			}
+			if( flip_faces )
+			{
+				poly_data->addFace( point_idx, point_idx_next, point_idx_next_up, point_idx_up );
+			}
+			else
+			{
+				poly_data->addFace( point_idx, point_idx_up, point_idx_next_up, point_idx_next );
+			}
+		}
+	}
+
+	// now the triangulated bottom and top cap
+	for( size_t i = 0; i != triangulated.size(); ++i )
+	{
+		carve::triangulate::tri_idx triangle = triangulated[i];
+		int a = triangle.a;
+		int b = triangle.b;
+		int c = triangle.c;
+
+		int vertex_id_a = map_merged_idx[a];
+		int vertex_id_b = map_merged_idx[b];
+		int vertex_id_c = map_merged_idx[c];
+
+		if( vertex_id_a == vertex_id_b || vertex_id_a == vertex_id_c || vertex_id_b == vertex_id_c )
+		{
+			continue;
+		}
+
+		int vertex_id_a_top = vertex_id_a + num_points_base;
+		int vertex_id_b_top = vertex_id_b + num_points_base;
+		int vertex_id_c_top = vertex_id_c + num_points_base;
+
+#ifdef _DEBUG
+		const carve::poly::Vertex<3>& v_a = poly_data->getVertex(vertex_id_a);
+		const carve::poly::Vertex<3>& v_b = poly_data->getVertex(vertex_id_b);
+		const carve::poly::Vertex<3>& v_c = poly_data->getVertex(vertex_id_c);
+
+		carve::geom::vector<3> pa( carve::geom::VECTOR( v_a.v[0],	v_a.v[1],	v_a.v[2] ) );
+		carve::geom::vector<3> pb( carve::geom::VECTOR( v_b.v[0],	v_b.v[1],	v_b.v[2] ) );
+		carve::geom::vector<3> pc( carve::geom::VECTOR( v_c.v[0],	v_c.v[1],	v_c.v[2] ) );
+
+		double A = 0.5*(cross( pa-pb, pa-pc ).length());
+		if( abs(A) < 0.000000001 )
+		{
+			std::cout << "area < 0.000000001\n" << std::endl;
+		}
+#endif
+
+		if( flip_faces )
+		{
+			poly_data->addFace( vertex_id_a,		vertex_id_c,		vertex_id_b );		// bottom cap
+			poly_data->addFace( vertex_id_a_top,	vertex_id_b_top,	vertex_id_c_top );	// top cap, flipped outward
+		}
+		else
+		{
+			poly_data->addFace( vertex_id_a,		vertex_id_b,		vertex_id_c );		// bottom cap
+			poly_data->addFace( vertex_id_a_top,	vertex_id_c_top,	vertex_id_b_top );	// top cap, flipped outward
+		}
+	}
+}
+
+void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_loops, const carve::geom::vector<3> extrusion_vector, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
+{
+	// TODO: rotate face_loops to xy plane, perform a 2D extrude(), then rotate all points back to original plane
 	if( face_loops.size() == 0 )
 	{
 		return;
@@ -553,16 +877,17 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& face_loo
 	//	int wait = 0;
 	//}
 
-	// figure 1: loops and indexes, winding order may be reversed
+	// figure 1: loops and indexes
 	//  3----------------------------2
 	//  |                            |
-	//  |   3-------------------2    |
-	//  |   |                   |    |
-	//  |   |                   |    |
-	//  |   0---face_loops[1]---1    |
+	//  |   1-------------------2    |3---------2
+	//  |   |                   |    |          |
+	//  |   |                   |    |          |face_loops[2]
+	//  |   0---face_loops[1]---3    |0---------1
 	//  |                            |
 	//  0-------face_loops[0]--------1
 
+	carve::geom::vector<3> normal_first_loop;
 	for( std::vector<std::vector<carve::geom::vector<3> > >::const_iterator it_face_loops = face_loops.begin(); it_face_loops != face_loops.end(); ++it_face_loops )
 	{
 		const std::vector<carve::geom::vector<3> >& loop = (*it_face_loops);
@@ -584,18 +909,13 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& face_loo
 
 		if( it_face_loops == face_loops.begin() )
 		{
-			carve::geom::vector<3>  normal = computePolygonNormal( loop );
+			normal_first_loop = computePolygonNormal( loop );
 
-			double extrusion_dot_normal = dot( extrusion_vector, normal );
-			if( extrusion_dot_normal < 0 )
-			{
-				flip_faces = true;
-			}
 
 			// figure out the best 2D plane to project to
-			double nx = abs(normal.x);
-			double ny = abs(normal.y);
-			double nz = abs(normal.z);
+			double nx = abs(normal_first_loop.x);
+			double ny = abs(normal_first_loop.y);
+			double nz = abs(normal_first_loop.z);
 			if( nz > nx && nz >= ny )
 			{
 				face_plane_projected = XY_PLANE;
@@ -659,6 +979,7 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& face_loo
 		}
 		if( reverse_loop )
 		{
+			normal_first_loop = -normal_first_loop;
 			std::reverse( loop_2d.begin(), loop_2d.end() );
 			std::reverse( loop_3rd_dim.begin(), loop_3rd_dim.end() );
 		}
@@ -691,6 +1012,12 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& face_loo
 
 		face_loops_projected.push_back(loop_2d);
 		face_loops_3rd_dim.push_back(loop_3rd_dim);
+	}
+
+	double extrusion_dot_normal = dot( extrusion_vector, normal_first_loop );
+	if( extrusion_dot_normal > 0 )
+	{
+		flip_faces = true;
 	}
 
 	// triangulate
@@ -898,11 +1225,12 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& face_loo
 			}
 			if( flip_faces )
 			{
-				poly_data->addFace( point_idx, point_idx_up, point_idx_next_up, point_idx_next );
+				poly_data->addFace( point_idx, point_idx_next, point_idx_next_up, point_idx_up );
 			}
 			else
 			{
-				poly_data->addFace( point_idx, point_idx_next, point_idx_next_up, point_idx_up );
+				poly_data->addFace( point_idx, point_idx_up, point_idx_next_up, point_idx_next );
+				
 			}
 		}
 	}
@@ -946,17 +1274,21 @@ void extrude( const std::vector<std::vector<carve::geom::vector<3> > >& face_loo
 
 		if( flip_faces )
 		{
-			poly_data->addFace( vertex_id_a,		vertex_id_b,		vertex_id_c );		// bottom cap
-			poly_data->addFace( vertex_id_a_top,	vertex_id_c_top,	vertex_id_b_top );	// top cap, flipped outward
+			poly_data->addFace( vertex_id_a,		vertex_id_c,		vertex_id_b );		// bottom cap
+			poly_data->addFace( vertex_id_a_top,	vertex_id_b_top,	vertex_id_c_top );	// top cap, flipped outward
 		}
 		else
 		{
-			poly_data->addFace( vertex_id_a,		vertex_id_c,		vertex_id_b );		// bottom cap
-			poly_data->addFace( vertex_id_a_top,	vertex_id_b_top,	vertex_id_c_top );	// top cap, flipped outward
+			poly_data->addFace( vertex_id_a,		vertex_id_b,		vertex_id_c );		// bottom cap
+			poly_data->addFace( vertex_id_a_top,	vertex_id_c_top,	vertex_id_b_top );	// top cap, flipped outward
+
+			
 		}
 	}
 }
 
+
+/*
 void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_loops, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
 {
 	bool face_loop_reversed = false;
@@ -1251,6 +1583,7 @@ void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> 
 		}
 	}
 }
+*/
 
 void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& inv ) 
 {
@@ -1489,10 +1822,86 @@ bool LineSegmentToLineSegmentIntersection(carve::geom::vector<2>& v1, carve::geo
 	return false;
 }
 
-
-void appendPointsToCurve( std::vector<carve::geom::vector<3> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec )
+void appendPointsToCurve( const std::vector<carve::geom::vector<2> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec )
 {
 	// sometimes, sense agreement is not given correctly. try to correct sense of segment if necessary
+	//if( target_vec.size() > 0 && points_vec.size() > 1 )
+	//{
+	//	carve::geom::vector<3> first_target_point = target_vec.front();
+	//	carve::geom::vector<3> last_target_point = target_vec.back();
+
+	//	carve::geom::vector<2> first_segment_point = points_vec.front();
+	//	carve::geom::vector<2> last_segment_point = points_vec.back();
+
+	//	if( (last_target_point.x - first_segment_point).length2() < 0.000001 )
+	//	{
+	//		// segment order is as expected, nothing to do
+	//	}
+	//	else
+	//	{
+	//		if( (last_target_point-last_segment_point).length() < 0.000001 )
+	//		{
+	//			// current segment seems to be in wrong order
+	//			std::reverse( points_vec.begin(), points_vec.end() );
+	//		}
+	//		else
+	//		{
+	//			// maybe the current segment fits to the beginning of the target vector
+	//			if( (first_target_point-first_segment_point).length() < 0.000001 )
+	//			{
+	//				std::reverse( target_vec.begin(), target_vec.end() );
+	//			}
+	//			else
+	//			{
+	//				if( (first_target_point-last_segment_point).length() < 0.000001 )
+	//				{
+	//					std::reverse( target_vec.begin(), target_vec.end() );
+	//					std::reverse( points_vec.begin(), points_vec.end() );
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
+	bool omit_first = false;
+	if( target_vec.size() > 0 )
+	{
+		const carve::geom::vector<3>& last_point = target_vec.back();
+		const carve::geom::vector<2>& first_point_current_segment = points_vec.front();
+		if( abs(last_point.x - first_point_current_segment.x) < 0.000001 )
+		{
+			if( abs(last_point.y - first_point_current_segment.y) < 0.000001 )
+			{
+				omit_first = true;
+			}
+		}
+	}
+
+	if( omit_first )
+	{
+		//target_vec.insert( target_vec.end(), points_vec.begin()+1, points_vec.end() );
+		for( int i=1; i<points_vec.size(); ++i )
+		{
+			const carve::geom::vector<2>& pt = points_vec[i];
+			target_vec.push_back( carve::geom::VECTOR( pt.x, pt.y, 0 ) );
+		}
+	}
+	else
+	{
+		//target_vec.insert( target_vec.end(), points_vec.begin(), points_vec.end() );
+		for( int i=0; i<points_vec.size(); ++i )
+		{
+			const carve::geom::vector<2>& pt = points_vec[i];
+			target_vec.push_back( carve::geom::VECTOR( pt.x, pt.y, 0 ) );
+		}
+	}
+	// TODO: handle all segments separately: std::vector<std::vector<carve::geom::vector<3> > >& target_vec
+}
+
+void appendPointsToCurve( const std::vector<carve::geom::vector<3> >& points_vec_src, std::vector<carve::geom::vector<3> >& target_vec )
+{
+	// sometimes, sense agreement is not given correctly. try to correct sense of segment if necessary
+	std::vector<carve::geom::vector<3> > points_vec( points_vec_src );
 	if( target_vec.size() > 0 && points_vec.size() > 1 )
 	{
 		carve::geom::vector<3> first_target_point = target_vec.front();
@@ -1501,13 +1910,13 @@ void appendPointsToCurve( std::vector<carve::geom::vector<3> >& points_vec, std:
 		carve::geom::vector<3> first_segment_point = points_vec.front();
 		carve::geom::vector<3> last_segment_point = points_vec.back();
 
-		if( (last_target_point-first_segment_point).length() < 0.000001 )
+		if( (last_target_point-first_segment_point).length2() < 0.000001 )
 		{
 			// segment order is as expected, nothing to do
 		}
 		else
 		{
-			if( (last_target_point-last_segment_point).length() < 0.000001 )
+			if( (last_target_point-last_segment_point).length2() < 0.000001 )
 			{
 				// current segment seems to be in wrong order
 				std::reverse( points_vec.begin(), points_vec.end() );
@@ -1515,13 +1924,13 @@ void appendPointsToCurve( std::vector<carve::geom::vector<3> >& points_vec, std:
 			else
 			{
 				// maybe the current segment fits to the beginning of the target vector
-				if( (first_target_point-first_segment_point).length() < 0.000001 )
+				if( (first_target_point-first_segment_point).length2() < 0.000001 )
 				{
 					std::reverse( target_vec.begin(), target_vec.end() );
 				}
 				else
 				{
-					if( (first_target_point-last_segment_point).length() < 0.000001 )
+					if( (first_target_point-last_segment_point).length2() < 0.000001 )
 					{
 						std::reverse( target_vec.begin(), target_vec.end() );
 						std::reverse( points_vec.begin(), points_vec.end() );

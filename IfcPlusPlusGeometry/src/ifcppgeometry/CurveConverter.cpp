@@ -65,6 +65,33 @@ CurveConverter::~CurveConverter()
 {
 }
 
+void CurveConverter::convertIfcCurve2D( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<2> >& loops, std::vector<carve::geom::vector<2> >& segment_start_points ) const
+{
+	std::vector<shared_ptr<IfcTrimmingSelect> > trim1_vec;
+	std::vector<shared_ptr<IfcTrimmingSelect> > trim2_vec;
+	convertIfcCurve2D( ifc_curve, loops, segment_start_points, trim1_vec, trim2_vec, true );
+}
+
+
+void CurveConverter::convertIfcCurve2D( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<2> >& target_vec, std::vector<carve::geom::vector<2> >& segment_start_points,
+	std::vector<shared_ptr<IfcTrimmingSelect> >& trim1_vec, std::vector<shared_ptr<IfcTrimmingSelect> >& trim2_vec, bool sense_agreement ) const
+{
+	std::vector<carve::geom::vector<3> > target_vec_3d;
+	std::vector<carve::geom::vector<3> > segment_start_points_3d;
+	convertIfcCurve( ifc_curve, target_vec_3d, segment_start_points_3d, trim1_vec, trim2_vec, sense_agreement );
+
+	for( int i=0; i<target_vec_3d.size(); ++i )
+	{
+		carve::geom::vector<3>& point_3d = target_vec_3d[i];
+		target_vec.push_back( carve::geom::VECTOR( point_3d.x, point_3d.y ) );
+	}
+	for( int i=0; i<segment_start_points_3d.size(); ++i )
+	{
+		carve::geom::vector<3>& point_3d = segment_start_points_3d[i];
+		segment_start_points.push_back( carve::geom::VECTOR( point_3d.x, point_3d.y ) );
+	}
+}
+
 
 void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std::vector<carve::geom::vector<3> >& loops, std::vector<carve::geom::vector<3> >& segment_start_points ) const
 {
@@ -262,7 +289,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 			if( num_segments < m_geom_settings->m_min_num_vertices_per_arc ) num_segments = m_geom_settings->m_min_num_vertices_per_arc;
 			const double circle_center_x = 0.0;
 			const double circle_center_y = 0.0;
-			std::vector<carve::geom::vector<3> > circle_points;
+			std::vector<carve::geom::vector<2> > circle_points;
 			ProfileConverter::addArcWithEndPoint( circle_points, circle_radius, start_angle, opening_angle, circle_center_x, circle_center_y, num_segments );
 
 			if( circle_points.size() > 0 )
@@ -270,12 +297,15 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				// apply position
 				for( unsigned int i=0; i<circle_points.size(); ++i )
 				{
-					carve::geom::vector<3> & point = circle_points.at(i);
-					point = conic_position_matrix * point;
+					carve::geom::vector<2>&  point = circle_points.at(i);
+					carve::geom::vector<3>  point3d( carve::geom::VECTOR( point.x, point.y, 0 ) );
+					point3d = conic_position_matrix * point3d;
+					point.x = point3d.x;
+					point.y = point3d.y;
 				}
 
 				appendPointsToCurve( circle_points, target_vec );
-				segment_start_points.push_back( circle_points.at(0) );
+				segment_start_points.push_back( carve::geom::VECTOR( circle_points.at(0).x, circle_points.at(0).y, 0 ) );
 			}
 
 			return;

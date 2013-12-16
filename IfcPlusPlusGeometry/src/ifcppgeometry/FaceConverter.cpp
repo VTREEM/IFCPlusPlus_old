@@ -176,18 +176,6 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 				polyline_data->addPolylineIndex(1);
 				polyline_data->addPolylineIndex(2);
 				polyline_data->addPolylineIndex(3);
-#ifdef _DEBUG
-				carve::geom::vector<3>  normal = computePolygonNormal( polyline_data->points );
-				std::vector<double >& directions = elementary_surface_placement->m_Axis->m_DirectionRatios;
-				carve::geom::vector<3>  plane_z( carve::geom::VECTOR( directions[0], directions[1], directions[2] ) );
-				carve::geom::vector<3>  plane_z_positioned = pos*plane_z;
-				double dot_test = dot( plane_z, normal );
-				double dot_test2 = dot( plane_z_positioned, normal );
-				if( abs(dot_test2-1.0) > 0.0001 )
-				{
-					std::cout << "IfcPlane normal vector not correct" << std::endl;
-				}
-#endif
 			}
 			return;
 		}
@@ -204,15 +192,16 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 			const double circle_center_x = 0.0;
 			const double circle_center_y = 0.0;
 
-			std::vector<carve::geom::vector<3> > circle_points;
+			std::vector<carve::geom::vector<2> > circle_points;
 			ProfileConverter::addArcWithEndPoint( circle_points, circle_radius, start_angle, opening_angle, circle_center_x, circle_center_y, num_segments );
 
 			// apply position and insert points
 			polyline_data->beginPolyline();
 			for( int i=0; i<circle_points.size(); ++i )
 			{
-				carve::geom::vector<3> point = circle_points.at(i);
-				polyline_data->addVertex( elementary_surface_matrix*point );
+				carve::geom::vector<2>& point = circle_points.at(i);
+				carve::geom::vector<3> point3d( carve::geom::VECTOR( point.x, point.y, 0 ) );
+				polyline_data->addVertex( elementary_surface_matrix*point3d );
 				polyline_data->addPolylineIndex(i);
 			}
 			return;
@@ -258,34 +247,27 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 	throw UnhandledRepresentationException(surface);
 }
 
-
 void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >& faces, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
 	std::stringstream err;
 	shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
-
-	// TODO: check if std::unordered_map is faster, hash value is concatenated string of coordinates with a certain precision
-	std::map<carve::geom3d::Vector, size_t> vert_idx;
-	std::map<carve::geom3d::Vector, size_t>::iterator vert_it;
-
-	enum FaceProjectionPlane
-	{
-		UNDEFINED,
-		XY_PLANE,
-		YZ_PLANE,
-		XZ_PLANE
-	};
+	std::map<double, std::map<double, std::map<double, int> > > existing_vertices_coords;
+	std::map<double, std::map<double, std::map<double, int> > >::iterator vert_it;
+	std::map<double, std::map<double, int> >::iterator it_find_y;
+	std::map<double, int>::iterator it_find_z;
 
 	std::vector<shared_ptr<IfcFace> >::const_iterator it_ifc_faces;
 	for( it_ifc_faces=faces.begin(); it_ifc_faces!=faces.end(); ++it_ifc_faces )
 	{
 		const shared_ptr<IfcFace>& face = (*it_ifc_faces);
+		
 		std::vector<shared_ptr<IfcFaceBound> >& vec_bounds = face->m_Bounds;
 		const int face_id = face->getId();
 
 		std::vector<std::vector<carve::geom2d::P2> > face_loops_2d;
 		std::vector<std::vector<carve::geom::vector<3> > > face_loops;
 		std::vector<std::vector<double> > face_loop_3rd_dim;
+		std::map<int,int> map_merged_idx;
 		bool face_loop_reversed = false;
 
 		int i_bound = 0;
@@ -295,9 +277,6 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 		for( it_bounds=vec_bounds.begin(); it_bounds!=vec_bounds.end(); ++it_bounds, ++i_bound )
 		{
 			shared_ptr<IfcFaceBound> face_bound = (*it_bounds);
-
-			std::vector<carve::geom2d::P2> path_loop;
-			std::vector<double> path_loop_3rd_dim;
 
 			// ENTITY IfcLoop SUPERTYPE OF(ONEOF(IfcEdgeLoop, IfcPolyLoop, IfcVertexLoop))
 			shared_ptr<IfcLoop> loop = face_bound->m_Bound;
@@ -333,8 +312,61 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			{
 				std::reverse( loop_points.begin(), loop_points.end() );
 			}
-			carve::geom3d::Vector normal = computePolygonNormal( loop_points );
 
+			if( loop_points.size() == 3 )
+			{
+				std::vector<int> triangle_indexes;
+				for( int point_i = 0; point_i < 3; ++point_i )
+				{
+					carve::geom::vector<3> v = pos*loop_points[point_i];
+
+					vert_it = existing_vertices_coords.find( v.x );
+					if( vert_it == existing_vertices_coords.end() )
+					{
+						existing_vertices_coords[v.x] = std::map<double, std::map<double, int> >();
+						vert_it = existing_vertices_coords.find( v.x );
+					}
+
+					std::map<double, std::map<double, int> >& map_y_index = (*vert_it).second;
+
+					it_find_y = map_y_index.find( v.y );
+					if( it_find_y == map_y_index.end() )
+					{
+						map_y_index[v.y] = std::map<double, int>();
+						it_find_y = map_y_index.find( v.y );
+					}
+
+					std::map<double, int>& map_z_index = (*it_find_y).second;
+
+					it_find_z = map_z_index.find( v.z );
+					if( it_find_z != map_z_index.end() )
+					{
+						// vertex already exists in polygon. remember its index for triangles
+						int vertex_index = (*it_find_z).second;
+						
+						map_merged_idx[point_i] = vertex_index;
+						triangle_indexes.push_back( vertex_index );
+						continue;
+					}
+					
+					poly_data->addVertex( v );
+					int vertex_id = poly_data->getVertexCount()-1;
+					map_z_index[v.z] = vertex_id;
+					map_merged_idx[point_i] = vertex_id;
+					triangle_indexes.push_back( vertex_id );
+				}
+
+				if( triangle_indexes.size() != 3 )
+				{
+					std::cout << "convertIfcFaceList: triangle_indexes.size() != 3" << std::endl;
+					continue;
+				}
+
+				poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
+				continue;
+			}
+
+			carve::geom3d::Vector normal = computePolygonNormal( loop_points );
 			if( it_bounds == vec_bounds.begin() )
 			{
 				double nx = abs(normal.x);
@@ -360,6 +392,9 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			}
 
 			// project face into 2d plane
+			std::vector<carve::geom2d::P2> path_loop;
+			std::vector<double> path_loop_3rd_dim;
+
 			for( int i=0; i<loop_points.size(); ++i )
 			{
 				carve::geom3d::Vector& point = loop_points.at(i);
@@ -466,24 +501,66 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 		}
 
 		// now insert points to polygon, avoiding points with same coordinates
-		std::map<int,int> map_merged_idx;
+		
 		for( size_t i = 0; i != merged.size(); ++i )
 		{
-			carve::geom3d::Vector v = merged_3d[i];
-			// TODO: check if this could become a bottleneck with large meshes. try maybe string based map (x,y,z as string key)
-			vert_it = vert_idx.find(v);
-			if( vert_it == vert_idx.end() )
+			const carve::geom::vector<3>& v = merged_3d[i];
+			
+			vert_it = existing_vertices_coords.find( v.x );
+			if( vert_it == existing_vertices_coords.end() )
 			{
-				poly_data->addVertex(v);
-				int vertex_id = poly_data->getVertexCount()-1;
-				vert_idx[v] = vertex_id;
-				map_merged_idx[i] = vertex_id;
+				existing_vertices_coords[v.x] = std::map<double, std::map<double, int> >();
+				vert_it = existing_vertices_coords.find( v.x );
 			}
-			else
+
+			std::map<double, std::map<double, int> >& map_y_index = (*vert_it).second;
+
+			it_find_y = map_y_index.find( v.y );
+			if( it_find_y == map_y_index.end() )
+			{
+				map_y_index[v.y] = std::map<double, int>();
+				it_find_y = map_y_index.find( v.y );
+			}
+
+			std::map<double, int>& map_z_index = (*it_find_y).second;
+
+			it_find_z = map_z_index.find( v.z );
+			if( it_find_z != map_z_index.end() )
 			{
 				// vertex already exists in polygon. remember its index for triangles
-				map_merged_idx[i]=(*vert_it).second;
+				int vertex_index = (*it_find_z).second;
+						
+				map_merged_idx[i] = vertex_index;
+				//triangle_indexes.push_back( vertex_index );
+				continue;
 			}
+					
+			poly_data->addVertex( v );
+			int vertex_id = poly_data->getVertexCount()-1;
+			map_z_index[v.z] = vertex_id;
+			//vert_idx[v.x] = shared_ptr<VertexContainer>( new VertexContainer( v.y, v.z, vertex_id ) ); // TODO: check if rounded value of x y z is better
+			map_merged_idx[i] = vertex_id;
+			/*
+			vert_it = vert_idx.find(v.x);
+			if( vert_it != vert_idx.end() )
+			{
+				const shared_ptr<VertexContainer>& vertex_container = (*vert_it).second;
+				if( v.y == vertex_container->y )
+				{
+					if( v.z == vertex_container->z )
+					{
+						// vertex already exists in polygon. remember its index for triangles
+						map_merged_idx[i] = vertex_container->index;
+						continue;
+					}
+				}
+			}
+			
+			poly_data->addVertex(v);
+			int vertex_id = poly_data->getVertexCount()-1;
+			vert_idx[v.x] = shared_ptr<VertexContainer>( new VertexContainer( v.y, v.z, vertex_id ) );
+			map_merged_idx[i] = vertex_id;
+			*/
 		}
 		for( size_t i = 0; i != triangulated.size(); ++i )
 		{
@@ -524,6 +601,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 				poly_data->addFace( vertex_id_a, vertex_id_b, vertex_id_c );
 			}
 		}
+		
 	}
 
 	// IfcFaceList can be a closed or open shell, so let the calling function decide where to put it

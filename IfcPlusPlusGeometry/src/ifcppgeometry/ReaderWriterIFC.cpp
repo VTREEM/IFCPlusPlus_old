@@ -62,7 +62,7 @@
 #include "ConverterOSG.h"
 #include "ReaderWriterIFC.h"
 
-#undef IFCPP_OPENMP
+
 
 ReaderWriterIFC::ReaderWriterIFC()
 {
@@ -676,6 +676,8 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		}
 	}
 
+	const shared_ptr<IfcElement> ifc_element = dynamic_pointer_cast<IfcElement>(product);
+
 	std::vector<shared_ptr<ItemData> >& product_items = product_shape->representation_data->vec_item_data;
 	for( int i_item=0; i_item<product_items.size(); ++i_item )
 	{
@@ -729,7 +731,20 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		}
 
 		// cut out openings like windows etc.
-		m_representation_converter->subtractOpenings( product, item_data, item_group, strs_err );
+		if( ifc_element )
+		{
+			m_representation_converter->subtractOpenings( ifc_element, item_data, strs_err );
+		}
+
+		// create shape for meshsets
+		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->meshsets.begin(); it_meshsets != item_data->meshsets.end(); ++it_meshsets )
+		{
+			shared_ptr<carve::mesh::MeshSet<3> >& product_meshset = (*it_meshsets);
+			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
+			ConverterOSG::drawMeshSet( product_meshset, geode_result );
+			item_group->addChild(geode_result);
+		}
+
 		
 		// create shape for polylines
 		for( int polyline_i = 0; polyline_i < item_data->polyline_data.size(); ++polyline_i )
@@ -815,7 +830,6 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 				
 				continue;
 			}
-
 		}
 	}
 

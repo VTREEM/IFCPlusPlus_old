@@ -40,7 +40,8 @@
 
 ViewerWidget::ViewerWidget( QWidget* parent) : QWidget(parent)
 {
-	osgViewer::ViewerBase::ThreadingModel threadingModel = m_viewer.suggestBestThreadingModel();
+	//osgViewer::ViewerBase::ThreadingModel threadingModel = m_viewer.suggestBestThreadingModel();
+	osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::ViewerBase::SingleThreaded;
 
     m_viewer.setThreadingModel(threadingModel);
 	m_near_plane = 0.5;

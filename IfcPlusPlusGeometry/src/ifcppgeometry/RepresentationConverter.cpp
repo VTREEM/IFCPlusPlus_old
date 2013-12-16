@@ -317,12 +317,10 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 				item_data->polyline_data.push_back( polyline_data );
 				continue;
 			}
-
 		}
 
 		unhandled_representation_items.push_back( representation_item );
 			
-
 
 		//std::string representation_type;
 		//std::string	representation_identifier;
@@ -488,9 +486,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	if( shell_based_surface_model )
 	{
 		std::vector<shared_ptr<IfcShell> >& vec_shells = shell_based_surface_model->m_SbsmBoundary;
-		std::vector<shared_ptr<IfcShell> >::iterator it_shells;
-
-		for( it_shells=vec_shells.begin(); it_shells!=vec_shells.end(); ++it_shells )
+		for( std::vector<shared_ptr<IfcShell> >::iterator it_shells=vec_shells.begin(); it_shells!=vec_shells.end(); ++it_shells )
 		{
 			shared_ptr<IfcShell> shell_select = (*it_shells);
 			if( dynamic_pointer_cast<IfcClosedShell>( shell_select ) )
@@ -596,7 +592,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 		shared_ptr<IfcGeometricCurveSet> geometric_curve_set = dynamic_pointer_cast<IfcGeometricCurveSet>(geometric_set);
 		if( geometric_curve_set )
 		{
-			
+			std::cout << "IfcGeometricCurveSet not implemented" << std::endl;	
 			return;
 		}
 		return;
@@ -612,247 +608,220 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	throw UnhandledRepresentationException( geom_item );
 }
 
-void RepresentationConverter::subtractOpenings( const shared_ptr<IfcProduct>& ifc_product, shared_ptr<ItemData>& item_data, osg::Group* item_group, std::stringstream& strs_err )
+void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& ifc_element, shared_ptr<ItemData>& item_data, std::stringstream& strs_err )
 {
-	const int product_id = ifc_product->getId();
+	const int product_id = ifc_element->getId();
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
 
 	// now go through all meshsets of the item
 	for( int i=0; i<item_data->meshsets.size(); ++i )
 	{
 		shared_ptr<carve::mesh::MeshSet<3> >& product_meshset = item_data->meshsets[i];
-		//bool product_meshset_ok = ConverterOSG::checkMeshSet( product_meshset, strs_err, product_id );
-		//if( !product_meshset_ok )
-		//{
-		//	std::cout << "RepresentationConverter::subtractOpenings: Meshset check failed" << std::endl;
-		//	continue;
-		//}
 
-		// check for openings
-		const shared_ptr<IfcElement> element = dynamic_pointer_cast<IfcElement>(ifc_product);
-		if( element )
+		std::vector<weak_ptr<IfcRelVoidsElement> > vec_rel_voids( ifc_element->m_HasOpenings_inverse );
+
+		if( vec_rel_voids.size() > 0 )
 		{
-			std::vector<weak_ptr<IfcRelVoidsElement> > vec_rel_voids( element->m_HasOpenings_inverse );
-
-			if( vec_rel_voids.size() > 0 )
+			shared_ptr<carve::mesh::MeshSet<3> > meshset_openings;
+			for( int i=0; i<vec_rel_voids.size(); ++i )
 			{
-				shared_ptr<carve::mesh::MeshSet<3> > meshset_openings;
-				for( int i=0; i<vec_rel_voids.size(); ++i )
+				shared_ptr<IfcRelVoidsElement> rel_voids( vec_rel_voids[i] );
+				shared_ptr<IfcFeatureElementSubtraction> opening = rel_voids->m_RelatedOpeningElement;
+				if( !opening )
 				{
-					shared_ptr<IfcRelVoidsElement> rel_voids( vec_rel_voids[i] );
-					shared_ptr<IfcFeatureElementSubtraction> opening = rel_voids->m_RelatedOpeningElement;
-					if( !opening )
-					{
-						continue;
-					}
-					if( !opening->m_Representation )
-					{
-						continue;
-					}
-
-					int opening_id = opening->getId();
-
-					// opening can have its own relative placement
-					shared_ptr<IfcObjectPlacement>	opening_placement = opening->m_ObjectPlacement;			//optional
-					carve::math::Matrix opening_placement_matrix( carve::math::Matrix::IDENT() );
-					if( opening_placement )
-					{
-						std::set<int> opening_placements_applied;
-						PlacementConverter::convertIfcObjectPlacement( opening_placement, opening_placement_matrix, length_factor, opening_placements_applied );
-					}
-
-					carve::csg::CSG csg;
-					std::vector<shared_ptr<IfcRepresentation> >& vec_opening_representations = opening->m_Representation->m_Representations;
-					std::vector<shared_ptr<IfcRepresentation> >::iterator it_representations;
-					for( it_representations=vec_opening_representations.begin(); it_representations!=vec_opening_representations.end(); ++it_representations )
-					{
-						shared_ptr<IfcRepresentation> opening_representation = (*it_representations);
-
-						// TODO: bounding box test
-						shared_ptr<RepresentationData> opening_representation_data( new RepresentationData() );
-						try
-						{
-							// TODO: Representation caching, one element could be used for several openings
-							std::set<int> visited_representation;
-							//m_representation_converter->convertIfcRepresentation( opening_representation, opening_placement_matrix, opening_representation_data, visited_representation );
-							convertIfcRepresentation( opening_representation, opening_placement_matrix, opening_representation_data, visited_representation );
-						}
-						catch( IfcPPException& e )
-						{
-							strs_err << e.what();
-						}
-						catch( carve::exception& ce )
-						{
-							strs_err << ce.str();
-						}
-						catch( std::exception& e )
-						{
-							strs_err << e.what();
-						}
-						catch(...)
-						{
-							strs_err << "RepresentationConverter::subtractOpenings: convertIfcRepresentation failed at opening id " << opening_id << std::endl;
-						}
-
-						std::vector<shared_ptr<ItemData> >& opening_representation_items = opening_representation_data->vec_item_data;
-						for( int i_item=0; i_item<opening_representation_items.size(); ++i_item )
-						{
-							shared_ptr<ItemData> opening_item_data = opening_representation_items[i_item];
-
-							std::vector<shared_ptr<carve::input::PolyhedronData> >::iterator it_opening_polyhedron_data = opening_item_data->closed_mesh_data.begin();
-							for( ; it_opening_polyhedron_data != opening_item_data->closed_mesh_data.end(); ++it_opening_polyhedron_data )
-							{
-								shared_ptr<carve::input::PolyhedronData>& polyhedron_data = (*it_opening_polyhedron_data);
-								if( polyhedron_data->getVertexCount() < 3 )
-								{
-									continue;
-								}
-
-								carve::input::Options carve_options;
-								shared_ptr<carve::mesh::MeshSet<3> > opening_meshset_single( polyhedron_data->createMesh(carve_options) );
-
-								bool meshset_ok = ConverterOSG::checkMeshSet( opening_meshset_single, strs_err, product_id );
-								if( !meshset_ok )
-								{
-									// error meshset is already written to strs_err
-									continue;
-								}
-
-								if( !meshset_openings )
-								{
-									meshset_openings = opening_meshset_single;
-								}
-								else
-								{
-									bool csg_operation_successful = true;
-									try
-									{
-										if( meshset_openings->meshes.size() && opening_meshset_single->meshes.size() > 0 )
-										{
-											meshset_openings =  shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( meshset_openings.get(), opening_meshset_single.get(), carve::csg::CSG::UNION, NULL, carve::csg::CSG::CLASSIFY_NORMAL) );
-												
-											bool result_meshset_ok = ConverterOSG::checkMeshSet( meshset_openings, strs_err, product_id );
-						
-#ifdef _DEBUG
-											if( !result_meshset_ok )
-											{
-												renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-												renderMeshsetInDebugViewer( m_debug_view, opening_meshset_single, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
-											}
-#endif
-										}
-									}
-									catch( IfcPPException& e )
-									{
-										strs_err << e.what();
-										csg_operation_successful = false;
-									}
-									catch( carve::exception& ce )
-									{
-										strs_err << ce.str();
-										csg_operation_successful = false;
-									}
-									catch( std::exception& e )
-									{
-										strs_err << e.what();
-										csg_operation_successful = false;
-									}
-									catch(...)
-									{
-										strs_err << "RepresentationConverter::subtractOpenings: opening csg operation failed at product id " << product_id << std::endl;
-										csg_operation_successful = false;
-									}
-
-									if( !csg_operation_successful )
-									{
-										strs_err << "RepresentationConverter::subtractOpenings: csg operation failed at product id " << product_id << std::endl;
-#ifdef _DEBUG
-										osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-										ConverterOSG::drawMeshSet( product_meshset, geode );
-										osg::BoundingSphere& geode_bs = geode->computeBound();
-										osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, geode_bs.radius() ) );
-										mt->addChild(geode);
-										item_group->addChild(mt);
-
-										osg::ref_ptr<osg::Geode> geode_opnening = new osg::Geode();
-										ConverterOSG::drawMeshSet( meshset_openings, geode_opnening );
-										mt->addChild(geode_opnening);
-#endif
-									}
-								}
-							}
-						}
-					}
+					continue;
 				}
-					
-				bool opening_polyhedron_ok = ConverterOSG::checkMeshSet( meshset_openings, strs_err, product_id );
-
-				if( !opening_polyhedron_ok )
+				if( !opening->m_Representation )
 				{
 					continue;
 				}
 
-				// do the subtraction
-				carve::csg::CSG csg;
-				bool csg_operation_successful = true;
-				try
+				int opening_id = opening->getId();
+
+				// opening can have its own relative placement
+				shared_ptr<IfcObjectPlacement>	opening_placement = opening->m_ObjectPlacement;			//optional
+				carve::math::Matrix opening_placement_matrix( carve::math::Matrix::IDENT() );
+				if( opening_placement )
 				{
-					if( product_meshset->meshes.size() && meshset_openings->meshes.size() > 0 )
+					std::set<int> opening_placements_applied;
+					PlacementConverter::convertIfcObjectPlacement( opening_placement, opening_placement_matrix, length_factor, opening_placements_applied );
+				}
+
+				carve::csg::CSG csg;
+				std::vector<shared_ptr<IfcRepresentation> >& vec_opening_representations = opening->m_Representation->m_Representations;
+				std::vector<shared_ptr<IfcRepresentation> >::iterator it_representations;
+				for( it_representations=vec_opening_representations.begin(); it_representations!=vec_opening_representations.end(); ++it_representations )
+				{
+					shared_ptr<IfcRepresentation> opening_representation = (*it_representations);
+
+					// TODO: bounding box test
+					shared_ptr<RepresentationData> opening_representation_data( new RepresentationData() );
+					try
 					{
-						shared_ptr<carve::mesh::MeshSet<3> > result( csg.compute( product_meshset.get(), meshset_openings.get(), carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_NORMAL) );
-						bool result_meshset_ok = ConverterOSG::checkMeshSet( result, strs_err, product_id );
-						
-#ifdef _DEBUG
-						if( !result_meshset_ok )
+						// TODO: Representation caching, one element could be used for several openings
+						std::set<int> visited_representation;
+						//m_representation_converter->convertIfcRepresentation( opening_representation, opening_placement_matrix, opening_representation_data, visited_representation );
+						convertIfcRepresentation( opening_representation, opening_placement_matrix, opening_representation_data, visited_representation );
+					}
+					catch( IfcPPException& e )
+					{
+						strs_err << e.what();
+					}
+					catch( carve::exception& ce )
+					{
+						strs_err << ce.str();
+					}
+					catch( std::exception& e )
+					{
+						strs_err << e.what();
+					}
+					catch(...)
+					{
+						strs_err << "subtractOpenings: convertIfcRepresentation failed at opening id " << opening_id << std::endl;
+					}
+
+					std::vector<shared_ptr<ItemData> >& opening_representation_items = opening_representation_data->vec_item_data;
+					for( int i_item=0; i_item<opening_representation_items.size(); ++i_item )
+					{
+						shared_ptr<ItemData> opening_item_data = opening_representation_items[i_item];
+
+						std::vector<shared_ptr<carve::input::PolyhedronData> >::iterator it_opening_polyhedron_data = opening_item_data->closed_mesh_data.begin();
+						for( ; it_opening_polyhedron_data != opening_item_data->closed_mesh_data.end(); ++it_opening_polyhedron_data )
 						{
-							renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-							renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
-						}
+							shared_ptr<carve::input::PolyhedronData>& polyhedron_data = (*it_opening_polyhedron_data);
+							if( polyhedron_data->getVertexCount() < 3 )
+							{
+								continue;
+							}
+
+							carve::input::Options carve_options;
+							shared_ptr<carve::mesh::MeshSet<3> > opening_meshset_single( polyhedron_data->createMesh(carve_options) );
+
+							bool meshset_ok = ConverterOSG::checkMeshSet( opening_meshset_single, strs_err, product_id );
+							if( !meshset_ok )
+							{
+								// error meshset is already written to strs_err
+								continue;
+							}
+
+							if( !meshset_openings )
+							{
+								meshset_openings = opening_meshset_single;
+								continue;
+							}
+								
+							if( meshset_openings->meshes.size() == 0 || opening_meshset_single->meshes.size() == 0 )
+							{
+								strs_err << "subtractOpenings: meshset_openings->meshes.size() == " << meshset_openings->meshes.size() 
+									<< ", opening_meshset_single->meshes.size() == " << opening_meshset_single->meshes.size() << std::endl;
+								continue;
+							}
+
+							bool csg_operation_successful = true;
+							try
+							{
+								meshset_openings =  shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( meshset_openings.get(), opening_meshset_single.get(), carve::csg::CSG::UNION, NULL, carve::csg::CSG::CLASSIFY_NORMAL) );
+								bool result_meshset_ok = ConverterOSG::checkMeshSet( meshset_openings, strs_err, product_id );
+#ifdef _DEBUG
+								if( !result_meshset_ok )
+								{
+									renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+									renderMeshsetInDebugViewer( m_debug_view, opening_meshset_single, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
+								}
 #endif
+							}
+							catch( IfcPPException& e )
+							{
+								strs_err << e.what();
+								csg_operation_successful = false;
+							}
+							catch( carve::exception& ce )
+							{
+								strs_err << ce.str();
+								csg_operation_successful = false;
+							}
+							catch( std::exception& e )
+							{
+								strs_err << e.what();
+								csg_operation_successful = false;
+							}
+							catch(...)
+							{
+								strs_err << "RepresentationConverter::subtractOpenings: opening csg operation failed at product id " << product_id << std::endl;
+								csg_operation_successful = false;
+							}
+
+							if( !csg_operation_successful )
+							{
+								strs_err << "RepresentationConverter::subtractOpenings: csg operation failed at product id " << product_id << std::endl;
+#ifdef _DEBUG
+								renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4f( 1.f, 0.f, 0.f, 1.f ), true );
+#endif
+							}
+						}
 					}
 				}
-				catch( IfcPPException& e )
-				{
-					strs_err << e.what();
-					csg_operation_successful = false;
-				}
-				catch( carve::exception& ce )
-				{
-					strs_err << ce.str();
-					csg_operation_successful = false;
-				}
-				catch( std::exception& e )
-				{
-					strs_err << e.what();
-					csg_operation_successful = false;
-				}
-				catch(...)
-				{
-					csg_operation_successful = false;
-				}
-						
-				if( !csg_operation_successful )
-				{
-					strs_err << "RepresentationConverter::subtractOpenings: csg operation failed at product id " << product_id << std::endl;
+			}
+					
 #ifdef _DEBUG
-					osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-					ConverterOSG::drawMeshSet( product_meshset, geode );
-					osg::BoundingSphere& geode_bs = geode->computeBound();
-					osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate(0, 0, geode_bs.radius() ) );
-					mt->addChild(geode);
-					item_group->addChild(mt);
+			bool opening_polyhedron_ok = ConverterOSG::checkMeshSet( meshset_openings, strs_err, product_id );
+			if( !opening_polyhedron_ok )
+			{
+				continue;
+			}
+#endif
 
-					osg::ref_ptr<osg::Geode> geode_opnening = new osg::Geode();
-					ConverterOSG::drawMeshSet( meshset_openings, geode_opnening );
-					mt->addChild(geode_opnening);
+			// do the subtraction
+			carve::csg::CSG csg;
+			bool csg_operation_successful = true;
+			try
+			{
+				if( product_meshset->meshes.size() && meshset_openings->meshes.size() > 0 )
+				{
+					shared_ptr<carve::mesh::MeshSet<3> > result( csg.compute( product_meshset.get(), meshset_openings.get(), carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_NORMAL) );
+					bool result_meshset_ok = ConverterOSG::checkMeshSet( result, strs_err, product_id );
+					product_meshset = result;
+#ifdef _DEBUG
+					if( !result_meshset_ok )
+					{
+						renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+						renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
+					}
 #endif
 				}
 			}
+			catch( IfcPPException& e )
+			{
+				strs_err << e.what();
+				csg_operation_successful = false;
+			}
+			catch( carve::exception& ce )
+			{
+				strs_err << ce.str();
+				csg_operation_successful = false;
+			}
+			catch( std::exception& e )
+			{
+				strs_err << e.what();
+				csg_operation_successful = false;
+			}
+			catch(...)
+			{
+				csg_operation_successful = false;
+			}
+						
+			if( !csg_operation_successful )
+			{
+				strs_err << "RepresentationConverter::subtractOpenings: csg operation failed at product id " << product_id << std::endl;
+#ifdef _DEBUG
+				renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4f( 1.f, 0.f, 0.f, 1.f ), true );
+#endif
+			}
 		}
-
-		osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
-		ConverterOSG::drawMeshSet( product_meshset, geode_result );
-		item_group->addChild(geode_result);
+	
+		//osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
+		//ConverterOSG::drawMeshSet( product_meshset, geode_result );
+		//item_group->addChild(geode_result);
 	}
 }
 

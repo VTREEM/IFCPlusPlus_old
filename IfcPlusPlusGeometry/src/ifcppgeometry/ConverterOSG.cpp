@@ -829,20 +829,20 @@ void ConverterOSG::createTest4(osg::Group* group)
 
 	{
 		
-		std::vector<carve::geom::vector<3> > merged;
-		merged.push_back( carve::geom::VECTOR( 0.21, 0.21,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 2.06, -1.02,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 4.24, -1.45,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 6.42, -1.02,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 8.27,  0.21,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 8.45,  0.0,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 6.53, -1.30,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 4.24, -1.75,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 1.94, -1.30,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 0.0,  0.0,	0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 0.21, 0.21,	0.0 ) );
+		std::vector<carve::geom::vector<2> > merged;
+		merged.push_back( carve::geom::VECTOR( 0.21, 0.21 ) );
+		merged.push_back( carve::geom::VECTOR( 2.06, -1.02 ) );
+		merged.push_back( carve::geom::VECTOR( 4.24, -1.45 ) );
+		merged.push_back( carve::geom::VECTOR( 6.42, -1.02 ) );
+		merged.push_back( carve::geom::VECTOR( 8.27,  0.21 ) );
+		merged.push_back( carve::geom::VECTOR( 8.45,  0.0 ) );
+		merged.push_back( carve::geom::VECTOR( 6.53, -1.30 ) );
+		merged.push_back( carve::geom::VECTOR( 4.24, -1.75 ) );
+		merged.push_back( carve::geom::VECTOR( 1.94, -1.30 ) );
+		merged.push_back( carve::geom::VECTOR( 0.0,  0.0 ) );
+		merged.push_back( carve::geom::VECTOR( 0.21, 0.21 ) );
 
-		std::vector<std::vector<carve::geom::vector<3> > > face_loops;
+		std::vector<std::vector<carve::geom::vector<2> > > face_loops;
 		face_loops.push_back( merged );
 
 		carve::geom::vector<3> extrusion_vector( carve::geom::VECTOR( 0.0, 0.0,	-2.78 ) );

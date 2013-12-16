@@ -41,6 +41,7 @@ class FaceConverter;
 class ProfileCache;
 
 class IfcProduct;
+class IfcElement;
 class IfcRepresentation;
 class IfcRepresentationItem;
 class IfcGeometricRepresentationItem;
@@ -60,7 +61,7 @@ public:
 	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
 	void convertIfcPropertySet(					const shared_ptr<IfcPropertySet>& property_set,	osg::Group* group );
 	void convertStyledItem(						const shared_ptr<IfcRepresentationItem>& representation_item, shared_ptr<ItemData>& item_data );
-	void subtractOpenings(						const shared_ptr<IfcProduct>& ifc_product, shared_ptr<ItemData>& item_data, osg::Group* item_group, std::stringstream& strs_err );
+	void subtractOpenings(						const shared_ptr<IfcElement>& ifc_element, shared_ptr<ItemData>& item_data, std::stringstream& strs_err );
 
 	shared_ptr<SolidModelConverter>& getSolidConverter() { return m_solid_converter; }
 	shared_ptr<ProfileCache>& getProfileCache() { return m_profile_cache; }
