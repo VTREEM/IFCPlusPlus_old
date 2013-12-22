@@ -85,7 +85,7 @@ public:
 	~IfcDerivedUnitEnum();
 	virtual const char* classname() const { return "IfcDerivedUnitEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcDerivedUnitEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcDerivedUnitEnum> createObjectFromStepData( const std::string& arg );
 	IfcDerivedUnitEnumEnum m_enum;
 };
 

@@ -36,7 +36,7 @@ public:
 	~IfcTextPath();
 	virtual const char* classname() const { return "IfcTextPath"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcTextPath> readStepData( std::string& arg );
+	static shared_ptr<IfcTextPath> createObjectFromStepData( const std::string& arg );
 	IfcTextPathEnum m_enum;
 };
 

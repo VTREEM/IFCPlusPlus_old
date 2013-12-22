@@ -26,6 +26,6 @@ public:
 	~IfcTranslationalStiffnessSelect();
 	virtual const char* classname() const { return "IfcTranslationalStiffnessSelect"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
-	static shared_ptr<IfcTranslationalStiffnessSelect> readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
+	static shared_ptr<IfcTranslationalStiffnessSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

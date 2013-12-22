@@ -43,14 +43,14 @@ void IfcCoordinateOperation::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcCoordinateOperation::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcCoordinateOperation::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcCoordinateOperation::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcCoordinateOperation, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcCoordinateOperation, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_SourceCRS = IfcCoordinateReferenceSystemSelect::readStepData( args[0], map );
+	m_SourceCRS = IfcCoordinateReferenceSystemSelect::createObjectFromStepData( args[0], map );
 	readEntityReference( args[1], m_TargetCRS, map );
 }
 void IfcCoordinateOperation::setInverseCounterparts( shared_ptr<IfcPPEntity> )

@@ -31,7 +31,7 @@ void IfcTextDecoration::getStepParameter( std::stringstream& stream, bool is_sel
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcTextDecoration> IfcTextDecoration::readStepData( std::string& arg )
+shared_ptr<IfcTextDecoration> IfcTextDecoration::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextDecoration>(); }

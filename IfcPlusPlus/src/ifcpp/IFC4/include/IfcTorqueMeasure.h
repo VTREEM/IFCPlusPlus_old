@@ -29,7 +29,7 @@ public:
 	~IfcTorqueMeasure();
 	virtual const char* classname() const { return "IfcTorqueMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcTorqueMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcTorqueMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

@@ -72,7 +72,7 @@ void IfcAirToAirHeatRecoveryTypeEnum::getStepParameter( std::stringstream& strea
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcAirToAirHeatRecoveryTypeEnum> IfcAirToAirHeatRecoveryTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcAirToAirHeatRecoveryTypeEnum> IfcAirToAirHeatRecoveryTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAirToAirHeatRecoveryTypeEnum>(); }

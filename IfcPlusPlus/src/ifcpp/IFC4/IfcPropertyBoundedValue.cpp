@@ -61,19 +61,19 @@ void IfcPropertyBoundedValue::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcPropertyBoundedValue::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPropertyBoundedValue::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPropertyBoundedValue::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<6 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcPropertyBoundedValue, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>6 ){ std::cout << "Wrong parameter count for entity IfcPropertyBoundedValue, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcIdentifier::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_UpperBoundValue = IfcValue::readStepData( args[2], map );
-	m_LowerBoundValue = IfcValue::readStepData( args[3], map );
-	m_Unit = IfcUnit::readStepData( args[4], map );
-	m_SetPointValue = IfcValue::readStepData( args[5], map );
+	m_Name = IfcIdentifier::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_UpperBoundValue = IfcValue::createObjectFromStepData( args[2], map );
+	m_LowerBoundValue = IfcValue::createObjectFromStepData( args[3], map );
+	m_Unit = IfcUnit::createObjectFromStepData( args[4], map );
+	m_SetPointValue = IfcValue::createObjectFromStepData( args[5], map );
 }
 void IfcPropertyBoundedValue::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

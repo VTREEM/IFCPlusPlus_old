@@ -102,34 +102,34 @@ void IfcTaskTime::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTaskTime::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTaskTime::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTaskTime::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<20 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTaskTime, expecting 20, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>20 ){ std::cout << "Wrong parameter count for entity IfcTaskTime, expecting 20, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_DataOrigin = IfcDataOriginEnum::readStepData( args[1] );
-	m_UserDefinedDataOrigin = IfcLabel::readStepData( args[2] );
-	m_DurationType = IfcTaskDurationEnum::readStepData( args[3] );
-	m_ScheduleDuration = IfcDuration::readStepData( args[4] );
-	m_ScheduleStart = IfcDateTime::readStepData( args[5] );
-	m_ScheduleFinish = IfcDateTime::readStepData( args[6] );
-	m_EarlyStart = IfcDateTime::readStepData( args[7] );
-	m_EarlyFinish = IfcDateTime::readStepData( args[8] );
-	m_LateStart = IfcDateTime::readStepData( args[9] );
-	m_LateFinish = IfcDateTime::readStepData( args[10] );
-	m_FreeFloat = IfcDuration::readStepData( args[11] );
-	m_TotalFloat = IfcDuration::readStepData( args[12] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_DataOrigin = IfcDataOriginEnum::createObjectFromStepData( args[1] );
+	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[2] );
+	m_DurationType = IfcTaskDurationEnum::createObjectFromStepData( args[3] );
+	m_ScheduleDuration = IfcDuration::createObjectFromStepData( args[4] );
+	m_ScheduleStart = IfcDateTime::createObjectFromStepData( args[5] );
+	m_ScheduleFinish = IfcDateTime::createObjectFromStepData( args[6] );
+	m_EarlyStart = IfcDateTime::createObjectFromStepData( args[7] );
+	m_EarlyFinish = IfcDateTime::createObjectFromStepData( args[8] );
+	m_LateStart = IfcDateTime::createObjectFromStepData( args[9] );
+	m_LateFinish = IfcDateTime::createObjectFromStepData( args[10] );
+	m_FreeFloat = IfcDuration::createObjectFromStepData( args[11] );
+	m_TotalFloat = IfcDuration::createObjectFromStepData( args[12] );
 	if( _stricmp( args[13].c_str(), ".F." ) == 0 ) { m_IsCritical = false; }
 	else if( _stricmp( args[13].c_str(), ".T." ) == 0 ) { m_IsCritical = true; }
-	m_StatusTime = IfcDateTime::readStepData( args[14] );
-	m_ActualDuration = IfcDuration::readStepData( args[15] );
-	m_ActualStart = IfcDateTime::readStepData( args[16] );
-	m_ActualFinish = IfcDateTime::readStepData( args[17] );
-	m_RemainingTime = IfcDuration::readStepData( args[18] );
-	m_Completion = IfcPositiveRatioMeasure::readStepData( args[19] );
+	m_StatusTime = IfcDateTime::createObjectFromStepData( args[14] );
+	m_ActualDuration = IfcDuration::createObjectFromStepData( args[15] );
+	m_ActualStart = IfcDateTime::createObjectFromStepData( args[16] );
+	m_ActualFinish = IfcDateTime::createObjectFromStepData( args[17] );
+	m_RemainingTime = IfcDuration::createObjectFromStepData( args[18] );
+	m_Completion = IfcPositiveRatioMeasure::createObjectFromStepData( args[19] );
 }
 void IfcTaskTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

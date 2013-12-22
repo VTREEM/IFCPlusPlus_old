@@ -52,17 +52,17 @@ void IfcLightSource::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcLightSource::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcLightSource::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcLightSource::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcLightSource, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcLightSource, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_LightColour, map );
-	m_AmbientIntensity = IfcNormalisedRatioMeasure::readStepData( args[2] );
-	m_Intensity = IfcNormalisedRatioMeasure::readStepData( args[3] );
+	m_AmbientIntensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[2] );
+	m_Intensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[3] );
 }
 void IfcLightSource::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

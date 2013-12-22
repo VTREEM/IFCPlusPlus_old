@@ -36,9 +36,6 @@
     <ClCompile Include="src\ifcppgeometry\StylesConverter.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\ifcppgeometry\Utility.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="src\ifcppgeometry\CurveConverter.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
@@ -52,6 +49,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="src\ifcppgeometry\GeometrySettings.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ifcppgeometry\GeomUtils.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,9 +80,6 @@
     <ClInclude Include="src\ifcppgeometry\UnhandledRepresentationException.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\ifcppgeometry\Utility.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="src\ifcppgeometry\CurveConverter.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -99,6 +96,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\ifcppgeometry\GeometrySettings.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ifcppgeometry\GeomUtils.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

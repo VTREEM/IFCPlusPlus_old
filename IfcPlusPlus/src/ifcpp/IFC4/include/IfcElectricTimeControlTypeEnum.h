@@ -37,7 +37,7 @@ public:
 	~IfcElectricTimeControlTypeEnum();
 	virtual const char* classname() const { return "IfcElectricTimeControlTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcElectricTimeControlTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcElectricTimeControlTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcElectricTimeControlTypeEnumEnum m_enum;
 };
 

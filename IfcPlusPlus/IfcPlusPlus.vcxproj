@@ -1435,6 +1435,7 @@
     <ClCompile Include="src\ifcpp\IFC4\IfcZone.cpp" />
     <ClCompile Include="src\ifcpp\IFC4\IfcZShapeProfileDef.cpp" />
     <ClCompile Include="src\ifcpp\IfcPPEntityBroker.cpp" />
+    <ClCompile Include="src\ifcpp\IfcPPTypeBroker.cpp" />
     <ClCompile Include="src\ifcpp\model\IfcPPException.cpp" />
     <ClCompile Include="src\ifcpp\model\IfcPPModel.cpp" />
     <ClCompile Include="src\ifcpp\model\IfcPPObject.cpp" />
@@ -1454,6 +1455,8 @@
     <ClInclude Include="src\ifcpp\IfcPPEntities.h" />
     <ClInclude Include="src\ifcpp\IfcPPEntitiesMap.h" />
     <ClInclude Include="src\ifcpp\IfcPPEntityEnums.h" />
+    <ClInclude Include="src\ifcpp\IfcPPTypeEnums.h" />
+    <ClInclude Include="src\ifcpp\IfcPPTypeMap.h" />
     <ClInclude Include="src\ifcpp\IfcPPTypes.h" />
     <ClInclude Include="src\ifcpp\model\IfcPPException.h" />
     <ClInclude Include="src\ifcpp\model\IfcPPModel.h" />

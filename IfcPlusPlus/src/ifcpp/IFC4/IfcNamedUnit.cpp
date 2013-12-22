@@ -43,7 +43,7 @@ void IfcNamedUnit::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcNamedUnit::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcNamedUnit::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcNamedUnit::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcNamedUnit, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -51,7 +51,7 @@ void IfcNamedUnit::readStepData( std::vector<std::string>& args, const std::map<
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcNamedUnit, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Dimensions, map );
-	m_UnitType = IfcUnitEnum::readStepData( args[1] );
+	m_UnitType = IfcUnitEnum::createObjectFromStepData( args[1] );
 }
 void IfcNamedUnit::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

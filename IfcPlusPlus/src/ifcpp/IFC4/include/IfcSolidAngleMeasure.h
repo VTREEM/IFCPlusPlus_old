@@ -29,7 +29,7 @@ public:
 	~IfcSolidAngleMeasure();
 	virtual const char* classname() const { return "IfcSolidAngleMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcSolidAngleMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcSolidAngleMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

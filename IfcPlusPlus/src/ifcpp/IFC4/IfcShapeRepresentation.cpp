@@ -54,7 +54,7 @@ void IfcShapeRepresentation::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcShapeRepresentation::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcShapeRepresentation::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcShapeRepresentation::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcShapeRepresentation, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -62,8 +62,8 @@ void IfcShapeRepresentation::readStepData( std::vector<std::string>& args, const
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcShapeRepresentation, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_ContextOfItems, map );
-	m_RepresentationIdentifier = IfcLabel::readStepData( args[1] );
-	m_RepresentationType = IfcLabel::readStepData( args[2] );
+	m_RepresentationIdentifier = IfcLabel::createObjectFromStepData( args[1] );
+	m_RepresentationType = IfcLabel::createObjectFromStepData( args[2] );
 	readEntityReferenceList( args[3], m_Items, map );
 }
 void IfcShapeRepresentation::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

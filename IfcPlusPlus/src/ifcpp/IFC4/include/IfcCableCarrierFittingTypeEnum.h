@@ -38,7 +38,7 @@ public:
 	~IfcCableCarrierFittingTypeEnum();
 	virtual const char* classname() const { return "IfcCableCarrierFittingTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcCableCarrierFittingTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcCableCarrierFittingTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcCableCarrierFittingTypeEnumEnum m_enum;
 };
 

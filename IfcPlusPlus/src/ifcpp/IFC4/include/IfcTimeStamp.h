@@ -29,7 +29,7 @@ public:
 	~IfcTimeStamp();
 	virtual const char* classname() const { return "IfcTimeStamp"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcTimeStamp> readStepData( std::string& arg );
+	static shared_ptr<IfcTimeStamp> createObjectFromStepData( const std::string& arg );
 	int m_value;
 };
 

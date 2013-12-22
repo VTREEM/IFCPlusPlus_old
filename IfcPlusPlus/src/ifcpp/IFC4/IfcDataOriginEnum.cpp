@@ -48,7 +48,7 @@ void IfcDataOriginEnum::getStepParameter( std::stringstream& stream, bool is_sel
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcDataOriginEnum> IfcDataOriginEnum::readStepData( std::string& arg )
+shared_ptr<IfcDataOriginEnum> IfcDataOriginEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDataOriginEnum>(); }

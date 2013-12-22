@@ -116,7 +116,7 @@ void IfcSensorTypeEnum::getStepParameter( std::stringstream& stream, bool is_sel
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcSensorTypeEnum> IfcSensorTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcSensorTypeEnum> IfcSensorTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSensorTypeEnum>(); }

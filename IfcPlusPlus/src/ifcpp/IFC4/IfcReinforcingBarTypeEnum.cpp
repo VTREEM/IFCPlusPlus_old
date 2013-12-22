@@ -68,7 +68,7 @@ void IfcReinforcingBarTypeEnum::getStepParameter( std::stringstream& stream, boo
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcReinforcingBarTypeEnum> IfcReinforcingBarTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcReinforcingBarTypeEnum> IfcReinforcingBarTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcReinforcingBarTypeEnum>(); }

@@ -29,7 +29,7 @@ public:
 	~IfcRadioActivityMeasure();
 	virtual const char* classname() const { return "IfcRadioActivityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcRadioActivityMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcRadioActivityMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

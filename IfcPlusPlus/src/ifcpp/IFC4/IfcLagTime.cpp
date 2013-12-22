@@ -54,18 +54,18 @@ void IfcLagTime::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcLagTime::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcLagTime::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcLagTime::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcLagTime, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcLagTime, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_DataOrigin = IfcDataOriginEnum::readStepData( args[1] );
-	m_UserDefinedDataOrigin = IfcLabel::readStepData( args[2] );
-	m_LagValue = IfcTimeOrRatioSelect::readStepData( args[3], map );
-	m_DurationType = IfcTaskDurationEnum::readStepData( args[4] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_DataOrigin = IfcDataOriginEnum::createObjectFromStepData( args[1] );
+	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[2] );
+	m_LagValue = IfcTimeOrRatioSelect::createObjectFromStepData( args[3], map );
+	m_DurationType = IfcTaskDurationEnum::createObjectFromStepData( args[4] );
 }
 void IfcLagTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -51,7 +51,7 @@ void IfcBoundingBox::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcBoundingBox::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcBoundingBox::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcBoundingBox::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcBoundingBox, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -59,9 +59,9 @@ void IfcBoundingBox::readStepData( std::vector<std::string>& args, const std::ma
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcBoundingBox, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Corner, map );
-	m_XDim = IfcPositiveLengthMeasure::readStepData( args[1] );
-	m_YDim = IfcPositiveLengthMeasure::readStepData( args[2] );
-	m_ZDim = IfcPositiveLengthMeasure::readStepData( args[3] );
+	m_XDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
+	m_YDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
+	m_ZDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
 }
 void IfcBoundingBox::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

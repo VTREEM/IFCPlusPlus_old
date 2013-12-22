@@ -99,26 +99,26 @@ void IfcSite::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcSite::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcSite::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcSite::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<14 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcSite, expecting 14, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>14 ){ std::cout << "Wrong parameter count for entity IfcSite, expecting 14, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_ObjectType = IfcLabel::readStepData( args[4] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
-	m_LongName = IfcLabel::readStepData( args[7] );
-	m_CompositionType = IfcElementCompositionEnum::readStepData( args[8] );
-	m_RefLatitude = IfcCompoundPlaneAngleMeasure::readStepData( args[9] );
-	m_RefLongitude = IfcCompoundPlaneAngleMeasure::readStepData( args[10] );
-	m_RefElevation = IfcLengthMeasure::readStepData( args[11] );
-	m_LandTitleNumber = IfcLabel::readStepData( args[12] );
+	m_LongName = IfcLabel::createObjectFromStepData( args[7] );
+	m_CompositionType = IfcElementCompositionEnum::createObjectFromStepData( args[8] );
+	m_RefLatitude = IfcCompoundPlaneAngleMeasure::createObjectFromStepData( args[9] );
+	m_RefLongitude = IfcCompoundPlaneAngleMeasure::createObjectFromStepData( args[10] );
+	m_RefElevation = IfcLengthMeasure::createObjectFromStepData( args[11] );
+	m_LandTitleNumber = IfcLabel::createObjectFromStepData( args[12] );
 	readEntityReference( args[13], m_SiteAddress, map );
 }
 void IfcSite::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

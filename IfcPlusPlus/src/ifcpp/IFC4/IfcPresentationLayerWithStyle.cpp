@@ -67,17 +67,17 @@ void IfcPresentationLayerWithStyle::getStepLine( std::stringstream& stream ) con
 	stream << ");";
 }
 void IfcPresentationLayerWithStyle::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPresentationLayerWithStyle::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPresentationLayerWithStyle::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcPresentationLayerWithStyle, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>8 ){ std::cout << "Wrong parameter count for entity IfcPresentationLayerWithStyle, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readSelectList( args[2], m_AssignedItems, map );
-	m_Identifier = IfcIdentifier::readStepData( args[3] );
+	m_Identifier = IfcIdentifier::createObjectFromStepData( args[3] );
 	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_LayerOn = false; }
 	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_LayerOn = true; }
 	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_LayerFrozen = false; }

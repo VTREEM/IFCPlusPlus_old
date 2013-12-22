@@ -52,7 +52,7 @@ void IfcInternalOrExternalEnum::getStepParameter( std::stringstream& stream, boo
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcInternalOrExternalEnum> IfcInternalOrExternalEnum::readStepData( std::string& arg )
+shared_ptr<IfcInternalOrExternalEnum> IfcInternalOrExternalEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcInternalOrExternalEnum>(); }

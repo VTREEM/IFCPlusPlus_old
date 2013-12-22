@@ -53,7 +53,7 @@ void IfcRevolvedAreaSolid::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcRevolvedAreaSolid::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRevolvedAreaSolid::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRevolvedAreaSolid::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRevolvedAreaSolid, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -63,7 +63,7 @@ void IfcRevolvedAreaSolid::readStepData( std::vector<std::string>& args, const s
 	readEntityReference( args[0], m_SweptArea, map );
 	readEntityReference( args[1], m_Position, map );
 	readEntityReference( args[2], m_Axis, map );
-	m_Angle = IfcPlaneAngleMeasure::readStepData( args[3] );
+	m_Angle = IfcPlaneAngleMeasure::createObjectFromStepData( args[3] );
 }
 void IfcRevolvedAreaSolid::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

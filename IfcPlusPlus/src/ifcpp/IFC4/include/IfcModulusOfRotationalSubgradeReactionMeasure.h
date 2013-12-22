@@ -30,7 +30,7 @@ public:
 	~IfcModulusOfRotationalSubgradeReactionMeasure();
 	virtual const char* classname() const { return "IfcModulusOfRotationalSubgradeReactionMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcModulusOfRotationalSubgradeReactionMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcModulusOfRotationalSubgradeReactionMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

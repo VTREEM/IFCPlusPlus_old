@@ -32,7 +32,7 @@ void IfcHeatingValueMeasure::getStepParameter( std::stringstream& stream, bool i
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcHeatingValueMeasure> IfcHeatingValueMeasure::readStepData( std::string& arg )
+shared_ptr<IfcHeatingValueMeasure> IfcHeatingValueMeasure::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcHeatingValueMeasure>(); }

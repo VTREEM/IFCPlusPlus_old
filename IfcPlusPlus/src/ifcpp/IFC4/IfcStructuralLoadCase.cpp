@@ -87,23 +87,23 @@ void IfcStructuralLoadCase::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcStructuralLoadCase::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcStructuralLoadCase::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcStructuralLoadCase::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<11 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcStructuralLoadCase, expecting 11, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>11 ){ std::cout << "Wrong parameter count for entity IfcStructuralLoadCase, expecting 11, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_ObjectType = IfcLabel::readStepData( args[4] );
-	m_PredefinedType = IfcLoadGroupTypeEnum::readStepData( args[5] );
-	m_ActionType = IfcActionTypeEnum::readStepData( args[6] );
-	m_ActionSource = IfcActionSourceTypeEnum::readStepData( args[7] );
-	m_Coefficient = IfcRatioMeasure::readStepData( args[8] );
-	m_Purpose = IfcLabel::readStepData( args[9] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
+	m_PredefinedType = IfcLoadGroupTypeEnum::createObjectFromStepData( args[5] );
+	m_ActionType = IfcActionTypeEnum::createObjectFromStepData( args[6] );
+	m_ActionSource = IfcActionSourceTypeEnum::createObjectFromStepData( args[7] );
+	m_Coefficient = IfcRatioMeasure::createObjectFromStepData( args[8] );
+	m_Purpose = IfcLabel::createObjectFromStepData( args[9] );
 	readTypeOfRealList( args[10], m_SelfWeightCoefficients );
 }
 void IfcStructuralLoadCase::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

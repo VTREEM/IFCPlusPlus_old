@@ -38,7 +38,7 @@ void IfcGeometricRepresentationItem::getStepLine( std::stringstream& stream ) co
 	stream << ");";
 }
 void IfcGeometricRepresentationItem::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcGeometricRepresentationItem::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcGeometricRepresentationItem::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcGeometricRepresentationItem::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

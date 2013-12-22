@@ -163,9 +163,9 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName)d.exe</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTDIR)\plugins\platforms;$(OSG_DIR)\lib;..\Carve\bin;..\IfcPlusPlus\bin;..\IfcPlusPlusGeometry\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTDIR)\plugins\platforms;$(OSG_DIR)\lib;..\Carve\bin;..\IfcPlusPlus\bin;..\IfcPlusPlusGeometry\bin;D:\lib\OSG\freetype\2.4.11\builds\win32\vc2010\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Rpcrt4.lib;opengl32.lib;glu32.lib;imm32.lib;winmm.lib;Ws2_32.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Networkd.lib;Qt5OpenGLd.lib;Qt5Widgetsd.lib;Qt5PlatformSupport.lib;Qt5PrintSupportd.lib;Qt5Xmld.lib;qwindowsd.lib;osgd.lib;OpenThreadsd.lib;osgAnimationd.lib;osgDBd.lib;osgFXd.lib;osgGAd.lib;osgQtd.lib;osgTextd.lib;osgUtild.lib;osgViewerd.lib;Carved.lib;IfcPlusPlusd.lib;IfcPlusPlusGeometryd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Rpcrt4.lib;opengl32.lib;glu32.lib;imm32.lib;winmm.lib;Ws2_32.lib;qtmaind.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Networkd.lib;Qt5OpenGLd.lib;Qt5Widgetsd.lib;Qt5PlatformSupport.lib;Qt5PrintSupportd.lib;Qt5Xmld.lib;osgd.lib;OpenThreadsd.lib;osgAnimationd.lib;osgDBd.lib;osgFXd.lib;osgGAd.lib;osgQtd.lib;osgTextd.lib;osgUtild.lib;osgViewerd.lib;freetype2411_D.lib;Carved.lib;IfcPlusPlusd.lib;IfcPlusPlusGeometryd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -1007,7 +1007,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties UicDir=".\bin\GeneratedFiles" MocDir=".\bin\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\bin\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_x64="5.1.1" />
+      <UserProperties UicDir=".\bin\GeneratedFiles" MocDir=".\bin\GeneratedFiles\$(ConfigurationName)" MocOptions="" RccDir=".\bin\GeneratedFiles" lupdateOnBuild="0" lupdateOptions="" lreleaseOptions="" Qt5Version_x0020_x64="5.2.0" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

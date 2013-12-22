@@ -117,30 +117,30 @@ void IfcTendon::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTendon::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTendon::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTendon::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<17 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTendon, expecting 17, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>17 ){ std::cout << "Wrong parameter count for entity IfcTendon, expecting 17, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_ObjectType = IfcLabel::readStepData( args[4] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
-	m_Tag = IfcIdentifier::readStepData( args[7] );
-	m_SteelGrade = IfcLabel::readStepData( args[8] );
-	m_PredefinedType = IfcTendonTypeEnum::readStepData( args[9] );
-	m_NominalDiameter = IfcPositiveLengthMeasure::readStepData( args[10] );
-	m_CrossSectionArea = IfcAreaMeasure::readStepData( args[11] );
-	m_TensionForce = IfcForceMeasure::readStepData( args[12] );
-	m_PreStress = IfcPressureMeasure::readStepData( args[13] );
-	m_FrictionCoefficient = IfcNormalisedRatioMeasure::readStepData( args[14] );
-	m_AnchorageSlip = IfcPositiveLengthMeasure::readStepData( args[15] );
-	m_MinCurvatureRadius = IfcPositiveLengthMeasure::readStepData( args[16] );
+	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
+	m_SteelGrade = IfcLabel::createObjectFromStepData( args[8] );
+	m_PredefinedType = IfcTendonTypeEnum::createObjectFromStepData( args[9] );
+	m_NominalDiameter = IfcPositiveLengthMeasure::createObjectFromStepData( args[10] );
+	m_CrossSectionArea = IfcAreaMeasure::createObjectFromStepData( args[11] );
+	m_TensionForce = IfcForceMeasure::createObjectFromStepData( args[12] );
+	m_PreStress = IfcPressureMeasure::createObjectFromStepData( args[13] );
+	m_FrictionCoefficient = IfcNormalisedRatioMeasure::createObjectFromStepData( args[14] );
+	m_AnchorageSlip = IfcPositiveLengthMeasure::createObjectFromStepData( args[15] );
+	m_MinCurvatureRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[16] );
 }
 void IfcTendon::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

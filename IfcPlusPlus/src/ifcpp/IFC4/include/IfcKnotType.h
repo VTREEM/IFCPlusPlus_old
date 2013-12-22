@@ -36,7 +36,7 @@ public:
 	~IfcKnotType();
 	virtual const char* classname() const { return "IfcKnotType"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcKnotType> readStepData( std::string& arg );
+	static shared_ptr<IfcKnotType> createObjectFromStepData( const std::string& arg );
 	IfcKnotTypeEnum m_enum;
 };
 

@@ -80,7 +80,7 @@ void IfcAudioVisualApplianceTypeEnum::getStepParameter( std::stringstream& strea
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcAudioVisualApplianceTypeEnum> IfcAudioVisualApplianceTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcAudioVisualApplianceTypeEnum> IfcAudioVisualApplianceTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAudioVisualApplianceTypeEnum>(); }

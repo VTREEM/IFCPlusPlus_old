@@ -68,21 +68,21 @@ void IfcTelecomAddress::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTelecomAddress::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTelecomAddress::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTelecomAddress::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<9 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTelecomAddress, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>9 ){ std::cout << "Wrong parameter count for entity IfcTelecomAddress, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Purpose = IfcAddressTypeEnum::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_UserDefinedPurpose = IfcLabel::readStepData( args[2] );
+	m_Purpose = IfcAddressTypeEnum::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_UserDefinedPurpose = IfcLabel::createObjectFromStepData( args[2] );
 	readTypeList( args[3], m_TelephoneNumbers );
 	readTypeList( args[4], m_FacsimileNumbers );
-	m_PagerNumber = IfcLabel::readStepData( args[5] );
+	m_PagerNumber = IfcLabel::createObjectFromStepData( args[5] );
 	readTypeList( args[6], m_ElectronicMailAddresses );
-	m_WWWHomePageURL = IfcURIReference::readStepData( args[7] );
+	m_WWWHomePageURL = IfcURIReference::createObjectFromStepData( args[7] );
 	readTypeList( args[8], m_MessagingIDs );
 }
 void IfcTelecomAddress::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

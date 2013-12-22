@@ -275,6 +275,7 @@
     <ClCompile Include="src\ifcppgeometry\CurveConverter.cpp" />
     <ClCompile Include="src\ifcppgeometry\FaceConverter.cpp" />
     <ClCompile Include="src\ifcppgeometry\GeometrySettings.cpp" />
+    <ClCompile Include="src\ifcppgeometry\GeomUtils.cpp" />
     <ClCompile Include="src\ifcppgeometry\PlacementConverter.cpp" />
     <ClCompile Include="src\ifcppgeometry\ProfileConverter.cpp" />
     <ClCompile Include="src\ifcppgeometry\ReaderWriterIFC.cpp" />
@@ -282,7 +283,6 @@
     <ClCompile Include="src\ifcppgeometry\SectionedSpine.cpp" />
     <ClCompile Include="src\ifcppgeometry\SolidModelConverter.cpp" />
     <ClCompile Include="src\ifcppgeometry\StylesConverter.cpp" />
-    <ClCompile Include="src\ifcppgeometry\Utility.cpp" />
     <ClCompile Include="src\ifcppgeometry\ProfileCache.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +291,7 @@
     <ClInclude Include="src\ifcppgeometry\CurveConverter.h" />
     <ClInclude Include="src\ifcppgeometry\FaceConverter.h" />
     <ClInclude Include="src\ifcppgeometry\GeometrySettings.h" />
+    <ClInclude Include="src\ifcppgeometry\GeomUtils.h" />
     <ClInclude Include="src\ifcppgeometry\PlacementConverter.h" />
     <ClInclude Include="src\ifcppgeometry\ProfileConverter.h" />
     <ClInclude Include="src\ifcppgeometry\ReaderWriterIFC.h" />
@@ -299,7 +300,6 @@
     <ClInclude Include="src\ifcppgeometry\SolidModelConverter.h" />
     <ClInclude Include="src\ifcppgeometry\StylesConverter.h" />
     <ClInclude Include="src\ifcppgeometry\UnhandledRepresentationException.h" />
-    <ClInclude Include="src\ifcppgeometry\Utility.h" />
     <ClInclude Include="src\ifcppgeometry\ProfileCache.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

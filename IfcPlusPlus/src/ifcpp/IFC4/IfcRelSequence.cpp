@@ -69,22 +69,22 @@ void IfcRelSequence::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcRelSequence::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRelSequence::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRelSequence::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<9 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRelSequence, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>9 ){ std::cout << "Wrong parameter count for entity IfcRelSequence, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_RelatingProcess, map );
 	readEntityReference( args[5], m_RelatedProcess, map );
 	readEntityReference( args[6], m_TimeLag, map );
-	m_SequenceType = IfcSequenceEnum::readStepData( args[7] );
-	m_UserDefinedSequenceType = IfcLabel::readStepData( args[8] );
+	m_SequenceType = IfcSequenceEnum::createObjectFromStepData( args[7] );
+	m_UserDefinedSequenceType = IfcLabel::createObjectFromStepData( args[8] );
 }
 void IfcRelSequence::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

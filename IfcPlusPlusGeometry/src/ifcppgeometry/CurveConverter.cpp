@@ -50,7 +50,7 @@
 #include "ifcpp/IFC4/include/IfcVertexPoint.h"
 
 #include "GeometrySettings.h"
-#include "Utility.h"
+#include "GeomUtils.h"
 #include "UnhandledRepresentationException.h"
 #include "PlacementConverter.h"
 #include "ProfileConverter.h"
@@ -636,7 +636,7 @@ void CurveConverter::convertIfcCartesianPointVector( const std::vector<shared_pt
 		{
 			std::cout << "convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2" << std::endl;
 			//detailedReport( strs );
-			//throw IfcPPException("convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2");
+			//throw IfcPPException("convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2", __func__);
 		}
 	}
 }
@@ -671,7 +671,7 @@ void CurveConverter::convertIfcCartesianPointVectorSkipDuplicates( const std::ve
 			//std::stringstream strs;
 			//strs << "IfcCartesianPoint (#" << cp_id << "): coords.size() < 2";
 			//detailedReport( strs );
-			//throw IfcPPException( strs.str().c_str() );
+			//throw IfcPPException( strs.str().c_str(), __func__ );
 		}
 
 		carve::geom::vector<3>  vertex( carve::geom::VECTOR( x, y, z ) );

@@ -14,6 +14,19 @@
 #include "IfcPPException.h"
 #include "IfcPPObject.h"
 
+// TYPE
+IfcPPType::IfcPPType()
+{
+}
+IfcPPType::~IfcPPType()
+{
+}
+void IfcPPType::readStepArgument( const std::string& arg )
+{
+	throw IfcPPException("IfcPPType::readStepArgument(), this method should be overwritten");
+}
+
+// ENTITY
 IfcPPEntity::IfcPPEntity() : m_id(-1)
 {
 }
@@ -29,9 +42,9 @@ void IfcPPEntity::setId( int id )
 	m_id = id;
 }
 
-void IfcPPEntity::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPPEntity::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
-	throw IfcPPException("IfcPPEntity::readStepData(), this method should be overwritten");
+	throw IfcPPException("IfcPPEntity::readStepArguments(), this method should be overwritten");
 }
 void IfcPPEntity::getStepLine( std::stringstream& stream ) const
 {

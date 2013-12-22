@@ -42,15 +42,15 @@ void IfcTextStyleForDefinedFont::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTextStyleForDefinedFont::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTextStyleForDefinedFont::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTextStyleForDefinedFont::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTextStyleForDefinedFont, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcTextStyleForDefinedFont, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Colour = IfcColour::readStepData( args[0], map );
-	m_BackgroundColour = IfcColour::readStepData( args[1], map );
+	m_Colour = IfcColour::createObjectFromStepData( args[0], map );
+	m_BackgroundColour = IfcColour::createObjectFromStepData( args[1], map );
 }
 void IfcTextStyleForDefinedFont::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

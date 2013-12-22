@@ -41,14 +41,14 @@ void IfcConic::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcConic::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcConic::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcConic::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<1 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcConic, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcConic, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Position = IfcAxis2Placement::readStepData( args[0], map );
+	m_Position = IfcAxis2Placement::createObjectFromStepData( args[0], map );
 }
 void IfcConic::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

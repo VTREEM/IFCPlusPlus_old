@@ -21,7 +21,7 @@
 // TYPE IfcModulusOfSubgradeReactionSelect 
 IfcModulusOfSubgradeReactionSelect::IfcModulusOfSubgradeReactionSelect() {}
 IfcModulusOfSubgradeReactionSelect::~IfcModulusOfSubgradeReactionSelect() {}
-shared_ptr<IfcModulusOfSubgradeReactionSelect> IfcModulusOfSubgradeReactionSelect::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcModulusOfSubgradeReactionSelect> IfcModulusOfSubgradeReactionSelect::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcModulusOfSubgradeReactionSelect>(); }
@@ -55,13 +55,16 @@ shared_ptr<IfcModulusOfSubgradeReactionSelect> IfcModulusOfSubgradeReactionSelec
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		if( keyword.compare("IFCBOOLEAN")== 0 )
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
 		{
-			return IfcBoolean::readStepData( inline_arg );
-		}
-		else if( keyword.compare("IFCMODULUSOFSUBGRADEREACTIONMEASURE")== 0 )
-		{
-			return IfcModulusOfSubgradeReactionMeasure::readStepData( inline_arg );
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcModulusOfSubgradeReactionSelect> result_ptr_self = dynamic_pointer_cast<IfcModulusOfSubgradeReactionSelect>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
 		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcModulusOfSubgradeReactionSelect::readStepData" << std::endl;

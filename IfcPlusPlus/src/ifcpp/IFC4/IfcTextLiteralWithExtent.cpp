@@ -57,18 +57,18 @@ void IfcTextLiteralWithExtent::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTextLiteralWithExtent::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTextLiteralWithExtent::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTextLiteralWithExtent::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTextLiteralWithExtent, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcTextLiteralWithExtent, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Literal = IfcPresentableText::readStepData( args[0] );
-	m_Placement = IfcAxis2Placement::readStepData( args[1], map );
-	m_Path = IfcTextPath::readStepData( args[2] );
+	m_Literal = IfcPresentableText::createObjectFromStepData( args[0] );
+	m_Placement = IfcAxis2Placement::createObjectFromStepData( args[1], map );
+	m_Path = IfcTextPath::createObjectFromStepData( args[2] );
 	readEntityReference( args[3], m_Extent, map );
-	m_BoxAlignment = IfcBoxAlignment::readStepData( args[4] );
+	m_BoxAlignment = IfcBoxAlignment::createObjectFromStepData( args[4] );
 }
 void IfcTextLiteralWithExtent::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

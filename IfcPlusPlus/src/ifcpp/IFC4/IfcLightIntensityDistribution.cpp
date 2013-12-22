@@ -43,14 +43,14 @@ void IfcLightIntensityDistribution::getStepLine( std::stringstream& stream ) con
 	stream << ");";
 }
 void IfcLightIntensityDistribution::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcLightIntensityDistribution::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcLightIntensityDistribution::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcLightIntensityDistribution, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcLightIntensityDistribution, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_LightDistributionCurve = IfcLightDistributionCurveEnum::readStepData( args[0] );
+	m_LightDistributionCurve = IfcLightDistributionCurveEnum::createObjectFromStepData( args[0] );
 	readEntityReferenceList( args[1], m_DistributionData, map );
 }
 void IfcLightIntensityDistribution::setInverseCounterparts( shared_ptr<IfcPPEntity> )

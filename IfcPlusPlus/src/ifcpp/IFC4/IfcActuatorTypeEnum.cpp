@@ -56,7 +56,7 @@ void IfcActuatorTypeEnum::getStepParameter( std::stringstream& stream, bool is_s
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcActuatorTypeEnum> IfcActuatorTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcActuatorTypeEnum> IfcActuatorTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcActuatorTypeEnum>(); }

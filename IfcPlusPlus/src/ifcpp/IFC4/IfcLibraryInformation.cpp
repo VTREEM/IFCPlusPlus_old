@@ -60,19 +60,19 @@ void IfcLibraryInformation::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcLibraryInformation::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcLibraryInformation::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcLibraryInformation::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<6 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcLibraryInformation, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>6 ){ std::cout << "Wrong parameter count for entity IfcLibraryInformation, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Version = IfcLabel::readStepData( args[1] );
-	m_Publisher = IfcActorSelect::readStepData( args[2], map );
-	m_VersionDate = IfcDateTime::readStepData( args[3] );
-	m_Location = IfcURIReference::readStepData( args[4] );
-	m_Description = IfcText::readStepData( args[5] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Version = IfcLabel::createObjectFromStepData( args[1] );
+	m_Publisher = IfcActorSelect::createObjectFromStepData( args[2], map );
+	m_VersionDate = IfcDateTime::createObjectFromStepData( args[3] );
+	m_Location = IfcURIReference::createObjectFromStepData( args[4] );
+	m_Description = IfcText::createObjectFromStepData( args[5] );
 }
 void IfcLibraryInformation::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

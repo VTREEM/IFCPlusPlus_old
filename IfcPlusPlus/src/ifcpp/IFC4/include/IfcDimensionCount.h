@@ -28,7 +28,7 @@ public:
 	~IfcDimensionCount();
 	virtual const char* classname() const { return "IfcDimensionCount"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcDimensionCount> readStepData( std::string& arg );
+	static shared_ptr<IfcDimensionCount> createObjectFromStepData( const std::string& arg );
 	int m_value;
 };
 

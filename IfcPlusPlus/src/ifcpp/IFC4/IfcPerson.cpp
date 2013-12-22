@@ -64,16 +64,16 @@ void IfcPerson::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcPerson::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPerson::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPerson::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcPerson, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>8 ){ std::cout << "Wrong parameter count for entity IfcPerson, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Identification = IfcIdentifier::readStepData( args[0] );
-	m_FamilyName = IfcLabel::readStepData( args[1] );
-	m_GivenName = IfcLabel::readStepData( args[2] );
+	m_Identification = IfcIdentifier::createObjectFromStepData( args[0] );
+	m_FamilyName = IfcLabel::createObjectFromStepData( args[1] );
+	m_GivenName = IfcLabel::createObjectFromStepData( args[2] );
 	readTypeList( args[3], m_MiddleNames );
 	readTypeList( args[4], m_PrefixTitles );
 	readTypeList( args[5], m_SuffixTitles );

@@ -56,7 +56,7 @@ void IfcStructuralCurveMemberTypeEnum::getStepParameter( std::stringstream& stre
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcStructuralCurveMemberTypeEnum> IfcStructuralCurveMemberTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcStructuralCurveMemberTypeEnum> IfcStructuralCurveMemberTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStructuralCurveMemberTypeEnum>(); }

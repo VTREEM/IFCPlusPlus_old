@@ -51,7 +51,7 @@ void IfcBlock::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcBlock::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcBlock::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcBlock::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcBlock, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -59,9 +59,9 @@ void IfcBlock::readStepData( std::vector<std::string>& args, const std::map<int,
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcBlock, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Position, map );
-	m_XLength = IfcPositiveLengthMeasure::readStepData( args[1] );
-	m_YLength = IfcPositiveLengthMeasure::readStepData( args[2] );
-	m_ZLength = IfcPositiveLengthMeasure::readStepData( args[3] );
+	m_XLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
+	m_YLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
+	m_ZLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
 }
 void IfcBlock::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

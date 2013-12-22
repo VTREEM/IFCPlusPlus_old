@@ -60,7 +60,7 @@
 #include "carve/matrix.hpp"
 
 #include "GeometrySettings.h"
-#include "Utility.h"
+#include "GeomUtils.h"
 #include "RepresentationConverter.h"
 #include "PlacementConverter.h"
 #include "CurveConverter.h"
@@ -157,7 +157,7 @@ void ProfileConverter::computeProfile( shared_ptr<IfcProfileDef> profile_def )
 	
 	std::stringstream sstr;
 	sstr << "ProfileDef not supported: " << profile_def->classname();
-	throw IfcPPException( sstr.str() );
+	throw IfcPPException( sstr.str(), __func__ );
 }
 
 void ProfileConverter::addAvoidingDuplicates( const std::vector<carve::geom::vector<2> >& polygon, std::vector<std::vector<carve::geom::vector<2> > >& paths )
@@ -306,8 +306,6 @@ void ProfileConverter::convertIfcArbitraryOpenProfileDef( const shared_ptr<IfcAr
 
 			std::reverse( right_points.begin(), right_points.end() );
 			std::vector<carve::geom::vector<2> > polygon;
-			//std::copy( left_points.begin(), left_points.end(), std::back_inserter( polygon ) );
-			//std::copy( right_points.begin(), right_points.end(), std::back_inserter( polygon ) );
 			for( int i2=0; i2<left_points.size(); ++i2 )
 			{
 				carve::geom::vector<3>& point3d = left_points[i2];
@@ -379,7 +377,7 @@ void ProfileConverter::convertIfcCompositeProfileDef( const shared_ptr<IfcCompos
 
 		std::stringstream sstr;
 		sstr << "ProfileDef not supported: " << profile_def->classname();
-		throw IfcPPException( sstr.str() );
+		throw IfcPPException( sstr.str(), __func__ );
 	}
 }
 	
@@ -692,11 +690,11 @@ void ProfileConverter::convertIfcParameterizedProfileDef( const shared_ptr<IfcPa
 			else
 			{
 				// symmetric: mirror horizontally along x-Axis
-				mirrorCopyPathBack( outer_loop, false, true );
+				mirrorCopyPathReverse( outer_loop, false, true );
 			}
 
 			// mirror vertically along y-axis
-			mirrorCopyPathBack( outer_loop, true, false );
+			mirrorCopyPathReverse( outer_loop, true, false );
 			paths.push_back(outer_loop);
 		}
 		return;
@@ -826,7 +824,7 @@ void ProfileConverter::convertIfcParameterizedProfileDef( const shared_ptr<IfcPa
 			}
 
 			// mirror horizontally along x-Axis
-			mirrorCopyPathBack( outer_loop, false, true );
+			mirrorCopyPathReverse( outer_loop, false, true );
 			paths.push_back(outer_loop);
 		}
 		return;
@@ -887,7 +885,7 @@ void ProfileConverter::convertIfcParameterizedProfileDef( const shared_ptr<IfcPa
 				outer_loop.push_back( carve::geom::VECTOR( (-b*0.5+t),  (-h*0.5+t) ));
 			}
 			// mirror horizontally along x-Axis
-			mirrorCopyPathBack( outer_loop, false, true );
+			mirrorCopyPathReverse( outer_loop, false, true );
 			paths.push_back(outer_loop);
 		}
 		return;
@@ -1021,7 +1019,7 @@ void ProfileConverter::convertIfcParameterizedProfileDef( const shared_ptr<IfcPa
 		}
 		
 		// mirror vertically along y-Axis
-		mirrorCopyPathBack( outer_loop, true, false );
+		mirrorCopyPathReverse( outer_loop, true, false );
 		paths.push_back(outer_loop);
 		return;
 	}
@@ -1029,7 +1027,7 @@ void ProfileConverter::convertIfcParameterizedProfileDef( const shared_ptr<IfcPa
 	//not supported ProfileDef
 	std::stringstream strs;
 	strs << "IfcProfileDef not supported: " << profile->classname();
-	throw IfcPPException( strs.str() );
+	throw IfcPPException( strs.str(), __func__ );
 }
 
 /*
@@ -1229,7 +1227,7 @@ void ProfileConverter::mirrorCopyPath( std::vector<carve::geom::vector<2> >& coo
 	}
 }
 
-void ProfileConverter::mirrorCopyPathBack( std::vector<carve::geom::vector<2> >& coords, bool mirror_on_y_axis, bool mirror_on_x_axis ) const
+void ProfileConverter::mirrorCopyPathReverse( std::vector<carve::geom::vector<2> >& coords, bool mirror_on_y_axis, bool mirror_on_x_axis ) const
 {
 	int points_count = coords.size();
 	double x, y;

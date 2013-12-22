@@ -47,7 +47,7 @@ void IfcDerivedUnit::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcDerivedUnit::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcDerivedUnit::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcDerivedUnit::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcDerivedUnit, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -55,8 +55,8 @@ void IfcDerivedUnit::readStepData( std::vector<std::string>& args, const std::ma
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcDerivedUnit, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_Elements, map );
-	m_UnitType = IfcDerivedUnitEnum::readStepData( args[1] );
-	m_UserDefinedType = IfcLabel::readStepData( args[2] );
+	m_UnitType = IfcDerivedUnitEnum::createObjectFromStepData( args[1] );
+	m_UserDefinedType = IfcLabel::createObjectFromStepData( args[2] );
 }
 void IfcDerivedUnit::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

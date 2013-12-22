@@ -11,20 +11,15 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#include <osgDB/ReadFile>
-#include <osg/Texture2D>
 #include <osg/ShapeDrawable>
 #include <osg/MatrixTransform>
 #include <osgText/Text>
-#include <osgUtil/SmoothingVisitor>
 #include <osg/CullFace>
 #include <osg/Material>
 #include <osg/Depth>
 #include <osg/LineStipple>
 #include <osg/PolygonMode>
 #include <osg/PolygonOffset>
-#include <osgGA/CameraManipulator>
-#include <osgViewer/CompositeViewer>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -45,7 +40,7 @@
 #include "ProfileConverter.h"
 #include "ConverterOSG.h"
 #include "RepresentationConverter.h"
-#include "Utility.h"
+#include "GeomUtils.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void WireFrameModeOn( osg::StateSet* state )
@@ -441,11 +436,6 @@ carve::geom::vector<3> computePolygonCentroid( const std::vector<carve::geom::ve
 	for( std::vector<carve::geom::vector<3> >::const_iterator it = polygon.begin(); it != polygon.end(); ++it )
 	{
 		const carve::geom::vector<3>& vertex_current = (*it);
-		//++it;
-		//if( it != polygon.end() )
-		//{
-		//	const carve::geom::vector<3>& vertex_next = (*it);
-		//}
 		polygon_centroid += vertex_current;
 	}
 	polygon_centroid /= double(polygon.size());
@@ -547,7 +537,7 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 	//  |                            |
 	//  |   1-------------------2    |3---------2
 	//  |   |                   |    |          |
-	//  |   |                   |    |          |face_loops[2]
+	//  |   |                   |    |          |face_loops[2]   // TODO: handle combined profiles
 	//  |   0---face_loops[1]---3    |0---------1
 	//  |                            |
 	//  0-------face_loops[0]--------1
@@ -573,7 +563,6 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 
 		if( it_face_loops == face_loops_input.begin() )
 		{
-			normal_first_loop = computePolygon2DNormal( loop );
 		}
 
 		std::vector<carve::geom2d::P2> loop_2d( loop );
@@ -583,6 +572,7 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 		carve::geom::vector<3>  normal_2d = computePolygon2DNormal( loop_2d );
 		if( it_face_loops == face_loops_input.begin() )
 		{
+			normal_first_loop = computePolygon2DNormal( loop );
 			if( normal_2d.z < 0 )
 			{
 				reverse_loop = true;
@@ -716,7 +706,7 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 		carve::geom::vector<3>  vertex3D( carve::geom::VECTOR( v.x, v.y, 0 ) );
 		poly_data->addVertex(vertex3D);
 		int vertex_id = poly_data->getVertexCount()-1;
-		map_y_index[v.y] = vertex_id;  // TODO: check if we have to round here
+		map_y_index[v.y] = vertex_id;  // TODO: it works for now, but check if we have to round here. maybe use checksum of rounded x and y as a single map key
 		map_merged_idx[i] = vertex_id;
 	}
 
@@ -869,13 +859,8 @@ void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_l
 	// project face into 2d plane
 	std::vector<std::vector<carve::geom2d::P2> >	face_loops_projected;
 	std::vector<std::vector<double> >				face_loops_3rd_dim;
-	FaceProjectionPlane face_plane_projected = UNDEFINED;
+	ProjectionPlane face_plane_projected = UNDEFINED;
 	bool flip_faces = false;
-
-	//if( face_loops.size() > 1 )
-	//{
-	//	int wait = 0;
-	//}
 
 	// figure 1: loops and indexes
 	//  3----------------------------2
@@ -905,12 +890,9 @@ void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_l
 			}
 		}
 
-		
-
 		if( it_face_loops == face_loops.begin() )
 		{
 			normal_first_loop = computePolygonNormal( loop );
-
 
 			// figure out the best 2D plane to project to
 			double nx = abs(normal_first_loop.x);
@@ -1287,304 +1269,6 @@ void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_l
 	}
 }
 
-
-/*
-void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_loops, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
-{
-	bool face_loop_reversed = false;
-	
-	// TODO: apply this triangulation also in ProfileConverter and ExtrudedAreaSolid
-	// project face into 2d plane
-	std::vector<std::vector<carve::geom2d::P2> >	face_loops_projected;
-	std::vector<std::vector<double> >				face_loops_3rd_dim;
-	FaceProjectionPlane face_plane_projected = UNDEFINED;
-
-	for( std::vector<std::vector<carve::geom::vector<3> > >::const_iterator it_face_loops = face_loops.begin(); it_face_loops != face_loops.end(); ++it_face_loops )
-	{
-		const std::vector<carve::geom::vector<3> >& loop = (*it_face_loops);
-
-		if( loop.size() < 3 )
-		{
-			err << "loop.size() < 3" << std::endl;
-			if( it_face_loops == face_loops.begin() )
-			{
-				break;
-			}
-			else
-			{
-				continue;
-			}
-		}
-
-		if( it_face_loops == face_loops.begin() )
-		{
-			carve::geom::vector<3>  normal = computePolygonNormal( loop );
-			double nx = abs(normal.x);
-			double ny = abs(normal.y);
-			double nz = abs(normal.z);
-			if( nz > nx && nz >= ny )
-			{
-				face_plane_projected = XY_PLANE;
-			}
-			else if( nx >= ny && nx >= nz )
-			{
-				face_plane_projected = YZ_PLANE;
-			}
-			else if( ny > nx && ny >= nz )
-			{
-				face_plane_projected = XZ_PLANE;
-			}
-			else
-			{
-				err << "tesselatePathLoops3D: unable to project to plane: nx" << nx << " ny " << ny << " nz " << nz << std::endl;
-				break;
-			}
-		}
-
-		std::vector<carve::geom2d::P2> loop_2d;
-		std::vector<double> loop_3rd_dim;
-
-		// project face into 2d plane
-		for( int i=0; i<loop.size(); ++i )
-		{
-			const carve::geom::vector<3> & point = loop.at(i);
-
-			if( face_plane_projected == XY_PLANE )
-			{
-				loop_2d.push_back( carve::geom::VECTOR(point.x, point.y ));
-				loop_3rd_dim.push_back(point.z);
-			}
-			else if( face_plane_projected == YZ_PLANE )
-			{
-				loop_2d.push_back( carve::geom::VECTOR(point.y, point.z ));
-				loop_3rd_dim.push_back(point.x);
-			}
-			else if( face_plane_projected == XZ_PLANE )
-			{
-				loop_2d.push_back( carve::geom::VECTOR(point.x, point.z ));
-				loop_3rd_dim.push_back(point.y);
-			}
-		}
-				
-		// check winding order
-		bool reverse_loop = false;
-		carve::geom::vector<3>  normal_2d = computePolygon2DNormal( loop_2d );
-		if( it_face_loops == face_loops.begin() )
-		{
-			if( normal_2d.z < 0 )
-			{
-				reverse_loop = true;
-				face_loop_reversed = true;	
-			}
-		}
-		else
-		{
-			if( normal_2d.z > 0 )
-			{
-				reverse_loop = true;
-			}
-		}
-		if( reverse_loop )
-		{
-			std::reverse( loop_2d.begin(), loop_2d.end() );
-			std::reverse( loop_3rd_dim.begin(), loop_3rd_dim.end() );
-		}
-				
-		if( loop_2d.size() < 3 )
-		{
-			err << "tesselatePathLoops3D: loop_2d.size() < 3" << std::endl;
-		}
-			
-		face_loops_projected.push_back(loop_2d);
-		face_loops_3rd_dim.push_back(loop_3rd_dim);
-	}
-
-	// triangulate
-	std::vector<carve::geom2d::P2> merged;
-	std::vector<carve::geom::vector<3> > merged_3d;
-	std::vector<carve::triangulate::tri_idx> triangulated;
-
-	try
-	{
-		std::vector<std::pair<size_t, size_t> > result = carve::triangulate::incorporateHolesIntoPolygon(face_loops_projected);	// first is loop index, second is vertex index in loop
-		merged.reserve(result.size());
-		for( size_t i = 0; i < result.size(); ++i )
-		{
-			int loop_number = result[i].first;
-			int index_in_loop = result[i].second;
-			
-			if( loop_number >= face_loops_projected.size() )
-			{
-				std::cout << "tesselatePathLoops3D: loop_number >= face_loops_projected.size()" << std::endl;
-				continue;
-			}
-			if( loop_number >= face_loops_3rd_dim.size() )
-			{
-				std::cout << "tesselatePathLoops3D: loop_number >= face_loops_3rd_dim.size()" << std::endl;
-				continue;
-			}
-			std::vector<carve::geom2d::P2>& loop_projected = face_loops_projected[loop_number];
-			std::vector<double>& loop_3rd_dim = face_loops_3rd_dim[loop_number];
-			
-			carve::geom2d::P2& point_projected = loop_projected[index_in_loop];
-			merged.push_back( point_projected );
-
-			// restore 3rd dimension
-			carve::geom::vector<3>  v;
-			if( face_plane_projected == XY_PLANE )
-			{
-				double z = loop_3rd_dim[index_in_loop];
-				v = carve::geom::VECTOR(	point_projected.x,	point_projected.y,	z);
-			}
-			else if( face_plane_projected == YZ_PLANE )
-			{
-				double x = loop_3rd_dim[index_in_loop];
-				v = carve::geom::VECTOR(	x,	point_projected.x,	point_projected.y);
-			}
-			else if( face_plane_projected == XZ_PLANE )
-			{
-				double y = loop_3rd_dim[index_in_loop];
-				v = carve::geom::VECTOR(	point_projected.x,	y,	point_projected.y);
-			}
-			merged_3d.push_back( v );
-		}
-		carve::triangulate::triangulate(merged, triangulated);
-		carve::triangulate::improve(merged, triangulated);
-
-	}
-	catch(...)
-	{
-		err << "carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
-
-		std::vector<std::vector<carve::geom2d::P2> >::iterator it_face_looops_2d;
-		for( it_face_looops_2d = face_loops_projected.begin(); it_face_looops_2d!=face_loops_projected.end(); ++it_face_looops_2d )
-		{
-			std::vector<carve::geom2d::P2>& single_loop_2d = *it_face_looops_2d;
-			std::vector<carve::geom2d::P2>::iterator it_face_loop;
-			err << "loop:\n";
-			for( it_face_loop = single_loop_2d.begin(); it_face_loop!=single_loop_2d.end(); ++it_face_loop )
-			{
-				carve::geom2d::P2& loop_point = *it_face_loop;
-				err << "	bound vertex (" << loop_point.x << "," << loop_point.y << ")\n";
-			}
-		}
-		std::cout << err.str().c_str();
-		return;
-	}
-
-
-	std::vector<carve::geom::vector<3> >& existing_points = poly_data->points;
-	std::map<carve::geom::vector<3> , size_t> vert_idx;
-	std::map<carve::geom::vector<3> , size_t>::iterator vert_it;
-	std::map<carve::geom::vector<3> , size_t>::iterator vert_it_found;
-	std::map<int,int> map_merged_idx;
-
-	// insert existing points into mesh and vertex, avoiding points with same coordinates
-	for( size_t i = 0; i != existing_points.size(); ++i )
-	{
-		carve::geom::vector<3>  v = existing_points[i];
-		
-		for( vert_it = vert_idx.begin(); vert_it != vert_idx.end(); ++vert_it )
-		{
-			const carve::geom::vector<3>& existing_point = (*vert_it).first;
-			if( abs(v.x - existing_point.x) < 0.00001 )
-			{
-				if( abs(v.y - existing_point.y) < 0.00001 )
-				{
-					if( abs(v.z - existing_point.z) < 0.00001 )
-					{
-						break;
-					}
-				}
-			}
-		}
-
-		if( vert_it == vert_idx.end() )
-		{
-			poly_data->addVertex(v);
-			int vertex_id = poly_data->getVertexCount()-1;
-			vert_idx[v] = vertex_id;
-			map_merged_idx[i] = vertex_id;
-		}
-		else
-		{
-			// vertex already exists in polygon. remember its index for triangles
-			map_merged_idx[i]=(*vert_it).second;
-		}
-	}
-
-	for( size_t i = 0; i != merged.size(); ++i )
-	{
-		carve::geom::vector<3>  v = merged_3d[i];
-		
-		for( vert_it = vert_idx.begin(); vert_it != vert_idx.end(); ++vert_it )
-		{
-			const carve::geom::vector<3>& existing_point = (*vert_it).first;
-			if( abs(v.x - existing_point.x) < 0.00001 )
-			{
-				if( abs(v.y - existing_point.y) < 0.00001 )
-				{
-					if( abs(v.z - existing_point.z) < 0.00001 )
-					{
-						break;
-					}
-				}
-			}
-		}
-
-		if( vert_it == vert_idx.end() )
-		{
-			poly_data->addVertex(v);
-			int vertex_id = poly_data->getVertexCount()-1;
-			vert_idx[v] = vertex_id;
-			map_merged_idx[i] = vertex_id;
-		}
-		else
-		{
-			// vertex already exists in polygon. remember its index for triangles
-			map_merged_idx[i]=(*vert_it).second;
-		}
-	}
-
-	for( size_t i = 0; i != triangulated.size(); ++i )
-	{
-		carve::triangulate::tri_idx triangle = triangulated[i];
-		int a = triangle.a;
-		int b = triangle.b;
-		int c = triangle.c;
-
-		int vertex_id_a = map_merged_idx[a];
-		int vertex_id_b = map_merged_idx[b];
-		int vertex_id_c = map_merged_idx[c];
-
-#ifdef _DEBUG
-		const carve::poly::Vertex<3>& v_a = poly_data->getVertex(vertex_id_a);
-		const carve::poly::Vertex<3>& v_b = poly_data->getVertex(vertex_id_b);
-		const carve::poly::Vertex<3>& v_c = poly_data->getVertex(vertex_id_c);
-
-		carve::geom::vector<3> pa( carve::geom::VECTOR( v_a.v[0],	v_a.v[1],	v_a.v[2] ) );
-		carve::geom::vector<3> pb( carve::geom::VECTOR( v_b.v[0],	v_b.v[1],	v_b.v[2] ) );
-		carve::geom::vector<3> pc( carve::geom::VECTOR( v_c.v[0],	v_c.v[1],	v_c.v[2] ) );
-
-		double A = 0.5*( cross( pa-pb, pa-pc ).length() );
-		if( abs(A) < 0.000000001 )
-		{
-			std::cout << "area < 0.000000001\n" << std::endl;
-		}
-#endif
-
-		if( face_loop_reversed )
-		{
-			poly_data->addFace( vertex_id_a, vertex_id_c, vertex_id_b );
-		}
-		else
-		{
-			poly_data->addFace( vertex_id_a, vertex_id_b, vertex_id_c );
-		}
-	}
-}
-*/
-
 void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& inv ) 
 {
 	int i, j;	// col, row
@@ -1689,7 +1373,7 @@ void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& i
 
 	if( err_flag )
 	{
-		throw IfcPPException("cannot compute inverse of matrix");
+		throw IfcPPException("cannot compute inverse of matrix", __func__);
 	}
 	
 	inv._11 = a[0][4];
@@ -1719,7 +1403,7 @@ void closestPointOnLine( carve::geom::vector<3>& closest, const carve::geom::vec
 	double numer = line_direction.x*line_direction.x + line_direction.y*line_direction.y + line_direction.z*line_direction.z;
 	if(numer == 0)
 	{
-		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!");
+		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!", __func__);
 	}
 	double lambda = denom/numer;
 	closest = carve::geom::VECTOR(line_origin.x+lambda*line_direction.x, line_origin.y+lambda*line_direction.y, line_origin.z+lambda*line_direction.z);
@@ -1732,7 +1416,7 @@ void closestPointOnLine( osg::Vec3d& closest, const osg::Vec3d& point, const osg
 	double numer = line_direction.x()*line_direction.x() + line_direction.y()*line_direction.y() + line_direction.z()*line_direction.z();
 	if(numer == 0)
 	{
-		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!");
+		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!", __func__);
 	}
 	double lambda = denom/numer;
 	closest.set(line_origin.x()+lambda*line_direction.x(), line_origin.y()+lambda*line_direction.y(), line_origin.z()+lambda*line_direction.z());
@@ -1746,7 +1430,7 @@ bool isPointOnLineSegment( double& target_lambda, const osg::Vec3d& point, const
 	const double numer = line_direction.x()*line_direction.x() + line_direction.y()*line_direction.y() + line_direction.z()*line_direction.z();
 	if(numer == 0)
 	{
-		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!");
+		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!", __func__);
 	}
 	const double lambda = denom/numer;
 	osg::Vec3d closest( line_origin.x()+lambda*line_direction.x(), line_origin.y()+lambda*line_direction.y(), line_origin.z()+lambda*line_direction.z() );

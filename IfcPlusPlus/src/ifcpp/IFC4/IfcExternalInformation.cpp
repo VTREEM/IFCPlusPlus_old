@@ -36,7 +36,7 @@ void IfcExternalInformation::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcExternalInformation::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcExternalInformation::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcExternalInformation::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcExternalInformation::setInverseCounterparts( shared_ptr<IfcPPEntity> )

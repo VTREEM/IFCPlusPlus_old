@@ -46,7 +46,7 @@ public:
 	~IfcCommunicationsApplianceTypeEnum();
 	virtual const char* classname() const { return "IfcCommunicationsApplianceTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcCommunicationsApplianceTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcCommunicationsApplianceTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcCommunicationsApplianceTypeEnumEnum m_enum;
 };
 

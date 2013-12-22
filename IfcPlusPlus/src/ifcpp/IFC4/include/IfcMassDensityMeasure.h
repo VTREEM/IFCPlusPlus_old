@@ -29,7 +29,7 @@ public:
 	~IfcMassDensityMeasure();
 	virtual const char* classname() const { return "IfcMassDensityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcMassDensityMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcMassDensityMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

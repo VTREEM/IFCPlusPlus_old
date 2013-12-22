@@ -29,7 +29,7 @@ public:
 	~IfcHeatingValueMeasure();
 	virtual const char* classname() const { return "IfcHeatingValueMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcHeatingValueMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcHeatingValueMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

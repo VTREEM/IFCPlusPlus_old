@@ -29,7 +29,7 @@ public:
 	~IfcLabel();
 	virtual const char* classname() const { return "IfcLabel"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcLabel> readStepData( std::string& arg );
+	static shared_ptr<IfcLabel> createObjectFromStepData( const std::string& arg );
 	std::string m_value;
 };
 

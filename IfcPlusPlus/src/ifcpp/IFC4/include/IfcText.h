@@ -29,7 +29,7 @@ public:
 	~IfcText();
 	virtual const char* classname() const { return "IfcText"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcText> readStepData( std::string& arg );
+	static shared_ptr<IfcText> createObjectFromStepData( const std::string& arg );
 	std::string m_value;
 };
 
