@@ -166,12 +166,6 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 	infile.close();
 
 	m_ifc_model->clearIfcModel();
-
-	//size_t pos_data = buffer.find( "DATA;" );  // TODO: handle if this is in a string of the header
-	//std::string buffer_header( buffer.substr( 0, pos_data ) );
-	//std::string buffer_data( buffer.substr( pos_data, std::string::npos ) );
-	//buffer = "";
-
 	m_step_reader->setModel( m_ifc_model );
 	m_step_reader->readStreamHeader( buffer );
 	std::string file_schema_version = m_ifc_model->getFileSchema();

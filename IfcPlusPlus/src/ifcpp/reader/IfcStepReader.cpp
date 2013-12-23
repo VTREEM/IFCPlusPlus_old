@@ -23,12 +23,6 @@
 #include <omp.h>
 #endif
 
-#ifdef _WIN32
-#include <unordered_map>
-#else
-#include <tr1/unordered_map>
-#endif
-
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPObject.h"
 #include "ifcpp/model/IfcPPException.h"
@@ -38,8 +32,8 @@
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/reader/IfcStepReader.h"
 
-static std::unordered_map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
-static std::unordered_map<std::string,IfcPPTypeEnum> map_string2type_enum(initializers_IfcPP_type, initializers_IfcPP_type + sizeof(initializers_IfcPP_type)/sizeof(initializers_IfcPP_type[0]));
+static std::map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
+static std::map<std::string,IfcPPTypeEnum> map_string2type_enum(initializers_IfcPP_type, initializers_IfcPP_type + sizeof(initializers_IfcPP_type)/sizeof(initializers_IfcPP_type[0]));
 
 void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
@@ -49,7 +43,7 @@ inline void findEndOfString( char*& stream_pos );
 
 IfcPPTypeEnum findTypeEnumForString( const std::string& type_name )
 {
-	std::unordered_map<std::string,IfcPPTypeEnum>::iterator it_type_enum = map_string2type_enum.find( type_name );
+	std::map<std::string,IfcPPTypeEnum>::iterator it_type_enum = map_string2type_enum.find( type_name );
 	if( it_type_enum != map_string2type_enum.end() )
 	{
 		IfcPPTypeEnum type_enum = it_type_enum->second;
@@ -61,7 +55,7 @@ IfcPPTypeEnum findTypeEnumForString( const std::string& type_name )
 
 IfcPPEntityEnum findEntityEnumForString( const std::string& entity_name )
 {
-	std::unordered_map<std::string,IfcPPEntityEnum>::iterator it_enum = map_string2entity_enum.find( entity_name );
+	std::map<std::string,IfcPPEntityEnum>::iterator it_enum = map_string2entity_enum.find( entity_name );
 	if( it_enum != map_string2entity_enum.end() )
 	{
 		IfcPPEntityEnum entity_enum = it_enum->second;
@@ -143,7 +137,7 @@ void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entit
 
 	if( keyword.size() > 0 )
 	{
-		std::unordered_map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
+		std::map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
 		if( it_entity_enum == map_string2entity_enum.end() )
 		{
 			throw UnknownEntityException( keyword );
