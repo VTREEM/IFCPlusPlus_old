@@ -124,7 +124,6 @@ set(CARVE_HEADER_FILES
 )
 
 set(CARVE_SOURCE_FILES 
-  src/common/geometry.cpp 
 
   src/lib/aabb.cpp
   src/lib/carve.cpp
