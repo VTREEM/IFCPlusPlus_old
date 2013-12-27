@@ -612,9 +612,9 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 			carve::geom::vector<2> & first = loop_2d.front();
 			carve::geom::vector<2> & last = loop_2d.back();
 
-			if( abs(first.x-last.x) < 0.00001 )
+			if( std::abs(first.x-last.x) < 0.00001 )
 			{
-				if( abs(first.y-last.y) < 0.00001 )
+				if( std::abs(first.y-last.y) < 0.00001 )
 				{
 					loop_2d.pop_back();
 					continue;
@@ -829,7 +829,7 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 		carve::geom::vector<3> pc( carve::geom::VECTOR( v_c.v[0],	v_c.v[1],	v_c.v[2] ) );
 
 		double A = 0.5*(cross( pa-pb, pa-pc ).length());
-		if( abs(A) < 0.000000001 )
+		if( std::abs(A) < 0.000000001 )
 		{
 			std::cout << "area < 0.000000001\n" << std::endl;
 		}
@@ -913,9 +913,9 @@ void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_l
 
 
 			// figure out the best 2D plane to project to
-			double nx = abs(normal_first_loop.x);
-			double ny = abs(normal_first_loop.y);
-			double nz = abs(normal_first_loop.z);
+			double nx = std::abs(normal_first_loop.x);
+			double ny = std::abs(normal_first_loop.y);
+			double nz = std::abs(normal_first_loop.z);
 			if( nz > nx && nz >= ny )
 			{
 				face_plane_projected = XY_PLANE;
@@ -995,11 +995,11 @@ void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_l
 			carve::geom::vector<2> & first = loop_2d.front();
 			carve::geom::vector<2> & last = loop_2d.back();
 
-			if( abs(first.x-last.x) < 0.00001 )
+			if( std::abs(first.x-last.x) < 0.00001 )
 			{
-				if( abs(first.y-last.y) < 0.00001 )
+				if( std::abs(first.y-last.y) < 0.00001 )
 				{
-					if( abs(loop_3rd_dim.front() - loop_3rd_dim.back() ) < 0.00001 )
+					if( std::abs(loop_3rd_dim.front() - loop_3rd_dim.back() ) < 0.00001 )
 					{
 						loop_2d.pop_back();
 						loop_3rd_dim.pop_back();
@@ -1130,11 +1130,11 @@ void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_l
 		for( vert_it = vert_idx.begin(); vert_it != vert_idx.end(); ++vert_it )
 		{
 			const carve::geom::vector<3>& existing_point = (*vert_it).first;
-			if( abs(v.x - existing_point.x) < 0.00001 )
+			if( std::abs(v.x - existing_point.x) < 0.00001 )
 			{
-				if( abs(v.y - existing_point.y) < 0.00001 )
+				if( std::abs(v.y - existing_point.y) < 0.00001 )
 				{
-					if( abs(v.z - existing_point.z) < 0.00001 )
+					if( std::abs(v.z - existing_point.z) < 0.00001 )
 					{
 						break;
 					}
@@ -1266,7 +1266,7 @@ void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_l
 		carve::geom::vector<3> pc( carve::geom::VECTOR( v_c.v[0],	v_c.v[1],	v_c.v[2] ) );
 
 		double A = 0.5*(cross( pa-pb, pa-pc ).length());
-		if( abs(A) < 0.000000001 )
+		if( std::abs(A) < 0.000000001 )
 		{
 			std::cout << "area < 0.000000001\n" << std::endl;
 		}
@@ -1319,9 +1319,9 @@ void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> 
 		if( it_face_loops == face_loops.begin() )
 		{
 			carve::geom::vector<3>  normal = computePolygonNormal( loop );
-			double nx = abs(normal.x);
-			double ny = abs(normal.y);
-			double nz = abs(normal.z);
+			double nx = std::abs(normal.x);
+			double ny = std::abs(normal.y);
+			double nz = std::abs(normal.z);
 			if( nz > nx && nz >= ny )
 			{
 				face_plane_projected = XY_PLANE;
@@ -1487,11 +1487,11 @@ void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> 
 		for( vert_it = vert_idx.begin(); vert_it != vert_idx.end(); ++vert_it )
 		{
 			const carve::geom::vector<3>& existing_point = (*vert_it).first;
-			if( abs(v.x - existing_point.x) < 0.00001 )
+			if( std::abs(v.x - existing_point.x) < 0.00001 )
 			{
-				if( abs(v.y - existing_point.y) < 0.00001 )
+				if( std::abs(v.y - existing_point.y) < 0.00001 )
 				{
-					if( abs(v.z - existing_point.z) < 0.00001 )
+					if( std::abs(v.z - existing_point.z) < 0.00001 )
 					{
 						break;
 					}
@@ -1520,11 +1520,11 @@ void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> 
 		for( vert_it = vert_idx.begin(); vert_it != vert_idx.end(); ++vert_it )
 		{
 			const carve::geom::vector<3>& existing_point = (*vert_it).first;
-			if( abs(v.x - existing_point.x) < 0.00001 )
+			if( std::abs(v.x - existing_point.x) < 0.00001 )
 			{
-				if( abs(v.y - existing_point.y) < 0.00001 )
+				if( std::abs(v.y - existing_point.y) < 0.00001 )
 				{
-					if( abs(v.z - existing_point.z) < 0.00001 )
+					if( std::abs(v.z - existing_point.z) < 0.00001 )
 					{
 						break;
 					}
@@ -1567,7 +1567,7 @@ void tesselatePathLoops3D( const std::vector<std::vector<carve::geom::vector<3> 
 		carve::geom::vector<3> pc( carve::geom::VECTOR( v_c.v[0],	v_c.v[1],	v_c.v[2] ) );
 
 		double A = 0.5*( cross( pa-pb, pa-pc ).length() );
-		if( abs(A) < 0.000000001 )
+		if( std::abs(A) < 0.000000001 )
 		{
 			std::cout << "area < 0.000000001\n" << std::endl;
 		}
@@ -1868,9 +1868,9 @@ void appendPointsToCurve( const std::vector<carve::geom::vector<2> >& points_vec
 	{
 		const carve::geom::vector<3>& last_point = target_vec.back();
 		const carve::geom::vector<2>& first_point_current_segment = points_vec.front();
-		if( abs(last_point.x - first_point_current_segment.x) < 0.000001 )
+		if( std::abs(last_point.x - first_point_current_segment.x) < 0.000001 )
 		{
-			if( abs(last_point.y - first_point_current_segment.y) < 0.000001 )
+			if( std::abs(last_point.y - first_point_current_segment.y) < 0.000001 )
 			{
 				omit_first = true;
 			}
@@ -2042,7 +2042,7 @@ bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector
 			v32.normalize();
 
 			double dot_product = dot( v32, v21 );
-			double dot_product_abs = abs( dot_product );
+			double dot_product_abs = std::abs( dot_product );
 
 			if( dot_product_abs > (1.0+GEOM_TOLERANCE) || dot_product_abs < (1.0-GEOM_TOLERANCE) )
 			{

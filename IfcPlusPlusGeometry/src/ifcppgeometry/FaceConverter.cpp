@@ -369,9 +369,9 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			carve::geom3d::Vector normal = computePolygonNormal( loop_points );
 			if( it_bounds == vec_bounds.begin() )
 			{
-				double nx = abs(normal.x);
-				double ny = abs(normal.y);
-				double nz = abs(normal.z);
+				double nx = std::abs(normal.x);
+				double ny = std::abs(normal.y);
+				double nz = std::abs(normal.z);
 				if( nz > nx && nz >= ny )
 				{
 					face_plane = XY_PLANE;
@@ -578,15 +578,15 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			const carve::poly::Vertex<3>& v_b = poly_data->getVertex(vertex_id_b);
 
 			double dx = v_a.v[0] - v_b.v[0];
-			if( abs(dx) < 0.0000001 )
+			if( std::abs(dx) < 0.0000001 )
 			{
 				double dy = v_a.v[1] - v_b.v[1];
-				if( abs(dy) < 0.0000001 )
+				if( std::abs(dy) < 0.0000001 )
 				{
 					double dz = v_a.v[2] - v_b.v[2];
-					if( abs(dz) < 0.0000001 )
+					if( std::abs(dz) < 0.0000001 )
 					{
-						std::cerr << "abs(dx) < 0.00001 && abs(dy) < 0.00001 && abs(dz) < 0.00001\n";
+						std::cerr << "std::abs(dx) < 0.00001 && std::abs(dy) < 0.00001 && std::abs(dz) < 0.00001\n";
 					}
 				}
 			}
