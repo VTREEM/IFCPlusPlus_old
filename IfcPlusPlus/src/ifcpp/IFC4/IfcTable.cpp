@@ -47,14 +47,14 @@ void IfcTable::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTable::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTable::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTable::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTable, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcTable, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	readEntityReferenceList( args[1], m_Rows, map );
 	readEntityReferenceList( args[2], m_Columns, map );
 }

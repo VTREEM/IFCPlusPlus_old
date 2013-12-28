@@ -70,23 +70,23 @@ void IfcPostalAddress::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcPostalAddress::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPostalAddress::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPostalAddress::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<10 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcPostalAddress, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>10 ){ std::cout << "Wrong parameter count for entity IfcPostalAddress, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Purpose = IfcAddressTypeEnum::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_UserDefinedPurpose = IfcLabel::readStepData( args[2] );
-	m_InternalLocation = IfcLabel::readStepData( args[3] );
+	m_Purpose = IfcAddressTypeEnum::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_UserDefinedPurpose = IfcLabel::createObjectFromStepData( args[2] );
+	m_InternalLocation = IfcLabel::createObjectFromStepData( args[3] );
 	readTypeList( args[4], m_AddressLines );
-	m_PostalBox = IfcLabel::readStepData( args[5] );
-	m_Town = IfcLabel::readStepData( args[6] );
-	m_Region = IfcLabel::readStepData( args[7] );
-	m_PostalCode = IfcLabel::readStepData( args[8] );
-	m_Country = IfcLabel::readStepData( args[9] );
+	m_PostalBox = IfcLabel::createObjectFromStepData( args[5] );
+	m_Town = IfcLabel::createObjectFromStepData( args[6] );
+	m_Region = IfcLabel::createObjectFromStepData( args[7] );
+	m_PostalCode = IfcLabel::createObjectFromStepData( args[8] );
+	m_Country = IfcLabel::createObjectFromStepData( args[9] );
 }
 void IfcPostalAddress::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

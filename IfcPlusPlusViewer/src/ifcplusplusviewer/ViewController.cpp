@@ -21,7 +21,7 @@
 #include <osg/LightSource>
 #include <osg/LightModel>
 
-#include "ifcppgeometry/Utility.h"
+#include "ifcppgeometry/GeomUtils.h"
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 

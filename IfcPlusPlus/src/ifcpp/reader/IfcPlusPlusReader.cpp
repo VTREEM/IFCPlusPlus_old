@@ -18,8 +18,12 @@ IfcPlusPlusReader::IfcPlusPlusReader()
 	unsetProgressCallBack();
 	unsetMessageCallBack();
 	unsetErrorCallBack();
-	m_ifc_version = IfcPPModel::UNDEFINED;
 }
 IfcPlusPlusReader::~IfcPlusPlusReader()
 {
+}
+
+void IfcPlusPlusReader::setModel( shared_ptr<IfcPPModel> model )
+{
+	m_model = model;
 }

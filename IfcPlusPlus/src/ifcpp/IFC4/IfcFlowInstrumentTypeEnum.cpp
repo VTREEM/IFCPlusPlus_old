@@ -68,7 +68,7 @@ void IfcFlowInstrumentTypeEnum::getStepParameter( std::stringstream& stream, boo
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcFlowInstrumentTypeEnum> IfcFlowInstrumentTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcFlowInstrumentTypeEnum> IfcFlowInstrumentTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFlowInstrumentTypeEnum>(); }

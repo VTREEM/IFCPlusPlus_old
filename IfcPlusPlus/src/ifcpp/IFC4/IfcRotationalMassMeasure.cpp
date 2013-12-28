@@ -32,7 +32,7 @@ void IfcRotationalMassMeasure::getStepParameter( std::stringstream& stream, bool
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcRotationalMassMeasure> IfcRotationalMassMeasure::readStepData( std::string& arg )
+shared_ptr<IfcRotationalMassMeasure> IfcRotationalMassMeasure::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRotationalMassMeasure>(); }

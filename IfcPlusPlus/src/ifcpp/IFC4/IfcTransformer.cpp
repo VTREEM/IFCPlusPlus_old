@@ -90,22 +90,22 @@ void IfcTransformer::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTransformer::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTransformer::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTransformer::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<9 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTransformer, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>9 ){ std::cout << "Wrong parameter count for entity IfcTransformer, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_ObjectType = IfcLabel::readStepData( args[4] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
-	m_Tag = IfcIdentifier::readStepData( args[7] );
-	m_PredefinedType = IfcTransformerTypeEnum::readStepData( args[8] );
+	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
+	m_PredefinedType = IfcTransformerTypeEnum::createObjectFromStepData( args[8] );
 }
 void IfcTransformer::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

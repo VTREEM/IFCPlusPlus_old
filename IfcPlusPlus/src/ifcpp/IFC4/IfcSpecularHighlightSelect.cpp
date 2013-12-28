@@ -21,7 +21,7 @@
 // TYPE IfcSpecularHighlightSelect 
 IfcSpecularHighlightSelect::IfcSpecularHighlightSelect() {}
 IfcSpecularHighlightSelect::~IfcSpecularHighlightSelect() {}
-shared_ptr<IfcSpecularHighlightSelect> IfcSpecularHighlightSelect::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcSpecularHighlightSelect> IfcSpecularHighlightSelect::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcSpecularHighlightSelect>(); }
@@ -55,13 +55,16 @@ shared_ptr<IfcSpecularHighlightSelect> IfcSpecularHighlightSelect::readStepData(
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		if( keyword.compare("IFCSPECULAREXPONENT")== 0 )
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
 		{
-			return IfcSpecularExponent::readStepData( inline_arg );
-		}
-		else if( keyword.compare("IFCSPECULARROUGHNESS")== 0 )
-		{
-			return IfcSpecularRoughness::readStepData( inline_arg );
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcSpecularHighlightSelect> result_ptr_self = dynamic_pointer_cast<IfcSpecularHighlightSelect>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
 		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSpecularHighlightSelect::readStepData" << std::endl;

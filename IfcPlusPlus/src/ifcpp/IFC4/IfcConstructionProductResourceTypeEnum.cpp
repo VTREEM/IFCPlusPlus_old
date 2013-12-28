@@ -44,7 +44,7 @@ void IfcConstructionProductResourceTypeEnum::getStepParameter( std::stringstream
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcConstructionProductResourceTypeEnum> IfcConstructionProductResourceTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcConstructionProductResourceTypeEnum> IfcConstructionProductResourceTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcConstructionProductResourceTypeEnum>(); }

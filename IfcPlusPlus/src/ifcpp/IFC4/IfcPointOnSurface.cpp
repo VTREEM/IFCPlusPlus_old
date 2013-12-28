@@ -48,7 +48,7 @@ void IfcPointOnSurface::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcPointOnSurface::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPointOnSurface::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPointOnSurface::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcPointOnSurface, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -56,8 +56,8 @@ void IfcPointOnSurface::readStepData( std::vector<std::string>& args, const std:
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcPointOnSurface, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_BasisSurface, map );
-	m_PointParameterU = IfcParameterValue::readStepData( args[1] );
-	m_PointParameterV = IfcParameterValue::readStepData( args[2] );
+	m_PointParameterU = IfcParameterValue::createObjectFromStepData( args[1] );
+	m_PointParameterV = IfcParameterValue::createObjectFromStepData( args[2] );
 }
 void IfcPointOnSurface::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

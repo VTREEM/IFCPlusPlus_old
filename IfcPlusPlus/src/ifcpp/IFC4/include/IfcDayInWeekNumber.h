@@ -28,7 +28,7 @@ public:
 	~IfcDayInWeekNumber();
 	virtual const char* classname() const { return "IfcDayInWeekNumber"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcDayInWeekNumber> readStepData( std::string& arg );
+	static shared_ptr<IfcDayInWeekNumber> createObjectFromStepData( const std::string& arg );
 	int m_value;
 };
 

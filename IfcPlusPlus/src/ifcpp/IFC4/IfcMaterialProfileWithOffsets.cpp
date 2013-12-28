@@ -66,19 +66,19 @@ void IfcMaterialProfileWithOffsets::getStepLine( std::stringstream& stream ) con
 	stream << ");";
 }
 void IfcMaterialProfileWithOffsets::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcMaterialProfileWithOffsets::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcMaterialProfileWithOffsets::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<7 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcMaterialProfileWithOffsets, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>7 ){ std::cout << "Wrong parameter count for entity IfcMaterialProfileWithOffsets, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_Material, map );
 	readEntityReference( args[3], m_Profile, map );
-	m_Priority = IfcNormalisedRatioMeasure::readStepData( args[4] );
-	m_Category = IfcLabel::readStepData( args[5] );
+	m_Priority = IfcNormalisedRatioMeasure::createObjectFromStepData( args[4] );
+	m_Category = IfcLabel::createObjectFromStepData( args[5] );
 	readTypeOfRealList( args[6], m_OffsetValues );
 }
 void IfcMaterialProfileWithOffsets::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

@@ -63,21 +63,21 @@ void IfcBoundaryNodeConditionWarping::getStepLine( std::stringstream& stream ) c
 	stream << ");";
 }
 void IfcBoundaryNodeConditionWarping::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcBoundaryNodeConditionWarping::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcBoundaryNodeConditionWarping::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcBoundaryNodeConditionWarping, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>8 ){ std::cout << "Wrong parameter count for entity IfcBoundaryNodeConditionWarping, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_TranslationalStiffnessX = IfcTranslationalStiffnessSelect::readStepData( args[1], map );
-	m_TranslationalStiffnessY = IfcTranslationalStiffnessSelect::readStepData( args[2], map );
-	m_TranslationalStiffnessZ = IfcTranslationalStiffnessSelect::readStepData( args[3], map );
-	m_RotationalStiffnessX = IfcRotationalStiffnessSelect::readStepData( args[4], map );
-	m_RotationalStiffnessY = IfcRotationalStiffnessSelect::readStepData( args[5], map );
-	m_RotationalStiffnessZ = IfcRotationalStiffnessSelect::readStepData( args[6], map );
-	m_WarpingStiffness = IfcWarpingStiffnessSelect::readStepData( args[7], map );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_TranslationalStiffnessX = IfcTranslationalStiffnessSelect::createObjectFromStepData( args[1], map );
+	m_TranslationalStiffnessY = IfcTranslationalStiffnessSelect::createObjectFromStepData( args[2], map );
+	m_TranslationalStiffnessZ = IfcTranslationalStiffnessSelect::createObjectFromStepData( args[3], map );
+	m_RotationalStiffnessX = IfcRotationalStiffnessSelect::createObjectFromStepData( args[4], map );
+	m_RotationalStiffnessY = IfcRotationalStiffnessSelect::createObjectFromStepData( args[5], map );
+	m_RotationalStiffnessZ = IfcRotationalStiffnessSelect::createObjectFromStepData( args[6], map );
+	m_WarpingStiffness = IfcWarpingStiffnessSelect::createObjectFromStepData( args[7], map );
 }
 void IfcBoundaryNodeConditionWarping::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

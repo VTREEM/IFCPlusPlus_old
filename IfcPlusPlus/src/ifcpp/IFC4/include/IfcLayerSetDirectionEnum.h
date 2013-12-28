@@ -35,7 +35,7 @@ public:
 	~IfcLayerSetDirectionEnum();
 	virtual const char* classname() const { return "IfcLayerSetDirectionEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcLayerSetDirectionEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcLayerSetDirectionEnum> createObjectFromStepData( const std::string& arg );
 	IfcLayerSetDirectionEnumEnum m_enum;
 };
 

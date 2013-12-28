@@ -37,7 +37,7 @@ public:
 	~IfcWorkScheduleTypeEnum();
 	virtual const char* classname() const { return "IfcWorkScheduleTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcWorkScheduleTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcWorkScheduleTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcWorkScheduleTypeEnumEnum m_enum;
 };
 

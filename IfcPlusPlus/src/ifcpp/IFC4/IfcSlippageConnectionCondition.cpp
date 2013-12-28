@@ -49,17 +49,17 @@ void IfcSlippageConnectionCondition::getStepLine( std::stringstream& stream ) co
 	stream << ");";
 }
 void IfcSlippageConnectionCondition::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcSlippageConnectionCondition::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcSlippageConnectionCondition::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcSlippageConnectionCondition, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcSlippageConnectionCondition, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_SlippageX = IfcLengthMeasure::readStepData( args[1] );
-	m_SlippageY = IfcLengthMeasure::readStepData( args[2] );
-	m_SlippageZ = IfcLengthMeasure::readStepData( args[3] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_SlippageX = IfcLengthMeasure::createObjectFromStepData( args[1] );
+	m_SlippageY = IfcLengthMeasure::createObjectFromStepData( args[2] );
+	m_SlippageZ = IfcLengthMeasure::createObjectFromStepData( args[3] );
 }
 void IfcSlippageConnectionCondition::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -29,24 +29,13 @@ namespace carve
 	namespace poly		{	class Polyhedron;	}
 }
 
-enum FaceProjectionPlane
+enum ProjectionPlane
 {
 	UNDEFINED,
 	XY_PLANE,
 	YZ_PLANE,
 	XZ_PLANE
 };
-
-//struct VertexContainer
-//{
-//	double y; double z; int index;
-//	VertexContainer( double _y, double _z, int _index )
-//	{
-//		y = _y;
-//		z = _z;
-//		index = _index;
-//	}
-//};
 
 osg::ref_ptr<osg::Geode> createCoordinateAxes();
 osg::ref_ptr<osg::Group> createCoordinateAxesArrows();

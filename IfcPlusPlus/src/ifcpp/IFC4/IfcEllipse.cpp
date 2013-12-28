@@ -48,16 +48,16 @@ void IfcEllipse::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcEllipse::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcEllipse::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcEllipse::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcEllipse, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcEllipse, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Position = IfcAxis2Placement::readStepData( args[0], map );
-	m_SemiAxis1 = IfcPositiveLengthMeasure::readStepData( args[1] );
-	m_SemiAxis2 = IfcPositiveLengthMeasure::readStepData( args[2] );
+	m_Position = IfcAxis2Placement::createObjectFromStepData( args[0], map );
+	m_SemiAxis1 = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
+	m_SemiAxis2 = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
 }
 void IfcEllipse::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

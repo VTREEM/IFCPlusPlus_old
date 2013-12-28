@@ -34,7 +34,7 @@
 #include "ifcpp/reader/IfcPlusPlusReader.h"
 #include "ifcpp/writer/IfcStepWriter.h"
 #include "ifcpp/model/IfcPPModel.h"
-#include "ifcppgeometry/Utility.h"
+#include "ifcppgeometry/GeomUtils.h"
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 #include "viewer/ViewerWidget.h"

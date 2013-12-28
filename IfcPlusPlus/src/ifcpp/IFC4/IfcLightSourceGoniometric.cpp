@@ -75,23 +75,23 @@ void IfcLightSourceGoniometric::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcLightSourceGoniometric::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcLightSourceGoniometric::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcLightSourceGoniometric::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<10 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcLightSourceGoniometric, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>10 ){ std::cout << "Wrong parameter count for entity IfcLightSourceGoniometric, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_LightColour, map );
-	m_AmbientIntensity = IfcNormalisedRatioMeasure::readStepData( args[2] );
-	m_Intensity = IfcNormalisedRatioMeasure::readStepData( args[3] );
+	m_AmbientIntensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[2] );
+	m_Intensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_Position, map );
 	readEntityReference( args[5], m_ColourAppearance, map );
-	m_ColourTemperature = IfcThermodynamicTemperatureMeasure::readStepData( args[6] );
-	m_LuminousFlux = IfcLuminousFluxMeasure::readStepData( args[7] );
-	m_LightEmissionSource = IfcLightEmissionSourceEnum::readStepData( args[8] );
-	m_LightDistributionDataSource = IfcLightDistributionDataSourceSelect::readStepData( args[9], map );
+	m_ColourTemperature = IfcThermodynamicTemperatureMeasure::createObjectFromStepData( args[6] );
+	m_LuminousFlux = IfcLuminousFluxMeasure::createObjectFromStepData( args[7] );
+	m_LightEmissionSource = IfcLightEmissionSourceEnum::createObjectFromStepData( args[8] );
+	m_LightDistributionDataSource = IfcLightDistributionDataSourceSelect::createObjectFromStepData( args[9], map );
 }
 void IfcLightSourceGoniometric::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

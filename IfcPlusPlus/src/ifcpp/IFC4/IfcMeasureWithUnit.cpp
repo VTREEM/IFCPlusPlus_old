@@ -43,15 +43,15 @@ void IfcMeasureWithUnit::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcMeasureWithUnit::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcMeasureWithUnit::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcMeasureWithUnit::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcMeasureWithUnit, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcMeasureWithUnit, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ValueComponent = IfcValue::readStepData( args[0], map );
-	m_UnitComponent = IfcUnit::readStepData( args[1], map );
+	m_ValueComponent = IfcValue::createObjectFromStepData( args[0], map );
+	m_UnitComponent = IfcUnit::createObjectFromStepData( args[1], map );
 }
 void IfcMeasureWithUnit::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

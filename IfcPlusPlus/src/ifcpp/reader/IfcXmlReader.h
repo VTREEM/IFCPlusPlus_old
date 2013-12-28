@@ -22,6 +22,6 @@ class IfcXmlReader : public IfcPlusPlusReader
 public:
 	IfcXmlReader();
 	~IfcXmlReader();
-	void readStreamHeader( std::string& in, shared_ptr<IfcPPModel> model );
-	bool readStreamData( std::string& in, std::string& file_schema, std::map<int,shared_ptr<IfcPPObject> >& map, std::stringstream& warning );
+	virtual void readStreamHeader(	const std::string& in );
+	virtual void readStreamData(	const std::string& in, std::map<int,shared_ptr<IfcPPEntity> >& map );
 };

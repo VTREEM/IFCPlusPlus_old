@@ -36,7 +36,7 @@ public:
 	~IfcEngineTypeEnum();
 	virtual const char* classname() const { return "IfcEngineTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcEngineTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcEngineTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcEngineTypeEnumEnum m_enum;
 };
 

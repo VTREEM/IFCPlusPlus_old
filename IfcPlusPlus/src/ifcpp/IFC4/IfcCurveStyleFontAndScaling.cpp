@@ -47,16 +47,16 @@ void IfcCurveStyleFontAndScaling::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcCurveStyleFontAndScaling::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcCurveStyleFontAndScaling::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcCurveStyleFontAndScaling::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcCurveStyleFontAndScaling, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcCurveStyleFontAndScaling, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_CurveFont = IfcCurveStyleFontSelect::readStepData( args[1], map );
-	m_CurveFontScaling = IfcPositiveRatioMeasure::readStepData( args[2] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_CurveFont = IfcCurveStyleFontSelect::createObjectFromStepData( args[1], map );
+	m_CurveFontScaling = IfcPositiveRatioMeasure::createObjectFromStepData( args[2] );
 }
 void IfcCurveStyleFontAndScaling::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -95,32 +95,32 @@ void IfcResourceTime::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcResourceTime::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcResourceTime::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcResourceTime::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<18 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcResourceTime, expecting 18, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>18 ){ std::cout << "Wrong parameter count for entity IfcResourceTime, expecting 18, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_DataOrigin = IfcDataOriginEnum::readStepData( args[1] );
-	m_UserDefinedDataOrigin = IfcLabel::readStepData( args[2] );
-	m_ScheduleWork = IfcDuration::readStepData( args[3] );
-	m_ScheduleUsage = IfcPositiveRatioMeasure::readStepData( args[4] );
-	m_ScheduleStart = IfcDateTime::readStepData( args[5] );
-	m_ScheduleFinish = IfcDateTime::readStepData( args[6] );
-	m_ScheduleContour = IfcLabel::readStepData( args[7] );
-	m_LevelingDelay = IfcDuration::readStepData( args[8] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_DataOrigin = IfcDataOriginEnum::createObjectFromStepData( args[1] );
+	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[2] );
+	m_ScheduleWork = IfcDuration::createObjectFromStepData( args[3] );
+	m_ScheduleUsage = IfcPositiveRatioMeasure::createObjectFromStepData( args[4] );
+	m_ScheduleStart = IfcDateTime::createObjectFromStepData( args[5] );
+	m_ScheduleFinish = IfcDateTime::createObjectFromStepData( args[6] );
+	m_ScheduleContour = IfcLabel::createObjectFromStepData( args[7] );
+	m_LevelingDelay = IfcDuration::createObjectFromStepData( args[8] );
 	if( _stricmp( args[9].c_str(), ".F." ) == 0 ) { m_IsOverAllocated = false; }
 	else if( _stricmp( args[9].c_str(), ".T." ) == 0 ) { m_IsOverAllocated = true; }
-	m_StatusTime = IfcDateTime::readStepData( args[10] );
-	m_ActualWork = IfcDuration::readStepData( args[11] );
-	m_ActualUsage = IfcPositiveRatioMeasure::readStepData( args[12] );
-	m_ActualStart = IfcDateTime::readStepData( args[13] );
-	m_ActualFinish = IfcDateTime::readStepData( args[14] );
-	m_RemainingWork = IfcDuration::readStepData( args[15] );
-	m_RemainingUsage = IfcPositiveRatioMeasure::readStepData( args[16] );
-	m_Completion = IfcPositiveRatioMeasure::readStepData( args[17] );
+	m_StatusTime = IfcDateTime::createObjectFromStepData( args[10] );
+	m_ActualWork = IfcDuration::createObjectFromStepData( args[11] );
+	m_ActualUsage = IfcPositiveRatioMeasure::createObjectFromStepData( args[12] );
+	m_ActualStart = IfcDateTime::createObjectFromStepData( args[13] );
+	m_ActualFinish = IfcDateTime::createObjectFromStepData( args[14] );
+	m_RemainingWork = IfcDuration::createObjectFromStepData( args[15] );
+	m_RemainingUsage = IfcPositiveRatioMeasure::createObjectFromStepData( args[16] );
+	m_Completion = IfcPositiveRatioMeasure::createObjectFromStepData( args[17] );
 }
 void IfcResourceTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

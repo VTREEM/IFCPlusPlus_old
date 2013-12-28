@@ -29,7 +29,7 @@ public:
 	~IfcPressureMeasure();
 	virtual const char* classname() const { return "IfcPressureMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcPressureMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcPressureMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

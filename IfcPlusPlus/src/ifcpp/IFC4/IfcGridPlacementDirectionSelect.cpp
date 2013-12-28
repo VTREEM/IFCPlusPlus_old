@@ -19,7 +19,7 @@
 // TYPE IfcGridPlacementDirectionSelect 
 IfcGridPlacementDirectionSelect::IfcGridPlacementDirectionSelect() {}
 IfcGridPlacementDirectionSelect::~IfcGridPlacementDirectionSelect() {}
-shared_ptr<IfcGridPlacementDirectionSelect> IfcGridPlacementDirectionSelect::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcGridPlacementDirectionSelect> IfcGridPlacementDirectionSelect::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcGridPlacementDirectionSelect>(); }
@@ -53,6 +53,17 @@ shared_ptr<IfcGridPlacementDirectionSelect> IfcGridPlacementDirectionSelect::rea
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
+		{
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcGridPlacementDirectionSelect> result_ptr_self = dynamic_pointer_cast<IfcGridPlacementDirectionSelect>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
+		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcGridPlacementDirectionSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );

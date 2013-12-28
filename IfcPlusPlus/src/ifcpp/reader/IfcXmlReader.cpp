@@ -17,13 +17,12 @@
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/reader/IfcXmlReader.h"
 
-void IfcXmlReader::readStreamHeader( std::string& in, shared_ptr<IfcPPModel> model )
+void IfcXmlReader::readStreamHeader( const std::string& in )
 {
 	// not implemented
 }
-bool IfcXmlReader::readStreamData( std::string& in, std::string& file_schema, std::map<int,shared_ptr<IfcPPObject> >& map, std::stringstream& warning )
+void IfcXmlReader::readStreamData( const std::string& in, std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// not implemented
-	return false;
+	return;
 }
-

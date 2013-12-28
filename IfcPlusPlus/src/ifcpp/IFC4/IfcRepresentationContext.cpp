@@ -43,15 +43,15 @@ void IfcRepresentationContext::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcRepresentationContext::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRepresentationContext::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRepresentationContext::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRepresentationContext, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcRepresentationContext, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ContextIdentifier = IfcLabel::readStepData( args[0] );
-	m_ContextType = IfcLabel::readStepData( args[1] );
+	m_ContextIdentifier = IfcLabel::createObjectFromStepData( args[0] );
+	m_ContextType = IfcLabel::createObjectFromStepData( args[1] );
 }
 void IfcRepresentationContext::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

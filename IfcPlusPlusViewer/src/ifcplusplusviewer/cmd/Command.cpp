@@ -11,6 +11,7 @@
  * OpenSceneGraph Public License for more details.
 */
 
+#include "ifcppgeometry/utility.h"
 #include "ifcpp/model/shared_ptr.h"
 #include "Command.h"
 

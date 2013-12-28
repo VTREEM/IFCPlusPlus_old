@@ -29,7 +29,7 @@ public:
 	IfcPPModel();
 	~IfcPPModel();
 	
-	enum IfcVersion { UNDEFINED, UNKNOWN, IFC2X, IFC2X2, IFC2X3, IFC2X4, IFC4 };
+	enum IfcVersion { IFC_VERSION_UNDEFINED, IFC_VERSION_UNKNOWN, IFC2X, IFC2X2, IFC2X3, IFC2X4, IFC4 };
 
 	const std::map<int,shared_ptr<IfcPPEntity> >& getMapIfcObjects() const { return m_map_entities; }
 	void insertEntity( shared_ptr<IfcPPEntity> e, bool overwrite_existing = false );
@@ -39,10 +39,14 @@ public:
 	shared_ptr<IfcProject> getIfcProject();
 	shared_ptr<IfcGeometricRepresentationContext> getIfcGeometricRepresentationContext3D();
 	std::string getFileHeader() { return m_file_header; }
-	std::string getFileSchema() { return m_file_schema; }
+	std::string getFileDescription() { return m_IFC_FILE_DESCRIPTION; }
+	std::string getFileName() { return m_IFC_FILE_NAME; }
+	std::string getFileSchema() { return m_IFC_FILE_SCHEMA; }
 	shared_ptr<UnitConverter> getUnitConverter() { return m_unit_converter; }
 
 	void setFileHeader( std::string header );
+	void setFileDescription( std::string schema );
+	void setFileName( std::string schema );
 	void setFileSchema( std::string schema );
 	void setIfcProject( shared_ptr<IfcProject> project );
 	void resolveInverseAttributes();
@@ -52,12 +56,19 @@ public:
 	void updateCache();
 	void clearCache();
 	void initFileHeader( std::string file_name );
+	IfcVersion getIfcSchemaVersion() {	return m_ifc_schema_version; }
+	void setIfcSchemaVersion( IfcVersion ver ) { m_ifc_schema_version = ver; }
+
+	friend class IfcStepReader;
 
 private:
-	std::map<int,shared_ptr<IfcPPEntity> >		m_map_entities;
+	std::map<int,shared_ptr<IfcPPEntity> >			m_map_entities;
 	shared_ptr<IfcProject>							m_ifc_project;
 	shared_ptr<IfcGeometricRepresentationContext>	m_geom_context_3d;
 	shared_ptr<UnitConverter>						m_unit_converter;
 	std::string										m_file_header;
-	std::string										m_file_schema;
+	std::string										m_IFC_FILE_DESCRIPTION;
+	std::string										m_IFC_FILE_NAME;
+	std::string										m_IFC_FILE_SCHEMA;
+	IfcVersion										m_ifc_schema_version;
 };

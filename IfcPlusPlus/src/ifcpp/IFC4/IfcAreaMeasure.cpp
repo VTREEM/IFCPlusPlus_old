@@ -32,7 +32,7 @@ void IfcAreaMeasure::getStepParameter( std::stringstream& stream, bool is_select
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcAreaMeasure> IfcAreaMeasure::readStepData( std::string& arg )
+shared_ptr<IfcAreaMeasure> IfcAreaMeasure::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAreaMeasure>(); }

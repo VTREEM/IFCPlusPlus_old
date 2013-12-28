@@ -19,7 +19,7 @@
 // TYPE IfcGeometricSetSelect 
 IfcGeometricSetSelect::IfcGeometricSetSelect() {}
 IfcGeometricSetSelect::~IfcGeometricSetSelect() {}
-shared_ptr<IfcGeometricSetSelect> IfcGeometricSetSelect::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcGeometricSetSelect> IfcGeometricSetSelect::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcGeometricSetSelect>(); }
@@ -53,6 +53,17 @@ shared_ptr<IfcGeometricSetSelect> IfcGeometricSetSelect::readStepData( std::stri
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
+		{
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcGeometricSetSelect> result_ptr_self = dynamic_pointer_cast<IfcGeometricSetSelect>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
+		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcGeometricSetSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );

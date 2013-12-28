@@ -98,30 +98,30 @@ void IfcDocumentInformation::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcDocumentInformation::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcDocumentInformation::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcDocumentInformation::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<17 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcDocumentInformation, expecting 17, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>17 ){ std::cout << "Wrong parameter count for entity IfcDocumentInformation, expecting 17, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Identification = IfcIdentifier::readStepData( args[0] );
-	m_Name = IfcLabel::readStepData( args[1] );
-	m_Description = IfcText::readStepData( args[2] );
-	m_Location = IfcURIReference::readStepData( args[3] );
-	m_Purpose = IfcText::readStepData( args[4] );
-	m_IntendedUse = IfcText::readStepData( args[5] );
-	m_Scope = IfcText::readStepData( args[6] );
-	m_Revision = IfcLabel::readStepData( args[7] );
-	m_DocumentOwner = IfcActorSelect::readStepData( args[8], map );
+	m_Identification = IfcIdentifier::createObjectFromStepData( args[0] );
+	m_Name = IfcLabel::createObjectFromStepData( args[1] );
+	m_Description = IfcText::createObjectFromStepData( args[2] );
+	m_Location = IfcURIReference::createObjectFromStepData( args[3] );
+	m_Purpose = IfcText::createObjectFromStepData( args[4] );
+	m_IntendedUse = IfcText::createObjectFromStepData( args[5] );
+	m_Scope = IfcText::createObjectFromStepData( args[6] );
+	m_Revision = IfcLabel::createObjectFromStepData( args[7] );
+	m_DocumentOwner = IfcActorSelect::createObjectFromStepData( args[8], map );
 	readSelectList( args[9], m_Editors, map );
-	m_CreationTime = IfcDateTime::readStepData( args[10] );
-	m_LastRevisionTime = IfcDateTime::readStepData( args[11] );
-	m_ElectronicFormat = IfcIdentifier::readStepData( args[12] );
-	m_ValidFrom = IfcDate::readStepData( args[13] );
-	m_ValidUntil = IfcDate::readStepData( args[14] );
-	m_Confidentiality = IfcDocumentConfidentialityEnum::readStepData( args[15] );
-	m_Status = IfcDocumentStatusEnum::readStepData( args[16] );
+	m_CreationTime = IfcDateTime::createObjectFromStepData( args[10] );
+	m_LastRevisionTime = IfcDateTime::createObjectFromStepData( args[11] );
+	m_ElectronicFormat = IfcIdentifier::createObjectFromStepData( args[12] );
+	m_ValidFrom = IfcDate::createObjectFromStepData( args[13] );
+	m_ValidUntil = IfcDate::createObjectFromStepData( args[14] );
+	m_Confidentiality = IfcDocumentConfidentialityEnum::createObjectFromStepData( args[15] );
+	m_Status = IfcDocumentStatusEnum::createObjectFromStepData( args[16] );
 }
 void IfcDocumentInformation::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -60,18 +60,18 @@ void IfcGeometricRepresentationContext::getStepLine( std::stringstream& stream )
 	stream << ");";
 }
 void IfcGeometricRepresentationContext::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcGeometricRepresentationContext::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcGeometricRepresentationContext::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<6 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcGeometricRepresentationContext, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>6 ){ std::cout << "Wrong parameter count for entity IfcGeometricRepresentationContext, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ContextIdentifier = IfcLabel::readStepData( args[0] );
-	m_ContextType = IfcLabel::readStepData( args[1] );
-	m_CoordinateSpaceDimension = IfcDimensionCount::readStepData( args[2] );
+	m_ContextIdentifier = IfcLabel::createObjectFromStepData( args[0] );
+	m_ContextType = IfcLabel::createObjectFromStepData( args[1] );
+	m_CoordinateSpaceDimension = IfcDimensionCount::createObjectFromStepData( args[2] );
 	readRealValue( args[3], m_Precision );
-	m_WorldCoordinateSystem = IfcAxis2Placement::readStepData( args[4], map );
+	m_WorldCoordinateSystem = IfcAxis2Placement::createObjectFromStepData( args[4], map );
 	readEntityReference( args[5], m_TrueNorth, map );
 }
 void IfcGeometricRepresentationContext::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

@@ -148,7 +148,7 @@ void IfcUnitEnum::getStepParameter( std::stringstream& stream, bool is_select_ty
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcUnitEnum> IfcUnitEnum::readStepData( std::string& arg )
+shared_ptr<IfcUnitEnum> IfcUnitEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcUnitEnum>(); }

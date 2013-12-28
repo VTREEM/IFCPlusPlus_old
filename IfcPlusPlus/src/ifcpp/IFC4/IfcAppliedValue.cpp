@@ -72,22 +72,22 @@ void IfcAppliedValue::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcAppliedValue::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcAppliedValue::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcAppliedValue::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<10 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcAppliedValue, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>10 ){ std::cout << "Wrong parameter count for entity IfcAppliedValue, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_AppliedValue = IfcAppliedValueSelect::readStepData( args[2], map );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_AppliedValue = IfcAppliedValueSelect::createObjectFromStepData( args[2], map );
 	readEntityReference( args[3], m_UnitBasis, map );
-	m_ApplicableDate = IfcDate::readStepData( args[4] );
-	m_FixedUntilDate = IfcDate::readStepData( args[5] );
-	m_Category = IfcLabel::readStepData( args[6] );
-	m_Condition = IfcLabel::readStepData( args[7] );
-	m_ArithmeticOperator = IfcArithmeticOperatorEnum::readStepData( args[8] );
+	m_ApplicableDate = IfcDate::createObjectFromStepData( args[4] );
+	m_FixedUntilDate = IfcDate::createObjectFromStepData( args[5] );
+	m_Category = IfcLabel::createObjectFromStepData( args[6] );
+	m_Condition = IfcLabel::createObjectFromStepData( args[7] );
+	m_ArithmeticOperator = IfcArithmeticOperatorEnum::createObjectFromStepData( args[8] );
 	readEntityReferenceList( args[9], m_Components, map );
 }
 void IfcAppliedValue::setInverseCounterparts( shared_ptr<IfcPPEntity> )

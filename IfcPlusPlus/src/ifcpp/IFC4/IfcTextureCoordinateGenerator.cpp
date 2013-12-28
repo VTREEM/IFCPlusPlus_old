@@ -47,7 +47,7 @@ void IfcTextureCoordinateGenerator::getStepLine( std::stringstream& stream ) con
 	stream << ");";
 }
 void IfcTextureCoordinateGenerator::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTextureCoordinateGenerator::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTextureCoordinateGenerator::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTextureCoordinateGenerator, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -55,7 +55,7 @@ void IfcTextureCoordinateGenerator::readStepData( std::vector<std::string>& args
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcTextureCoordinateGenerator, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_Maps, map );
-	m_Mode = IfcLabel::readStepData( args[1] );
+	m_Mode = IfcLabel::createObjectFromStepData( args[1] );
 	readTypeOfRealList( args[2], m_Parameter );
 }
 void IfcTextureCoordinateGenerator::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

@@ -35,7 +35,7 @@ public:
 	~IfcBoolean();
 	virtual const char* classname() const { return "IfcBoolean"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcBoolean> readStepData( std::string& arg );
+	static shared_ptr<IfcBoolean> createObjectFromStepData( const std::string& arg );
 	bool m_value;
 };
 

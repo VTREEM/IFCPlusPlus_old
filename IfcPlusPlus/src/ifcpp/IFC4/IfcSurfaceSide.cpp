@@ -40,7 +40,7 @@ void IfcSurfaceSide::getStepParameter( std::stringstream& stream, bool is_select
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcSurfaceSide> IfcSurfaceSide::readStepData( std::string& arg )
+shared_ptr<IfcSurfaceSide> IfcSurfaceSide::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSurfaceSide>(); }

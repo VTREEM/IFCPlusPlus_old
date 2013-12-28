@@ -29,7 +29,7 @@ public:
 	~IfcAbsorbedDoseMeasure();
 	virtual const char* classname() const { return "IfcAbsorbedDoseMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcAbsorbedDoseMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcAbsorbedDoseMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

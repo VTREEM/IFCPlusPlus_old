@@ -60,18 +60,18 @@ void IfcRelConnectsStructuralActivity::getStepLine( std::stringstream& stream ) 
 	stream << ");";
 }
 void IfcRelConnectsStructuralActivity::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRelConnectsStructuralActivity::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRelConnectsStructuralActivity::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<6 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRelConnectsStructuralActivity, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>6 ){ std::cout << "Wrong parameter count for entity IfcRelConnectsStructuralActivity, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_RelatingElement = IfcStructuralActivityAssignmentSelect::readStepData( args[4], map );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_RelatingElement = IfcStructuralActivityAssignmentSelect::createObjectFromStepData( args[4], map );
 	readEntityReference( args[5], m_RelatedStructuralActivity, map );
 }
 void IfcRelConnectsStructuralActivity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

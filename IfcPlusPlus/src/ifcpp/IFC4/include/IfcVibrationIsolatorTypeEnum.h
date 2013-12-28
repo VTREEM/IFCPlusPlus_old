@@ -36,7 +36,7 @@ public:
 	~IfcVibrationIsolatorTypeEnum();
 	virtual const char* classname() const { return "IfcVibrationIsolatorTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcVibrationIsolatorTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcVibrationIsolatorTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcVibrationIsolatorTypeEnumEnum m_enum;
 };
 

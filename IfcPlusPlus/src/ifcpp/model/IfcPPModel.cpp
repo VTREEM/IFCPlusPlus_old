@@ -49,6 +49,7 @@ IfcPPModel::IfcPPModel()
 {
 	m_unit_converter = shared_ptr<UnitConverter>( new UnitConverter() );
 	initFileHeader( "IfcPlusPlus-export.ifc" );
+	m_ifc_schema_version = IfcPPModel::IFC_VERSION_UNDEFINED;
 }
 
 IfcPPModel::~IfcPPModel()
@@ -290,9 +291,18 @@ void IfcPPModel::setFileHeader( std::string header )
 	m_file_header = header;
 }
 
+void IfcPPModel::setFileDescription( std::string schema )
+{
+	m_IFC_FILE_DESCRIPTION = schema;
+}
+
+void IfcPPModel::setFileName( std::string schema )
+{
+	m_IFC_FILE_NAME = schema;
+}
 void IfcPPModel::setFileSchema( std::string schema )
 {
-	m_file_schema = schema;
+	m_IFC_FILE_SCHEMA = schema;
 }
 
 void IfcPPModel::clearIfcModel()

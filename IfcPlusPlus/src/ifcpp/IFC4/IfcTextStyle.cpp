@@ -55,17 +55,17 @@ void IfcTextStyle::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTextStyle::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTextStyle::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTextStyle::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTextStyle, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcTextStyle, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_TextCharacterAppearance, map );
 	readEntityReference( args[2], m_TextStyle, map );
-	m_TextFontStyle = IfcTextFontSelect::readStepData( args[3], map );
+	m_TextFontStyle = IfcTextFontSelect::createObjectFromStepData( args[3], map );
 	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_ModelOrDraughting = false; }
 	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_ModelOrDraughting = true; }
 }

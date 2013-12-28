@@ -67,7 +67,7 @@ void IfcSurfaceStyleRendering::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcSurfaceStyleRendering::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcSurfaceStyleRendering::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcSurfaceStyleRendering::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<9 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcSurfaceStyleRendering, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -75,14 +75,14 @@ void IfcSurfaceStyleRendering::readStepData( std::vector<std::string>& args, con
 	if( num_args>9 ){ std::cout << "Wrong parameter count for entity IfcSurfaceStyleRendering, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_SurfaceColour, map );
-	m_Transparency = IfcNormalisedRatioMeasure::readStepData( args[1] );
-	m_DiffuseColour = IfcColourOrFactor::readStepData( args[2], map );
-	m_TransmissionColour = IfcColourOrFactor::readStepData( args[3], map );
-	m_DiffuseTransmissionColour = IfcColourOrFactor::readStepData( args[4], map );
-	m_ReflectionColour = IfcColourOrFactor::readStepData( args[5], map );
-	m_SpecularColour = IfcColourOrFactor::readStepData( args[6], map );
-	m_SpecularHighlight = IfcSpecularHighlightSelect::readStepData( args[7], map );
-	m_ReflectanceMethod = IfcReflectanceMethodEnum::readStepData( args[8] );
+	m_Transparency = IfcNormalisedRatioMeasure::createObjectFromStepData( args[1] );
+	m_DiffuseColour = IfcColourOrFactor::createObjectFromStepData( args[2], map );
+	m_TransmissionColour = IfcColourOrFactor::createObjectFromStepData( args[3], map );
+	m_DiffuseTransmissionColour = IfcColourOrFactor::createObjectFromStepData( args[4], map );
+	m_ReflectionColour = IfcColourOrFactor::createObjectFromStepData( args[5], map );
+	m_SpecularColour = IfcColourOrFactor::createObjectFromStepData( args[6], map );
+	m_SpecularHighlight = IfcSpecularHighlightSelect::createObjectFromStepData( args[7], map );
+	m_ReflectanceMethod = IfcReflectanceMethodEnum::createObjectFromStepData( args[8] );
 }
 void IfcSurfaceStyleRendering::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

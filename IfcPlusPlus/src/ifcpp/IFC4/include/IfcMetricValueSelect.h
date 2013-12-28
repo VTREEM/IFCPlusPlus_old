@@ -26,6 +26,6 @@ public:
 	~IfcMetricValueSelect();
 	virtual const char* classname() const { return "IfcMetricValueSelect"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
-	static shared_ptr<IfcMetricValueSelect> readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
+	static shared_ptr<IfcMetricValueSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

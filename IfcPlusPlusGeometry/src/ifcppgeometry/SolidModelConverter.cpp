@@ -18,13 +18,8 @@
 #pragma warning (disable: 4267)
 #include <carve/carve.hpp>
 #include <carve/geom3d.hpp>
-#include <carve/poly.hpp>
-#include <carve/polyhedron_base.hpp>
-#include <carve/faceloop.hpp>
 #include <carve/input.hpp>
-#include <carve/csg.hpp>
 #include <carve/csg_triangulator.hpp>
-#include <common/geometry.hpp>
 
 #include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
 #include "ifcpp/IFC4/include/IfcPlaneAngleMeasure.h"
@@ -68,7 +63,7 @@
 #include "CurveConverter.h"
 #include "FaceConverter.h"
 #include "ConverterOSG.h"
-#include "Utility.h"
+#include "GeomUtils.h"
 #include "UnhandledRepresentationException.h"
 #include "RepresentationConverter.h"
 #include "SolidModelConverter.h"
@@ -102,8 +97,6 @@ void SolidModelConverter::detailedReport( std::stringstream& strs )
 // ENTITY IfcSolidModel ABSTRACT SUPERTYPE OF(ONEOF(IfcCsgSolid, IfcManifoldSolidBrep, IfcSweptAreaSolid, IfcSweptDiskSolid))
 void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>& solid_model, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
-	
-
 	shared_ptr<IfcSweptAreaSolid> swept_area_solid = dynamic_pointer_cast<IfcSweptAreaSolid>(solid_model);
 	if( swept_area_solid )
 	{
@@ -210,49 +203,29 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			shared_ptr<ItemData> input_data_outer_shell( new ItemData() );
 			m_face_converter->convertIfcFaceList( vec_faces_outer_shell, pos, input_data_outer_shell );
 			std::copy( input_data_outer_shell->open_or_closed_mesh_data.begin(), input_data_outer_shell->open_or_closed_mesh_data.end(), std::back_inserter(item_data->closed_mesh_data) );
-
-
-			//shared_ptr<IfcConnectedFaceSet> face_set = (*it_face_sets);
-			//std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = face_set->m_CfsFaces;
-
-			//shared_ptr<ItemData> input_data_face_set( new ItemData );
-			//convertIfcFaceList( vec_ifc_faces, pos, input_data_face_set );
-			//std::copy( input_data_face_set->open_or_closed_mesh_data.begin(), input_data_face_set->open_or_closed_mesh_data.end(), std::back_inserter(item_data->open_mesh_data) );
-		
-
-			shared_ptr<IfcFacetedBrep> faceted_brep = dynamic_pointer_cast<IfcFacetedBrep>(manifold_solid_brep);
-			if( faceted_brep )
-			{
-				shared_ptr<IfcClosedShell> shell = faceted_brep->m_Outer;
-				if( !shell )
-				{
-					return;
-				}
-				std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = shell->m_CfsFaces;
-
-				shared_ptr<ItemData> input_data_closed_shell( new ItemData() );
-				m_face_converter->convertIfcFaceList( vec_ifc_faces, pos, input_data_closed_shell );
-				std::copy( input_data_closed_shell->open_or_closed_mesh_data.begin(), input_data_closed_shell->open_or_closed_mesh_data.end(), std::back_inserter(item_data->closed_mesh_data) );
-
-				return;
-			}
-
-			shared_ptr<IfcAdvancedBrep> advanced_brep = dynamic_pointer_cast<IfcAdvancedBrep>(manifold_solid_brep);
-			if( advanced_brep )
-			{
-				// ENTITY IfcAdvancedBrep	SUPERTYPE OF(IfcAdvancedBrepWithVoids)
-				if( dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(advanced_brep) )
-				{
-					shared_ptr<IfcAdvancedBrepWithVoids> advanced_brep_with_voids = dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(solid_model);
-					std::vector<shared_ptr<IfcClosedShell> >& vec_voids = advanced_brep_with_voids->m_Voids;
-
-					// TODO: subtract voids from outer shell
-					std::cout << "IfcAdvancedBrep not implemented" << std::endl;
-				}
-				return;
-			}
 		}
 
+		shared_ptr<IfcFacetedBrep> faceted_brep = dynamic_pointer_cast<IfcFacetedBrep>(manifold_solid_brep);
+		if( faceted_brep )
+		{
+			// no additional attributes
+			return;
+		}
+
+		shared_ptr<IfcAdvancedBrep> advanced_brep = dynamic_pointer_cast<IfcAdvancedBrep>(manifold_solid_brep);
+		if( advanced_brep )
+		{
+			// ENTITY IfcAdvancedBrep	SUPERTYPE OF(IfcAdvancedBrepWithVoids)
+			if( dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(advanced_brep) )
+			{
+				shared_ptr<IfcAdvancedBrepWithVoids> advanced_brep_with_voids = dynamic_pointer_cast<IfcAdvancedBrepWithVoids>(solid_model);
+				std::vector<shared_ptr<IfcClosedShell> >& vec_voids = advanced_brep_with_voids->m_Voids;
+
+				// TODO: subtract voids from outer shell
+				std::cout << "IfcAdvancedBrep not implemented" << std::endl;
+			}
+			return;
+		}
 			
 		throw UnhandledRepresentationException( solid_model );
 	}
@@ -367,7 +340,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 				section2.normalize();
 
 				double dot_product = dot( section1, section2 );
-				double dot_product_abs = abs(dot_product);
+				double dot_product_abs = std::abs(dot_product);
 
 				// if dot == 1 or -1, then points are colinear
 				if( dot_product_abs < (1.0-0.0001) || dot_product_abs > (1.0+0.0001) )
@@ -387,7 +360,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			// sweeping curve is linear. assume any local z vector
 			local_z = carve::geom::VECTOR( 0, 0, 1 );
 			double dot_normal_local_z = dot( (basis_curve_points.at(1) - basis_curve_points.at(0)), local_z );
-			if( abs(dot_normal_local_z) < 0.0001 )
+			if( std::abs(dot_normal_local_z) < 0.0001 )
 			{
 				local_z = carve::geom::VECTOR( 0, 1, 0 );
 				local_z.normalize();
@@ -428,7 +401,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			section1.normalize();
 			section2.normalize();
 			double dot_product = dot( section1, section2 );
-			double dot_product_abs = abs(dot_product);
+			double dot_product_abs = std::abs(dot_product);
 
 			if( dot_product_abs < (1.0-0.0001) || dot_product_abs > (1.0+0.0001) )
 			{
@@ -567,13 +540,13 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 {
 	if( !extruded_area->m_ExtrudedDirection )
 	{
-		throw IfcPPException( "RepresentationConverter::convertIfcExtrudedAreaSolid: invalid ExtrudedDirection" );
+		throw IfcPPException( "Invalid ExtrudedDirection", __func__ );
 		return;
 	}
 
 	if( !extruded_area->m_Depth )
 	{
-		throw IfcPPException( "RepresentationConverter::convertIfcExtrudedAreaSolid: invalid Depth" );
+		throw IfcPPException( "Invalid Depth", __func__ );
 		return;
 	}
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
@@ -609,7 +582,7 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 	std::vector<carve::geom::vector<3> >& points = poly_data->points;
 	for( std::vector<carve::geom::vector<3> >::iterator it_points = points.begin(); it_points != points.end(); ++it_points )
 	{
-		carve::geom::vector<3> & vertex = (*it_points);
+		carve::geom::vector<3>& vertex = (*it_points);
 		vertex = pos*vertex;
 	}
 
@@ -651,7 +624,7 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 
 	if( err.tellp() > 0 )
 	{
-		throw IfcPPException( err.str().c_str() );
+		throw IfcPPException( err.str().c_str(), __func__ );
 	}
 }
 
@@ -659,7 +632,6 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 void SolidModelConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,	const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
 	shared_ptr<carve::input::PolyhedronData> polyhedron_data( new carve::input::PolyhedronData() );
-	
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
 
 	// ENTITY IfcCsgPrimitive3D  ABSTRACT SUPERTYPE OF(ONEOF(IfcBlock, IfcRectangularPyramid, IfcRightCircularCone, IfcRightCircularCylinder, IfcSphere
@@ -947,21 +919,21 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 		strs << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_loops == 0";
 		detailedReport( strs );
 		return;
-		//throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_loops == 0");
+		//throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_loops == 0", __func__);
 	}
 	if( profile_coords[0].size() < 3 )
 	{
 		std::stringstream strs;
 		strs << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_polygon_points < 3";
 		detailedReport( strs );
-		//throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_polygon_points < 3");
+		//throw IfcPPException("RepresentationConverter::convertIfcRevolvedAreaSolid: num_polygon_points < 3", __func__);
 	}
 
 	if( revolution_angle > M_PI*2 ) revolution_angle = M_PI*2;
 	if( revolution_angle < -M_PI*2 ) revolution_angle = M_PI*2;
 
 	// TODO: calculate num segments according to length/width/height ratio and overall size of the object
-	int num_segments = m_geom_settings->m_num_vertices_per_circle*(abs(revolution_angle)/(2.0*M_PI));
+	int num_segments = m_geom_settings->m_num_vertices_per_circle*(std::abs(revolution_angle)/(2.0*M_PI));
 	if( num_segments < 6 )
 	{
 		num_segments = 6;
@@ -1065,8 +1037,7 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 
 void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanResult>& bool_result, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
-	const int bool_result_id = bool_result->getId();
-
+	const int boolean_result_id = bool_result->getId();
 	std::stringstream strs_err;
 	shared_ptr<IfcBooleanClippingResult> boolean_clipping_result = dynamic_pointer_cast<IfcBooleanClippingResult>(bool_result);
 	if( boolean_clipping_result )
@@ -1233,11 +1204,10 @@ void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanRe
 	if( strs_err.tellp() > 0 )
 	{
 		detailedReport( strs_err );
-		//throw IfcPPException( err.str().c_str() );
+		//throw IfcPPException( err.str().c_str(), __func__ );
 	}
 }
 
-bool show_first = true;
 void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanOperand>& operand, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
 {
 	shared_ptr<IfcSolidModel> solid_model = dynamic_pointer_cast<IfcSolidModel>(operand);
@@ -1435,7 +1405,7 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 
 		if( err.tellp() > 0 )
 		{
-			throw IfcPPException( err.str().c_str() );
+			throw IfcPPException( err.str().c_str(), __func__ );
 		}
 		return;
 	}

@@ -20,7 +20,7 @@
 // TYPE IfcCurveFontOrScaledCurveFontSelect 
 IfcCurveFontOrScaledCurveFontSelect::IfcCurveFontOrScaledCurveFontSelect() {}
 IfcCurveFontOrScaledCurveFontSelect::~IfcCurveFontOrScaledCurveFontSelect() {}
-shared_ptr<IfcCurveFontOrScaledCurveFontSelect> IfcCurveFontOrScaledCurveFontSelect::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcCurveFontOrScaledCurveFontSelect> IfcCurveFontOrScaledCurveFontSelect::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcCurveFontOrScaledCurveFontSelect>(); }
@@ -54,9 +54,16 @@ shared_ptr<IfcCurveFontOrScaledCurveFontSelect> IfcCurveFontOrScaledCurveFontSel
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		if( keyword.compare("IFCCURVESTYLEFONTSELECT")== 0 )
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
 		{
-			return IfcCurveStyleFontSelect::readStepData( inline_arg, map );
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcCurveFontOrScaledCurveFontSelect> result_ptr_self = dynamic_pointer_cast<IfcCurveFontOrScaledCurveFontSelect>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
 		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcCurveFontOrScaledCurveFontSelect::readStepData" << std::endl;

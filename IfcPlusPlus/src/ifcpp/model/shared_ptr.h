@@ -29,7 +29,17 @@ using std::tr1::weak_ptr;
 using std::tr1::dynamic_pointer_cast;
 using std::tr1::enable_shared_from_this;
 
-#elif defined __GNUC__
+#elif _LIBCPP_VERSION // Clang, libc++
+
+#include <memory>
+using std::shared_ptr;
+using std::weak_ptr;
+using std::dynamic_pointer_cast;
+using std::enable_shared_from_this;
+
+#define _stricmp strcasecmp
+
+#elif defined __GNUC__ && !defined(__FreeBSD__)
 
 #include <tr1/memory>
 using std::tr1::shared_ptr;
@@ -38,6 +48,19 @@ using std::tr1::dynamic_pointer_cast;
 using std::tr1::enable_shared_from_this;
 
 #define _stricmp strcasecmp
+
+#elif defined(__FreeBSD__)
+
+// Requires clang++ and libc++
+#include <memory>
+
+using std::shared_ptr;
+using std::weak_ptr;
+using std::dynamic_pointer_cast;
+using std::enable_shared_from_this;
+
+#define _stricmp strcasecmp
+
 
 #else
 

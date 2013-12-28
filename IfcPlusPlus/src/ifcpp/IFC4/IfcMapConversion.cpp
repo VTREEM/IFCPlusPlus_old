@@ -63,21 +63,21 @@ void IfcMapConversion::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcMapConversion::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcMapConversion::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcMapConversion::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcMapConversion, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>8 ){ std::cout << "Wrong parameter count for entity IfcMapConversion, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_SourceCRS = IfcCoordinateReferenceSystemSelect::readStepData( args[0], map );
+	m_SourceCRS = IfcCoordinateReferenceSystemSelect::createObjectFromStepData( args[0], map );
 	readEntityReference( args[1], m_TargetCRS, map );
-	m_Eastings = IfcLengthMeasure::readStepData( args[2] );
-	m_Northings = IfcLengthMeasure::readStepData( args[3] );
-	m_OrthogonalHeight = IfcLengthMeasure::readStepData( args[4] );
-	m_XAxisAbscissa = IfcReal::readStepData( args[5] );
-	m_XAxisOrdinate = IfcReal::readStepData( args[6] );
-	m_Scale = IfcReal::readStepData( args[7] );
+	m_Eastings = IfcLengthMeasure::createObjectFromStepData( args[2] );
+	m_Northings = IfcLengthMeasure::createObjectFromStepData( args[3] );
+	m_OrthogonalHeight = IfcLengthMeasure::createObjectFromStepData( args[4] );
+	m_XAxisAbscissa = IfcReal::createObjectFromStepData( args[5] );
+	m_XAxisOrdinate = IfcReal::createObjectFromStepData( args[6] );
+	m_Scale = IfcReal::createObjectFromStepData( args[7] );
 }
 void IfcMapConversion::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

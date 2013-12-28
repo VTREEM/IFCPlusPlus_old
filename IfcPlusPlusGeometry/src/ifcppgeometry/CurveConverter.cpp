@@ -17,6 +17,8 @@
 #define _USE_MATH_DEFINES 
 #include <math.h>
 
+#include "CurveConverter.h"
+
 #include "ifcpp/model/shared_ptr.h"
 #include "ifcpp/model/UnitConverter.h"
 #include "ifcpp/model/IfcPPException.h"
@@ -50,11 +52,10 @@
 #include "ifcpp/IFC4/include/IfcVertexPoint.h"
 
 #include "GeometrySettings.h"
-#include "Utility.h"
+#include "GeomUtils.h"
 #include "UnhandledRepresentationException.h"
 #include "PlacementConverter.h"
 #include "ProfileConverter.h"
-#include "CurveConverter.h"
 
 CurveConverter::CurveConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> uc )
 	: m_geom_settings(geom_settings), m_unit_converter( uc )
@@ -285,7 +286,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				}
 			}
 
-			int num_segments = m_geom_settings->m_num_vertices_per_circle*(abs(opening_angle)/(2.0*M_PI));
+			int num_segments = m_geom_settings->m_num_vertices_per_circle*(std::abs(opening_angle)/(2.0*M_PI));
 			if( num_segments < m_geom_settings->m_min_num_vertices_per_arc ) num_segments = m_geom_settings->m_min_num_vertices_per_arc;
 			const double circle_center_x = 0.0;
 			const double circle_center_y = 0.0;
@@ -497,11 +498,11 @@ void CurveConverter::convertIfcLoop( const shared_ptr<IfcLoop>& loop,	std::vecto
 			carve::geom3d::Vector& first = loop_points.front();
 			carve::geom3d::Vector& last = loop_points.back();
 
-			if( abs(first.x-last.x) < 0.00000001 )
+			if( std::abs(first.x-last.x) < 0.00000001 )
 			{
-				if( abs(first.y-last.y) < 0.00000001 )
+				if( std::abs(first.y-last.y) < 0.00000001 )
 				{
-					if( abs(first.z-last.z) < 0.00000001 )
+					if( std::abs(first.z-last.z) < 0.00000001 )
 					{
 						loop_points.pop_back();
 						continue;
@@ -636,7 +637,7 @@ void CurveConverter::convertIfcCartesianPointVector( const std::vector<shared_pt
 		{
 			std::cout << "convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2" << std::endl;
 			//detailedReport( strs );
-			//throw IfcPPException("convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2");
+			//throw IfcPPException("convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2", __func__);
 		}
 	}
 }
@@ -671,7 +672,7 @@ void CurveConverter::convertIfcCartesianPointVectorSkipDuplicates( const std::ve
 			//std::stringstream strs;
 			//strs << "IfcCartesianPoint (#" << cp_id << "): coords.size() < 2";
 			//detailedReport( strs );
-			//throw IfcPPException( strs.str().c_str() );
+			//throw IfcPPException( strs.str().c_str(), __func__ );
 		}
 
 		carve::geom::vector<3>  vertex( carve::geom::VECTOR( x, y, z ) );
@@ -679,11 +680,11 @@ void CurveConverter::convertIfcCartesianPointVectorSkipDuplicates( const std::ve
 		// skip duplicate vertices
 		if( it_cp != ifc_points.begin() )
 		{
-			if( abs(vertex.x-vertex_previous.x) < 0.00000001 )
+			if( std::abs(vertex.x-vertex_previous.x) < 0.00000001 )
 			{
-				if( abs(vertex.y-vertex_previous.y) < 0.00000001 )
+				if( std::abs(vertex.y-vertex_previous.y) < 0.00000001 )
 				{
-					if( abs(vertex.z-vertex_previous.z) < 0.00000001 )
+					if( std::abs(vertex.z-vertex_previous.z) < 0.00000001 )
 					{
 						// TODO: is it better to report degenerated loops, or to just omit them?
 						continue;
@@ -701,13 +702,13 @@ double CurveConverter::getAngleOnCircle( const carve::geom::vector<3>& circle_ce
 {
 	double result_angle = -1.0;
 	carve::geom::vector<3> center_trim_point = trim_point-circle_center;
-	if( abs(center_trim_point.length() - circle_radius) < 0.0001 )
+	if( std::abs(center_trim_point.length() - circle_radius) < 0.0001 )
 	{
 		carve::geom::vector<3> center_trim_point_direction = center_trim_point;
 		center_trim_point_direction.normalize();
 		double cos_angle = carve::geom::dot( center_trim_point_direction, carve::geom::vector<3> ( carve::geom::VECTOR( 1.0, 0, 0 ) ) );
 
-		if( abs(cos_angle) < 0.0001 )
+		if( std::abs(cos_angle) < 0.0001 )
 		{
 			if( center_trim_point.y > 0 )
 			{

@@ -37,7 +37,7 @@ void IfcPropertyAbstraction::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcPropertyAbstraction::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPropertyAbstraction::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPropertyAbstraction::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcPropertyAbstraction::setInverseCounterparts( shared_ptr<IfcPPEntity> )

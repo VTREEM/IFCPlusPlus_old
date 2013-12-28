@@ -60,19 +60,19 @@ void IfcProjectedCRS::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcProjectedCRS::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcProjectedCRS::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcProjectedCRS::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<7 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcProjectedCRS, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>7 ){ std::cout << "Wrong parameter count for entity IfcProjectedCRS, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_GeodeticDatum = IfcIdentifier::readStepData( args[2] );
-	m_VerticalDatum = IfcIdentifier::readStepData( args[3] );
-	m_MapProjection = IfcIdentifier::readStepData( args[4] );
-	m_MapZone = IfcIdentifier::readStepData( args[5] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_GeodeticDatum = IfcIdentifier::createObjectFromStepData( args[2] );
+	m_VerticalDatum = IfcIdentifier::createObjectFromStepData( args[3] );
+	m_MapProjection = IfcIdentifier::createObjectFromStepData( args[4] );
+	m_MapZone = IfcIdentifier::createObjectFromStepData( args[5] );
 	readEntityReference( args[6], m_MapUnit, map );
 }
 void IfcProjectedCRS::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

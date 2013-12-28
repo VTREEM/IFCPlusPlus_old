@@ -95,26 +95,26 @@ void IfcAsset::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcAsset::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcAsset::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcAsset::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<14 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcAsset, expecting 14, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>14 ){ std::cout << "Wrong parameter count for entity IfcAsset, expecting 14, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_ObjectType = IfcLabel::readStepData( args[4] );
-	m_Identification = IfcIdentifier::readStepData( args[5] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
+	m_Identification = IfcIdentifier::createObjectFromStepData( args[5] );
 	readEntityReference( args[6], m_OriginalValue, map );
 	readEntityReference( args[7], m_CurrentValue, map );
 	readEntityReference( args[8], m_TotalReplacementCost, map );
-	m_Owner = IfcActorSelect::readStepData( args[9], map );
-	m_User = IfcActorSelect::readStepData( args[10], map );
+	m_Owner = IfcActorSelect::createObjectFromStepData( args[9], map );
+	m_User = IfcActorSelect::createObjectFromStepData( args[10], map );
 	readEntityReference( args[11], m_ResponsiblePerson, map );
-	m_IncorporationDate = IfcDate::readStepData( args[12] );
+	m_IncorporationDate = IfcDate::createObjectFromStepData( args[12] );
 	readEntityReference( args[13], m_DepreciatedValue, map );
 }
 void IfcAsset::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

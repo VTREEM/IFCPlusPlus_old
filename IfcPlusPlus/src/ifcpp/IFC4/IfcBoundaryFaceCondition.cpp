@@ -49,17 +49,17 @@ void IfcBoundaryFaceCondition::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcBoundaryFaceCondition::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcBoundaryFaceCondition::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcBoundaryFaceCondition::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcBoundaryFaceCondition, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcBoundaryFaceCondition, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_TranslationalStiffnessByAreaX = IfcModulusOfSubgradeReactionSelect::readStepData( args[1], map );
-	m_TranslationalStiffnessByAreaY = IfcModulusOfSubgradeReactionSelect::readStepData( args[2], map );
-	m_TranslationalStiffnessByAreaZ = IfcModulusOfSubgradeReactionSelect::readStepData( args[3], map );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_TranslationalStiffnessByAreaX = IfcModulusOfSubgradeReactionSelect::createObjectFromStepData( args[1], map );
+	m_TranslationalStiffnessByAreaY = IfcModulusOfSubgradeReactionSelect::createObjectFromStepData( args[2], map );
+	m_TranslationalStiffnessByAreaZ = IfcModulusOfSubgradeReactionSelect::createObjectFromStepData( args[3], map );
 }
 void IfcBoundaryFaceCondition::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

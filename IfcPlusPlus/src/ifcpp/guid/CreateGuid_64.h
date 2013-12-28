@@ -12,8 +12,8 @@ std::string createGUID32();
 
 #ifndef WIN32
 #include <time.h>
-#include <uuid/uuid.hpp>
-#include <stdlib.h>
+#include <uuid/uuid.h>
+#include <cstdlib>
 
 typedef struct _GUID {		  // size is 16
 	unsigned long Data1;
