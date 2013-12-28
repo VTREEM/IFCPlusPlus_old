@@ -593,7 +593,7 @@ void classifyEasyFaces(FaceLoopList &face_loops,
   }
 }
 #endif
-
+#if 0
 void carve::csg::CSG::classifyFaceGroupsSimple(const V2Set &shared_edges,
                                                VertexClassification &vclass,
                                                const carve::poly::Polyhedron  *poly_a,                           
@@ -770,3 +770,4 @@ void carve::csg::CSG::classifyFaceGroupsSimple(const V2Set &shared_edges,
   }
 #endif
 }
+#endif
