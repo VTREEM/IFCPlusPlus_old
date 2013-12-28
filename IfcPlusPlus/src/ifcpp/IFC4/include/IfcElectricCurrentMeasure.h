@@ -29,7 +29,7 @@ public:
 	~IfcElectricCurrentMeasure();
 	virtual const char* classname() const { return "IfcElectricCurrentMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcElectricCurrentMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcElectricCurrentMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

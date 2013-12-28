@@ -49,15 +49,15 @@ void IfcParameterizedProfileDef::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcParameterizedProfileDef::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcParameterizedProfileDef::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcParameterizedProfileDef::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcParameterizedProfileDef, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcParameterizedProfileDef, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ProfileType = IfcProfileTypeEnum::readStepData( args[0] );
-	m_ProfileName = IfcLabel::readStepData( args[1] );
+	m_ProfileType = IfcProfileTypeEnum::createObjectFromStepData( args[0] );
+	m_ProfileName = IfcLabel::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_Position, map );
 }
 void IfcParameterizedProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

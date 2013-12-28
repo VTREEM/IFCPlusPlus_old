@@ -37,7 +37,7 @@ public:
 	~IfcPermitTypeEnum();
 	virtual const char* classname() const { return "IfcPermitTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcPermitTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcPermitTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcPermitTypeEnumEnum m_enum;
 };
 

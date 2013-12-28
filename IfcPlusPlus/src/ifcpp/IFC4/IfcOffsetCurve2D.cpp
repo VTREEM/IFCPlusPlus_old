@@ -49,7 +49,7 @@ void IfcOffsetCurve2D::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcOffsetCurve2D::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcOffsetCurve2D::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcOffsetCurve2D::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcOffsetCurve2D, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -57,7 +57,7 @@ void IfcOffsetCurve2D::readStepData( std::vector<std::string>& args, const std::
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcOffsetCurve2D, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_BasisCurve, map );
-	m_Distance = IfcLengthMeasure::readStepData( args[1] );
+	m_Distance = IfcLengthMeasure::createObjectFromStepData( args[1] );
 	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
 	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
 }

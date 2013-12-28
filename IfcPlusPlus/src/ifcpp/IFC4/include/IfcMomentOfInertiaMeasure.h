@@ -29,7 +29,7 @@ public:
 	~IfcMomentOfInertiaMeasure();
 	virtual const char* classname() const { return "IfcMomentOfInertiaMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcMomentOfInertiaMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcMomentOfInertiaMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

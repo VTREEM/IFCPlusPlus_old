@@ -58,20 +58,20 @@ void IfcFailureConnectionCondition::getStepLine( std::stringstream& stream ) con
 	stream << ");";
 }
 void IfcFailureConnectionCondition::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcFailureConnectionCondition::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcFailureConnectionCondition::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<7 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcFailureConnectionCondition, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>7 ){ std::cout << "Wrong parameter count for entity IfcFailureConnectionCondition, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_TensionFailureX = IfcForceMeasure::readStepData( args[1] );
-	m_TensionFailureY = IfcForceMeasure::readStepData( args[2] );
-	m_TensionFailureZ = IfcForceMeasure::readStepData( args[3] );
-	m_CompressionFailureX = IfcForceMeasure::readStepData( args[4] );
-	m_CompressionFailureY = IfcForceMeasure::readStepData( args[5] );
-	m_CompressionFailureZ = IfcForceMeasure::readStepData( args[6] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_TensionFailureX = IfcForceMeasure::createObjectFromStepData( args[1] );
+	m_TensionFailureY = IfcForceMeasure::createObjectFromStepData( args[2] );
+	m_TensionFailureZ = IfcForceMeasure::createObjectFromStepData( args[3] );
+	m_CompressionFailureX = IfcForceMeasure::createObjectFromStepData( args[4] );
+	m_CompressionFailureY = IfcForceMeasure::createObjectFromStepData( args[5] );
+	m_CompressionFailureZ = IfcForceMeasure::createObjectFromStepData( args[6] );
 }
 void IfcFailureConnectionCondition::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

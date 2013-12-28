@@ -19,8 +19,10 @@
 #include "ifcpp/model/shared_ptr.h"
 
 #ifdef __GNUC__
+#include "ifcpp/IfcPPTypeEnums.h"
 #include "ifcpp/IfcPPEntityEnums.h"
 #else
+enum IfcPPTypeEnum;
 enum IfcPPEntityEnum;
 #endif
 
@@ -43,21 +45,25 @@ public:
 	virtual const char* classname() const { return "IfcPPEntity"; }
 	virtual void getStepLine( std::stringstream& stream ) const;
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	virtual void readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map );
+	virtual void readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 	virtual void setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self );
 	virtual void unlinkSelf();
 	virtual const int getId() const { return m_id; }
 	void setId( int id );
-	std::string m_arguments;
+	std::string m_entity_argument_str;
 	IfcPPEntityEnum m_entity_enum;
 };
 
-//// pure abstract class to derive IFC TYPEs from
+//// class to derive IFC TYPEs from
 class IfcPPType : public IfcPPObject
 {
 public:	
+	IfcPPType();
+	~IfcPPType();
 	virtual const char* classname() const { return "IfcPPType"; }
 	virtual void getStepData( std::stringstream& ) {};
+	virtual void readStepArgument( const std::string& arg );
+	IfcPPTypeEnum m_type_enum;
 };
 
 

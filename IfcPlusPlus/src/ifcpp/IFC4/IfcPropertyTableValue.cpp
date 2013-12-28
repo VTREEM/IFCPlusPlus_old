@@ -68,21 +68,21 @@ void IfcPropertyTableValue::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcPropertyTableValue::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPropertyTableValue::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPropertyTableValue::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcPropertyTableValue, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>8 ){ std::cout << "Wrong parameter count for entity IfcPropertyTableValue, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcIdentifier::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
+	m_Name = IfcIdentifier::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readSelectList( args[2], m_DefiningValues, map );
 	readSelectList( args[3], m_DefinedValues, map );
-	m_Expression = IfcText::readStepData( args[4] );
-	m_DefiningUnit = IfcUnit::readStepData( args[5], map );
-	m_DefinedUnit = IfcUnit::readStepData( args[6], map );
-	m_CurveInterpolation = IfcCurveInterpolationEnum::readStepData( args[7] );
+	m_Expression = IfcText::createObjectFromStepData( args[4] );
+	m_DefiningUnit = IfcUnit::createObjectFromStepData( args[5], map );
+	m_DefinedUnit = IfcUnit::createObjectFromStepData( args[6], map );
+	m_CurveInterpolation = IfcCurveInterpolationEnum::createObjectFromStepData( args[7] );
 }
 void IfcPropertyTableValue::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -40,7 +40,7 @@ void IfcTubeBundleTypeEnum::getStepParameter( std::stringstream& stream, bool is
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcTubeBundleTypeEnum> IfcTubeBundleTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcTubeBundleTypeEnum> IfcTubeBundleTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTubeBundleTypeEnum>(); }

@@ -60,19 +60,19 @@ void IfcReinforcementBarProperties::getStepLine( std::stringstream& stream ) con
 	stream << ");";
 }
 void IfcReinforcementBarProperties::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcReinforcementBarProperties::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcReinforcementBarProperties::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<6 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcReinforcementBarProperties, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>6 ){ std::cout << "Wrong parameter count for entity IfcReinforcementBarProperties, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_TotalCrossSectionArea = IfcAreaMeasure::readStepData( args[0] );
-	m_SteelGrade = IfcLabel::readStepData( args[1] );
-	m_BarSurface = IfcReinforcingBarSurfaceEnum::readStepData( args[2] );
-	m_EffectiveDepth = IfcLengthMeasure::readStepData( args[3] );
-	m_NominalBarDiameter = IfcPositiveLengthMeasure::readStepData( args[4] );
-	m_BarCount = IfcCountMeasure::readStepData( args[5] );
+	m_TotalCrossSectionArea = IfcAreaMeasure::createObjectFromStepData( args[0] );
+	m_SteelGrade = IfcLabel::createObjectFromStepData( args[1] );
+	m_BarSurface = IfcReinforcingBarSurfaceEnum::createObjectFromStepData( args[2] );
+	m_EffectiveDepth = IfcLengthMeasure::createObjectFromStepData( args[3] );
+	m_NominalBarDiameter = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
+	m_BarCount = IfcCountMeasure::createObjectFromStepData( args[5] );
 }
 void IfcReinforcementBarProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -88,7 +88,7 @@ void IfcHumidifierTypeEnum::getStepParameter( std::stringstream& stream, bool is
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcHumidifierTypeEnum> IfcHumidifierTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcHumidifierTypeEnum> IfcHumidifierTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcHumidifierTypeEnum>(); }

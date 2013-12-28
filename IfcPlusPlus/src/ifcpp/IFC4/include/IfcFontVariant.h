@@ -28,7 +28,7 @@ public:
 	~IfcFontVariant();
 	virtual const char* classname() const { return "IfcFontVariant"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcFontVariant> readStepData( std::string& arg );
+	static shared_ptr<IfcFontVariant> createObjectFromStepData( const std::string& arg );
 	std::string m_value;
 };
 

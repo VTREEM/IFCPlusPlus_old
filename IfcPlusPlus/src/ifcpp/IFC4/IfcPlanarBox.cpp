@@ -48,16 +48,16 @@ void IfcPlanarBox::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcPlanarBox::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcPlanarBox::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcPlanarBox::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcPlanarBox, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcPlanarBox, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_SizeInX = IfcLengthMeasure::readStepData( args[0] );
-	m_SizeInY = IfcLengthMeasure::readStepData( args[1] );
-	m_Placement = IfcAxis2Placement::readStepData( args[2], map );
+	m_SizeInX = IfcLengthMeasure::createObjectFromStepData( args[0] );
+	m_SizeInY = IfcLengthMeasure::createObjectFromStepData( args[1] );
+	m_Placement = IfcAxis2Placement::createObjectFromStepData( args[2], map );
 }
 void IfcPlanarBox::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

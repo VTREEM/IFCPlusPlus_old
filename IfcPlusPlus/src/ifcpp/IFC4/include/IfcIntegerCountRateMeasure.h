@@ -29,7 +29,7 @@ public:
 	~IfcIntegerCountRateMeasure();
 	virtual const char* classname() const { return "IfcIntegerCountRateMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcIntegerCountRateMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcIntegerCountRateMeasure> createObjectFromStepData( const std::string& arg );
 	int m_value;
 };
 

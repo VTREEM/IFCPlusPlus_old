@@ -36,7 +36,7 @@ void IfcConnectionGeometry::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcConnectionGeometry::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcConnectionGeometry::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcConnectionGeometry::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcConnectionGeometry::setInverseCounterparts( shared_ptr<IfcPPEntity> )

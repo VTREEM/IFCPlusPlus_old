@@ -29,7 +29,7 @@ public:
 	~IfcLuminousIntensityMeasure();
 	virtual const char* classname() const { return "IfcLuminousIntensityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcLuminousIntensityMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcLuminousIntensityMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

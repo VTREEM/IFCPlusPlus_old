@@ -44,7 +44,7 @@ public:
 	~IfcSanitaryTerminalTypeEnum();
 	virtual const char* classname() const { return "IfcSanitaryTerminalTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcSanitaryTerminalTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcSanitaryTerminalTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcSanitaryTerminalTypeEnumEnum m_enum;
 };
 

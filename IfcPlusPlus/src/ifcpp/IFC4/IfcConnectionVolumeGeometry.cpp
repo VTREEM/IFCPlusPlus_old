@@ -42,15 +42,15 @@ void IfcConnectionVolumeGeometry::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcConnectionVolumeGeometry::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcConnectionVolumeGeometry::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcConnectionVolumeGeometry::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcConnectionVolumeGeometry, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcConnectionVolumeGeometry, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_VolumeOnRelatingElement = IfcSolidOrShell::readStepData( args[0], map );
-	m_VolumeOnRelatedElement = IfcSolidOrShell::readStepData( args[1], map );
+	m_VolumeOnRelatingElement = IfcSolidOrShell::createObjectFromStepData( args[0], map );
+	m_VolumeOnRelatedElement = IfcSolidOrShell::createObjectFromStepData( args[1], map );
 }
 void IfcConnectionVolumeGeometry::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

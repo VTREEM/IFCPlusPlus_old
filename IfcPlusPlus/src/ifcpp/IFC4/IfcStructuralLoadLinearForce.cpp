@@ -59,20 +59,20 @@ void IfcStructuralLoadLinearForce::getStepLine( std::stringstream& stream ) cons
 	stream << ");";
 }
 void IfcStructuralLoadLinearForce::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcStructuralLoadLinearForce::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcStructuralLoadLinearForce::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<7 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcStructuralLoadLinearForce, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>7 ){ std::cout << "Wrong parameter count for entity IfcStructuralLoadLinearForce, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_LinearForceX = IfcLinearForceMeasure::readStepData( args[1] );
-	m_LinearForceY = IfcLinearForceMeasure::readStepData( args[2] );
-	m_LinearForceZ = IfcLinearForceMeasure::readStepData( args[3] );
-	m_LinearMomentX = IfcLinearMomentMeasure::readStepData( args[4] );
-	m_LinearMomentY = IfcLinearMomentMeasure::readStepData( args[5] );
-	m_LinearMomentZ = IfcLinearMomentMeasure::readStepData( args[6] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_LinearForceX = IfcLinearForceMeasure::createObjectFromStepData( args[1] );
+	m_LinearForceY = IfcLinearForceMeasure::createObjectFromStepData( args[2] );
+	m_LinearForceZ = IfcLinearForceMeasure::createObjectFromStepData( args[3] );
+	m_LinearMomentX = IfcLinearMomentMeasure::createObjectFromStepData( args[4] );
+	m_LinearMomentY = IfcLinearMomentMeasure::createObjectFromStepData( args[5] );
+	m_LinearMomentZ = IfcLinearMomentMeasure::createObjectFromStepData( args[6] );
 }
 void IfcStructuralLoadLinearForce::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

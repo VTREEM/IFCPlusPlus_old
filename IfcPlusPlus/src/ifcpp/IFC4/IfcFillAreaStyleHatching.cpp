@@ -56,7 +56,7 @@ void IfcFillAreaStyleHatching::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcFillAreaStyleHatching::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcFillAreaStyleHatching::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcFillAreaStyleHatching::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcFillAreaStyleHatching, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -64,10 +64,10 @@ void IfcFillAreaStyleHatching::readStepData( std::vector<std::string>& args, con
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcFillAreaStyleHatching, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_HatchLineAppearance, map );
-	m_StartOfNextHatchLine = IfcHatchLineDistanceSelect::readStepData( args[1], map );
+	m_StartOfNextHatchLine = IfcHatchLineDistanceSelect::createObjectFromStepData( args[1], map );
 	readEntityReference( args[2], m_PointOfReferenceHatchLine, map );
 	readEntityReference( args[3], m_PatternStart, map );
-	m_HatchLineAngle = IfcPlaneAngleMeasure::readStepData( args[4] );
+	m_HatchLineAngle = IfcPlaneAngleMeasure::createObjectFromStepData( args[4] );
 }
 void IfcFillAreaStyleHatching::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

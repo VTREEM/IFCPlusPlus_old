@@ -41,7 +41,7 @@ public:
 	~IfcGeometricProjectionEnum();
 	virtual const char* classname() const { return "IfcGeometricProjectionEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcGeometricProjectionEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcGeometricProjectionEnum> createObjectFromStepData( const std::string& arg );
 	IfcGeometricProjectionEnumEnum m_enum;
 };
 

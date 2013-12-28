@@ -30,7 +30,7 @@ public:
 	~IfcDuration();
 	virtual const char* classname() const { return "IfcDuration"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcDuration> readStepData( std::string& arg );
+	static shared_ptr<IfcDuration> createObjectFromStepData( const std::string& arg );
 	std::string m_value;
 };
 

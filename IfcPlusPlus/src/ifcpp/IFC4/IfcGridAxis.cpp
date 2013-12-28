@@ -49,16 +49,16 @@ void IfcGridAxis::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcGridAxis::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcGridAxis::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcGridAxis::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcGridAxis, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcGridAxis, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_AxisTag = IfcLabel::readStepData( args[0] );
+	m_AxisTag = IfcLabel::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_AxisCurve, map );
-	m_SameSense = IfcBoolean::readStepData( args[2] );
+	m_SameSense = IfcBoolean::createObjectFromStepData( args[2] );
 }
 void IfcGridAxis::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

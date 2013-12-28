@@ -19,7 +19,7 @@
 // TYPE IfcSurfaceOrFaceSurface 
 IfcSurfaceOrFaceSurface::IfcSurfaceOrFaceSurface() {}
 IfcSurfaceOrFaceSurface::~IfcSurfaceOrFaceSurface() {}
-shared_ptr<IfcSurfaceOrFaceSurface> IfcSurfaceOrFaceSurface::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcSurfaceOrFaceSurface> IfcSurfaceOrFaceSurface::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcSurfaceOrFaceSurface>(); }
@@ -53,6 +53,17 @@ shared_ptr<IfcSurfaceOrFaceSurface> IfcSurfaceOrFaceSurface::readStepData( std::
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
+		{
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcSurfaceOrFaceSurface> result_ptr_self = dynamic_pointer_cast<IfcSurfaceOrFaceSurface>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
+		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSurfaceOrFaceSurface::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );

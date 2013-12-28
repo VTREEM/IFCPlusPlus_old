@@ -3531,6 +3531,9 @@
     <ClCompile Include="src\ifcpp\IfcPPEntityBroker.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\ifcpp\IfcPPTypeBroker.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ifcpp\guid\CreateGuid_64.h">
@@ -3597,6 +3600,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\ifcpp\IfcPPTypes.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ifcpp\IfcPPTypeEnums.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ifcpp\IfcPPTypeMap.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

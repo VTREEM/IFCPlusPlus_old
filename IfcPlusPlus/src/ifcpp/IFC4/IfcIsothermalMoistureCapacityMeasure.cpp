@@ -32,7 +32,7 @@ void IfcIsothermalMoistureCapacityMeasure::getStepParameter( std::stringstream& 
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcIsothermalMoistureCapacityMeasure> IfcIsothermalMoistureCapacityMeasure::readStepData( std::string& arg )
+shared_ptr<IfcIsothermalMoistureCapacityMeasure> IfcIsothermalMoistureCapacityMeasure::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcIsothermalMoistureCapacityMeasure>(); }

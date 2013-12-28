@@ -33,7 +33,7 @@ void IfcDescriptiveMeasure::getStepParameter( std::stringstream& stream, bool is
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcDescriptiveMeasure> IfcDescriptiveMeasure::readStepData( std::string& arg )
+shared_ptr<IfcDescriptiveMeasure> IfcDescriptiveMeasure::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDescriptiveMeasure>(); }

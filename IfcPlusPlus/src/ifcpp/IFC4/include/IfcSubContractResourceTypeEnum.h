@@ -36,7 +36,7 @@ public:
 	~IfcSubContractResourceTypeEnum();
 	virtual const char* classname() const { return "IfcSubContractResourceTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcSubContractResourceTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcSubContractResourceTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcSubContractResourceTypeEnumEnum m_enum;
 };
 

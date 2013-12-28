@@ -26,7 +26,7 @@
 #include "gui/TabReadWrite.h"
 #include "gui/MainWindow.h"
 #include "ifcpp/model/IfcPPException.h"
-#include "ifcppgeometry/Utility.h"
+#include "ifcppgeometry/GeomUtils.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
 #include "ifcppgeometry/RepresentationConverter.h"
 #include "ifcppgeometry/ConverterOSG.h"

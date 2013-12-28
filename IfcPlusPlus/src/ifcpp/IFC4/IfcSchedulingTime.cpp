@@ -46,16 +46,16 @@ void IfcSchedulingTime::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcSchedulingTime::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcSchedulingTime::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcSchedulingTime::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcSchedulingTime, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcSchedulingTime, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_DataOrigin = IfcDataOriginEnum::readStepData( args[1] );
-	m_UserDefinedDataOrigin = IfcLabel::readStepData( args[2] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_DataOrigin = IfcDataOriginEnum::createObjectFromStepData( args[1] );
+	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[2] );
 }
 void IfcSchedulingTime::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

@@ -92,26 +92,26 @@ void IfcStructuralPlanarAction::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcStructuralPlanarAction::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcStructuralPlanarAction::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcStructuralPlanarAction::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<12 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcStructuralPlanarAction, expecting 12, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>12 ){ std::cout << "Wrong parameter count for entity IfcStructuralPlanarAction, expecting 12, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_ObjectType = IfcLabel::readStepData( args[4] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
 	readEntityReference( args[7], m_AppliedLoad, map );
-	m_GlobalOrLocal = IfcGlobalOrLocalEnum::readStepData( args[8] );
+	m_GlobalOrLocal = IfcGlobalOrLocalEnum::createObjectFromStepData( args[8] );
 	if( _stricmp( args[9].c_str(), ".F." ) == 0 ) { m_DestabilizingLoad = false; }
 	else if( _stricmp( args[9].c_str(), ".T." ) == 0 ) { m_DestabilizingLoad = true; }
-	m_ProjectedOrTrue = IfcProjectedOrTrueLengthEnum::readStepData( args[10] );
-	m_PredefinedType = IfcStructuralSurfaceActivityTypeEnum::readStepData( args[11] );
+	m_ProjectedOrTrue = IfcProjectedOrTrueLengthEnum::createObjectFromStepData( args[10] );
+	m_PredefinedType = IfcStructuralSurfaceActivityTypeEnum::createObjectFromStepData( args[11] );
 }
 void IfcStructuralPlanarAction::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

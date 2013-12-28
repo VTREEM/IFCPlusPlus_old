@@ -45,8 +45,8 @@ public:
 	void addArcWithEndPoint(		std::vector<carve::geom::vector<2> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM ) const;
 	static void addArcWithEndPoint(	std::vector<carve::geom::vector<2> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int segments );
 	void mirrorCopyPath(			std::vector<carve::geom::vector<2> >& coords, bool mirror_on_y_axis, bool mirror_on_x_axis ) const;
-	void mirrorCopyPathBack(		std::vector<carve::geom::vector<2> >& coords, bool mirror_on_y_axis, bool mirror_on_x_axis ) const;
-		static void addAvoidingDuplicates( const std::vector<carve::geom::vector<2> >& polygon, std::vector<std::vector<carve::geom::vector<2> > >& paths );
+	void mirrorCopyPathReverse(		std::vector<carve::geom::vector<2> >& coords, bool mirror_on_y_axis, bool mirror_on_x_axis ) const;
+	static void addAvoidingDuplicates( const std::vector<carve::geom::vector<2> >& polygon, std::vector<std::vector<carve::geom::vector<2> > >& paths );
 	static void deleteLastPointIfEqualToFirst( std::vector<carve::geom::vector<2> >& polygon );
 	const std::vector<std::vector<carve::geom::vector<2> > >& getCoordinates() { return m_paths; }
 

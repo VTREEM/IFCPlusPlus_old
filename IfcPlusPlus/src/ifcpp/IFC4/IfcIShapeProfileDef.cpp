@@ -73,23 +73,23 @@ void IfcIShapeProfileDef::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcIShapeProfileDef::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcIShapeProfileDef::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcIShapeProfileDef::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<10 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcIShapeProfileDef, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>10 ){ std::cout << "Wrong parameter count for entity IfcIShapeProfileDef, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ProfileType = IfcProfileTypeEnum::readStepData( args[0] );
-	m_ProfileName = IfcLabel::readStepData( args[1] );
+	m_ProfileType = IfcProfileTypeEnum::createObjectFromStepData( args[0] );
+	m_ProfileName = IfcLabel::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_Position, map );
-	m_OverallWidth = IfcPositiveLengthMeasure::readStepData( args[3] );
-	m_OverallDepth = IfcPositiveLengthMeasure::readStepData( args[4] );
-	m_WebThickness = IfcPositiveLengthMeasure::readStepData( args[5] );
-	m_FlangeThickness = IfcPositiveLengthMeasure::readStepData( args[6] );
-	m_FilletRadius = IfcNonNegativeLengthMeasure::readStepData( args[7] );
-	m_FlangeEdgeRadius = IfcNonNegativeLengthMeasure::readStepData( args[8] );
-	m_FlangeSlope = IfcPlaneAngleMeasure::readStepData( args[9] );
+	m_OverallWidth = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
+	m_OverallDepth = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
+	m_WebThickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[5] );
+	m_FlangeThickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[6] );
+	m_FilletRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[7] );
+	m_FlangeEdgeRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[8] );
+	m_FlangeSlope = IfcPlaneAngleMeasure::createObjectFromStepData( args[9] );
 }
 void IfcIShapeProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

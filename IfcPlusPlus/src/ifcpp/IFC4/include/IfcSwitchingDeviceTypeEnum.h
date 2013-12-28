@@ -43,7 +43,7 @@ public:
 	~IfcSwitchingDeviceTypeEnum();
 	virtual const char* classname() const { return "IfcSwitchingDeviceTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcSwitchingDeviceTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcSwitchingDeviceTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcSwitchingDeviceTypeEnumEnum m_enum;
 };
 

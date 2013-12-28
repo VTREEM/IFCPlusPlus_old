@@ -74,23 +74,23 @@ void IfcGeometricRepresentationSubContext::getStepLine( std::stringstream& strea
 	stream << ");";
 }
 void IfcGeometricRepresentationSubContext::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcGeometricRepresentationSubContext::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcGeometricRepresentationSubContext::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<10 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcGeometricRepresentationSubContext, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>10 ){ std::cout << "Wrong parameter count for entity IfcGeometricRepresentationSubContext, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ContextIdentifier = IfcLabel::readStepData( args[0] );
-	m_ContextType = IfcLabel::readStepData( args[1] );
-	m_CoordinateSpaceDimension = IfcDimensionCount::readStepData( args[2] );
+	m_ContextIdentifier = IfcLabel::createObjectFromStepData( args[0] );
+	m_ContextType = IfcLabel::createObjectFromStepData( args[1] );
+	m_CoordinateSpaceDimension = IfcDimensionCount::createObjectFromStepData( args[2] );
 	readRealValue( args[3], m_Precision );
-	m_WorldCoordinateSystem = IfcAxis2Placement::readStepData( args[4], map );
+	m_WorldCoordinateSystem = IfcAxis2Placement::createObjectFromStepData( args[4], map );
 	readEntityReference( args[5], m_TrueNorth, map );
 	readEntityReference( args[6], m_ParentContext, map );
-	m_TargetScale = IfcPositiveRatioMeasure::readStepData( args[7] );
-	m_TargetView = IfcGeometricProjectionEnum::readStepData( args[8] );
-	m_UserDefinedTargetView = IfcLabel::readStepData( args[9] );
+	m_TargetScale = IfcPositiveRatioMeasure::createObjectFromStepData( args[7] );
+	m_TargetView = IfcGeometricProjectionEnum::createObjectFromStepData( args[8] );
+	m_UserDefinedTargetView = IfcLabel::createObjectFromStepData( args[9] );
 }
 void IfcGeometricRepresentationSubContext::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

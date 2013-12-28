@@ -60,20 +60,20 @@ void IfcTextStyleTextModel::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTextStyleTextModel::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTextStyleTextModel::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTextStyleTextModel::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<7 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcTextStyleTextModel, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>7 ){ std::cout << "Wrong parameter count for entity IfcTextStyleTextModel, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_TextIndent = IfcSizeSelect::readStepData( args[0], map );
-	m_TextAlign = IfcTextAlignment::readStepData( args[1] );
-	m_TextDecoration = IfcTextDecoration::readStepData( args[2] );
-	m_LetterSpacing = IfcSizeSelect::readStepData( args[3], map );
-	m_WordSpacing = IfcSizeSelect::readStepData( args[4], map );
-	m_TextTransform = IfcTextTransformation::readStepData( args[5] );
-	m_LineHeight = IfcSizeSelect::readStepData( args[6], map );
+	m_TextIndent = IfcSizeSelect::createObjectFromStepData( args[0], map );
+	m_TextAlign = IfcTextAlignment::createObjectFromStepData( args[1] );
+	m_TextDecoration = IfcTextDecoration::createObjectFromStepData( args[2] );
+	m_LetterSpacing = IfcSizeSelect::createObjectFromStepData( args[3], map );
+	m_WordSpacing = IfcSizeSelect::createObjectFromStepData( args[4], map );
+	m_TextTransform = IfcTextTransformation::createObjectFromStepData( args[5] );
+	m_LineHeight = IfcSizeSelect::createObjectFromStepData( args[6], map );
 }
 void IfcTextStyleTextModel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

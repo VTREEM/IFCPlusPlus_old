@@ -42,7 +42,7 @@ public:
 	~IfcSpatialZoneTypeEnum();
 	virtual const char* classname() const { return "IfcSpatialZoneTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcSpatialZoneTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcSpatialZoneTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcSpatialZoneTypeEnumEnum m_enum;
 };
 

@@ -131,7 +131,7 @@ bool CmdLoadIfcFile::doCmd()
 
 	if( err.tellp() > 0 )
 	{
-		throw IfcPPException( err.str().c_str() );
+		throw IfcPPException( err.str().c_str(), __func__ );
 	}
 
 	return true;

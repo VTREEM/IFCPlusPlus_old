@@ -61,7 +61,7 @@
 #include "ifcpp/IFC4/include/IfcAxis2Placement.h"
 #include "ifcpp/IFC4/include/IfcLabel.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
-#include "ifcppgeometry/Utility.h"
+#include "ifcppgeometry/GeomUtils.h"
 
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"

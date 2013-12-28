@@ -52,18 +52,18 @@ void IfcConnectionPointEccentricity::getStepLine( std::stringstream& stream ) co
 	stream << ");";
 }
 void IfcConnectionPointEccentricity::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcConnectionPointEccentricity::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcConnectionPointEccentricity::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcConnectionPointEccentricity, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcConnectionPointEccentricity, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_PointOnRelatingElement = IfcPointOrVertexPoint::readStepData( args[0], map );
-	m_PointOnRelatedElement = IfcPointOrVertexPoint::readStepData( args[1], map );
-	m_EccentricityInX = IfcLengthMeasure::readStepData( args[2] );
-	m_EccentricityInY = IfcLengthMeasure::readStepData( args[3] );
-	m_EccentricityInZ = IfcLengthMeasure::readStepData( args[4] );
+	m_PointOnRelatingElement = IfcPointOrVertexPoint::createObjectFromStepData( args[0], map );
+	m_PointOnRelatedElement = IfcPointOrVertexPoint::createObjectFromStepData( args[1], map );
+	m_EccentricityInX = IfcLengthMeasure::createObjectFromStepData( args[2] );
+	m_EccentricityInY = IfcLengthMeasure::createObjectFromStepData( args[3] );
+	m_EccentricityInZ = IfcLengthMeasure::createObjectFromStepData( args[4] );
 }
 void IfcConnectionPointEccentricity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -72,7 +72,7 @@ void IfcConstructionMaterialResourceTypeEnum::getStepParameter( std::stringstrea
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcConstructionMaterialResourceTypeEnum> IfcConstructionMaterialResourceTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcConstructionMaterialResourceTypeEnum> IfcConstructionMaterialResourceTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcConstructionMaterialResourceTypeEnum>(); }

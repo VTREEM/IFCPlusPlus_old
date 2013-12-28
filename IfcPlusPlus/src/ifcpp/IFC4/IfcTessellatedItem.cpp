@@ -38,7 +38,7 @@ void IfcTessellatedItem::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcTessellatedItem::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcTessellatedItem::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcTessellatedItem::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcTessellatedItem::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

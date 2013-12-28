@@ -78,23 +78,23 @@ void IfcMetric::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcMetric::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcMetric::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcMetric::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<11 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcMetric, expecting 11, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>11 ){ std::cout << "Wrong parameter count for entity IfcMetric, expecting 11, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_ConstraintGrade = IfcConstraintEnum::readStepData( args[2] );
-	m_ConstraintSource = IfcLabel::readStepData( args[3] );
-	m_CreatingActor = IfcActorSelect::readStepData( args[4], map );
-	m_CreationTime = IfcDateTime::readStepData( args[5] );
-	m_UserDefinedGrade = IfcLabel::readStepData( args[6] );
-	m_Benchmark = IfcBenchmarkEnum::readStepData( args[7] );
-	m_ValueSource = IfcLabel::readStepData( args[8] );
-	m_DataValue = IfcMetricValueSelect::readStepData( args[9], map );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_ConstraintGrade = IfcConstraintEnum::createObjectFromStepData( args[2] );
+	m_ConstraintSource = IfcLabel::createObjectFromStepData( args[3] );
+	m_CreatingActor = IfcActorSelect::createObjectFromStepData( args[4], map );
+	m_CreationTime = IfcDateTime::createObjectFromStepData( args[5] );
+	m_UserDefinedGrade = IfcLabel::createObjectFromStepData( args[6] );
+	m_Benchmark = IfcBenchmarkEnum::createObjectFromStepData( args[7] );
+	m_ValueSource = IfcLabel::createObjectFromStepData( args[8] );
+	m_DataValue = IfcMetricValueSelect::createObjectFromStepData( args[9], map );
 	readEntityReference( args[10], m_ReferencePath, map );
 }
 void IfcMetric::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

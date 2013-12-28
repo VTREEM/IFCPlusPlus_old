@@ -66,21 +66,21 @@ void IfcRectangleHollowProfileDef::getStepLine( std::stringstream& stream ) cons
 	stream << ");";
 }
 void IfcRectangleHollowProfileDef::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRectangleHollowProfileDef::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRectangleHollowProfileDef::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRectangleHollowProfileDef, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>8 ){ std::cout << "Wrong parameter count for entity IfcRectangleHollowProfileDef, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ProfileType = IfcProfileTypeEnum::readStepData( args[0] );
-	m_ProfileName = IfcLabel::readStepData( args[1] );
+	m_ProfileType = IfcProfileTypeEnum::createObjectFromStepData( args[0] );
+	m_ProfileName = IfcLabel::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_Position, map );
-	m_XDim = IfcPositiveLengthMeasure::readStepData( args[3] );
-	m_YDim = IfcPositiveLengthMeasure::readStepData( args[4] );
-	m_WallThickness = IfcPositiveLengthMeasure::readStepData( args[5] );
-	m_InnerFilletRadius = IfcNonNegativeLengthMeasure::readStepData( args[6] );
-	m_OuterFilletRadius = IfcNonNegativeLengthMeasure::readStepData( args[7] );
+	m_XDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
+	m_YDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
+	m_WallThickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[5] );
+	m_InnerFilletRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[6] );
+	m_OuterFilletRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[7] );
 }
 void IfcRectangleHollowProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -92,7 +92,7 @@ void IfcStairTypeEnum::getStepParameter( std::stringstream& stream, bool is_sele
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcStairTypeEnum> IfcStairTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcStairTypeEnum> IfcStairTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStairTypeEnum>(); }

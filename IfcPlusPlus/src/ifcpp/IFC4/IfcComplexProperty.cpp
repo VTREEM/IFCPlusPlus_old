@@ -53,16 +53,16 @@ void IfcComplexProperty::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcComplexProperty::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcComplexProperty::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcComplexProperty::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcComplexProperty, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcComplexProperty, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcIdentifier::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_UsageName = IfcIdentifier::readStepData( args[2] );
+	m_Name = IfcIdentifier::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_UsageName = IfcIdentifier::createObjectFromStepData( args[2] );
 	readEntityReferenceList( args[3], m_HasProperties, map );
 }
 void IfcComplexProperty::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

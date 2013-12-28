@@ -53,18 +53,18 @@ void IfcMaterialRelationship::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcMaterialRelationship::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcMaterialRelationship::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcMaterialRelationship::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcMaterialRelationship, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcMaterialRelationship, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_RelatingMaterial, map );
 	readEntityReferenceList( args[3], m_RelatedMaterials, map );
-	m_Expression = IfcLabel::readStepData( args[4] );
+	m_Expression = IfcLabel::createObjectFromStepData( args[4] );
 }
 void IfcMaterialRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

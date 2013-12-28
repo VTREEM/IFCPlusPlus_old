@@ -23,29 +23,46 @@
 #include <omp.h>
 #endif
 
-#ifdef _LIBCPP_VERSION
-// using libc++
-#include <unordered_map>
-#define UNORDERED_MAP std::unordered_map
-#else
-// using libstdc++
-#include <tr1/unordered_map>
-#define UNORDERED_MAP std::tr1::unordered_map
-#endif
-
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPObject.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcpp/model/UnknownEntityException.h"
+#include "ifcpp/IfcPPTypeMap.h"
 #include "ifcpp/IfcPPEntitiesMap.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/reader/IfcStepReader.h"
 
-static UNORDERED_MAP<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
+static std::map<std::string,IfcPPEntityEnum> map_string2entity_enum(initializers_IfcPP_entity, initializers_IfcPP_entity + sizeof(initializers_IfcPP_entity)/sizeof(initializers_IfcPP_entity[0]));
+static std::map<std::string,IfcPPTypeEnum> map_string2type_enum(initializers_IfcPP_type, initializers_IfcPP_type + sizeof(initializers_IfcPP_type)/sizeof(initializers_IfcPP_type[0]));
 
-void applyBackwardCompatibility( IfcPPModel::IfcVersion backward_version, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
+void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
+shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
+inline void findEndOfString( char*& stream_pos );
+
+IfcPPTypeEnum findTypeEnumForString( const std::string& type_name )
+{
+	std::map<std::string,IfcPPTypeEnum>::iterator it_type_enum = map_string2type_enum.find( type_name );
+	if( it_type_enum != map_string2type_enum.end() )
+	{
+		IfcPPTypeEnum type_enum = it_type_enum->second;
+		return type_enum;
+	}
+	return IFC_TYPE_UNDEFINED;
+}
+
+
+IfcPPEntityEnum findEntityEnumForString( const std::string& entity_name )
+{
+	std::map<std::string,IfcPPEntityEnum>::iterator it_enum = map_string2entity_enum.find( entity_name );
+	if( it_enum != map_string2entity_enum.end() )
+	{
+		IfcPPEntityEnum entity_enum = it_enum->second;
+		return entity_enum;
+	}
+	return IFC_ENTITY_UNDEFINED;
+}
 
 void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entity )
 {
@@ -120,8 +137,7 @@ void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entit
 
 	if( keyword.size() > 0 )
 	{
-		//std::map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
-		UNORDERED_MAP<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
+		std::map<std::string,IfcPPEntityEnum>::iterator it_entity_enum = map_string2entity_enum.find( keyword );
 		if( it_entity_enum == map_string2entity_enum.end() )
 		{
 			throw UnknownEntityException( keyword );
@@ -138,16 +154,14 @@ void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entit
 				entity->m_entity_enum = entity_enum;
 				
 				size_t sub_length = line.size() -(stream_pos-line.c_str());
-				entity->m_arguments.assign( stream_pos, sub_length );
+				entity->m_entity_argument_str.assign( stream_pos, sub_length );
 			}
 		}
 	}
 }
 
 
-
-
-// constructor
+//////////////////////////////////////////////////////////////////////////////////////////////////
 IfcStepReader::IfcStepReader()
 {
 }
@@ -155,83 +169,129 @@ IfcStepReader::~IfcStepReader()
 {
 }
 
-void IfcStepReader::readStreamHeader( std::string& read_in, shared_ptr<IfcPPModel> model )
+void IfcStepReader::readStreamHeader( const std::string& read_in )
 {
-	m_ifc_version = IfcPPModel::UNDEFINED;
-	m_file_schema = "";
-	
-
-	size_t file_header_end = read_in.find("DATA;");
-	
-	if( file_header_end != std::string::npos )
+	if( !m_model )
 	{
-		std::string file_header = read_in.substr(0,file_header_end);
-		model->setFileHeader( file_header );
+		throw IfcPPException( "Model not set.", __func__ );
 	}
 
-	size_t file_schema_begin = read_in.find("FILE_SCHEMA") + 11;
-	if( file_schema_begin != std::string::npos )
+	m_model->m_file_header = "";
+	m_model->m_ifc_schema_version = IfcPPModel::IFC_VERSION_UNDEFINED;
+	m_model->m_IFC_FILE_DESCRIPTION = "";
+	m_model->m_IFC_FILE_NAME = "";
+	m_model->m_IFC_FILE_SCHEMA = "";
+	
+	size_t file_header_start = read_in.find("HEADER;");
+	size_t file_header_end = read_in.find("ENDSEC;");
+	if( file_header_start == std::string::npos || file_header_end == std::string::npos )
 	{
-		size_t file_schema_end = read_in.find(";",file_schema_begin);
-		if( file_schema_end != std::string::npos )
+		throw IfcPPException( "Missing file header", __func__ );
+	}
+	
+	file_header_start += 7;
+	std::string file_header = read_in.substr( file_header_start, file_header_end - file_header_start );
+	m_model->setFileHeader( file_header );
+	
+	std::vector<std::string> vec_header_lines;
+	// split into lines
+	char* stream_pos = &file_header[0];
+	char* last_token = stream_pos;
+
+	while( *stream_pos != '\0' )
+	{
+		if( *stream_pos == '\'' )
 		{
+			findEndOfString( stream_pos );
+			continue;
+		}
+
+		if( *stream_pos == ';' )
+		{
+			char* begin_line = last_token;
+			std::string single_step_line( begin_line, stream_pos-last_token );
+			vec_header_lines.push_back( single_step_line );
+
+			++stream_pos;
+			while(isspace(*stream_pos)){++stream_pos;}
+			last_token = stream_pos;
+
+			continue;
+		}
+		++stream_pos;
+	}
+
+	for( int i=0; i<vec_header_lines.size(); ++i )
+	{
+		std::string header_line = vec_header_lines[i];
+
+		if( header_line.find("FILE_DESCRIPTION") != std::string::npos )
+		{
+			m_model->setFileDescription( header_line );
+			continue;
+		}
+
+		if( header_line.find("FILE_NAME") != std::string::npos )
+		{
+			m_model->setFileName( header_line );
+			continue;
+		}
+
+		if( header_line.find("FILE_SCHEMA") != std::string::npos )
+		{
+			size_t file_schema_begin = header_line.find("FILE_SCHEMA") + 11;
+			m_model->setFileSchema( header_line );
+
+			std::string file_schema_args = header_line.substr( 11 );
+			size_t find_whitespace = file_schema_args.find(" ");
+			while(find_whitespace != std::string::npos){ file_schema_args.erase(find_whitespace,1); find_whitespace = file_schema_args.find(" "); }
 			
-			m_file_schema = read_in.substr(file_schema_begin,file_schema_end-file_schema_begin);
-		
-			size_t find_whitespace = m_file_schema.find(" ");
-			while(find_whitespace != std::string::npos){ m_file_schema.erase(find_whitespace,1); find_whitespace = m_file_schema.find(" "); }
-			
-			if( m_file_schema.at(0) =='(' && m_file_schema.at(m_file_schema.size()-1) ==')' )
+			if( file_schema_args.at(0) =='(' && file_schema_args.at(file_schema_args.size()-1) ==')' )
 			{
-				m_file_schema = m_file_schema.substr( 1, m_file_schema.size()-2 );
+				file_schema_args = file_schema_args.substr( 1, file_schema_args.size()-2 );
 			}
-			if( m_file_schema.at(0) =='(' && m_file_schema.at(m_file_schema.size()-1) ==')' )
+			if( file_schema_args.at(0) =='(' && file_schema_args.at(file_schema_args.size()-1) ==')' )
 			{
-				m_file_schema = m_file_schema.substr( 1, m_file_schema.size()-2 );
+				file_schema_args = file_schema_args.substr( 1, file_schema_args.size()-2 );
 			}
-			if( m_file_schema.at(0) =='\'' && m_file_schema.at(m_file_schema.size()-1) =='\'' )
+			if( file_schema_args.at(0) =='\'' && file_schema_args.at(file_schema_args.size()-1) =='\'' )
 			{
-				m_file_schema = m_file_schema.substr( 1, m_file_schema.size()-2 );
+				file_schema_args = file_schema_args.substr( 1, file_schema_args.size()-2 );
 			}
-			model->setFileSchema( m_file_schema );
-			if( m_file_schema.substr(0,6).compare("IFC2X2") == 0 )
+				
+			if( file_schema_args.substr(0,6).compare("IFC2X2") == 0 )
 			{
-				m_ifc_version = IfcPPModel::IFC2X2;
+				m_model->m_ifc_schema_version = IfcPPModel::IFC2X2;
 			}
-			else if( m_file_schema.substr(0,6).compare("IFC2X3") == 0 )
+			else if( file_schema_args.substr(0,6).compare("IFC2X3") == 0 )
 			{
-				m_ifc_version = IfcPPModel::IFC2X3;
+				m_model->m_ifc_schema_version = IfcPPModel::IFC2X3;
 			}
-			else if( m_file_schema.substr(0,6).compare("IFC2X4") == 0 )
+			else if( file_schema_args.substr(0,6).compare("IFC2X4") == 0 )
 			{
-				m_ifc_version = IfcPPModel::IFC2X4;
+				m_model->m_ifc_schema_version = IfcPPModel::IFC2X4;
 			}
-			else if( m_file_schema.substr(0,5).compare("IFC2X") == 0 )
+			else if( file_schema_args.substr(0,5).compare("IFC2X") == 0 )
 			{
-				m_ifc_version = IfcPPModel::IFC2X;
+				m_model->m_ifc_schema_version = IfcPPModel::IFC2X;
 			}
-			else if( m_file_schema.compare("IFC4") == 0 )
+			else if( file_schema_args.compare("IFC4") == 0 )
 			{
-				m_ifc_version = IfcPPModel::IFC4;
+				m_model->m_ifc_schema_version = IfcPPModel::IFC4;
 			}
-			else if( m_file_schema.compare("IFC4RC4") == 0 )
+			else if( file_schema_args.compare("IFC4RC4") == 0 )
 			{
-				m_ifc_version = IfcPPModel::IFC4;
+				m_model->m_ifc_schema_version = IfcPPModel::IFC4;
 			}
 			else
 			{
-				m_ifc_version = IfcPPModel::UNKNOWN;
+				m_model->m_ifc_schema_version = IfcPPModel::IFC_VERSION_UNDEFINED;
 			}
 		}
 	}
 }
 
-
-
-//#undef IFCPP_OPENMP
-//#define IFCPP_OPENMP
-
-void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::string>& target_vec )
+void IfcStepReader::splitIntoStepLines( const std::string& read_in, std::vector<std::string>& target_vec )
 {
 	// set progress to 0
 	double progress = 0.0;
@@ -239,8 +299,9 @@ void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::s
 	const int length = (int)read_in.length();
 
 	// sort out comments like /* ... */
-	std::string buffer( read_in );
-	char* stream_pos_source = &read_in[0];
+	std::string buffer;
+	buffer.resize( length );
+	char* stream_pos_source = (char*)&read_in[0];
 	char* stream_pos = &buffer[0];
 
 	while( *stream_pos_source != '\0' )
@@ -271,6 +332,13 @@ void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::s
 		{
 			copyToEndOfStepString( stream_pos, stream_pos_source );
 		}
+
+		if( *stream_pos_source == '\r' )
+		{
+			// omit newlines
+			++stream_pos_source;
+			continue;
+		}
 		
 		if( *stream_pos_source == '\n' )
 		{
@@ -291,48 +359,27 @@ void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::s
 		stream_pos += 5;
 		while(isspace(*stream_pos)){++stream_pos;}
 	}
-	else
+	
+	// find the first data line
+	stream_pos = &buffer[0];
+	while( *stream_pos != '\0' )
 	{
-		// try to find the first data line another way
-		stream_pos = &buffer[0];
-		while( *stream_pos != '\0' )
+		if( *stream_pos == '#' )
 		{
-			if( *stream_pos == '#' )
-			{
-				break;
-			}
-			++stream_pos;
+			break;
 		}
+		++stream_pos;
 	}
 
 	// split into data lines: #1234=IFCOBJECTNAME(...,...,(...,...),...);
 	char* last_token = stream_pos;
 	char* progress_anchor = stream_pos;
-	bool escaped = false;
+
 	while( *stream_pos != '\0' )
 	{
 		if( *stream_pos == '\'' )
 		{
-			++stream_pos;
-			// beginning of string, continue to end
-			while( *stream_pos != '\0' )
-			{
-				escaped = false;
-				if( *stream_pos == '\\' )
-				{
-					if( *(stream_pos+1) == '\\' )
-					{
-						// we have a double backslash, so just continue
-						++stream_pos;
-						++stream_pos;
-						continue;
-					}
-					++stream_pos;
-					escaped = true;
-				}
-				
-				if( *stream_pos == '\'' )
-				{
+			findEndOfString( stream_pos );
 					if( *(stream_pos+1) == '\'' )
 					{
 						// we have a double quote, so just continue
@@ -340,16 +387,6 @@ void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::s
 						++stream_pos;
 						continue;
 					}
-					++stream_pos;
-					if( escaped )
-					{
-						continue;
-					}
-					// end of string
-					break;
-				}
-				++stream_pos;
-			}
 			++stream_pos;
 			continue;
 		}
@@ -370,9 +407,9 @@ void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::s
 			if( target_vec.size() % 100 == 0 )
 			{
 				double progress_since_anchor = (double)(stream_pos-progress_anchor)/double(length);
-				if( progress_since_anchor > 0.01 )
+				if( progress_since_anchor > 0.03 )
 				{
-					progress = 0.1*(double)(stream_pos-&buffer[0])/double(length);
+					progress = 0.2*(double)(stream_pos-&buffer[0])/double(length);
 					progressCallback( progress );
 					progress_anchor = stream_pos;
 				}
@@ -388,8 +425,8 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 	std::set<std::string> unkown_entities;
 	std::stringstream err_unknown_entity;
 
-	double progress = 0.1;
-	double last_progress = 0.1;
+	double progress = 0.2;
+	double last_progress = 0.2;
 	int num_lines = (int)step_lines.size();
 	
 #ifdef IFCPP_OPENMP
@@ -451,8 +488,8 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 
 			if( i%10 == 0)
 			{
-				progress = 0.1 + 0.1*(double)i/num_lines;
-				if( progress - last_progress > 0.01 )
+				progress = 0.2 + 0.1*(double)i/num_lines;
+				if( progress - last_progress > 0.03 )
 				{
 					if( omp_get_thread_num() == 0 )
 					{
@@ -510,8 +547,8 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 			}
 		}
 
-		progress = 0.1 + 0.1*(double)i/num_lines;
-		if( progress - last_progress > 0.01 )
+		progress = 0.2 + 0.1*(double)i/num_lines;
+		if( progress - last_progress > 0.03 )
 		{
 			progressCallback( progress );
 			last_progress = progress;
@@ -525,7 +562,7 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 	}
 }
 
-void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntity> >& vec_entities, const std::map<int,shared_ptr<IfcPPEntity> > map_entities )
+void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntity> >& vec_entities, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities  )
 {
 	// second pass, now read arguments
 	// every object can be initialized independently in parallel
@@ -533,11 +570,11 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 	std::stringstream err;
 
 	// set progress
-	double progress = 0.2;
+	double progress = 0.3;
 	progressCallback( progress );
 
 #ifdef IFCPP_OPENMP
-	double last_progress = 0.2;
+	double last_progress = 0.3;
 	const std::map<int,shared_ptr<IfcPPEntity> >* map_ptr = &map_entities;
 	const std::vector<shared_ptr<IfcPPEntity> >* vec_entities_ptr = &vec_entities;
 
@@ -550,25 +587,28 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 		for( int i=0; i<num_objects; ++i )
 		{
 			shared_ptr<IfcPPEntity> entity = vec_entities_ptr->at(i);
-			std::string& argument_str = entity->m_arguments;
+			std::string& argument_str = entity->m_entity_argument_str;
 			std::vector<std::string> arguments;
 			tokenizeEntityArguments( argument_str, arguments );
 
+#ifndef SET_ENTIY_ARGUMENT_STRING
+		entity->m_entity_argument_str = "";
+#endif
 			// character decoding:
 			decodeArgumentStrings( arguments );
 
-			if( m_ifc_version != IfcPPModel::IFC4 )
+			if( m_model->getIfcSchemaVersion() != IfcPPModel::IFC4 )
 			{
-				if( m_ifc_version != IfcPPModel::UNDEFINED && m_ifc_version != IfcPPModel::UNKNOWN )
+				if( m_model->getIfcSchemaVersion() != IfcPPModel::IFC_VERSION_UNDEFINED && m_model->getIfcSchemaVersion() != IfcPPModel::IFC_VERSION_UNKNOWN )
 				{
 					IfcPPEntityEnum entity_enum = entity->m_entity_enum;
-					applyBackwardCompatibility( m_ifc_version, entity_enum, arguments );
+					applyBackwardCompatibility( m_model, entity_enum, arguments );
 				}
 			}
 
 			try
 			{
-				entity->readStepData( arguments, map_loc );
+				entity->readStepArguments( arguments, map_loc );
 			}
 			catch( std::exception& e )
 			{
@@ -588,8 +628,8 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 
 			if( i%10 == 0 )
 			{
-				progress = 0.3 + 0.7*(double)i/num_objects;
-				if( progress - last_progress > 0.01 )
+				progress = 0.3 + 0.6*(double)i/num_objects;
+				if( progress - last_progress > 0.03 )
 				{
 					if( omp_get_thread_num() == 0 )
 					{
@@ -608,26 +648,28 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 	for( ; it_entity_vec!=vec_entities.end(); ++it_entity_vec )
 	{
 		shared_ptr<IfcPPEntity> entity = (*it_entity_vec);
-		std::string& argument_str = entity->m_arguments;
+#ifdef _DEBUG
+		int entitiy_id = entity->getId();
+#endif
+		std::string& argument_str = entity->m_entity_argument_str;
 		std::vector<std::string> arguments;
 		tokenizeEntityArguments( argument_str, arguments );
-		
+
 		// character decoding:
 		decodeArgumentStrings( arguments );
 	
-
-		if( m_ifc_version != IfcPPModel::IFC4 )
+		if( m_model->getIfcSchemaVersion() != IfcPPModel::IFC4 )
 		{
-			if( m_ifc_version != IfcPPModel::UNDEFINED && m_ifc_version != IfcPPModel::UNKNOWN )
+			if( m_model->getIfcSchemaVersion() != IfcPPModel::IFC_VERSION_UNDEFINED && m_model->getIfcSchemaVersion() != IfcPPModel::IFC_VERSION_UNKNOWN )
 			{
 				IfcPPEntityEnum entity_enum = entity->m_entity_enum;
-				applyBackwardCompatibility( m_ifc_version, entity_enum, arguments );
+				applyBackwardCompatibility( m_model, entity_enum, arguments );
 			}
 		}
 
 		try
 		{
-			entity->readStepData( arguments, map_entities );
+			entity->readStepArguments( arguments, map_entities );
 		}
 		catch( std::exception& e )
 		{
@@ -637,9 +679,13 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 		{
 			err << "#" << entity->getId() << "=" << typeid(*entity).name() << ": " << e->what();
 		}
+
+#ifndef SET_ENTIY_ARGUMENT_STRING
+		entity->m_entity_argument_str = "";
+#endif
 		if( i%100 == 0 )
 		{
-			progress = 0.2 + 0.7*(double)i/num_objects;
+			progress = 0.3 + 0.6*(double)i/num_objects;
 			progressCallback( progress );
 		}
 		++i;
@@ -652,26 +698,25 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 	}
 }
 
-void IfcStepReader::readStreamData(	std::string& read_in, std::map<int,shared_ptr<IfcPPEntity> >& target_map )
+void IfcStepReader::readStreamData(	const std::string& read_in, std::map<int,shared_ptr<IfcPPEntity> >& target_map )
 {
 	char* current_numeric_locale = setlocale(LC_NUMERIC, NULL);
 	setlocale(LC_NUMERIC,"C");
 
-	if( m_ifc_version == IfcPPModel::UNDEFINED || m_ifc_version == IfcPPModel::UNKNOWN )
+	if( m_model->getIfcSchemaVersion()  == IfcPPModel::IFC_VERSION_UNDEFINED || m_model->getIfcSchemaVersion() == IfcPPModel::IFC_VERSION_UNKNOWN )
 	{
-		
 		std::string error_message;
 		error_message.append( "Unsupported IFC version: " );
-		error_message.append( m_file_schema );
+		error_message.append( m_model->getFileSchema() );
 		errorCallback( error_message );
 		progressCallback(0.0);
 		return;
 	}
 	
 	std::string message( "Detected IFC version: " );
-	message.append( m_file_schema );
+	message.append( m_model->getFileSchema() );
 
-	if( m_ifc_version < IfcPPModel::IFC4 )
+	if( m_model->getIfcSchemaVersion() < IfcPPModel::IFC4 )
 	{
 		message.append( "\nTrying to apply backward compatibility" );
 	}
@@ -696,7 +741,7 @@ void IfcStepReader::readStreamData(	std::string& read_in, std::map<int,shared_pt
 	catch( UnknownEntityException& e )
 	{
 		std::string unknown_keyword = e.m_keyword;
-		err << "unknown entity: " << unknown_keyword.c_str() << std::endl;
+		err << "readStreamData: unknown entity: " << unknown_keyword.c_str() << std::endl;
 	}
 	catch( IfcPPException& e )
 	{
@@ -708,7 +753,7 @@ void IfcStepReader::readStreamData(	std::string& read_in, std::map<int,shared_pt
 	}
 	catch(...)
 	{
-		err << "readStepLines: error occurred" << std::endl;
+		err << "readStreamData: error occurred" << std::endl;
 	}
 	
 	// copy entities into map so that they can be found during entity attribute initialization
@@ -733,7 +778,7 @@ void IfcStepReader::readStreamData(	std::string& read_in, std::map<int,shared_pt
 	}
 	catch(...)
 	{
-		err << "readStepLines: error occurred" << std::endl;
+		err << "readStreamData: error occurred" << std::endl;
 	}
 
 	setlocale(LC_NUMERIC,current_numeric_locale);
@@ -767,12 +812,15 @@ void applyBackwardCompatibility( std::string& keyword, std::string& step_line )
 	
 }
 
-void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum type_enum, std::vector<std::string>& args )
+void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityEnum type_enum, std::vector<std::string>& args )
 {
+	IfcPPModel::IfcVersion version = ifc_model->getIfcSchemaVersion();
+	std::string ifc_file_name = ifc_model->getFileName();
+
 	// TODO: replace this workaround with a systematic backward compatibility, possibly generated from schema diff
 	if( version < IfcPPModel::IFC2X )
 	{
-		throw IfcPPException( "Unsupported IFC version" );
+		throw IfcPPException( "Unsupported IFC version", __func__ );
 	}
 	if( version <= IfcPPModel::IFC2X )
 	{
@@ -839,10 +887,21 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			args.push_back( "$" );
 			break;
 		case IFCCURVESTYLE:
-			if( args.size() == 4 )
+			while( args.size() < 5 )
 			{
-				args.insert( args.begin()+1, "$" );
+				args.push_back( "$" );
 			}
+			
+			// workaround to fix export bugs from some CAD programs
+			//if( args.size() > 4 )
+			//{
+			//	size_t replace_pos = args[2].find( "IFCDESCRIPTIVEMEASURE" );
+			//	if( replace_pos != std::string::npos )
+			//	{
+			//		args[2] = "$";
+			//	}
+			//}
+
 			break;
 			//D
 		case IFCDISCRETEACCESSORY:
@@ -1002,9 +1061,9 @@ void applyBackwardCompatibility( IfcPPModel::IfcVersion version, IfcPPEntityEnum
 			break;
 		
 		case IFCTEXTSTYLE:
-			if( args.size() == 13 )
+			while( args.size() < 5 )
 			{
-				args.pop_back();	//ModelOrDraughting	 :	OPTIONAL BOOLEAN;
+				args.push_back( "$" );
 			}
 			break;
 			

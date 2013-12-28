@@ -29,7 +29,7 @@ public:
 	~IfcMoistureDiffusivityMeasure();
 	virtual const char* classname() const { return "IfcMoistureDiffusivityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcMoistureDiffusivityMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcMoistureDiffusivityMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

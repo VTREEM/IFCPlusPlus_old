@@ -44,7 +44,7 @@
 #include "ifcpp/model/UnitConverter.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "GeometrySettings.h"
-#include "Utility.h"
+#include "GeomUtils.h"
 #include "UnhandledRepresentationException.h"
 #include "ProfileConverter.h"
 #include "PlacementConverter.h"
@@ -271,7 +271,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 		bool face_loop_reversed = false;
 
 		int i_bound = 0;
-		FaceProjectionPlane face_plane = UNDEFINED;
+		ProjectionPlane face_plane = UNDEFINED;
 
 		std::vector<shared_ptr<IfcFaceBound> >::iterator it_bounds;
 		for( it_bounds=vec_bounds.begin(); it_bounds!=vec_bounds.end(); ++it_bounds, ++i_bound )
@@ -609,7 +609,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 
 	if( err.tellp() > 0 )
 	{
-		throw IfcPPException( err.str().c_str() );
+		throw IfcPPException( err.str().c_str(), __func__ );
 	}
 }
 
