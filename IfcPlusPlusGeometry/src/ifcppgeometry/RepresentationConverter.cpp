@@ -763,13 +763,11 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 				}
 			}
 					
-#ifdef _DEBUG
 			bool opening_polyhedron_ok = ConverterOSG::checkMeshSet( meshset_openings, strs_err, product_id );
 			if( !opening_polyhedron_ok )
 			{
 				continue;
 			}
-#endif
 
 			// do the subtraction
 			carve::csg::CSG csg;
