@@ -333,6 +333,13 @@ void IfcStepReader::splitIntoStepLines( std::string& read_in, std::vector<std::s
 				
 				if( *stream_pos == '\'' )
 				{
+					if( *(stream_pos+1) == '\'' )
+					{
+						// we have a double quote, so just continue
+						++stream_pos;
+						++stream_pos;
+						continue;
+					}
 					++stream_pos;
 					if( escaped )
 					{
