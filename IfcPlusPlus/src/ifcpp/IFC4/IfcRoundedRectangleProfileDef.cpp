@@ -59,19 +59,19 @@ void IfcRoundedRectangleProfileDef::getStepLine( std::stringstream& stream ) con
 	stream << ");";
 }
 void IfcRoundedRectangleProfileDef::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRoundedRectangleProfileDef::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRoundedRectangleProfileDef::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<6 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRoundedRectangleProfileDef, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>6 ){ std::cout << "Wrong parameter count for entity IfcRoundedRectangleProfileDef, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_ProfileType = IfcProfileTypeEnum::readStepData( args[0] );
-	m_ProfileName = IfcLabel::readStepData( args[1] );
+	m_ProfileType = IfcProfileTypeEnum::createObjectFromStepData( args[0] );
+	m_ProfileName = IfcLabel::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_Position, map );
-	m_XDim = IfcPositiveLengthMeasure::readStepData( args[3] );
-	m_YDim = IfcPositiveLengthMeasure::readStepData( args[4] );
-	m_RoundingRadius = IfcPositiveLengthMeasure::readStepData( args[5] );
+	m_XDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
+	m_YDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
+	m_RoundingRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[5] );
 }
 void IfcRoundedRectangleProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

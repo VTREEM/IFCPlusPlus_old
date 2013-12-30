@@ -20,7 +20,7 @@
 // TYPE IfcPresentationStyleSelect 
 IfcPresentationStyleSelect::IfcPresentationStyleSelect() {}
 IfcPresentationStyleSelect::~IfcPresentationStyleSelect() {}
-shared_ptr<IfcPresentationStyleSelect> IfcPresentationStyleSelect::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcPresentationStyleSelect> IfcPresentationStyleSelect::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcPresentationStyleSelect>(); }
@@ -54,9 +54,16 @@ shared_ptr<IfcPresentationStyleSelect> IfcPresentationStyleSelect::readStepData(
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		if( keyword.compare("IFCNULLSTYLE")== 0 )
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
 		{
-			return IfcNullStyle::readStepData( inline_arg );
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcPresentationStyleSelect> result_ptr_self = dynamic_pointer_cast<IfcPresentationStyleSelect>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
 		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcPresentationStyleSelect::readStepData" << std::endl;

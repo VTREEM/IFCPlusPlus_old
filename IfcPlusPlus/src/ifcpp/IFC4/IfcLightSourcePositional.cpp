@@ -70,22 +70,22 @@ void IfcLightSourcePositional::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcLightSourcePositional::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcLightSourcePositional::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcLightSourcePositional::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<9 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcLightSourcePositional, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>9 ){ std::cout << "Wrong parameter count for entity IfcLightSourcePositional, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_LightColour, map );
-	m_AmbientIntensity = IfcNormalisedRatioMeasure::readStepData( args[2] );
-	m_Intensity = IfcNormalisedRatioMeasure::readStepData( args[3] );
+	m_AmbientIntensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[2] );
+	m_Intensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_Position, map );
-	m_Radius = IfcPositiveLengthMeasure::readStepData( args[5] );
-	m_ConstantAttenuation = IfcReal::readStepData( args[6] );
-	m_DistanceAttenuation = IfcReal::readStepData( args[7] );
-	m_QuadricAttenuation = IfcReal::readStepData( args[8] );
+	m_Radius = IfcPositiveLengthMeasure::createObjectFromStepData( args[5] );
+	m_ConstantAttenuation = IfcReal::createObjectFromStepData( args[6] );
+	m_DistanceAttenuation = IfcReal::createObjectFromStepData( args[7] );
+	m_QuadricAttenuation = IfcReal::createObjectFromStepData( args[8] );
 }
 void IfcLightSourcePositional::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

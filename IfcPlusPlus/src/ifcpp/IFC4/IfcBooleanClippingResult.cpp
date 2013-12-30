@@ -48,16 +48,16 @@ void IfcBooleanClippingResult::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcBooleanClippingResult::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcBooleanClippingResult::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcBooleanClippingResult::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcBooleanClippingResult, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcBooleanClippingResult, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Operator = IfcBooleanOperator::readStepData( args[0] );
-	m_FirstOperand = IfcBooleanOperand::readStepData( args[1], map );
-	m_SecondOperand = IfcBooleanOperand::readStepData( args[2], map );
+	m_Operator = IfcBooleanOperator::createObjectFromStepData( args[0] );
+	m_FirstOperand = IfcBooleanOperand::createObjectFromStepData( args[1], map );
+	m_SecondOperand = IfcBooleanOperand::createObjectFromStepData( args[2], map );
 }
 void IfcBooleanClippingResult::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

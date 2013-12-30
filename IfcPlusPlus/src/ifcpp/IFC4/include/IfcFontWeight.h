@@ -28,7 +28,7 @@ public:
 	~IfcFontWeight();
 	virtual const char* classname() const { return "IfcFontWeight"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcFontWeight> readStepData( std::string& arg );
+	static shared_ptr<IfcFontWeight> createObjectFromStepData( const std::string& arg );
 	std::string m_value;
 };
 

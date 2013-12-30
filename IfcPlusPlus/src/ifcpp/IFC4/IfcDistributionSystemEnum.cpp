@@ -204,7 +204,7 @@ void IfcDistributionSystemEnum::getStepParameter( std::stringstream& stream, boo
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcDistributionSystemEnum> IfcDistributionSystemEnum::readStepData( std::string& arg )
+shared_ptr<IfcDistributionSystemEnum> IfcDistributionSystemEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDistributionSystemEnum>(); }

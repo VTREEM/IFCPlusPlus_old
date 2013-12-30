@@ -26,6 +26,6 @@ public:
 	~IfcClassificationReferenceSelect();
 	virtual const char* classname() const { return "IfcClassificationReferenceSelect"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
-	static shared_ptr<IfcClassificationReferenceSelect> readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
+	static shared_ptr<IfcClassificationReferenceSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

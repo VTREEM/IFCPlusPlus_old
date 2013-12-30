@@ -43,7 +43,7 @@ public:
 	~IfcEvaporativeCoolerTypeEnum();
 	virtual const char* classname() const { return "IfcEvaporativeCoolerTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcEvaporativeCoolerTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcEvaporativeCoolerTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcEvaporativeCoolerTypeEnumEnum m_enum;
 };
 

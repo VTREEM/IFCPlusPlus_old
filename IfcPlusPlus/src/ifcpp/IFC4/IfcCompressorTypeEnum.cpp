@@ -96,7 +96,7 @@ void IfcCompressorTypeEnum::getStepParameter( std::stringstream& stream, bool is
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcCompressorTypeEnum> IfcCompressorTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcCompressorTypeEnum> IfcCompressorTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCompressorTypeEnum>(); }

@@ -84,7 +84,7 @@ void IfcTaskTypeEnum::getStepParameter( std::stringstream& stream, bool is_selec
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcTaskTypeEnum> IfcTaskTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcTaskTypeEnum> IfcTaskTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTaskTypeEnum>(); }

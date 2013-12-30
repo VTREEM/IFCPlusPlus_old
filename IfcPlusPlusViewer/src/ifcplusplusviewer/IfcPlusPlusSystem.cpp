@@ -13,18 +13,10 @@
 
 #include <osg/Group>
 #include <osg/Material>
-#include <osg/PolygonMode>
-#include <osg/PolygonOffset>
 #include <osgFX/Scribe>
-#include <osgUtil/Optimizer>
-#include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgGA/GUIActionAdapter>
-#include <osgGA/TrackballManipulator>
 #include <osgDB/Registry>
-
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
 
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPException.h"

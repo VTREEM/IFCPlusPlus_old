@@ -74,7 +74,7 @@ void IfcMaterialLayerWithOffsets::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcMaterialLayerWithOffsets::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcMaterialLayerWithOffsets::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcMaterialLayerWithOffsets::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<9 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcMaterialLayerWithOffsets, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -82,13 +82,13 @@ void IfcMaterialLayerWithOffsets::readStepData( std::vector<std::string>& args, 
 	if( num_args>9 ){ std::cout << "Wrong parameter count for entity IfcMaterialLayerWithOffsets, expecting 9, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Material, map );
-	m_LayerThickness = IfcNonNegativeLengthMeasure::readStepData( args[1] );
-	m_IsVentilated = IfcLogical::readStepData( args[2] );
-	m_Name = IfcLabel::readStepData( args[3] );
-	m_Description = IfcText::readStepData( args[4] );
-	m_Category = IfcLabel::readStepData( args[5] );
-	m_Priority = IfcNormalisedRatioMeasure::readStepData( args[6] );
-	m_OffsetDirection = IfcLayerSetDirectionEnum::readStepData( args[7] );
+	m_LayerThickness = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[1] );
+	m_IsVentilated = IfcLogical::createObjectFromStepData( args[2] );
+	m_Name = IfcLabel::createObjectFromStepData( args[3] );
+	m_Description = IfcText::createObjectFromStepData( args[4] );
+	m_Category = IfcLabel::createObjectFromStepData( args[5] );
+	m_Priority = IfcNormalisedRatioMeasure::createObjectFromStepData( args[6] );
+	m_OffsetDirection = IfcLayerSetDirectionEnum::createObjectFromStepData( args[7] );
 	readTypeOfRealList( args[8], m_OffsetValues );
 }
 void IfcMaterialLayerWithOffsets::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

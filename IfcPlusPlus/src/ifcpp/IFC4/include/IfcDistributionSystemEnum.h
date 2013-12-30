@@ -76,7 +76,7 @@ public:
 	~IfcDistributionSystemEnum();
 	virtual const char* classname() const { return "IfcDistributionSystemEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcDistributionSystemEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcDistributionSystemEnum> createObjectFromStepData( const std::string& arg );
 	IfcDistributionSystemEnumEnum m_enum;
 };
 

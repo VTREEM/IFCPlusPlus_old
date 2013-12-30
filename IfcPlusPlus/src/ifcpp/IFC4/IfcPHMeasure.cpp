@@ -32,7 +32,7 @@ void IfcPHMeasure::getStepParameter( std::stringstream& stream, bool is_select_t
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcPHMeasure> IfcPHMeasure::readStepData( std::string& arg )
+shared_ptr<IfcPHMeasure> IfcPHMeasure::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPHMeasure>(); }

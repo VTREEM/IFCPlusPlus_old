@@ -48,7 +48,7 @@ void IfcFillAreaStyleTiles::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcFillAreaStyleTiles::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcFillAreaStyleTiles::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcFillAreaStyleTiles::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcFillAreaStyleTiles, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -57,7 +57,7 @@ void IfcFillAreaStyleTiles::readStepData( std::vector<std::string>& args, const 
 	#endif
 	readEntityReferenceList( args[0], m_TilingPattern, map );
 	readEntityReferenceList( args[1], m_Tiles, map );
-	m_TilingScale = IfcPositiveRatioMeasure::readStepData( args[2] );
+	m_TilingScale = IfcPositiveRatioMeasure::createObjectFromStepData( args[2] );
 }
 void IfcFillAreaStyleTiles::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

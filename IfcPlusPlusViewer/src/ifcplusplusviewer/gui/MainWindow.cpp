@@ -27,7 +27,7 @@
 #include "viewer/Orbit3DManipulator.h"
 #include "cmd/CmdRemoveSelectedObjects.h"
 #include "cmd/CommandManager.h"
-#include "ifcppgeometry/Utility.h"
+#include "ifcppgeometry/GeomUtils.h"
 #include "TabReadWrite.h"
 #include "TabView.h"
 #include "MainWindow.h"

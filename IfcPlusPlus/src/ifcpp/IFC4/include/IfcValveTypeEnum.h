@@ -55,7 +55,7 @@ public:
 	~IfcValveTypeEnum();
 	virtual const char* classname() const { return "IfcValveTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcValveTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcValveTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcValveTypeEnumEnum m_enum;
 };
 

@@ -64,7 +64,7 @@ void IfcOwnerHistory::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcOwnerHistory::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcOwnerHistory::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcOwnerHistory::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcOwnerHistory, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -73,12 +73,12 @@ void IfcOwnerHistory::readStepData( std::vector<std::string>& args, const std::m
 	#endif
 	readEntityReference( args[0], m_OwningUser, map );
 	readEntityReference( args[1], m_OwningApplication, map );
-	m_State = IfcStateEnum::readStepData( args[2] );
-	m_ChangeAction = IfcChangeActionEnum::readStepData( args[3] );
-	m_LastModifiedDate = IfcTimeStamp::readStepData( args[4] );
+	m_State = IfcStateEnum::createObjectFromStepData( args[2] );
+	m_ChangeAction = IfcChangeActionEnum::createObjectFromStepData( args[3] );
+	m_LastModifiedDate = IfcTimeStamp::createObjectFromStepData( args[4] );
 	readEntityReference( args[5], m_LastModifyingUser, map );
 	readEntityReference( args[6], m_LastModifyingApplication, map );
-	m_CreationDate = IfcTimeStamp::readStepData( args[7] );
+	m_CreationDate = IfcTimeStamp::createObjectFromStepData( args[7] );
 }
 void IfcOwnerHistory::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

@@ -29,7 +29,7 @@ public:
 	~IfcDynamicViscosityMeasure();
 	virtual const char* classname() const { return "IfcDynamicViscosityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcDynamicViscosityMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcDynamicViscosityMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

@@ -83,25 +83,25 @@ void IfcSimplePropertyTemplate::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcSimplePropertyTemplate::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcSimplePropertyTemplate::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcSimplePropertyTemplate::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<12 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcSimplePropertyTemplate, expecting 12, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>12 ){ std::cout << "Wrong parameter count for entity IfcSimplePropertyTemplate, expecting 12, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_TemplateType = IfcSimplePropertyTemplateTypeEnum::readStepData( args[4] );
-	m_PrimaryMeasureType = IfcLabel::readStepData( args[5] );
-	m_SecondaryMeasureType = IfcLabel::readStepData( args[6] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_TemplateType = IfcSimplePropertyTemplateTypeEnum::createObjectFromStepData( args[4] );
+	m_PrimaryMeasureType = IfcLabel::createObjectFromStepData( args[5] );
+	m_SecondaryMeasureType = IfcLabel::createObjectFromStepData( args[6] );
 	readEntityReference( args[7], m_Enumerators, map );
-	m_PrimaryUnit = IfcUnit::readStepData( args[8], map );
-	m_SecondaryUnit = IfcUnit::readStepData( args[9], map );
-	m_Expression = IfcLabel::readStepData( args[10] );
-	m_AccessState = IfcStateEnum::readStepData( args[11] );
+	m_PrimaryUnit = IfcUnit::createObjectFromStepData( args[8], map );
+	m_SecondaryUnit = IfcUnit::createObjectFromStepData( args[9], map );
+	m_Expression = IfcLabel::createObjectFromStepData( args[10] );
+	m_AccessState = IfcStateEnum::createObjectFromStepData( args[11] );
 }
 void IfcSimplePropertyTemplate::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

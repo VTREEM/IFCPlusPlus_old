@@ -60,7 +60,7 @@ void IfcBeamTypeEnum::getStepParameter( std::stringstream& stream, bool is_selec
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcBeamTypeEnum> IfcBeamTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcBeamTypeEnum> IfcBeamTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBeamTypeEnum>(); }

@@ -32,7 +32,7 @@
 #include "common/geometry.hpp"
 
 #include "ifcpp/model/IfcPPException.h"
-#include "Utility.h"
+#include "GeomUtils.h"
 #include "ProfileConverter.h"
 #include "ConverterOSG.h"
 
@@ -61,7 +61,7 @@ void ConverterOSG::drawFace( const carve::mesh::Face<3>* face, osg::Geode* geode
 
 	if( num_vertices < 4 )
 	{
-		throw IfcPPException( "ConverterOSG::drawFace is meant only for num vertices > 4" );
+		throw IfcPPException( "drawFace is meant only for num vertices > 4", __func__ );
 	}
 
 	carve::geom::vector<3> * vertex_vec;

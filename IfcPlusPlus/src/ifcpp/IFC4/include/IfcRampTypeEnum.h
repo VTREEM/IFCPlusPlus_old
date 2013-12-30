@@ -40,7 +40,7 @@ public:
 	~IfcRampTypeEnum();
 	virtual const char* classname() const { return "IfcRampTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcRampTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcRampTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcRampTypeEnumEnum m_enum;
 };
 

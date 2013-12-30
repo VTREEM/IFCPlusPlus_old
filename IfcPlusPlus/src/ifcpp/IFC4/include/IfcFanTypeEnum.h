@@ -41,7 +41,7 @@ public:
 	~IfcFanTypeEnum();
 	virtual const char* classname() const { return "IfcFanTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcFanTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcFanTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcFanTypeEnumEnum m_enum;
 };
 

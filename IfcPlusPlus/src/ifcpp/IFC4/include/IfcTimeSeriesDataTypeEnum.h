@@ -39,7 +39,7 @@ public:
 	~IfcTimeSeriesDataTypeEnum();
 	virtual const char* classname() const { return "IfcTimeSeriesDataTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcTimeSeriesDataTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcTimeSeriesDataTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcTimeSeriesDataTypeEnumEnum m_enum;
 };
 

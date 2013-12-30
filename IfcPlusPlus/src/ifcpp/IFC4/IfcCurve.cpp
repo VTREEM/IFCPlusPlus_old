@@ -38,7 +38,7 @@ void IfcCurve::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcCurve::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcCurve::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcCurve::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcCurve::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

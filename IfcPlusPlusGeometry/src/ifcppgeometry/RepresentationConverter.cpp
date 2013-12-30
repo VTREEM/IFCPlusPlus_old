@@ -18,13 +18,12 @@
 #include <math.h>
 #include <iterator>
 #include <osg/Group>
-#include <osg/MatrixTransform>
 
+#pragma warning (disable: 4267)
 #include <carve/carve.hpp>
 #include <carve/geom3d.hpp>
 #include <carve/poly.hpp>
 #include <carve/polyhedron_base.hpp>
-//#include <carve/csg.hpp>
 #include <carve/csg_triangulator.hpp>
 
 #include "ifcpp/IFC4/include/IfcProduct.h"
@@ -79,7 +78,7 @@
 #include "ifcpp/model/UnitConverter.h"
 #include "ifcpp/model/IfcPPException.h"
 
-#include "Utility.h"
+#include "GeomUtils.h"
 #include "ConverterOSG.h"
 #include "GeometrySettings.h"
 #include "PlacementConverter.h"
@@ -242,7 +241,7 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 					strs << "#" << mapping_origin_placement->getId() << " = IfcPlacement: !dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )";
 					detailedReport( strs );
 					continue;
-					//throw IfcPPException( "! dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )" );
+					//throw IfcPPException( "! dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )", __func__ );
 				}
 			}
 
@@ -405,7 +404,7 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 	if( err.tellp() > 0 )
 	{
 		detailedReport( err );
-		//throw IfcPPException( err.str().c_str() );
+		//throw IfcPPException( err.str().c_str(), __func__ );
 	}
 }
 

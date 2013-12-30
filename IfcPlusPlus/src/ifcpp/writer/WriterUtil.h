@@ -31,7 +31,7 @@ void writeDoubleList3D( std::stringstream& stream, const  std::vector<std::vecto
 void writeConstCharList( std::stringstream& stream, const std::vector<const char*>& vec );
 void writeStringList( std::stringstream& stream, const std::vector<std::string>& vec );
 
-template<class T>
+template<typename T>
 void writeTypeOfIntList( std::stringstream& stream, const std::vector<shared_ptr<T> >& vec )
 {
 	//(38,12,4)
@@ -48,7 +48,7 @@ void writeTypeOfIntList( std::stringstream& stream, const std::vector<shared_ptr
 	stream << ")";
 }
 
-template<class T>
+template<typename T>
 void writeTypeOfRealList( std::stringstream& stream, const std::vector<shared_ptr<T> >& vec )
 {
 	//(.38,12.0,.04)
@@ -66,7 +66,7 @@ void writeTypeOfRealList( std::stringstream& stream, const std::vector<shared_pt
 	stream << ")";
 }
 
-template<class T>
+template<typename T>
 void writeTypeOfRealList2D( std::stringstream& stream, const std::vector<std::vector<shared_ptr<T> > >& vec )
 {
 	//((.38,12.0,.04),(.38,1.0,346.0),(1.8,1.0,.04))
@@ -85,7 +85,7 @@ void writeTypeOfRealList2D( std::stringstream& stream, const std::vector<std::ve
 	stream << ")";
 }
 
-template<class T>
+template<typename T>
 void writeEntityList( std::stringstream& stream, const std::vector<shared_ptr<T> >& vec )
 {
 	//(#287,#291,$,#299)
@@ -110,7 +110,7 @@ void writeEntityList( std::stringstream& stream, const std::vector<shared_ptr<T>
 	stream << ")";
 }
 
-template<class T>
+template<typename T>
 void writeEntityList2D( std::stringstream& stream, const std::vector<std::vector<shared_ptr<T> > >& vec )
 {
 	//((#287,#291,$,#299),(#287,#291,$,#299))
@@ -129,7 +129,7 @@ void writeEntityList2D( std::stringstream& stream, const std::vector<std::vector
 	stream << ")";
 }
 
-template<class T>
+template<typename T>
 void writeEntityList3D( std::stringstream& stream, const std::vector<std::vector<std::vector<shared_ptr<T> > > >& vec )
 {
 	//(((#287,#291,$,#299),(#287,#291,$,#299)),((#287,#291,$,#299),(#287,#291,$,#299)))
@@ -149,7 +149,7 @@ void writeEntityList3D( std::stringstream& stream, const std::vector<std::vector
 	stream << ")";
 }
 
-template<class T>
+template<typename T>
 void writeTypeList( std::stringstream& stream, const std::vector<shared_ptr<T> >& vec, bool is_select_type = false )
 {
 	//(#287,#291,$,#299)
@@ -178,7 +178,7 @@ void writeTypeList( std::stringstream& stream, const std::vector<shared_ptr<T> >
 	stream << ")";
 }
 
-template<class T>
+template<typename T>
 void writeTypeList2D( std::stringstream& stream, const std::vector<std::vector<shared_ptr<T> > >& vec, bool is_select_type = false )
 {
 	//(#287,#291,$,#299)

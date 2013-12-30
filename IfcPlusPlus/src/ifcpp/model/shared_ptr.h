@@ -13,7 +13,7 @@
 
 #pragma once
 
-#if _MSC_VER >= 1600 // Visual Studio 2010 or better
+#if _MSC_VER >= 1600
 
 #include <memory>
 using std::shared_ptr;
@@ -21,7 +21,7 @@ using std::weak_ptr;
 using std::dynamic_pointer_cast;
 using std::enable_shared_from_this;
 
-#elif _MSC_VER >= 1500 // Visual Studio 2008
+#elif _MSC_VER >= 1500
 
 #include <memory>
 using std::tr1::shared_ptr;
@@ -39,7 +39,7 @@ using std::enable_shared_from_this;
 
 #define _stricmp strcasecmp
 
-#elif defined __GNUC__ // gcc
+#elif defined __GNUC__ && !defined(__FreeBSD__)
 
 #include <tr1/memory>
 using std::tr1::shared_ptr;
@@ -49,7 +49,20 @@ using std::tr1::enable_shared_from_this;
 
 #define _stricmp strcasecmp
 
-#else // everything else must use Boost 
+#elif defined(__FreeBSD__)
+
+// Requires clang++ and libc++
+#include <memory>
+
+using std::shared_ptr;
+using std::weak_ptr;
+using std::dynamic_pointer_cast;
+using std::enable_shared_from_this;
+
+#define _stricmp strcasecmp
+
+
+#else
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>

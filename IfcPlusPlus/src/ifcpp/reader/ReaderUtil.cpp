@@ -22,6 +22,9 @@
 #include "ifcpp/model/IfcPPException.h"
 #include "ReaderUtil.h"
 
+shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
+IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
+
 void checkOpeningClosingParenthesis( const char* ch_check )
 {
 	int num_opening=0;
@@ -212,7 +215,7 @@ void tokenizeEntityList( std::string& list_str, std::vector<int>& list_items )
 	}
 }
 
-void readIntValue( std::string& str, int& int_value )
+void readIntValue( const std::string& str, int& int_value )
 {
 	if( str.compare("$") == 0 )
 	{
@@ -223,7 +226,8 @@ void readIntValue( std::string& str, int& int_value )
 		int_value = atoi( str.c_str() );
 	}
 }
-void readRealValue( std::string& str, double& real_value )
+
+void readRealValue( const std::string& str, double& real_value )
 {
 	if( str.compare("$") == 0 )
 	{
@@ -271,6 +275,7 @@ void readIntList( const std::string& str, std::vector<int>& vec )
 		++i;
 	}
 }
+
 void readIntList2D( const std::string& str, std::vector<std::vector<int> >& vec )
 {
 	// ((1,2,4),(3,23,039),(938,3,-3,6))
@@ -474,6 +479,7 @@ void readConstCharList( const std::string& str, std::vector<const char*>& vec )
 		++i;
 	}
 }
+
 void readStringList( const std::string& str, std::vector<std::string>& vec )
 {
 	const char* ch = str.c_str();
@@ -510,6 +516,65 @@ void readStringList( const std::string& str, std::vector<std::string>& vec )
 	}
 }
 
+void findEndOfString( char*& stream_pos )
+{
+	++stream_pos;
+	char* pos_begin = stream_pos;
+
+	// beginning of string, continue to end
+	while( *stream_pos != '\0' )
+	{
+		if( *stream_pos == '\\' )
+		{
+			if( *(stream_pos+1) == 'X' )
+			{
+				if( *(stream_pos+2) == '0' || *(stream_pos+2) == '2' || *(stream_pos+2) == '4' )
+				{
+					if( *(stream_pos+3) == '\\' )
+					{
+						// ISO 10646 encoding, continue
+						stream_pos += 4;
+						continue;
+					}
+				}
+			}
+
+			if( *(stream_pos+1) == '\\' )
+			{
+				// we have a double backslash, so just continue
+				++stream_pos;
+				++stream_pos;
+				continue;
+			}
+			if( *(stream_pos+1) == '\'' )
+			{
+				// quote is escaped
+				++stream_pos;
+				++stream_pos;
+				continue;
+			}
+		}
+				
+		if( *stream_pos == '\'' )
+		{
+			if( *(stream_pos+1) == '\'' )
+			{
+				// two single quotes in string
+				if( stream_pos != pos_begin )
+				{
+					++stream_pos;
+					++stream_pos;
+					continue;
+				}
+			}
+			++stream_pos;
+
+			// end of string
+			break;
+		}
+		++stream_pos;
+	}
+}
 
 void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 {
@@ -524,12 +589,10 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 		if( arg_length > 0 )
 		{
 			char* stream_pos = (char*)argument_str.c_str();				// ascii characters from STEP file
-			char* stream_pos_new = (char*)arg_str_new.c_str();				// ascii characters from STEP file
+			char* stream_pos_new = (char*)arg_str_new.c_str();			// ascii characters from STEP file
 			{
 				while( *stream_pos != '\0' )
 				{
-					
-
 					if( *stream_pos == '\\' )
 					{
 						if( *(stream_pos+1) == 'S' )
@@ -614,7 +677,6 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 						}
 					}
 					
-
 					*stream_pos_new = *stream_pos;
 					++stream_pos_new;
 					++stream_pos;
@@ -646,32 +708,7 @@ void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::
 	{
 		if( *stream_pos == '\'' )
 		{
-			// go to end of string
-			++stream_pos;
-			char look_back = ' ';
-			char look_back2 = ' ';
-			while( *stream_pos != '\0' )
-			{
-				if( *stream_pos == '\'' )
-				{
-					if( look_back == '\\' )
-					{
-						if( look_back2 != '\\' )
-						{
-							// tick is escaped
-							look_back = *stream_pos;
-							++stream_pos;
-							continue;
-						}
-					}
-					// else tick marks the end of argument
-					++stream_pos;
-					break;
-				}
-				look_back2 = look_back;
-				look_back = *stream_pos;
-				++stream_pos;
-			}
+			findEndOfString( stream_pos );
 			continue;
 		}
 
@@ -746,12 +783,11 @@ void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::
 	}
 }
 
-
 void tokenizeInlineArgument( std::string arg, std::string& keyword, std::string& inline_arg )
 {
 	if( arg.size() == 0 )
 	{
-		throw IfcPPException( "tokenizeInlineArgument: arg.size() == 0", __func__ );
+		throw IfcPPException( "arg.size() == 0", __func__ );
 	}
 	if( arg.compare("$") == 0 )
 	{
@@ -859,36 +895,52 @@ void tokenizeInlineArgument( std::string arg, std::string& keyword, std::string&
 
 void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source )
 {
-	// string can have escaped ticks: \' and also other escaped characters: \\  \S
-	*(stream_pos++) = *(stream_pos_source++);
-	bool escaped = false;
-	while( *stream_pos_source != '\0' )
-	{
-		escaped = false;
-		if( *stream_pos_source == '\\' )
-		{
-			if( *(stream_pos_source+1) == '\\' )
-			{
-				// we have a double backslash, so copy and continue
-				*(stream_pos++) = *(stream_pos_source++);
-				*(stream_pos++) = *(stream_pos_source++);
-				continue;
-			}
-			*(stream_pos++) = *(stream_pos_source++);
-			escaped = true;
-		}
+	char* pos_begin = stream_pos_source;
+	findEndOfString( stream_pos_source );
 
-		if( *stream_pos_source == '\'' )
+	size_t length = stream_pos_source - pos_begin;
+	memcpy( stream_pos, pos_begin, (length)*sizeof( char) );
+	stream_pos += length;
+}
+
+void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
+{
+	std::string keyword;
+	std::string inline_arg;
+	tokenizeInlineArgument( arg, keyword, inline_arg );
+
+	if( keyword.size() == 0 )
+	{
+		return;
+	}
+
+	IfcPPTypeEnum type_enum = findTypeEnumForString( keyword );
+	if( type_enum != IFC_TYPE_UNDEFINED )
+	{
+		shared_ptr<IfcPPType> type_instance = createIfcPPType( type_enum, inline_arg, map_entities );
+		if( type_instance )
 		{
-			*(stream_pos++) = *(stream_pos_source++);
-			if( escaped )
-			{
-				continue;
-			}
-			// end of string
-			break;
+			type_instance->m_type_enum = type_enum;
+			result = type_instance;
+			return;
 		}
-		// copy
-		*(stream_pos++) = *(stream_pos_source++);
+	}
+
+	IfcPPEntityEnum entity_enum = findEntityEnumForString( keyword );
+	if( entity_enum != IFC_ENTITY_UNDEFINED )
+	{
+		shared_ptr<IfcPPEntity> entity_instance( createIfcPPEntity( entity_enum ) );
+		if( entity_instance )
+		{
+			entity_instance->setId( -1 );
+			entity_instance->m_entity_enum = entity_enum;
+			entity_instance->m_entity_argument_str.assign( inline_arg );
+			std::vector<std::string> args;
+			args.push_back( inline_arg );
+			entity_instance->readStepArguments( args, map_entities );
+
+			result = entity_instance;
+			return;
+		}
 	}
 }

@@ -39,7 +39,7 @@ void IfcMaterialDefinition::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcMaterialDefinition::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcMaterialDefinition::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcMaterialDefinition::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcMaterialDefinition::setInverseCounterparts( shared_ptr<IfcPPEntity> )

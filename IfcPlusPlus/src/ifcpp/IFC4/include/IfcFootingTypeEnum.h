@@ -39,7 +39,7 @@ public:
 	~IfcFootingTypeEnum();
 	virtual const char* classname() const { return "IfcFootingTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcFootingTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcFootingTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcFootingTypeEnumEnum m_enum;
 };
 

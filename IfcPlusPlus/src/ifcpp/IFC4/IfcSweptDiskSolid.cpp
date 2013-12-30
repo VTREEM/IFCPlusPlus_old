@@ -55,7 +55,7 @@ void IfcSweptDiskSolid::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcSweptDiskSolid::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcSweptDiskSolid::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcSweptDiskSolid::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcSweptDiskSolid, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -63,10 +63,10 @@ void IfcSweptDiskSolid::readStepData( std::vector<std::string>& args, const std:
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcSweptDiskSolid, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Directrix, map );
-	m_Radius = IfcPositiveLengthMeasure::readStepData( args[1] );
-	m_InnerRadius = IfcPositiveLengthMeasure::readStepData( args[2] );
-	m_StartParam = IfcParameterValue::readStepData( args[3] );
-	m_EndParam = IfcParameterValue::readStepData( args[4] );
+	m_Radius = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
+	m_InnerRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
+	m_StartParam = IfcParameterValue::createObjectFromStepData( args[3] );
+	m_EndParam = IfcParameterValue::createObjectFromStepData( args[4] );
 }
 void IfcSweptDiskSolid::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

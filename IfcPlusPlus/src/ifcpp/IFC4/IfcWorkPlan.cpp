@@ -95,27 +95,27 @@ void IfcWorkPlan::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcWorkPlan::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcWorkPlan::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcWorkPlan::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<14 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcWorkPlan, expecting 14, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>14 ){ std::cout << "Wrong parameter count for entity IfcWorkPlan, expecting 14, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_ObjectType = IfcLabel::readStepData( args[4] );
-	m_Identification = IfcIdentifier::readStepData( args[5] );
-	m_CreationDate = IfcDateTime::readStepData( args[6] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
+	m_Identification = IfcIdentifier::createObjectFromStepData( args[5] );
+	m_CreationDate = IfcDateTime::createObjectFromStepData( args[6] );
 	readEntityReferenceList( args[7], m_Creators, map );
-	m_Purpose = IfcLabel::readStepData( args[8] );
-	m_Duration = IfcDuration::readStepData( args[9] );
-	m_TotalFloat = IfcDuration::readStepData( args[10] );
-	m_StartTime = IfcDateTime::readStepData( args[11] );
-	m_FinishTime = IfcDateTime::readStepData( args[12] );
-	m_PredefinedType = IfcWorkPlanTypeEnum::readStepData( args[13] );
+	m_Purpose = IfcLabel::createObjectFromStepData( args[8] );
+	m_Duration = IfcDuration::createObjectFromStepData( args[9] );
+	m_TotalFloat = IfcDuration::createObjectFromStepData( args[10] );
+	m_StartTime = IfcDateTime::createObjectFromStepData( args[11] );
+	m_FinishTime = IfcDateTime::createObjectFromStepData( args[12] );
+	m_PredefinedType = IfcWorkPlanTypeEnum::createObjectFromStepData( args[13] );
 }
 void IfcWorkPlan::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

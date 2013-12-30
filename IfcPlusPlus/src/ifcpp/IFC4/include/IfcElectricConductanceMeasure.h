@@ -29,7 +29,7 @@ public:
 	~IfcElectricConductanceMeasure();
 	virtual const char* classname() const { return "IfcElectricConductanceMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcElectricConductanceMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcElectricConductanceMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

@@ -24,6 +24,8 @@
 #include "ifcpp/model/shared_ptr.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcpp/model/IfcPPObject.h"
+#include "ifcpp/IfcPPTypeEnums.h"
+#include "ifcpp/IfcPPEntityEnums.h"
 
 #ifndef WIN32
 #include <cstdio>
@@ -44,18 +46,21 @@ void readStringList( const std::string& str, std::vector<std::string>& vec );
 
 void checkOpeningClosingParenthesis( const char* ch_check );
 void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::string>& entity_arguments );
-void tokenizeInlineArgument( std::string input, std::string& keyword, std::string& inner_argument );
+void tokenizeInlineArgument( const std::string input, std::string& keyword, std::string& inner_argument );
 void findLeadingTrailingParanthesis( char* ch, char*& pos_opening, char*& pos_closing );
 void tokenizeList( std::string& list_str, std::vector<std::string>& list_items );
 void tokenizeEntityList( std::string& list_str, std::vector<int>& list_items );
 
-void readIntValue( std::string& str, int& value );
-void readRealValue( std::string& str, double& value );
+void readIntValue( const std::string& str, int& value );
+void readRealValue( const std::string& str, double& value );
 void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source );
 void decodeArgumentStrings( std::vector<std::string>& entity_arguments );
+IfcPPTypeEnum findTypeEnumForString( const std::string& type_name );
+IfcPPEntityEnum findEntityEnumForString( const std::string& entity_name );
+void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 
-template<class T>
-void readTypeOfIntList( std::string& str, std::vector<shared_ptr<T> >& vec )
+template<typename T>
+void readTypeOfIntList( const std::string& str, std::vector<shared_ptr<T> >& vec )
 {
 	//(38,12,4)
 	char* ch = (char*)str.c_str();
@@ -85,7 +90,7 @@ void readTypeOfIntList( std::string& str, std::vector<shared_ptr<T> >& vec )
 	}
 }
 
-template<class T>
+template<typename T>
 void readTypeOfRealList( const char* str, std::vector<shared_ptr<T> >& vec )
 {
 	//(.38,12.0,.04)
@@ -122,8 +127,8 @@ void readTypeOfRealList( const char* str, std::vector<shared_ptr<T> >& vec )
 	}
 }
 
-template<class T>
-void readTypeOfRealList( std::string& str, std::vector<shared_ptr<T> >& vec )
+template<typename T>
+void readTypeOfRealList( const std::string& str, std::vector<shared_ptr<T> >& vec )
 {
 	//(.38,12.0,.04)
 	char* ch = (char*)str.c_str();
@@ -131,8 +136,8 @@ void readTypeOfRealList( std::string& str, std::vector<shared_ptr<T> >& vec )
 }
 
 
-template<class T>
-void readTypeOfRealList2D( std::string& str, std::vector<std::vector<shared_ptr<T> > >& vec )
+template<typename T>
+void readTypeOfRealList2D( const std::string& str, std::vector<std::vector<shared_ptr<T> > >& vec )
 {
 	//((.38,12.0,.04),(.38,1.0,346.0),(1.8,1.0,.04))
 	char* ch = (char*)str.c_str();
@@ -145,7 +150,7 @@ void readTypeOfRealList2D( std::string& str, std::vector<std::vector<shared_ptr<
 
 	if( ch[0] != '(' )
 	{
-		throw IfcPPException( "readTypeOfRealList2D: string does not start with (" );
+		throw IfcPPException( "string does not start with (", __func__ );
 	}
 	unsigned int i=0;
 	unsigned int last_token = 1;
@@ -183,22 +188,20 @@ void readTypeOfRealList2D( std::string& str, std::vector<std::vector<shared_ptr<
 
 	// no closing paranthesis found
 	std::stringstream err;
-	err << "readTypeOfRealList2D: no closing paranthesis found: " << str << std::endl;
-	throw IfcPPException( err.str() );
+	err << "no closing paranthesis found: " << str << std::endl;
+	throw IfcPPException( err.str(), __func__ );
 }
 
-template<class T>
-void readEntityReference(  std::string& str, shared_ptr<T>& smart, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
+template<typename T>
+void readEntityReference( const std::string& str, shared_ptr<T>& smart, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	if( str.length() == 0)
 	{
-		std::stringstream err;
-		err << "readEntityReference: empty argument. should be $" << std::endl;
 		return;
 	}
 	if( str.at(0) == '#' )
 	{
-		int entity_id = atoi( str.erase( 0, 1 ).c_str() );
+		int entity_id = atoi( str.substr( 1 ).c_str() );
 		std::map<int,shared_ptr<IfcPPEntity> >::const_iterator it_entity = map_entities.find( entity_id );
 		if( it_entity != map_entities.end() )
 		{
@@ -208,8 +211,8 @@ void readEntityReference(  std::string& str, shared_ptr<T>& smart, const std::ma
 		else
 		{
 			std::stringstream err;
-			err << "readEntityReference: object with id " << entity_id << " not found" << std::endl;
-			throw IfcPPException( err.str() );
+			err << "object with id " << entity_id << " not found" << std::endl;
+			throw IfcPPException( err.str(), __func__ );
 		}
 	}
 	else if( str.compare("$")==0 )
@@ -222,12 +225,12 @@ void readEntityReference(  std::string& str, shared_ptr<T>& smart, const std::ma
 	}
 	else
 	{
-		throw IfcPPException( "readEntityReference: unexpected argument\n" );
+		throw IfcPPException( "unexpected argument", __func__ );
 	}
 }
 
-template<class T>
-void readTypeList( std::string arg_complete, std::vector<shared_ptr<T> >& vec )
+template<typename T>
+void readTypeList( const std::string arg_complete, std::vector<shared_ptr<T> >& vec )
 {
 	//(IfcLabel('label'),'',IfcLengthMeasure(2.0),#299)
 	char* pos_opening = NULL;
@@ -242,8 +245,8 @@ void readTypeList( std::string arg_complete, std::vector<shared_ptr<T> >& vec )
 			return;
 		}
 		std::stringstream err;
-		err << "readTypeList: num_opening != num_closing : " << arg_complete.c_str() << std::endl;
-		throw IfcPPException( err.str() );
+		err << "num_opening != num_closing : " << arg_complete.c_str() << std::endl;
+		throw IfcPPException( err.str(), __func__ );
 	}
 	std::string arg( pos_opening+1, pos_closing-pos_opening-1 );
 	std::vector<std::string> list_items;
@@ -252,12 +255,12 @@ void readTypeList( std::string arg_complete, std::vector<shared_ptr<T> >& vec )
 	for( unsigned int i=0; i<list_items.size(); ++i )
 	{
 		std::string& item = list_items[i];
-		vec.push_back( T::readStepData( item ) );
+		vec.push_back( T::createObjectFromStepData( item ) );
 	}
 }
 
-template<class T>
-void readSelectList( std::string& arg_complete, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
+template<typename T>
+void readSelectList( const std::string& arg_complete, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(#287,#291,#295,#299)
 	char* pos_opening = NULL;
@@ -272,8 +275,8 @@ void readSelectList( std::string& arg_complete, std::vector<shared_ptr<T> >& vec
 			return;
 		}
 		std::stringstream err;
-		err << "readSelectList: num_opening != num_closing : " << arg_complete.c_str() << std::endl;
-		throw IfcPPException( err.str() );
+		err << "num_opening != num_closing : " << arg_complete.c_str() << std::endl;
+		throw IfcPPException( err.str(), __func__ );
 	}
 	std::string arg( pos_opening+1, pos_closing-pos_opening-1 );
 	std::vector<std::string> list_items;
@@ -298,13 +301,13 @@ void readSelectList( std::string& arg_complete, std::vector<shared_ptr<T> >& vec
 		else
 		{
 			// could be type like IFCPARAMETERVALUE(90)
-			vec.push_back( T::readStepData( item, map_entities ) );
+			vec.push_back( T::createObjectFromStepData( item, map_entities ) );
 		}
 	}
 	return;
 }
 
-template<class T>
+template<typename T>
 void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(#287,#291,#295,#299)
@@ -323,8 +326,8 @@ void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T
 			}
 		}
 		std::stringstream err;
-		err << "readEntityReferenceList: num_opening != num_closing : " << arg_complete << std::endl;
-		throw IfcPPException( err.str() );
+		err << "num_opening != num_closing : " << arg_complete << std::endl;
+		throw IfcPPException( err.str(), __func__ );
 	}
 	std::string arg( pos_opening+1, pos_closing-pos_opening-1 );
 	std::vector<int> list_items;
@@ -342,7 +345,7 @@ void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T
 	}
 }
 
-template<class T>
+template<typename T>
 void readEntityReferenceList( const std::string& str, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(#287,#291,#295,#299)
@@ -350,8 +353,8 @@ void readEntityReferenceList( const std::string& str, std::vector<shared_ptr<T> 
 	readEntityReferenceList( ch, vec, map_entities );
 }
 
-template<class T>
-void readEntityReferenceList2D( std::string& str, std::vector<std::vector<shared_ptr<T> > >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
+template<typename T>
+void readEntityReferenceList2D( const std::string& str, std::vector<std::vector<shared_ptr<T> > >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//((#287,#291,#295,#299),(#287,#291,#295,#299))
 	char* ch = (char*)str.c_str();
@@ -398,12 +401,12 @@ void readEntityReferenceList2D( std::string& str, std::vector<std::vector<shared
 	}
 	// no closing paranthesis found
 	std::stringstream err;
-	err << "readEntityReferenceList2D: no closing paranthesis found: " << str << std::endl;
-	throw IfcPPException( err.str() );
+	err << "no closing paranthesis found: " << str << std::endl;
+	throw IfcPPException( err.str(), __func__ );
 }
 
-template<class T>
-void readEntityReferenceList3D( std::string& str, std::vector<std::vector<std::vector<shared_ptr<T> > > >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
+template<typename T>
+void readEntityReferenceList3D( const std::string& str, std::vector<std::vector<std::vector<shared_ptr<T> > > >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(((#287,#291,#295,#299),(#287,#291,#295,#299)),((#287,#291,#295,#299),(#287,#291,#295,#299)))
 	const unsigned int argsize = (unsigned int)str.size();
@@ -452,6 +455,6 @@ void readEntityReferenceList3D( std::string& str, std::vector<std::vector<std::v
 	}
 	// no closing paranthesis found
 	std::stringstream err;
-	err << "readEntityReferenceList3D: no closing paranthesis found: " << str << std::endl;
-	throw IfcPPException( err.str() );
+	err << "no closing paranthesis found: " << str << std::endl;
+	throw IfcPPException( err.str(), __func__ );
 }

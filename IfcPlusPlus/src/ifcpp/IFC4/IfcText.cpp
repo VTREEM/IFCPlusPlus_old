@@ -32,7 +32,7 @@ void IfcText::getStepParameter( std::stringstream& stream, bool is_select_type )
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcText> IfcText::readStepData( std::string& arg )
+shared_ptr<IfcText> IfcText::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcText>(); }

@@ -36,7 +36,7 @@ public:
 	~IfcBuildingElementPartTypeEnum();
 	virtual const char* classname() const { return "IfcBuildingElementPartTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcBuildingElementPartTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcBuildingElementPartTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcBuildingElementPartTypeEnumEnum m_enum;
 };
 

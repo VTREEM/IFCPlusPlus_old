@@ -29,7 +29,7 @@ public:
 	~IfcWarpingConstantMeasure();
 	virtual const char* classname() const { return "IfcWarpingConstantMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcWarpingConstantMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcWarpingConstantMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

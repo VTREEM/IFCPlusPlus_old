@@ -74,22 +74,22 @@ void IfcRelSpaceBoundary1stLevel::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcRelSpaceBoundary1stLevel::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRelSpaceBoundary1stLevel::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRelSpaceBoundary1stLevel::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<10 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRelSpaceBoundary1stLevel, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>10 ){ std::cout << "Wrong parameter count for entity IfcRelSpaceBoundary1stLevel, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_GlobalId = IfcGloballyUniqueId::readStepData( args[0] );
+	m_GlobalId = IfcGloballyUniqueId::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_OwnerHistory, map );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_Description = IfcText::readStepData( args[3] );
-	m_RelatingSpace = IfcSpaceBoundarySelect::readStepData( args[4], map );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_Description = IfcText::createObjectFromStepData( args[3] );
+	m_RelatingSpace = IfcSpaceBoundarySelect::createObjectFromStepData( args[4], map );
 	readEntityReference( args[5], m_RelatedBuildingElement, map );
 	readEntityReference( args[6], m_ConnectionGeometry, map );
-	m_PhysicalOrVirtualBoundary = IfcPhysicalOrVirtualEnum::readStepData( args[7] );
-	m_InternalOrExternalBoundary = IfcInternalOrExternalEnum::readStepData( args[8] );
+	m_PhysicalOrVirtualBoundary = IfcPhysicalOrVirtualEnum::createObjectFromStepData( args[7] );
+	m_InternalOrExternalBoundary = IfcInternalOrExternalEnum::createObjectFromStepData( args[8] );
 	readEntityReference( args[9], m_ParentBoundary, map );
 }
 void IfcRelSpaceBoundary1stLevel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

@@ -72,7 +72,7 @@ void IfcLightEmissionSourceEnum::getStepParameter( std::stringstream& stream, bo
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcLightEmissionSourceEnum> IfcLightEmissionSourceEnum::readStepData( std::string& arg )
+shared_ptr<IfcLightEmissionSourceEnum> IfcLightEmissionSourceEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLightEmissionSourceEnum>(); }

@@ -31,7 +31,7 @@ void IfcFontStyle::getStepParameter( std::stringstream& stream, bool is_select_t
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcFontStyle> IfcFontStyle::readStepData( std::string& arg )
+shared_ptr<IfcFontStyle> IfcFontStyle::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFontStyle>(); }

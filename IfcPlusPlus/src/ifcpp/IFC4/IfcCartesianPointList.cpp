@@ -38,7 +38,7 @@ void IfcCartesianPointList::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcCartesianPointList::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcCartesianPointList::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcCartesianPointList::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 }
 void IfcCartesianPointList::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

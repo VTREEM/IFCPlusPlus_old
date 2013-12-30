@@ -50,7 +50,7 @@ void IfcApplication::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcApplication::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcApplication::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcApplication::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<4 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcApplication, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -58,9 +58,9 @@ void IfcApplication::readStepData( std::vector<std::string>& args, const std::ma
 	if( num_args>4 ){ std::cout << "Wrong parameter count for entity IfcApplication, expecting 4, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_ApplicationDeveloper, map );
-	m_Version = IfcLabel::readStepData( args[1] );
-	m_ApplicationFullName = IfcLabel::readStepData( args[2] );
-	m_ApplicationIdentifier = IfcIdentifier::readStepData( args[3] );
+	m_Version = IfcLabel::createObjectFromStepData( args[1] );
+	m_ApplicationFullName = IfcLabel::createObjectFromStepData( args[2] );
+	m_ApplicationIdentifier = IfcIdentifier::createObjectFromStepData( args[3] );
 }
 void IfcApplication::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

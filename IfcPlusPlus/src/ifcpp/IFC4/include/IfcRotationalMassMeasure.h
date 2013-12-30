@@ -29,7 +29,7 @@ public:
 	~IfcRotationalMassMeasure();
 	virtual const char* classname() const { return "IfcRotationalMassMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcRotationalMassMeasure> readStepData( std::string& arg );
+	static shared_ptr<IfcRotationalMassMeasure> createObjectFromStepData( const std::string& arg );
 	double m_value;
 };
 

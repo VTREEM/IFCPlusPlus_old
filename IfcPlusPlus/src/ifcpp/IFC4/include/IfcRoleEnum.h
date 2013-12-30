@@ -55,7 +55,7 @@ public:
 	~IfcRoleEnum();
 	virtual const char* classname() const { return "IfcRoleEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcRoleEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcRoleEnum> createObjectFromStepData( const std::string& arg );
 	IfcRoleEnumEnum m_enum;
 };
 

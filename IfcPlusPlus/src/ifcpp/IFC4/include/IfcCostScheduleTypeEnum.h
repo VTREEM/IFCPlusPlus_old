@@ -41,7 +41,7 @@ public:
 	~IfcCostScheduleTypeEnum();
 	virtual const char* classname() const { return "IfcCostScheduleTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcCostScheduleTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcCostScheduleTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcCostScheduleTypeEnumEnum m_enum;
 };
 

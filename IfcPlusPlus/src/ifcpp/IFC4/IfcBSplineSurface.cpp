@@ -65,7 +65,7 @@ void IfcBSplineSurface::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcBSplineSurface::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcBSplineSurface::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcBSplineSurface::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<7 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcBSplineSurface, expecting 7, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -75,7 +75,7 @@ void IfcBSplineSurface::readStepData( std::vector<std::string>& args, const std:
 	readIntValue( args[0], m_UDegree );
 	readIntValue( args[1], m_VDegree );
 	readEntityReferenceList2D( args[2], m_ControlPointsList, map );
-	m_SurfaceForm = IfcBSplineSurfaceForm::readStepData( args[3] );
+	m_SurfaceForm = IfcBSplineSurfaceForm::createObjectFromStepData( args[3] );
 	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_UClosed = false; }
 	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_UClosed = true; }
 	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_VClosed = false; }

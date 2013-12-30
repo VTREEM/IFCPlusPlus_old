@@ -52,16 +52,16 @@ void IfcReference::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcReference::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcReference::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcReference::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<5 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcReference, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>5 ){ std::cout << "Wrong parameter count for entity IfcReference, expecting 5, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_TypeIdentifier = IfcIdentifier::readStepData( args[0] );
-	m_AttributeIdentifier = IfcIdentifier::readStepData( args[1] );
-	m_InstanceName = IfcLabel::readStepData( args[2] );
+	m_TypeIdentifier = IfcIdentifier::createObjectFromStepData( args[0] );
+	m_AttributeIdentifier = IfcIdentifier::createObjectFromStepData( args[1] );
+	m_InstanceName = IfcLabel::createObjectFromStepData( args[2] );
 	readIntList(  args[3], m_ListPositions );
 	readEntityReference( args[4], m_InnerReference, map );
 }

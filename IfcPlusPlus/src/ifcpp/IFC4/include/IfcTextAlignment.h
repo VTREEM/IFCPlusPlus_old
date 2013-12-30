@@ -28,7 +28,7 @@ public:
 	~IfcTextAlignment();
 	virtual const char* classname() const { return "IfcTextAlignment"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcTextAlignment> readStepData( std::string& arg );
+	static shared_ptr<IfcTextAlignment> createObjectFromStepData( const std::string& arg );
 	std::string m_value;
 };
 

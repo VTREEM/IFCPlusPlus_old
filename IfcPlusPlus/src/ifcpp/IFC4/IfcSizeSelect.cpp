@@ -25,7 +25,7 @@
 // TYPE IfcSizeSelect 
 IfcSizeSelect::IfcSizeSelect() {}
 IfcSizeSelect::~IfcSizeSelect() {}
-shared_ptr<IfcSizeSelect> IfcSizeSelect::readStepData( std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+shared_ptr<IfcSizeSelect> IfcSizeSelect::createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	// Read SELECT TYPE
 	if( arg.size() == 0 ){ return shared_ptr<IfcSizeSelect>(); }
@@ -59,29 +59,16 @@ shared_ptr<IfcSizeSelect> IfcSizeSelect::readStepData( std::string& arg, const s
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		if( keyword.compare("IFCDESCRIPTIVEMEASURE")== 0 )
+		shared_ptr<IfcPPObject> result_object( NULL );
+		readInlineTypeOrEntity( arg, result_object, map );
+		if( result_object )
 		{
-			return IfcDescriptiveMeasure::readStepData( inline_arg );
-		}
-		else if( keyword.compare("IFCLENGTHMEASURE")== 0 )
-		{
-			return IfcLengthMeasure::readStepData( inline_arg );
-		}
-		else if( keyword.compare("IFCNORMALISEDRATIOMEASURE")== 0 )
-		{
-			return IfcNormalisedRatioMeasure::readStepData( inline_arg );
-		}
-		else if( keyword.compare("IFCPOSITIVELENGTHMEASURE")== 0 )
-		{
-			return IfcPositiveLengthMeasure::readStepData( inline_arg );
-		}
-		else if( keyword.compare("IFCPOSITIVERATIOMEASURE")== 0 )
-		{
-			return IfcPositiveRatioMeasure::readStepData( inline_arg );
-		}
-		else if( keyword.compare("IFCRATIOMEASURE")== 0 )
-		{
-			return IfcRatioMeasure::readStepData( inline_arg );
+			shared_ptr<IfcPPObject> result_ptr( result_object );
+			shared_ptr<IfcSizeSelect> result_ptr_self = dynamic_pointer_cast<IfcSizeSelect>( result_ptr );
+			if( result_ptr_self )
+			{
+				return result_ptr_self;
+			}
 		}
 		std::stringstream strs;
 		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSizeSelect::readStepData" << std::endl;

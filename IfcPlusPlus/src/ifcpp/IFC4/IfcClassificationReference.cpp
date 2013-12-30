@@ -61,19 +61,19 @@ void IfcClassificationReference::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcClassificationReference::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcClassificationReference::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcClassificationReference::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<6 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcClassificationReference, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>6 ){ std::cout << "Wrong parameter count for entity IfcClassificationReference, expecting 6, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Location = IfcURIReference::readStepData( args[0] );
-	m_Identification = IfcIdentifier::readStepData( args[1] );
-	m_Name = IfcLabel::readStepData( args[2] );
-	m_ReferencedSource = IfcClassificationReferenceSelect::readStepData( args[3], map );
-	m_Description = IfcText::readStepData( args[4] );
-	m_Sort = IfcIdentifier::readStepData( args[5] );
+	m_Location = IfcURIReference::createObjectFromStepData( args[0] );
+	m_Identification = IfcIdentifier::createObjectFromStepData( args[1] );
+	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+	m_ReferencedSource = IfcClassificationReferenceSelect::createObjectFromStepData( args[3], map );
+	m_Description = IfcText::createObjectFromStepData( args[4] );
+	m_Sort = IfcIdentifier::createObjectFromStepData( args[5] );
 }
 void IfcClassificationReference::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

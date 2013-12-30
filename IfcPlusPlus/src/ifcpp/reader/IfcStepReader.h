@@ -21,9 +21,10 @@ class IfcStepReader : public IfcPlusPlusReader
 public:
 	IfcStepReader();
 	~IfcStepReader();
-	void readStreamHeader( std::string& in, shared_ptr<IfcPPModel> model );
-	void readStreamData( std::string& in, std::map<int,shared_ptr<IfcPPEntity> >& map );
-	void splitIntoStepLines( std::string& read_in, std::vector<std::string>& step_lines );
-	void readStepLines( const std::vector<std::string>& step_lines, std::vector<shared_ptr<IfcPPEntity> >& target_entity_map );
-	void readEntityArguments( const std::vector<shared_ptr<IfcPPEntity> >& vec_entities, const std::map<int,shared_ptr<IfcPPEntity> > map_entities );
+	virtual void readStreamHeader(	const std::string& in );
+	virtual void readStreamData(	const std::string& in, std::map<int,shared_ptr<IfcPPEntity> >& map );
+
+	void splitIntoStepLines(	const std::string& read_in, std::vector<std::string>& step_lines );
+	void readStepLines(			const std::vector<std::string>& step_lines, std::vector<shared_ptr<IfcPPEntity> >& vec_target_entity );
+	void readEntityArguments(	const std::vector<shared_ptr<IfcPPEntity> >& vec_entities, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };

@@ -211,10 +211,10 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 	// read data as a block:
 	infile.read (&buffer[0],length);
 	infile.close();
-	
-	m_ifc_model->clearIfcModel();
 
-	m_step_reader->readStreamHeader( buffer, m_ifc_model );
+	m_ifc_model->clearIfcModel();
+	m_step_reader->setModel( m_ifc_model );
+	m_step_reader->readStreamHeader( buffer );
 	std::string file_schema_version = m_ifc_model->getFileSchema();
 	std::map<int,shared_ptr<IfcPPEntity> > map_entities;
 	
@@ -316,7 +316,7 @@ void ReaderWriterIFC::createGeometry()
 	shared_ptr<IfcProject> project = m_ifc_model->getIfcProject();
 	if( !project )
 	{
-		throw IfcPPException( "ReaderWriterIFC: no valid IfcProject in model." );
+		throw IfcPPException( "ReaderWriterIFC: no valid IfcProject in model." , __func__ );
 	}
 
 	m_product_shapes.clear();
@@ -544,7 +544,7 @@ void ReaderWriterIFC::createGeometry()
 
 	if( err.tellp() > 0 )
 	{
-		throw IfcPPException( err.str().c_str() );
+		throw IfcPPException( err.str().c_str(), __func__ );
 	}
 }
 
@@ -953,7 +953,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	
 	if( strs_err.tellp() > 0 )
 	{
-		throw IfcPPException( strs_err.str().c_str() );
+		throw IfcPPException( strs_err.str().c_str(), __func__ );
 	}
 }
 

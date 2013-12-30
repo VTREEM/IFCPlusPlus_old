@@ -52,7 +52,7 @@ void IfcElectricDistributionBoardTypeEnum::getStepParameter( std::stringstream& 
 	}
 	if( is_select_type ) { stream << ")"; }
 }
-shared_ptr<IfcElectricDistributionBoardTypeEnum> IfcElectricDistributionBoardTypeEnum::readStepData( std::string& arg )
+shared_ptr<IfcElectricDistributionBoardTypeEnum> IfcElectricDistributionBoardTypeEnum::createObjectFromStepData( const std::string& arg )
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricDistributionBoardTypeEnum>(); }

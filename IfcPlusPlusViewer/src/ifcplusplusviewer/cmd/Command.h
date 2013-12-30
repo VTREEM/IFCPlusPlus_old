@@ -13,11 +13,11 @@
 
 #pragma once
 
-#include "ifcpp/model/shared_ptr.h"
 #include <osg/Vec3f>
 #include <osg/Group>
 #include <osgGA/GUIEventAdapter>
 #include <osgGA/GUIActionAdapter>
+#include "ifcpp/model/shared_ptr.h"
 
 class IfcPlusPlusSystem;
 class IfcPPEntity;

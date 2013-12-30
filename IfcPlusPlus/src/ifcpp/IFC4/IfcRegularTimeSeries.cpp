@@ -74,22 +74,22 @@ void IfcRegularTimeSeries::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcRegularTimeSeries::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRegularTimeSeries::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRegularTimeSeries::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<10 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRegularTimeSeries, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>10 ){ std::cout << "Wrong parameter count for entity IfcRegularTimeSeries, expecting 10, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
-	m_StartTime = IfcDateTime::readStepData( args[2] );
-	m_EndTime = IfcDateTime::readStepData( args[3] );
-	m_TimeSeriesDataType = IfcTimeSeriesDataTypeEnum::readStepData( args[4] );
-	m_DataOrigin = IfcDataOriginEnum::readStepData( args[5] );
-	m_UserDefinedDataOrigin = IfcLabel::readStepData( args[6] );
-	m_Unit = IfcUnit::readStepData( args[7], map );
-	m_TimeStep = IfcTimeMeasure::readStepData( args[8] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
+	m_StartTime = IfcDateTime::createObjectFromStepData( args[2] );
+	m_EndTime = IfcDateTime::createObjectFromStepData( args[3] );
+	m_TimeSeriesDataType = IfcTimeSeriesDataTypeEnum::createObjectFromStepData( args[4] );
+	m_DataOrigin = IfcDataOriginEnum::createObjectFromStepData( args[5] );
+	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[6] );
+	m_Unit = IfcUnit::createObjectFromStepData( args[7], map );
+	m_TimeStep = IfcTimeMeasure::createObjectFromStepData( args[8] );
 	readEntityReferenceList( args[9], m_Values, map );
 }
 void IfcRegularTimeSeries::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

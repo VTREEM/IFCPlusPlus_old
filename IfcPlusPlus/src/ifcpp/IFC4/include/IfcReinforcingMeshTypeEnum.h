@@ -34,7 +34,7 @@ public:
 	~IfcReinforcingMeshTypeEnum();
 	virtual const char* classname() const { return "IfcReinforcingMeshTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcReinforcingMeshTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcReinforcingMeshTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcReinforcingMeshTypeEnumEnum m_enum;
 };
 

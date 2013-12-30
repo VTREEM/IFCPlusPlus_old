@@ -68,7 +68,7 @@ void IfcBSplineCurveWithKnots::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcBSplineCurveWithKnots::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcBSplineCurveWithKnots::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcBSplineCurveWithKnots::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<8 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcBSplineCurveWithKnots, expecting 8, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -77,14 +77,14 @@ void IfcBSplineCurveWithKnots::readStepData( std::vector<std::string>& args, con
 	#endif
 	readIntValue( args[0], m_Degree );
 	readEntityReferenceList( args[1], m_ControlPointsList, map );
-	m_CurveForm = IfcBSplineCurveForm::readStepData( args[2] );
+	m_CurveForm = IfcBSplineCurveForm::createObjectFromStepData( args[2] );
 	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_ClosedCurve = false; }
 	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_ClosedCurve = true; }
 	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
 	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
 	readIntList(  args[5], m_KnotMultiplicities );
 	readTypeOfRealList( args[6], m_Knots );
-	m_KnotSpec = IfcKnotType::readStepData( args[7] );
+	m_KnotSpec = IfcKnotType::createObjectFromStepData( args[7] );
 }
 void IfcBSplineCurveWithKnots::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

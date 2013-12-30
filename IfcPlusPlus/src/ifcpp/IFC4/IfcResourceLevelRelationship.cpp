@@ -43,15 +43,15 @@ void IfcResourceLevelRelationship::getStepLine( std::stringstream& stream ) cons
 	stream << ");";
 }
 void IfcResourceLevelRelationship::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcResourceLevelRelationship::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcResourceLevelRelationship::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<2 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcResourceLevelRelationship, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
 	#ifdef _DEBUG
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcResourceLevelRelationship, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
-	m_Name = IfcLabel::readStepData( args[0] );
-	m_Description = IfcText::readStepData( args[1] );
+	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+	m_Description = IfcText::createObjectFromStepData( args[1] );
 }
 void IfcResourceLevelRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

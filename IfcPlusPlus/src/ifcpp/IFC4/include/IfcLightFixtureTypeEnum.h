@@ -37,7 +37,7 @@ public:
 	~IfcLightFixtureTypeEnum();
 	virtual const char* classname() const { return "IfcLightFixtureTypeEnum"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
-	static shared_ptr<IfcLightFixtureTypeEnum> readStepData( std::string& arg );
+	static shared_ptr<IfcLightFixtureTypeEnum> createObjectFromStepData( const std::string& arg );
 	IfcLightFixtureTypeEnumEnum m_enum;
 };
 

@@ -48,7 +48,7 @@ void IfcRightCircularCone::getStepLine( std::stringstream& stream ) const
 	stream << ");";
 }
 void IfcRightCircularCone::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
-void IfcRightCircularCone::readStepData( std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+void IfcRightCircularCone::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
 {
 	const int num_args = (int)args.size();
 	if( num_args<3 ){ std::stringstream strserr; strserr << "Wrong parameter count for entity IfcRightCircularCone, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; throw IfcPPException( strserr.str().c_str() ); }
@@ -56,8 +56,8 @@ void IfcRightCircularCone::readStepData( std::vector<std::string>& args, const s
 	if( num_args>3 ){ std::cout << "Wrong parameter count for entity IfcRightCircularCone, expecting 3, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Position, map );
-	m_Height = IfcPositiveLengthMeasure::readStepData( args[1] );
-	m_BottomRadius = IfcPositiveLengthMeasure::readStepData( args[2] );
+	m_Height = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
+	m_BottomRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
 }
 void IfcRightCircularCone::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {
