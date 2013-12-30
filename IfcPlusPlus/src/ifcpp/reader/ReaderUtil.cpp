@@ -516,7 +516,7 @@ void readStringList( const std::string& str, std::vector<std::string>& vec )
 	}
 }
 
-inline void findEndOfString( char*& stream_pos )
+void findEndOfString( char*& stream_pos )
 {
 	++stream_pos;
 	char* pos_begin = stream_pos;
@@ -915,7 +915,7 @@ void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& re
 	}
 
 	IfcPPTypeEnum type_enum = findTypeEnumForString( keyword );
-	if( type_enum != IfcPPTypeEnum::IFC_TYPE_UNDEFINED )
+	if( type_enum != IFC_TYPE_UNDEFINED )
 	{
 		shared_ptr<IfcPPType> type_instance = createIfcPPType( type_enum, inline_arg, map_entities );
 		if( type_instance )
@@ -927,7 +927,7 @@ void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& re
 	}
 
 	IfcPPEntityEnum entity_enum = findEntityEnumForString( keyword );
-	if( entity_enum != IfcPPEntityEnum::IFC_ENTITY_UNDEFINED )
+	if( entity_enum != IFC_ENTITY_UNDEFINED )
 	{
 		shared_ptr<IfcPPEntity> entity_instance( createIfcPPEntity( entity_enum ) );
 		if( entity_instance )

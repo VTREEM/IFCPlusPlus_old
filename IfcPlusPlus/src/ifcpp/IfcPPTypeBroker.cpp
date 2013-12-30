@@ -357,5 +357,5 @@ shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std:
 
 		default: throw IfcPPException("given IfcPPTypeEnum not valid");
 	}
-	return 0;
+	return shared_ptr<IfcPPType>(0);
 }
