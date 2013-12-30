@@ -380,13 +380,6 @@ void IfcStepReader::splitIntoStepLines( const std::string& read_in, std::vector<
 		if( *stream_pos == '\'' )
 		{
 			findEndOfString( stream_pos );
-					if( *(stream_pos+1) == '\'' )
-					{
-						// we have a double quote, so just continue
-						++stream_pos;
-						++stream_pos;
-						continue;
-					}
 			++stream_pos;
 			continue;
 		}
