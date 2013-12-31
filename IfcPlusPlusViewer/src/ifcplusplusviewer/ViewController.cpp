@@ -28,9 +28,10 @@
 ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 {
 	m_rootnode	= new osg::Group();
+	m_rootnode->setName("m_rootnode");
 	m_sw_model = new osg::Switch();
 	m_transform_model = new osg::MatrixTransform();
-	m_transform_model->setName("model");
+	m_transform_model->setName("m_transform_model");
 	m_transform_model->addChild( m_sw_model.get() );
 	m_rootnode->addChild( m_transform_model.get() );
 	m_rootnode->setDataVariance( osg::Object::DYNAMIC );
@@ -46,6 +47,7 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	// TODO: fancy horizon
 
 	m_sw_bound = new osg::Switch();
+	m_sw_bound->setName("m_sw_bound");
 	m_rootnode->addChild( m_sw_bound );
 	m_transparent_model = false;
 	m_viewer_mode = VIEWER_MODE_SHADED;
@@ -88,6 +90,7 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 
 	// create coordinate axes
 	m_sw_coord_axes = new osg::Switch();
+	m_sw_coord_axes->setName("m_sw_coord_axes");
 	m_sw_coord_axes->addChild( createCoordinateAxes() );
 	m_sw_coord_axes->addChild( createCoordinateAxesArrows() );
 	//m_sw_coord_axes->addChild( createQuarterCircles() );
@@ -165,6 +168,7 @@ void ViewController::toggleSceneLight()
 	if( !m_transform_light.valid() )
 	{
 		osg::Group* light_group = new osg::Group();
+		light_group->setName("light_group");
 		double model_size = 100; // TODO: adjust when model is loaded
 
 		osg::Light* light6 = new osg::Light();

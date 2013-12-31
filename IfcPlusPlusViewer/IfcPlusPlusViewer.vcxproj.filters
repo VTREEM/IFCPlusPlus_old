@@ -124,6 +124,9 @@
     <ClCompile Include="bin\GeneratedFiles\ReleaseWithDebugInfo\moc_IfcPlusPlusSystem.cpp">
       <Filter>Generierte Dateien\ReleaseWithDebugInfo</Filter>
     </ClCompile>
+    <ClCompile Include="src\ifcplusplusviewer\viewer\SubGroupIntersectionVisitor.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bin\GeneratedFiles\ui_ifcplusplusviewer2.h" />
@@ -146,6 +149,9 @@
       <Filter>Header Dateien</Filter>
     </ClInclude>
     <ClInclude Include="src\ifcplusplusviewer\viewer\ViewerUtil.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ifcplusplusviewer\viewer\SubGroupIntersectionVisitor.h">
       <Filter>Header Dateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -221,11 +227,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resources\appicon.rc">
-      <Filter>Resource Dateien</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\styles.css">
       <Filter>Resource Dateien</Filter>
     </None>
@@ -264,5 +265,8 @@
     <Image Include="Resources\img\IfcPlusPlusViewerWindowIcon.png">
       <Filter>Resource Dateien</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\appicon.rc" />
   </ItemGroup>
 </Project>
