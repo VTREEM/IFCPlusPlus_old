@@ -2,12 +2,10 @@
 #include <iostream>
 #include <iomanip>
 #include <QtWidgets/QApplication>
-#include <osg/BoundsChecking>
 #include <osg/ShapeDrawable>
-#include <osg/PositionAttitudeTransform>
-#include <osg/PolygonStipple>
-#include <osg/LineStipple>
+#include <osgUtil/IntersectionVisitor>
 #include <osg/MatrixTransform>
+#include <osg/Switch>
 #include <osgViewer/View>
 #include <osgFx/Scribe>
 #include <osgText/Text>
@@ -21,6 +19,8 @@
 #include <ifcppgeometry/ReaderWriterIFC.h>
 
 #include "IfcPlusPlusSystem.h"
+#include "SubGroupIntersectionVisitor.h"
+#include "ViewController.h"
 #include "ViewerUtil.h"
 #include "Orbit3DManipulator.h"
 
@@ -414,9 +414,15 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 #endif
 	//picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_ONE_PER_DRAWABLE );
 	picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
-	osgUtil::IntersectionVisitor iv( picker.get() );
+	SubGroupIntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
-	cam->accept(iv);
+	osg::Group* model_node = m_system->getViewController()->getModelNode();
+	iv.apply( *cam, model_node );
+
+	//osgUtil::IntersectionVisitor iv( picker.get() );
+	//iv.apply( *(m_system->getViewController()->getModelNode()) );
+	//osg::Camera* cam = view->getCamera();
+	//cam->accept(iv);
 
 	if( picker->containsIntersections() )
 	{
@@ -472,9 +478,10 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 #endif
 	//picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_ONE_PER_DRAWABLE );
 	picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
-	osgUtil::IntersectionVisitor iv( picker.get() );
+	SubGroupIntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
-	cam->accept(iv);
+	osg::Group* model_node = m_system->getViewController()->getModelNode();
+	iv.apply( *cam, model_node );
 
 	bool intersection_geometry_found = false;
 	if( picker->containsIntersections() )
@@ -497,7 +504,7 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 			// check if picked object is a representation of an IfcProduct
 			if( node_name.length() == 0 ) continue;
 			if( node_name.at(0) != '#' ) continue;
-			if( node_name.substr( 0, 9 ).compare( "intersect" ) == 0 ) continue;
+			if( node_name.compare( 0, 9, "intersect" ) == 0 ) continue;
 
 			osg::Group* group = dynamic_cast<osg::Group*>( node );
 			if( !group )
@@ -505,28 +512,13 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 				continue;
 			}
 			
-
-			char* stream_pos = (char*)node_name.c_str();
-			char* begin_id = stream_pos;
-			if( *stream_pos == '#' )
-			{
-				// need at least one integer here
-				++stream_pos;
-				begin_id = stream_pos;
-
-				// proceed until end of integer
-				while( isdigit( *stream_pos ) )
-				{
-					++stream_pos;
-				}
-			}
-			const int id = atoi( std::string( begin_id, stream_pos-begin_id ).c_str() );
-
-			//std::string id_str = node_name.substr(1,node_name.length()-1);
-			//int id = atoi( id_str.c_str() );
+			// extract entity id
+			std::string node_name_id = node_name.substr( 1 );
+			size_t last_index = node_name_id.find_first_not_of("0123456789");
+			std::string id_str = node_name_id.substr( 0, last_index );
+			const int id = atoi( id_str.c_str() );
 
 			const std::map<int, shared_ptr<selectedEntity> >& map_selected = m_system->getSelectedObjects();
-
 			std::map<int, shared_ptr<selectedEntity> >::const_iterator it_selected = map_selected.find( id );
 
 			if( it_selected != map_selected.end() )
