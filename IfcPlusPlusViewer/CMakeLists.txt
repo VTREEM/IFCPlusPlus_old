@@ -65,6 +65,7 @@ set(IFCPPVIEWER_SOURCE_FILES
   src/ifcplusplusviewer/gui/TabTextEdit.cpp
   src/ifcplusplusviewer/gui/TabView.cpp
   src/ifcplusplusviewer/viewer/Orbit3DManipulator.cpp
+  src/ifcplusplusviewer/viewer/SubGroupIntersectionVisitor.cpp
   src/ifcplusplusviewer/viewer/ViewerUtil.cpp
   src/ifcplusplusviewer/viewer/ViewerWidget.cpp
 )
@@ -83,6 +84,7 @@ set(IFCPPVIEWER_HEADER_FILES
   src/ifcplusplusviewer/gui/TabTextEdit.h
   src/ifcplusplusviewer/gui/TabView.h
   src/ifcplusplusviewer/viewer/Orbit3DManipulator.h
+  src/ifcplusplusviewer/viewer/SubGroupIntersectionVisitor.h
   src/ifcplusplusviewer/viewer/ViewerUtil.h
   src/ifcplusplusviewer/viewer/ViewerWidget.h
 )
