@@ -27,19 +27,19 @@
 	#include <QtGui/qevent.h>
 	#include <QtCore/qsettings.h>
 #else
-	#include <QtWidgets/qboxlayout.h>
-	#include <QtWidgets/qtreewidget.h>
-	#include <QtWidgets/qfiledialog.h>
-	#include <QtWidgets/qlabel.h>
-	#include <QtWidgets/qcombobox.h>
-	#include <QtWidgets/qpushbutton.h>
-	#include <QtWidgets/qprogressbar.h>
-	#include <QtWidgets/qlineedit.h>
-	#include <QtWidgets/qsplitter.h>
-	#include <QtWidgets/qapplication.h>
-	#include <QtWidgets/qtextedit.h>
+	#include <QtWidgets/QVBoxLayout>
+	#include <QtWidgets/QTreeWidget>
+	#include <QtWidgets/QFileDialog>
+	#include <QtWidgets/QLabel>
+	#include <QtWidgets/QComboBox>
+	#include <QtWidgets/QPushButton>
+	#include <QtWidgets/QProgressBar>
+	#include <QtWidgets/QLineEdit>
+	#include <QtWidgets/QSplitter>
+	#include <QtWidgets/QApplication>
+	#include <QtWidgets/QTextEdit>
 	#include <QtGui/qevent.h>
-	#include <QtCore/qsettings.h>
+	#include <QtCore/QSettings>
 #endif
 
 #include "ifcpp/reader/IfcPlusPlusReader.h"

@@ -94,6 +94,7 @@ ReaderWriterIFC::~ReaderWriterIFC()
 
 void ReaderWriterIFC::reset()
 {
+	progressTextCallback( "Unloading model, cleaning up memory..." );
 	m_err.str(std::string());
 	m_messages.str(std::string());
 
@@ -103,6 +104,7 @@ void ReaderWriterIFC::reset()
 	m_group_result->removeChildren( 0, m_group_result->getNumChildren() );
 	m_recent_progress = 0.0;
 
+	progressTextCallback( "Unloading model done" );
 	m_ignored_types.clear();
 	m_selected_types.clear();	
 }

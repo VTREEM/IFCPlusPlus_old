@@ -706,14 +706,9 @@ void IfcStepReader::readStreamData(	const std::string& read_in, std::map<int,sha
 		return;
 	}
 	
-	std::string message( "Detected IFC version: " );
-	message.append( m_model->getFileSchema() );
-
-	if( m_model->getIfcSchemaVersion() < IfcPPModel::IFC4 )
-	{
-		message.append( "\nTrying to apply backward compatibility" );
-	}
-	messageCallback( message );
+	//std::string message( "Detected IFC version: " );
+	//message.append( m_model->getFileSchema() );
+	messageCallback( std::string( "Detected IFC version: ") + m_model->getFileSchema() );
 
 	std::stringstream err;
 	std::vector<std::string> step_lines;
