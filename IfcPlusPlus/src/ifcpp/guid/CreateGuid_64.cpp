@@ -14,21 +14,17 @@
 //
 
 
-
+#pragma warning( disable: 4996 )
 #include <stdio.h>
 #include <string.h>
 
 #include	"CreateGuid_64.h"
 
-//
-// (CoCreateGuid should be written to produce the globally unique data.)
-//
+static long cv_to_64( const unsigned long number, char *code, int len );
+static long cv_from_64( unsigned long *pRes, const char *str );
 
-static BOOL cv_to_64( const unsigned long number, char *code, int len );
-static BOOL cv_from_64( unsigned long *pRes, const char *str );
-
-static BOOL cv_to_85( const unsigned long number, char *code, int len );
-static BOOL cv_from_85( unsigned long *pRes, const char *str );
+static long cv_to_85( const unsigned long number, char *code, int len );
+static long cv_from_85( unsigned long *pRes, const char *str );
 
 static const char *cConversionTable85 =
 //		  1		 2		 3		 4		 5		 6		 7		 8
@@ -46,6 +42,36 @@ static const char *cConversionTable =
 #ifndef _CREATE_GUID_64_C_
 #define _CREATE_GUID_64_C_
 
+std::string createGUID32()
+{
+	std::stringstream uuid_strs;
+	uuid_strs << std::uppercase;
+	boost::uuids::uuid uuid = boost::uuids::random_generator()();
+	uuid_strs << uuid;
+	return uuid_strs.str();
+}
+
+void getGuid( GUID   *pGuid )
+{
+	std::stringstream uuid_strs;
+	uuid_strs << std::uppercase;
+	boost::uuids::uuid uuid = boost::uuids::random_generator()();
+	uuid_strs << uuid;
+
+	//Append bytes from generated uuid_t to make a long and two short values for use in _GUID struct
+	unsigned long data1 = (unsigned long)uuid.data[0];
+	data1=data1<<24;
+	data1=data1|((unsigned long)uuid.data[1])<<16|((unsigned long)uuid.data[2])<<8|(unsigned long)uuid.data[3];
+
+	unsigned short data2 = (unsigned short) uuid.data[4];
+	data2=(data2<<8)|(unsigned short)uuid.data[5];
+
+	unsigned short data3 = (unsigned short) uuid.data[6];
+	data3=(data3<<8)|(unsigned short)uuid.data[7];
+	GUID guid = { data1, data2, data3, { uuid.data[8], uuid.data[9], uuid.data[10], uuid.data[11], uuid.data[12], uuid.data[13], uuid.data[14], uuid.data[15] } };
+	*pGuid = guid;
+};
+
 std::string CreateCompressedGuidString22()
 {
 	GUID guid = GUID_NULL;
@@ -54,7 +80,7 @@ std::string CreateCompressedGuidString22()
 	int len = 23;
 
 	// Call to the function from Microsoft
-	CoCreateGuid (&guid);
+	getGuid(&guid);
 
 	if (memcmp (&GUID_NULL, &guid, sizeof (GUID)) == 0)
 	{
@@ -76,7 +102,7 @@ char * CreateCompressedGuidString( char * buf, int len )
    //
    // Call to the function from Microsoft
    //
-	CoCreateGuid (&guid);
+	getGuid(&guid);
 
 	if (memcmp (&GUID_NULL, &guid, sizeof (GUID)) == 0) {
 		return 0;
@@ -212,7 +238,7 @@ bool getGuidFromString64( const char   *string, GUID *pGuid )
 
 	len = (int) strlen (string);
 	if (len != 22)
-		return FALSE;
+		return false;
 
 	j = 0;
 	m = 2;
@@ -225,7 +251,7 @@ bool getGuidFromString64( const char   *string, GUID *pGuid )
 	}
 	for(i = 0; i < 6; ++i) {
 		if (!cv_from_64 (&num[i], str[i])) {
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -242,21 +268,21 @@ bool getGuidFromString64( const char   *string, GUID *pGuid )
 	pGuid->Data4[6] = (unsigned char) ((num[5] / 256) % 256);				   //	02. byte
 	pGuid->Data4[7] = (unsigned char) (num[5] % 256);						   //	01. byte
 
-	return TRUE;
+	return true;
 }
 
 //
 // Conversion of an integer into a number with base 64
 // using the coside table cConveronTable
 //
-BOOL cv_to_64( const unsigned long number, char *code, int len )
+long cv_to_64( const unsigned long number, char *code, int len )
 {
 	unsigned long   act;
 	int			 iDigit, nDigits;
 	char			result[5];
 
 	if (len > 5)
-		return FALSE;
+		return false;
 
 	act = number;
 	nDigits = len - 1;
@@ -268,22 +294,22 @@ BOOL cv_to_64( const unsigned long number, char *code, int len )
 	result[len - 1] = '\0';
 
 	if (act != 0)
-		return FALSE;
+		return false;
 
 	strcpy (code, result);
-	return TRUE;
+	return true;
 }
 
 //
 // The reverse function to calculate the number from the code
 //
-BOOL cv_from_64( unsigned long *pRes, const char *str )
+long cv_from_64( unsigned long *pRes, const char *str )
 {
 	int len, i, j, index;
 
 	len= (int) strlen (str);
 	if (len > 4)
-		return FALSE;
+		return false;
 
 	*pRes=0;
 
@@ -296,10 +322,10 @@ BOOL cv_from_64( unsigned long *pRes, const char *str )
 			}
 		}
 		if (index == -1)
-			return FALSE;
+			return false;
 		*pRes = *pRes * 64 + index;
 	}
-	return TRUE;
+	return true;
 }
 
 //
@@ -355,14 +381,14 @@ bool getGuidFromString85( const char   *string, GUID *pGuid )
 
 	len = (int) strlen (string);
 	if (len != 20)
-		return FALSE;
+		return false;
 	for(i = 0; i < 4; ++i) {
 		strncpy (str[i], &string[i*5], 5);
 		str[i][5]= '\0';
 	}
 	for(i = 0; i < 4; ++i) {
 		if (!cv_from_85 (&num[i], str[i]))
-			return FALSE;
+			return false;
 	}
 	pGuid->Data1= (unsigned long) num[0];
 	data= num[1];
@@ -379,26 +405,26 @@ bool getGuidFromString85( const char   *string, GUID *pGuid )
 		pGuid->Data4[i]= (unsigned char) (data & 255);
 		data= data >> 8;
 	}
-	return TRUE;
+	return true;
 }
 
 //
 // Conversion of an integer into a number with base 85
 // using the code table cConversionTable85
 //
-BOOL cv_to_85( const unsigned long number, char *code, int len )
+long cv_to_85( const unsigned long number, char *code, int len )
 {
 	unsigned long  act;
 	int  z_array[5], ndig, i, zeroes;
 	char result[6];
 
 	if (len < 6)
-		return FALSE;
+		return false;
 	ndig=0;
 	act=number;
 	do {
 		if (ndig > 4)
-			return FALSE;
+			return false;
 		z_array[ndig]= (int) (act % 85);
 		act /= 85;
 		++ndig;
@@ -416,20 +442,20 @@ BOOL cv_to_85( const unsigned long number, char *code, int len )
 	}
 	result[5]='\0';
 	strcpy (code, result);
-	return TRUE;
+	return true;
 }
 
 //
 // The reverse function to calculate the number from the code
 //
-BOOL cv_from_85( unsigned long *pRes, const char *str )
+long cv_from_85( unsigned long *pRes, const char *str )
 {
 	int len, i, j, index;
 	unsigned long fact;
 
 	len= (int) strlen (str);
 	if (len > 5)
-	return FALSE;
+	return false;
 
 	*pRes=0;
 	fact=1;
@@ -442,39 +468,10 @@ BOOL cv_from_85( unsigned long *pRes, const char *str )
 			}
 		}
 		if (index == -1)
-			return FALSE;
+			return false;
 		*pRes+= index * fact;
 		fact *= 85;
 	}
-	return TRUE;
-}
-#endif
-
-#ifdef WIN32
-std::string createGUID32()
-{
-	UUID guid;
-	std::memset( &guid, 0, sizeof( UUID ) );
-
-	RPC_STATUS status = UuidCreateSequential( &guid );
-	if( RPC_S_OK != status )
-	{
-		throw E_UNEXPECTED;
-	}
-
-	//m_guid = guid;
-
-	//UUID m_guid;
-	WCHAR* wzGuid;
-	HRESULT hr = StringFromCLSID( guid, &wzGuid );
-	if( FAILED( hr ) )
-	{
-		throw hr;
-	}
-
-	std::wstring guid_wstr( wzGuid );
-	guid_wstr = guid_wstr.substr( 1, guid_wstr.length() - 2 );
-	std::string guid_str( guid_wstr.begin(), guid_wstr.end() );
-	return guid_str;
+	return true;
 }
 #endif

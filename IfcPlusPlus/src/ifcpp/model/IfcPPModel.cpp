@@ -11,6 +11,7 @@
  * OpenSceneGraph Public License for more details.
 */
 
+#pragma warning( disable: 4996 )
 #include <iostream>
 #include <time.h>
 #include "ifcpp/IFC4/include/IfcLabel.h"

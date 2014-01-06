@@ -34,7 +34,7 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	m_transform_model->setName("m_transform_model");
 	m_transform_model->addChild( m_sw_model.get() );
 	m_rootnode->addChild( m_transform_model.get() );
-	m_rootnode->setDataVariance( osg::Object::DYNAMIC );
+	//m_rootnode->setDataVariance( osg::Object::DYNAMIC );
 
 	// background camera
 	//osg::Camera* sky = new osg::Camera();

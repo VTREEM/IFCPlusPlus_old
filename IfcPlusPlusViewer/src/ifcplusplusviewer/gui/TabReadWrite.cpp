@@ -11,6 +11,7 @@
  * OpenSceneGraph Public License for more details.
 */
 
+#pragma warning( disable: 4996 )
 #include <QtCore/qglobal.h>
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 	#include <QtGui/qboxlayout.h>
@@ -139,6 +140,8 @@ public:
 	}
 };
 
+
+
 TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidget* parent ) : m_system(sys), m_viewer(viewer), QWidget( parent )
 {
 	m_block_selection_signals = false;
@@ -182,7 +185,12 @@ TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidge
 	m_txt_out = new QTextEdit();
 
 #ifdef _DEBUG
-	m_txt_out->setText( createGUID32().c_str() );
+	std::stringstream uuid_strs;
+//	for( int i=0; i<10; ++i )
+	uuid_strs << createGUID32().c_str() << std::endl;
+	uuid_strs << CreateCompressedGuidString22().c_str() << std::endl;
+
+	m_txt_out->setText( uuid_strs.str().c_str() );
 #endif
 
 	m_storey_widget = new StoreyWidget( m_system );
