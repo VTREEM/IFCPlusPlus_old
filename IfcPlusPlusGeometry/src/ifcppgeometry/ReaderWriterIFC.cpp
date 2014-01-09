@@ -457,16 +457,6 @@ void ReaderWriterIFC::createGeometry()
 				*c = tolower(*c);
 			}
 
-			if (std::find(m_ignored_types.begin(),  m_ignored_types.end(),  lowercaseType) == m_ignored_types.end())
-			{
-				std::cerr << "Type " << lowercaseType << " not in Ignore list" << std::endl;
-			}
-
-			if ((m_selected_types.size() != 0) && (std::find(m_selected_types.begin(), m_selected_types.end(), lowercaseType) != m_selected_types.end()))
-			{
-				std::cerr << "Type " << lowercaseType << " in Select list" << std::endl;
-			}
-
 			// Filter out element types found in m_ignored_types, select elements found in m_selected_types
 			if ((std::find(m_ignored_types.begin(),  m_ignored_types.end(),  lowercaseType) == m_ignored_types.end()) &&
 				((m_selected_types.size() == 0) || (std::find(m_selected_types.begin(), m_selected_types.end(), lowercaseType) != m_selected_types.end())))
