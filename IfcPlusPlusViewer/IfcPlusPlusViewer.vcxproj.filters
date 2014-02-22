@@ -127,6 +127,21 @@
     <ClCompile Include="src\ifcplusplusviewer\viewer\SubGroupIntersectionVisitor.cpp">
       <Filter>Source Dateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\ifcplusplusviewer\gui\IfcTreeWidget.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\GeneratedFiles\ReleaseWithDebugInfo\moc_IfcTreeWidget.cpp">
+      <Filter>Generierte Dateien\ReleaseWithDebugInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\GeneratedFiles\ReleaseNoOptimization\moc_IfcTreeWidget.cpp">
+      <Filter>Generierte Dateien\ReleaseNoOptimization</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\GeneratedFiles\Debug\moc_IfcTreeWidget.cpp">
+      <Filter>Generierte Dateien\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="bin\GeneratedFiles\Release\moc_IfcTreeWidget.cpp">
+      <Filter>Generierte Dateien\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bin\GeneratedFiles\ui_ifcplusplusviewer2.h" />
@@ -223,6 +238,9 @@
       <Filter>Resource Dateien</Filter>
     </CustomBuild>
     <CustomBuild Include="src\ifcplusplusviewer\viewer\Orbit3DManipulator.h">
+      <Filter>Header Dateien</Filter>
+    </CustomBuild>
+    <CustomBuild Include="src\ifcplusplusviewer\gui\IfcTreeWidget.h">
       <Filter>Header Dateien</Filter>
     </CustomBuild>
   </ItemGroup>

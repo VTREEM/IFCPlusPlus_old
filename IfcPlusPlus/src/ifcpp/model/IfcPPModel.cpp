@@ -379,17 +379,13 @@ void IfcPPModel::clearCache()
 
 void IfcPPModel::resolveInverseAttributes()
 {
-	std::vector<shared_ptr<IfcObjectDefinition> >::iterator it_object_def;
-	std::vector<shared_ptr<IfcProduct> >::iterator it_product;
-	std::map<int,shared_ptr<IfcPPEntity> >::iterator it;
-
-	for( it=m_map_entities.begin(); it!=m_map_entities.end(); ++it )
+	for( std::map<int,shared_ptr<IfcPPEntity> >::iterator it = m_map_entities.begin(); it != m_map_entities.end(); ++it )
 	{
-		shared_ptr<IfcPPEntity> obj = it->second;
-		if( !obj )
+		shared_ptr<IfcPPEntity> entity = it->second;
+		if( !entity )
 		{
 			continue;
 		}
-		obj->setInverseCounterparts( obj );
+		entity->setInverseCounterparts( entity );
 	}
 }

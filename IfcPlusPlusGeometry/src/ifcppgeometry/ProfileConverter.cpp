@@ -288,7 +288,7 @@ void ProfileConverter::convertIfcArbitraryOpenProfileDef( const shared_ptr<IfcAr
 				}
 
 				carve::geom::vector<3> bisecting_normal;
-				bisectingPlane( vertex_before, vertex_current, vertex_next, bisecting_normal );
+				GeomUtils::bisectingPlane( vertex_before, vertex_current, vertex_next, bisecting_normal );
 
 				if( ii == num_base_points -1 )
 				{
@@ -298,7 +298,7 @@ void ProfileConverter::convertIfcArbitraryOpenProfileDef( const shared_ptr<IfcAr
 				local_z.x = 0;
 				local_z.y = 0;
 				local_z.z = -1;
-				convertPlane2Matrix( bisecting_normal, vertex_current, local_z, matrix_sweep );
+				GeomUtils::convertPlane2Matrix( bisecting_normal, vertex_current, local_z, matrix_sweep );
 
 				left_points.push_back(  matrix_sweep*point_left );
 				right_points.push_back(  matrix_sweep*point_right );

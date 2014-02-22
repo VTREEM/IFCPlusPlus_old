@@ -91,8 +91,8 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	// create coordinate axes
 	m_sw_coord_axes = new osg::Switch();
 	m_sw_coord_axes->setName("m_sw_coord_axes");
-	m_sw_coord_axes->addChild( createCoordinateAxes() );
-	m_sw_coord_axes->addChild( createCoordinateAxesArrows() );
+	m_sw_coord_axes->addChild( GeomUtils::createCoordinateAxes() );
+	m_sw_coord_axes->addChild( GeomUtils::createCoordinateAxesArrows() );
 	//m_sw_coord_axes->addChild( createQuarterCircles() );
 	m_rootnode->addChild( m_sw_coord_axes.get() );
 
@@ -123,21 +123,21 @@ void ViewController::setViewerMode( ViewerMode mode )
 		// first disable previous mode
 		if( m_viewer_mode == VIEWER_MODE_WIREFRAME )
 		{
-			WireFrameModeOff( m_transform_model.get() );
+			GeomUtils::WireFrameModeOff( m_transform_model.get() );
 		}
 		else if( m_viewer_mode == VIEWER_MODE_HIDDEN_LINE )
 		{
-			HiddenLineModeOff( m_transform_model.get() );
+			GeomUtils::HiddenLineModeOff( m_transform_model.get() );
 		}
 
 		m_viewer_mode = mode;
 		if( m_viewer_mode == VIEWER_MODE_WIREFRAME )
 		{
-			WireFrameModeOn( m_transform_model.get() );
+			GeomUtils::WireFrameModeOn( m_transform_model.get() );
 		}
 		else if( m_viewer_mode == VIEWER_MODE_HIDDEN_LINE )
 		{
-			HiddenLineModeOn( m_transform_model.get() );
+			GeomUtils::HiddenLineModeOn( m_transform_model.get() );
 		}
 	}
 }

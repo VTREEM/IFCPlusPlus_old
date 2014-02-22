@@ -75,7 +75,7 @@ void ConverterOSG::drawFace( const carve::mesh::Face<3>* face, osg::Geode* geode
 		triangles->push_back( i );
 	}
 
-	osg::Vec3f poly_normal = computePolygonNormal( vertices );
+	osg::Vec3f poly_normal = GeomUtils::computePolygonNormal( vertices );
 	osg::Vec3Array* normals = new osg::Vec3Array();
 	normals->resize( num_vertices, poly_normal );
 
@@ -463,6 +463,150 @@ bool ConverterOSG::checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set,
 	return true;
 }
 
+double ConverterOSG::computeSurfaceAreaOfGroup( const osg::Group* grp )
+{
+	double surface_area = 0.0;
+	int num_children = grp->getNumChildren();
+	for( int i=0; i<num_children; ++i )
+	{
+		const osg::Node* node = grp->getChild(i);
+		const osg::Group* child_group = dynamic_cast<const osg::Group*>(node);
+		if( child_group )
+		{
+			surface_area += computeSurfaceAreaOfGroup( child_group );
+			continue;
+		}
+		const osg::Geode* child_geode = dynamic_cast<const osg::Geode*>(node);
+		if( child_geode )
+		{
+			const osg::Geode::DrawableList& drawable_list = child_geode->getDrawableList();
+			osg::Geode::DrawableList::const_iterator it_drawables;
+			for( it_drawables=drawable_list.begin(); it_drawables!=drawable_list.end(); ++it_drawables )
+			{
+				osg::Drawable* drawable = (*it_drawables);
+				const osg::Geometry* child_gemetry = dynamic_cast<const osg::Geometry*>(drawable);
+				if( !child_gemetry )
+				{
+					std::cout << "!child_gemetry" << std::endl;
+					return 0;
+				}
+				const osg::Array* vertices_array = child_gemetry->getVertexArray();
+				const osg::Vec3Array* vertices_float = dynamic_cast<const osg::Vec3Array*>(vertices_array);
+					
+				if( !vertices_float )
+				{
+					std::cout << "!vertices_float" << std::endl; 
+					return 0;
+				}
+
+				const osg::Geometry::PrimitiveSetList& primitive_sets = child_gemetry->getPrimitiveSetList();
+				osg::Geometry::PrimitiveSetList::const_iterator it_primitives;
+				for( it_primitives=primitive_sets.begin(); it_primitives!=primitive_sets.end(); ++it_primitives )
+				{
+					const osg::PrimitiveSet* p_set = (*it_primitives);
+
+					const int num_elements = p_set->getNumIndices();
+					if( num_elements < 3 )
+					{
+						std::cout << "num_elements < 3" << std::endl; 
+						continue;
+					}
+
+					if( p_set->getMode() == osg::PrimitiveSet::QUADS )
+					{
+						for( int k=0; k<num_elements-3; k+=4 )
+						{
+							const osg::Vec3& v0 = vertices_float->at( p_set->index(k) );
+							const osg::Vec3& v1 = vertices_float->at( p_set->index(k+1) );
+							const osg::Vec3& v2 = vertices_float->at( p_set->index(k+2) );
+							const osg::Vec3& v3 = vertices_float->at( p_set->index(k+3) );
+
+#ifdef _DEBUG
+							if( (v0 -v1).length2() < 0.00001 )
+							{
+								continue;
+							}
+							if( (v1 -v2).length2() < 0.00001 )
+							{
+								continue;
+							}
+							if( (v2 -v3).length2() < 0.00001 )
+							{
+								continue;
+							}
+							if( (v3 -v0).length2() < 0.00001 )
+							{
+								continue;
+							}
+#endif
+							osg::Vec3d v0_v1 = v1 - v0;
+							osg::Vec3d v0_v3 = v3 - v0;
+							osg::Vec3d v2_v1 = v1 - v2;
+							osg::Vec3d v2_v3 = v3 - v2;
+							osg::Vec3d cross_vec = v0_v1 ^ v0_v3;
+							surface_area += cross_vec.length()*0.5;
+
+							cross_vec = v2_v1 ^ v2_v3;
+							surface_area += cross_vec.length()*0.5;
+						}
+					}
+					else if( p_set->getMode() == osg::PrimitiveSet::TRIANGLES )
+					{
+						for( int k=0; k<num_elements-2; k+=3 )
+						{
+							const osg::Vec3& v0 = vertices_float->at( p_set->index(k) );
+							const osg::Vec3& v1 = vertices_float->at( p_set->index(k+1) );
+							const osg::Vec3& v2 = vertices_float->at( p_set->index(k+2) );
+
+							osg::Vec3d v0_v1 = v1 - v0;
+							osg::Vec3d v0_v2 = v2 - v0;
+										
+							osg::Vec3d cross_vec = v0_v1 ^ v0_v2;
+							surface_area += cross_vec.length()*0.5;
+						}
+					}
+					else if( p_set->getMode() == osg::PrimitiveSet::TRIANGLE_STRIP )
+					{
+						for( int k=0; k<num_elements-3; ++k )
+						{
+							const osg::Vec3& v0 = vertices_float->at( p_set->index(k) );
+							const osg::Vec3& v1 = vertices_float->at( p_set->index(k+1) );
+							const osg::Vec3& v2 = vertices_float->at( p_set->index(k+2) );
+
+							osg::Vec3d v0_v1 = v1 - v0;
+							osg::Vec3d v0_v2 = v2 - v0;
+										
+							osg::Vec3d cross_vec = v0_v1 ^ v0_v2;
+							surface_area += cross_vec.length()*0.5;
+						}
+					}
+					else if( p_set->getMode() == osg::PrimitiveSet::TRIANGLE_FAN )
+					{
+						const osg::Vec3& v0 = vertices_float->at( p_set->index(0) );
+						for( int k=0; k<num_elements-2; ++k )
+						{
+							const osg::Vec3& v1 = vertices_float->at( p_set->index(k+1) );
+							const osg::Vec3& v2 = vertices_float->at( p_set->index(k+2) );
+
+							osg::Vec3d v0_v1 = v1 - v0;
+							osg::Vec3d v0_v2 = v2 - v0;
+										
+							osg::Vec3d cross_vec = v0_v1 ^ v0_v2;
+							surface_area += cross_vec.length()*0.5;
+						}
+					}
+					else
+					{
+						std::cout << "other primitive set mode" << std::endl;
+						return 0;
+					}
+				}
+			}
+		}
+	}
+	return surface_area;
+}
+
 void ConverterOSG::convertOsgGroup( const osg::Group* src, carve::input::PolyhedronData& target )
 {
 	int num_children = src->getNumChildren();
@@ -795,7 +939,7 @@ void ConverterOSG::createTest4(osg::Group* group)
 		merged.push_back( carve::geom::VECTOR( 0.0, 0.0 ) );
 		merged.push_back( carve::geom::VECTOR( 0.21, 0.21 ) );
 		//ProfileConverter::deleteLastPointIfEqualToFirst( merged );
-		carve::geom::vector<3> normal = computePolygon2DNormal( merged );
+		carve::geom::vector<3> normal = GeomUtils::computePolygon2DNormal( merged );
 		if( normal.z < 0 )
 		{
 			std::reverse( merged.begin(), merged.end() );
@@ -848,7 +992,7 @@ void ConverterOSG::createTest4(osg::Group* group)
 		carve::geom::vector<3> extrusion_vector( carve::geom::VECTOR( 0.0, 0.0,	-2.78 ) );
 		shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
 		std::stringstream err;
-		extrude( face_loops, extrusion_vector, poly_data, err );
+		GeomUtils::extrude( face_loops, extrusion_vector, poly_data, err );
 
 		osg::Geode* geode = new osg::Geode();
 		group->addChild( geode );

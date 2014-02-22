@@ -116,7 +116,7 @@ void TabView::slotCullFrontFaces( int state )
 	{
 		m_cull_front = false;
 	}
-	cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
 }
 
 void TabView::slotCullBackFaces( int state )
@@ -129,7 +129,7 @@ void TabView::slotCullBackFaces( int state )
 	{
 		m_cull_back = false;
 	}
-	cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
 }
 
 void TabView::slotProjectionButtonClicked( int btn )

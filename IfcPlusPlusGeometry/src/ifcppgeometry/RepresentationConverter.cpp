@@ -136,12 +136,12 @@ void RepresentationConverter::convertStyledItem( const shared_ptr<IfcRepresentat
 	#endif
 		if( stateset != NULL )
 		{
-			item_data->statesets.push_back(stateset);
+			item_data->item_statesets.push_back(stateset);
 		}
 	}
 }
 
-void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRepresentation>& representation, const carve::math::Matrix& pos, shared_ptr<RepresentationData>& input_data, std::set<int>& visited )
+void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRepresentation>& representation, const carve::math::Matrix& pos, shared_ptr<ShapeInputData>& input_data, std::set<int>& visited )
 {
 	std::stringstream err;
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
@@ -313,7 +313,7 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 						}
 					}
 				}
-				item_data->polyline_data.push_back( polyline_data );
+				item_data->item_polyline_data.push_back( polyline_data );
 				continue;
 			}
 		}
@@ -372,7 +372,7 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 #endif
 					if( stateset != NULL )
 					{
-						input_data->statesets.push_back(stateset);
+						input_data->vec_statesets.push_back(stateset);
 					}
 				}
 			}
@@ -441,7 +441,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 
 			shared_ptr<ItemData> input_data_face_set( new ItemData );
 			m_face_converter->convertIfcFaceList( vec_ifc_faces, pos, input_data_face_set );
-			std::copy( input_data_face_set->open_or_closed_mesh_data.begin(), input_data_face_set->open_or_closed_mesh_data.end(), std::back_inserter(item_data->open_mesh_data) );
+			std::copy( input_data_face_set->item_open_or_closed_mesh_data.begin(), input_data_face_set->item_open_or_closed_mesh_data.end(), std::back_inserter(item_data->item_open_mesh_data) );
 		}
 		
 		return;
@@ -476,7 +476,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 			polyline_data->addVertex( pos*point );
 			polyline_data->addPolylineIndex(i);
 		}
-		item_data->polyline_data.push_back( polyline_data );
+		item_data->item_polyline_data.push_back( polyline_data );
 		
 		return;
 	}
@@ -495,7 +495,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 
 				shared_ptr<ItemData> input_data( new ItemData() );
 				m_face_converter->convertIfcFaceList( vec_ifc_faces, pos, input_data );
-				std::copy( input_data->open_or_closed_mesh_data.begin(), input_data->open_or_closed_mesh_data.end(), std::back_inserter(item_data->closed_mesh_data) );
+				std::copy( input_data->item_open_or_closed_mesh_data.begin(), input_data->item_open_or_closed_mesh_data.end(), std::back_inserter(item_data->item_closed_mesh_data) );
 			}
 			else if( dynamic_pointer_cast<IfcOpenShell>( shell_select ) )
 			{
@@ -505,7 +505,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 				shared_ptr<ItemData> input_data( new ItemData() );
 				m_face_converter->convertIfcFaceList( vec_ifc_faces, pos, input_data );
 
-				std::copy( input_data->open_or_closed_mesh_data.begin(), input_data->open_or_closed_mesh_data.end(), std::back_inserter(item_data->open_mesh_data) );
+				std::copy( input_data->item_open_or_closed_mesh_data.begin(), input_data->item_open_or_closed_mesh_data.end(), std::back_inserter(item_data->item_open_mesh_data) );
 			}
 		}
 		return;
@@ -518,7 +518,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 		m_face_converter->convertIfcSurface( surface, pos, polyline );
 		if( polyline->getVertexCount() > 1 )
 		{
-			item_data->polyline_data.push_back( polyline );
+			item_data->item_polyline_data.push_back( polyline );
 		}
 		return;
 	}
@@ -543,7 +543,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 			polyline_data->addVertex(vertex);
 			polyline_data->addPolylineIndex(i);
 		}
-		item_data->polyline_data.push_back(polyline_data);
+		item_data->item_polyline_data.push_back(polyline_data);
 
 		return;
 	}
@@ -580,7 +580,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 				m_face_converter->convertIfcSurface( select_surface, pos, polyline );
 				if( polyline->getVertexCount() > 1 )
 				{
-					item_data->polyline_data.push_back( polyline );
+					item_data->item_polyline_data.push_back( polyline );
 				}
 
 				//convertIfcSurface( select_surface, pos, input_data );
@@ -613,9 +613,9 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
 
 	// now go through all meshsets of the item
-	for( int i=0; i<item_data->meshsets.size(); ++i )
+	for( int i=0; i<item_data->item_meshsets.size(); ++i )
 	{
-		shared_ptr<carve::mesh::MeshSet<3> >& product_meshset = item_data->meshsets[i];
+		shared_ptr<carve::mesh::MeshSet<3> >& product_meshset = item_data->item_meshsets[i];
 
 		std::vector<weak_ptr<IfcRelVoidsElement> > vec_rel_voids( ifc_element->m_HasOpenings_inverse );
 
@@ -654,7 +654,7 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 					shared_ptr<IfcRepresentation> opening_representation = (*it_representations);
 
 					// TODO: bounding box test
-					shared_ptr<RepresentationData> opening_representation_data( new RepresentationData() );
+					shared_ptr<ShapeInputData> opening_representation_data( new ShapeInputData() );
 					try
 					{
 						// TODO: Representation caching, one element could be used for several openings
@@ -684,8 +684,8 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 					{
 						shared_ptr<ItemData> opening_item_data = opening_representation_items[i_item];
 
-						std::vector<shared_ptr<carve::input::PolyhedronData> >::iterator it_opening_polyhedron_data = opening_item_data->closed_mesh_data.begin();
-						for( ; it_opening_polyhedron_data != opening_item_data->closed_mesh_data.end(); ++it_opening_polyhedron_data )
+						std::vector<shared_ptr<carve::input::PolyhedronData> >::iterator it_opening_polyhedron_data = opening_item_data->item_closed_mesh_data.begin();
+						for( ; it_opening_polyhedron_data != opening_item_data->item_closed_mesh_data.end(); ++it_opening_polyhedron_data )
 						{
 							shared_ptr<carve::input::PolyhedronData>& polyhedron_data = (*it_opening_polyhedron_data);
 							if( polyhedron_data->getVertexCount() < 3 )
@@ -724,8 +724,8 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 #ifdef _DEBUG
 								if( !result_meshset_ok )
 								{
-									renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-									renderMeshsetInDebugViewer( m_debug_view, opening_meshset_single, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
+									GeomUtils::renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+									GeomUtils::renderMeshsetInDebugViewer( m_debug_view, opening_meshset_single, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
 								}
 #endif
 							}
@@ -754,7 +754,7 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 							{
 								strs_err << "RepresentationConverter::subtractOpenings: csg operation failed at product id " << product_id << std::endl;
 #ifdef _DEBUG
-								renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4f( 1.f, 0.f, 0.f, 1.f ), true );
+								GeomUtils::renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4f( 1.f, 0.f, 0.f, 1.f ), true );
 #endif
 							}
 						}
@@ -783,8 +783,8 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 #ifdef _DEBUG
 					if( !result_meshset_ok )
 					{
-						renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-						renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
+						GeomUtils::renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+						GeomUtils::renderMeshsetInDebugViewer( m_debug_view, meshset_openings, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
 					}
 #endif
 				}
@@ -813,7 +813,7 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 			{
 				strs_err << "RepresentationConverter::subtractOpenings: csg operation failed at product id " << product_id << std::endl;
 #ifdef _DEBUG
-				renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4f( 1.f, 0.f, 0.f, 1.f ), true );
+				GeomUtils::renderMeshsetInDebugViewer( m_debug_view, product_meshset, osg::Vec4f( 1.f, 0.f, 0.f, 1.f ), true );
 #endif
 			}
 		}

@@ -53,6 +53,8 @@ public:
 	static void drawPolyhedron( const shared_ptr<carve::poly::Polyhedron>& polyhedron,			osg::Geode* geode, bool add_color_array = false );
 	static void drawPolyline(	const shared_ptr<carve::input::PolylineSetData>& polyline_data, osg::Geode* geode, bool add_color_array = false );
 	static bool checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id );
+	static double computeSurfaceAreaOfGroup( const osg::Group* grp );
+
 	static void convertOsgGroup( const osg::Group* src, carve::input::PolyhedronData& target );
 	static void createTest( osg::Group* group );
 	static void createTest2( osg::Group* group );

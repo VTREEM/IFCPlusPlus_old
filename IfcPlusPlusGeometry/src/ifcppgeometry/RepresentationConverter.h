@@ -27,12 +27,12 @@
 #include <carve/input.hpp>
 #include <ifcpp/model/shared_ptr.h>
 #include "GeometryInputData.h"
+#include "GeometrySettings.h"
 
 #ifdef IFCPP_OPENMP
 #include <omp.h>
 #endif
 
-class GeometrySettings;
 class UnitConverter;
 class StylesConverter;
 class CurveConverter;
@@ -55,7 +55,7 @@ public:
 	RepresentationConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> unit_converter );
 	~RepresentationConverter();
 
-	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,			const carve::math::Matrix& pos,		shared_ptr<RepresentationData>& representation_data, std::set<int>& visited );
+	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,			const carve::math::Matrix& pos,		shared_ptr<ShapeInputData>& shape_data, std::set<int>& visited );
 	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
 	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,						const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
 	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );

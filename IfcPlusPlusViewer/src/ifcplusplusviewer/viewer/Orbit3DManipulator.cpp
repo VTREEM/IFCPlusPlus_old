@@ -576,7 +576,7 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 
 							//osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 1 ) );
 
-							shared_ptr<ReaderWriterIFC::ProductShape> read_result( new ReaderWriterIFC::ProductShape() );
+							shared_ptr<ShapeInputData> read_result( new ShapeInputData() );
 							osg::ref_ptr<ReaderWriterIFC> reader_writer( new ReaderWriterIFC() );
 							reader_writer->setModel( m_ifc_model );
 							reader_writer->convertIfcProduct( product_selected, read_result, &viewer );

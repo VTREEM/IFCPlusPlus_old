@@ -126,7 +126,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				convertIfcCurve( segement_curve, segment_vec, segment_start_points );
 				if( segment_vec.size() > 0 )
 				{
-					appendPointsToCurve( segment_vec, target_vec );
+					GeomUtils::appendPointsToCurve( segment_vec, target_vec );
 				}
 			}
 			return;
@@ -155,7 +155,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 			bool trimmed_sense_agreement = trimmed_curve->m_SenseAgreement;
 
 			convertIfcCurve( basis_curve, basis_curve_points, segment_start_points, curve_trim1_vec, curve_trim2_vec, trimmed_sense_agreement );
-			appendPointsToCurve( basis_curve_points, target_vec );
+			GeomUtils::appendPointsToCurve( basis_curve_points, target_vec );
 			return;
 		}
 
@@ -304,7 +304,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 					point.y = point3d.y;
 				}
 
-				appendPointsToCurve( circle_points, target_vec );
+				GeomUtils::appendPointsToCurve( circle_points, target_vec );
 				segment_start_points.push_back( carve::geom::VECTOR( circle_points.at(0).x, circle_points.at(0).y, 0 ) );
 			}
 
@@ -340,7 +340,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 						carve::geom::vector<3>& point = circle_points.at(i);
 						point = conic_position_matrix * point;
 					}
-					appendPointsToCurve( circle_points, target_vec );
+					GeomUtils::appendPointsToCurve( circle_points, target_vec );
 
 					//if( segment_start_points != NULL )
 					{
@@ -404,7 +404,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				convertIfcCartesianPoint( ifc_trim_point, trim_point );
 
 				carve::geom::vector<3> closest_point_on_line;
-				closestPointOnLine( closest_point_on_line, trim_point, line_origin, line_direction );
+				GeomUtils::closestPointOnLine( trim_point, line_origin, line_direction, closest_point_on_line );
 
 				if( (closest_point_on_line-trim_point).length() < 0.0001 )
 				{
@@ -430,7 +430,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				convertIfcCartesianPoint( ifc_trim_point, trim_point );
 
 				carve::geom::vector<3> closest_point_on_line;
-				closestPointOnLine( closest_point_on_line, trim_point, line_origin, line_direction );
+				GeomUtils::closestPointOnLine( trim_point, line_origin, line_direction, closest_point_on_line );
 
 				if( (closest_point_on_line-trim_point).length() < 0.0001 )
 				{
@@ -444,7 +444,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 		points_vec.push_back( line_origin );
 		points_vec.push_back( line_end );
 
-		appendPointsToCurve( points_vec, target_vec );
+		GeomUtils::appendPointsToCurve( points_vec, target_vec );
 
 		//if( segment_start_points != NULL )
 		{

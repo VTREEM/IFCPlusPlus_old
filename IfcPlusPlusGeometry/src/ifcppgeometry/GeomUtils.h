@@ -37,41 +37,45 @@ enum ProjectionPlane
 	XZ_PLANE
 };
 
-osg::ref_ptr<osg::Geode> createCoordinateAxes();
-osg::ref_ptr<osg::Group> createCoordinateAxesArrows();
-osg::ref_ptr<osg::Geode> createCoordinateGrid();
-osg::ref_ptr<osg::Geode> createQuarterCircles();
-void WireFrameModeOn( osg::StateSet* state );
-void WireFrameModeOn( osg::Node* srisdNode );
-void WireFrameModeOn( osg::Drawable* drawable );
-void WireFrameModeOff( osg::StateSet* state );
-void WireFrameModeOff( osg::Node* srisdNode );
-void WireFrameModeOff( osg::Drawable* drawable );
-void HiddenLineModeOn( osg::Group* node );
-void HiddenLineModeOff( osg::Group* node );
-void cullFrontBack( bool front, bool back, osg::StateSet* stateset );
+class GeomUtils
+{
+public:
+	static osg::ref_ptr<osg::Geode> createCoordinateAxes();
+	static osg::ref_ptr<osg::Group> createCoordinateAxesArrows();
+	static osg::ref_ptr<osg::Geode> createCoordinateGrid();
+	static osg::ref_ptr<osg::Geode> createQuarterCircles();
+	static void WireFrameModeOn( osg::StateSet* state );
+	static void WireFrameModeOn( osg::Node* srisdNode );
+	//static void WireFrameModeOn( osg::Drawable* drawable );
+	static void WireFrameModeOff( osg::StateSet* state );
+	static void WireFrameModeOff( osg::Node* srisdNode );
+	//static void WireFrameModeOff( osg::Drawable* drawable );
+	static void HiddenLineModeOn( osg::Group* node );
+	static void HiddenLineModeOff( osg::Group* node );
+	static void cullFrontBack( bool front, bool back, osg::StateSet* stateset );
 
-osg::Vec3d computePolygonNormal( const osg::Vec3dArray* polygon );
-osg::Vec3f computePolygonNormal( const osg::Vec3Array* polygon );
-carve::geom::vector<3> computePolygonCentroid( const std::vector<carve::geom::vector<3> >& polygon );
-carve::geom::vector<3> computePolygonNormal( const std::vector<carve::geom::vector<3> >& polygon );
-carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::vector<2> >& polygon );
+	static osg::Vec3d computePolygonNormal( const osg::Vec3dArray* polygon );
+	static osg::Vec3f computePolygonNormal( const osg::Vec3Array* polygon );
+	static carve::geom::vector<3> computePolygonCentroid( const std::vector<carve::geom::vector<3> >& polygon );
+	static carve::geom::vector<3> computePolygonNormal( const std::vector<carve::geom::vector<3> >& polygon );
+	static carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::vector<2> >& polygon );
 
-bool LineSegmentToLineIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result );
-bool LineSegmentToLineSegmentIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result );
+	static bool LineSegmentToLineIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result );
+	static bool LineSegmentToLineSegmentIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result );
 
-void appendPointsToCurve( const std::vector<carve::geom::vector<3> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec );
-void appendPointsToCurve( const std::vector<carve::geom::vector<2> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec );
-void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& inv );
-void closestPointOnLine( carve::geom::vector<3>& closest, const carve::geom::vector<3>& point, const carve::geom::vector<3>& line_origin, const carve::geom::vector<3>& line_direction );
-void closestPointOnLine( osg::Vec3d& closest, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
-bool isPointOnLineSegment( double& lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
-void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
-void extrude(	const std::vector<std::vector<carve::geom::vector<2> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
-void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m );
-bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal );
-void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
-						 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix );
+	static void appendPointsToCurve( const std::vector<carve::geom::vector<3> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec );
+	static void appendPointsToCurve( const std::vector<carve::geom::vector<2> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec );
+	static void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& inv );
+	static void closestPointOnLine( const carve::geom::vector<3>& point, const carve::geom::vector<3>& line_origin, const carve::geom::vector<3>& line_direction, carve::geom::vector<3>& closest );
+	static void closestPointOnLine( const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction, osg::Vec3d& closest );
+	static bool isPointOnLineSegment( double& lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
+	static void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
+	static void extrude(	const std::vector<std::vector<carve::geom::vector<2> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
+	static void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m );
+	static bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal );
+	static void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
+							 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix );
 
-void renderMeshsetInDebugViewer( osgViewer::View* view, shared_ptr<carve::mesh::MeshSet<3> >& meshset, osg::Vec4f& color, bool wireframe );
-void renderPolylineInDebugViewer( osgViewer::View* view, shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color );
+	static void renderMeshsetInDebugViewer( osgViewer::View* view, shared_ptr<carve::mesh::MeshSet<3> >& meshset, osg::Vec4f& color, bool wireframe );
+	static void renderPolylineInDebugViewer( osgViewer::View* view, shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color );
+};

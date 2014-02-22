@@ -265,7 +265,7 @@ void IfcPlusPlusSystem::setObjectSelected( shared_ptr<IfcPPEntity> ifc_object, b
 		if( product )
 		{
 			const int product_id = product->getId();
-			shared_ptr<ReaderWriterIFC::ProductShape> product_shape( new ReaderWriterIFC::ProductShape() );
+			shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
 			product_shape->ifc_product = product;
 
 			if( product->m_Representation )
@@ -350,4 +350,19 @@ void IfcPlusPlusSystem::clearSelection()
 		}
 	}
 	m_map_selected.clear();
+}
+
+void IfcPlusPlusSystem::notifyModelCleared()
+{
+	emit( signalModelCleared() );
+}
+
+void IfcPlusPlusSystem::notifyModelLoadingStart()
+{
+	emit( signalModelLoadingStart() );
+}
+
+void IfcPlusPlusSystem::notifyModelLoadingDone()
+{
+	emit( signalModelLoadingDone() );
 }
