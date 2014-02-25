@@ -22,6 +22,36 @@
 #include "ifcpp/model/IfcPPException.h"
 #include "ReaderUtil.h"
 
+
+static short HexD(unsigned char mc)
+{
+	short returnValue;
+
+	if (mc >= '0' && mc <= '9')
+		returnValue = (short)mc - (short)'0';
+	else if (mc >= 'A' && mc <= 'F')
+		returnValue = 10 + (short)mc - (short)'A';
+	else if (mc >= 'a' && mc <= 'f')
+		returnValue = 10 + (short)mc - (short)'a';
+	else
+		returnValue = 0;
+	return (returnValue);
+}
+
+
+static wchar_t Hex2Wchar(unsigned char h1, unsigned char h2 )
+{
+	wchar_t returnValue = (HexD(h1) << 4) + HexD(h2);
+	return (returnValue);
+}
+
+static wchar_t Hex4Wchar(unsigned char h1, unsigned char h2, unsigned char h3, unsigned char h4 )
+{
+	wchar_t returnValue = (HexD(h1)<< 12) + (HexD(h2) << 8) +(HexD(h3) << 4) + HexD(h4);
+	return (returnValue);
+}
+
+
 shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
 
@@ -584,12 +614,14 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 		std::string& argument_str = (*it);
 		const size_t arg_length = argument_str.length();
 		
-		std::string arg_str_new( argument_str );
+		std::string arg_str_new = "";
 
 		if( arg_length > 0 )
 		{
+			arg_str_new.reserve(arg_length);
+
 			char* stream_pos = (char*)argument_str.c_str();				// ascii characters from STEP file
-			char* stream_pos_new = (char*)arg_str_new.c_str();			// ascii characters from STEP file
+			//char* stream_pos_new = (char*)arg_str_new.c_str();			// ascii characters from STEP file
 			{
 				while( *stream_pos != '\0' )
 				{
@@ -612,8 +644,9 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 													char first = *(stream_pos+3);
 													char second = *(stream_pos+7);
 
-													*stream_pos_new = char(125 + first + second);
-													++stream_pos_new;
+													//*stream_pos_new = char(125 + first + second);
+													//++stream_pos_new;
+													arg_str_new += char(125 + first + second);
 
 													stream_pos += 8;
 													continue;
@@ -627,8 +660,9 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 										char char_pos = *(stream_pos+3);
 										char char_pos_128 =  char_pos + 128;
 
-										*stream_pos_new = char_pos_128;
-										++stream_pos_new;
+										//*stream_pos_new = char_pos_128;
+										//++stream_pos_new;
+										arg_str_new += char_pos_128;
 										stream_pos += 4;
 										continue;
 									}
@@ -641,29 +675,33 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 							//++stream_pos;
 							if( *(stream_pos+2) == '\\' )
 							{
-								//++stream_pos;
-								char c = *(stream_pos+3);
 
-								int first = int(c) / 16 - 3;
-								int second = c % 16;
-								int result = first*10 + second;
-								if(result > 9) result--;
-								//int result_ascii = hex2int( c );
-								char char_ascii = result;
+								wchar_t wc = Hex2Wchar(*(stream_pos+3), *(stream_pos+4));
 
-								*stream_pos_new = char_ascii;
-								++stream_pos_new;
+
+
+
+
+
+
+
+								unsigned char char_ascii = wctob(wc);
+								//*stream_pos_new = char_ascii;
+								//++stream_pos_new;
+								arg_str_new+= char_ascii;
 
 								stream_pos += 4;
 								continue;
 
-								//result_str.push_back( char_ascii );
-								//continue;
+
+
 							}
 							else if( *(stream_pos+2) == '0' )
 							{
 								if( *(stream_pos+3) == '\\' )
 								{
+									stream_pos += 4;
+									continue;
 								}
 							}
 							else if( *(stream_pos+2) == '2' )
@@ -672,20 +710,41 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 								{
 									// the following sequence of multiples of four hexadecimal characters shall be interpreted as encoding the 
 									// two-octet representation of characters from the BMP in ISO 10646
+
+									bool finished = false;
+									stream_pos += 4;
+
+									do
+									{
+										wchar_t wc = Hex4Wchar(*(stream_pos), *(stream_pos+1), *(stream_pos+2), *(stream_pos+3));
+										
+
+										unsigned char char_ascii = wctob(wc);
+										//*stream_pos_new = char_ascii;
+										//++stream_pos_new;
+										arg_str_new+= char_ascii;
+										stream_pos += 4;
+										
+
+									} while (( *stream_pos != '\0' ) && ( *stream_pos != '\\' ));
+
+									continue;
 								}
 							}
 						}
 					}
 					
-					*stream_pos_new = *stream_pos;
-					++stream_pos_new;
+					//*stream_pos_new = *stream_pos;
+					//++stream_pos_new;
+					arg_str_new+= *stream_pos;
 					++stream_pos;
 				}
 
-				*stream_pos_new = '\0';
+				//*stream_pos_new = '\0';
 			}
 		}
 
+		//arg_str_new.resize(strlen(arg_str_new.c_str()));
 		argument_str.assign( arg_str_new );
 	}
 }

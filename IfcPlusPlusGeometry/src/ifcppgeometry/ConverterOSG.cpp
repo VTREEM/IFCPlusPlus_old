@@ -38,6 +38,48 @@
 
 //#define DEBUG_DRAW_NORMALS
 
+inline void drawTriangles( osg::Vec3Array* vertices_triangles, osg::Vec3Array* normals_triangles, bool add_color_array, osg::Geode* geode )
+{
+	osg::Geometry* geometry = new osg::Geometry();
+	geometry->setVertexArray( vertices_triangles );
+		
+	geometry->setNormalArray( normals_triangles );
+	geometry->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+
+	if( add_color_array )
+	{
+		osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array();
+		colors->resize( vertices_triangles->size(), osg::Vec4f( 0.6f, 0.6f, 0.6f, 0.1f ) );
+
+		geometry->setColorArray( colors );
+		geometry->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
+	}
+		
+	geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::TRIANGLES,0,vertices_triangles->size()));
+	geode->addDrawable( geometry );
+}
+
+inline void drawQuads( osg::Vec3Array* vertices, osg::Vec3Array* normals, bool add_color_array, osg::Geode* geode )
+{
+	osg::Geometry* geometry = new osg::Geometry();
+	geometry->setVertexArray( vertices );
+
+	geometry->setNormalArray( normals );
+	geometry->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+
+	if( add_color_array )
+	{
+		osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array();
+		colors->resize( vertices->size(), osg::Vec4f( 0.6f, 0.6f, 0.6f, 0.1f ) );
+
+		geometry->setColorArray( colors );
+		geometry->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
+	}
+
+	geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS,0,vertices->size()));
+	geode->addDrawable( geometry );
+}
+
 ConverterOSG::ConverterOSG()
 {
 }
@@ -61,7 +103,7 @@ void ConverterOSG::drawFace( const carve::mesh::Face<3>* face, osg::Geode* geode
 
 	if( num_vertices < 4 )
 	{
-		throw IfcPPException( "drawFace is meant only for num vertices > 4", __func__ );
+		std::cout << "drawFace is meant only for num vertices > 4" << std::endl;
 	}
 
 	carve::geom::vector<3> * vertex_vec;
@@ -101,12 +143,15 @@ void ConverterOSG::drawFace( const carve::mesh::Face<3>* face, osg::Geode* geode
 		geometry->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
 	}
 
-
-	osg::ref_ptr<osgUtil::Tessellator> tesselator = new osgUtil::Tessellator();
-	tesselator->setTessellationType(osgUtil::Tessellator::TESS_TYPE_POLYGONS);
-	tesselator->setWindingType( osgUtil::Tessellator::TESS_WINDING_ODD );
-	tesselator->retessellatePolygons(*geometry);
+	if( num_vertices > 3 )
+	{
+		osg::ref_ptr<osgUtil::Tessellator> tesselator = new osgUtil::Tessellator();
+		tesselator->setTessellationType(osgUtil::Tessellator::TESS_TYPE_POLYGONS);
+		tesselator->setWindingType( osgUtil::Tessellator::TESS_WINDING_ODD );
+		tesselator->retessellatePolygons(*geometry);
+	}
 	geode->addDrawable(geometry);
+
 
 #ifdef DEBUG_DRAW_NORMALS
 	osg::Vec3Array* vertices_normals = new osg::Vec3Array();
@@ -192,44 +237,12 @@ void ConverterOSG::drawMesh( const carve::mesh::Mesh<3>* mesh, osg::Geode* geode
 
 	if( vertices_tri->size() > 0 )
 	{
-		osg::Geometry* geometry = new osg::Geometry();
-		geometry->setVertexArray( vertices_tri );
-		
-		geometry->setNormalArray( normals_tri );
-		geometry->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
-
-		if( add_color_array )
-		{
-			osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array();
-			colors->resize( vertices_tri->size(), osg::Vec4f( 0.6f, 0.6f, 0.6f, 0.1f ) );
-
-			geometry->setColorArray( colors );
-			geometry->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
-		}
-		
-		geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::TRIANGLES,0,vertices_tri->size()));
-		geode->addDrawable( geometry );
+		drawTriangles( vertices_tri, normals_tri, add_color_array, geode );
 	}
 
 	if( vertices_quad->size() > 0 )
 	{
-		osg::Geometry* geometry = new osg::Geometry();
-		geometry->setVertexArray( vertices_quad );
-
-		geometry->setNormalArray( normals_quad );
-		geometry->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
-
-		if( add_color_array )
-		{
-			osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array();
-			colors->resize( vertices_quad->size(), osg::Vec4f( 0.6f, 0.6f, 0.6f, 0.1f ) );
-
-			geometry->setColorArray( colors );
-			geometry->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
-		}
-
-		geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS,0,vertices_quad->size()));
-		geode->addDrawable( geometry );
+		drawQuads( vertices_quad, normals_quad, add_color_array, geode );
 	}
 }
 
