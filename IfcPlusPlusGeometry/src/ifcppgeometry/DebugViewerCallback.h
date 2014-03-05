@@ -28,4 +28,3 @@ void renderMeshsetInDebugViewer( const shared_ptr<ShapeInputData>& product_shape
 void renderPolylineInDebugViewer( shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color );
 
 #endif
-

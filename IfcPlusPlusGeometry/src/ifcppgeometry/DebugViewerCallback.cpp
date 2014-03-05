@@ -13,7 +13,7 @@
 
 #include "DebugViewerCallback.h"
 
-#ifndef  NDEBUG
+#ifdef  _DEBUG
 
 void* obj_call_on_render_meshset = NULL;
 void (*func_call_on_render_meshset)(void*, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe) = NULL;
