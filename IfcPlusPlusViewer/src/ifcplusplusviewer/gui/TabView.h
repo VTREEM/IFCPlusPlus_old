@@ -14,11 +14,7 @@
 #pragma once
 
 #include <QtCore/qglobal.h>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-	#include <QtGui/qwidget.h>
-#else
-	#include <QtWidgets/qwidget.h>
-#endif
+#include <QtWidgets/QWidget>
 
 class IfcPlusPlusSystem;
 class ViewerWidget;

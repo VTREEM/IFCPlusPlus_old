@@ -14,13 +14,8 @@
 #include <iostream>
 
 #include <QtCore/qglobal.h>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-	#include <QtGui/qapplication.h>
-	#include <QtGui/QSplashScreen>
-#else
-	#include <QtWidgets/QApplication>
-	#include <QtWidgets/QSplashScreen>
-#endif
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QSplashScreen>
 
 #include <osgViewer/CompositeViewer>
 #include "gui/TabReadWrite.h"
@@ -32,6 +27,7 @@
 #include "ifcppgeometry/ConverterOSG.h"
 #include "viewer/ViewerWidget.h"
 #include "viewer/Orbit3DManipulator.h"
+#include "gui/DebugViewer.h"
 #include "ViewController.h"
 #include "IfcPlusPlusSystem.h"
 
@@ -92,14 +88,19 @@ int main(int argc, char *argv[])
 	viewer_widget->setRootNode( sys->getViewController()->getRootNode() );
 
 	MainWindow* window = new MainWindow( sys, viewer_widget );
-	app.connect( &app,		SIGNAL(lastWindowClosed()),				&app,	SLOT(quit()) );
+	app.connect( window,	SIGNAL(signalMainWindowClosed()),	&app,	SLOT(quit()) );
+	
 	window->show();
 	viewer_widget->setFocus();
 	viewer_widget->startTimer();
 	viewer_widget->getMainView()->addEventHandler( sys );
 
-	sys->getReaderWriterIFC()->setDebugView( viewer_widget->getMainView() );
-	//ConverterOSG::createTest4( sys->getViewController()->getModelNode() );
+#ifdef _DEBUG
+	DebugViewer* debug_viewer = new DebugViewer();
+	debug_viewer->m_viewer_widget->startTimer();
+	debug_viewer->show();
+#endif
+	//ConverterOSG::createTest( sys->getViewController()->getModelNode() );
 
 	if( argc > 1 )
 	{

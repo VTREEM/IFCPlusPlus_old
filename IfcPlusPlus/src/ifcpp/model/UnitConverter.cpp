@@ -11,12 +11,8 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2011-07-18
-
 #define _USE_MATH_DEFINES
 #include <math.h>
-
 
 #include "ifcpp/IFC4/include/IfcConversionBasedUnit.h"
 #include "ifcpp/IFC4/include/IfcLabel.h"
@@ -35,7 +31,8 @@
 UnitConverter::UnitConverter()
 {
 	m_length_unit_factor = 1.0;
-	m_plane_angle_factor = 1.0; // defaulting to radian
+	//m_plane_angle_factor = 1.0; // defaulting to radian
+	m_plane_angle_factor = M_PI/180.0; // defaulting to 360°
 
 	m_prefix_map[IfcSIPrefix::ENUM_EXA]		= 1E18;
 	m_prefix_map[IfcSIPrefix::ENUM_PETA]	= 1E15;
@@ -62,7 +59,9 @@ UnitConverter::~UnitConverter()
 void UnitConverter::setIfcProject(shared_ptr<IfcProject> project)
 {
 	m_length_unit_factor = 1.0;
-	m_plane_angle_factor = 1.0; // defaulting to radian
+	//m_plane_angle_factor = 1.0; // defaulting to radian
+	m_plane_angle_factor = M_PI/180.0; // defaulting to 360°
+	bool angle_factor_found = false;
 
 	if( !project->m_UnitsInContext )
 	{
@@ -100,6 +99,7 @@ void UnitConverter::setIfcProject(shared_ptr<IfcProject> project)
 					if( unit_name->m_enum == IfcSIUnitName::ENUM_RADIAN )
 					{
 						m_plane_angle_factor = 1.0;
+						angle_factor_found = true;
 					}
 				}
 			}
@@ -142,17 +142,20 @@ void UnitConverter::setIfcProject(shared_ptr<IfcProject> project)
 									{
 										shared_ptr<IfcPlaneAngleMeasure> plane_angle_measure = dynamic_pointer_cast<IfcPlaneAngleMeasure>(plane_angle_value);
 										m_plane_angle_factor = plane_angle_measure->m_value;
+										angle_factor_found = true;
 									}
 									else if( dynamic_pointer_cast<IfcRatioMeasure>(plane_angle_value) )
 									{
 										shared_ptr<IfcRatioMeasure> plane_angle_measure = dynamic_pointer_cast<IfcRatioMeasure>(plane_angle_value);
 										m_plane_angle_factor = plane_angle_measure->m_value;
+										angle_factor_found = true;
 									}
 									else if( conversion_based_unit->m_Name )
 									{
 										if( _stricmp(conversion_based_unit->m_Name->m_value.c_str(), "DEGREE" ) == 0 )
 										{
 											m_plane_angle_factor = M_PI/180.0;
+											angle_factor_found = true;
 										}
 									}
 								}
@@ -162,5 +165,10 @@ void UnitConverter::setIfcProject(shared_ptr<IfcProject> project)
 				}
 			}
 		}
+	}
+
+	if( !angle_factor_found )
+	{
+		std::cout << "Warning: no plane angle unit definition found in model!" << std::endl;
 	}
 }

@@ -54,6 +54,9 @@
     <ClCompile Include="src\ifcppgeometry\GeomUtils.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\ifcppgeometry\DebugViewerCallback.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ifcppgeometry\ConverterOSG.h">
@@ -99,6 +102,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\ifcppgeometry\GeomUtils.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ifcppgeometry\DebugViewerCallback.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

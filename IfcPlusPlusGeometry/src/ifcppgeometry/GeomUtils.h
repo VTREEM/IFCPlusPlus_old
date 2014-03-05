@@ -46,10 +46,8 @@ public:
 	static osg::ref_ptr<osg::Geode> createQuarterCircles();
 	static void WireFrameModeOn( osg::StateSet* state );
 	static void WireFrameModeOn( osg::Node* srisdNode );
-	//static void WireFrameModeOn( osg::Drawable* drawable );
 	static void WireFrameModeOff( osg::StateSet* state );
 	static void WireFrameModeOff( osg::Node* srisdNode );
-	//static void WireFrameModeOff( osg::Drawable* drawable );
 	static void HiddenLineModeOn( osg::Group* node );
 	static void HiddenLineModeOff( osg::Group* node );
 	static void cullFrontBack( bool front, bool back, osg::StateSet* stateset );
@@ -69,13 +67,9 @@ public:
 	static void closestPointOnLine( const carve::geom::vector<3>& point, const carve::geom::vector<3>& line_origin, const carve::geom::vector<3>& line_direction, carve::geom::vector<3>& closest );
 	static void closestPointOnLine( const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction, osg::Vec3d& closest );
 	static bool isPointOnLineSegment( double& lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
-	static void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
 	static void extrude(	const std::vector<std::vector<carve::geom::vector<2> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
 	static void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m );
 	static bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal );
 	static void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
 							 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix );
-
-	static void renderMeshsetInDebugViewer( osgViewer::View* view, shared_ptr<carve::mesh::MeshSet<3> >& meshset, osg::Vec4f& color, bool wireframe );
-	static void renderPolylineInDebugViewer( osgViewer::View* view, shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color );
 };

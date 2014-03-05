@@ -54,6 +54,8 @@
 #include <ifcpp/writer/IfcStepWriter.h>
 #include <ifcpp/model/UnitConverter.h>
 
+#include <carve/csg_triangulator.hpp>
+
 #include "GeometrySettings.h"
 #include "UnhandledRepresentationException.h"
 #include "RepresentationConverter.h"
@@ -84,7 +86,6 @@ ReaderWriterIFC::ReaderWriterIFC()
 	m_glass_stateset->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
 
 	m_group_result = new osg::Group();
-	m_debug_view = NULL;
 }
 
 ReaderWriterIFC::~ReaderWriterIFC()
@@ -125,16 +126,6 @@ void ReaderWriterIFC::setModel( shared_ptr<IfcPPModel> model )
 
 	m_unit_converter = m_ifc_model->getUnitConverter();
 	m_representation_converter = shared_ptr<RepresentationConverter>( new RepresentationConverter( m_geom_settings, m_unit_converter ) );
-
-	setDebugView( m_debug_view );
-}
-
-
-void ReaderWriterIFC::setDebugView( osgViewer::View* view )
-{
-	m_debug_view = view;
-	m_representation_converter->m_debug_view = view;
-	m_representation_converter->getSolidConverter()->m_debug_view = view;
 }
 
 void ReaderWriterIFC::setNumVerticesPerCircle( int num_vertices )
@@ -225,7 +216,6 @@ osgDB::ReaderWriter::ReadResult ReaderWriterIFC::readNode(const std::string& fil
 
 		m_unit_converter = m_ifc_model->getUnitConverter();
 		m_representation_converter = shared_ptr<RepresentationConverter>( new RepresentationConverter( m_geom_settings, m_unit_converter ) );
-		setDebugView( m_debug_view );
 	}
 	catch( IfcPPException& e )
 	{
@@ -284,7 +274,7 @@ void ReaderWriterIFC::createGeometry()
 	std::stringstream err;
 
 	double length_to_meter_factor = m_ifc_model->getUnitConverter()->getLengthInMeterFactor();
-	carve::EPSILON = 1.4901161193847656e-08*length_to_meter_factor;
+	carve::setEpsilon( 1.4901161193847656e-08*length_to_meter_factor );
 
 	const std::map<int,shared_ptr<IfcPPEntity> >& map = m_ifc_model->getMapIfcObjects();
 	std::map<int,shared_ptr<IfcPPEntity> >::const_iterator it;
@@ -405,10 +395,9 @@ void ReaderWriterIFC::createGeometry()
 			err << e.str();
 		}
 #ifdef _DEBUG
-		catch( DebugBreakException& e )
+		catch( DebugBreakException& dbge )
 		{
-			// pass exception up so that only the geometry with errors is shown
-			throw DebugBreakException( e.what() );
+			throw dbge;
 		}
 #endif
 		catch( std::exception& e )
@@ -665,10 +654,9 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 			strs_err << e.what();
 		}
 #ifdef _DEBUG
-			catch( DebugBreakException& e )
+			catch( DebugBreakException& dbge )
 			{
-				// pass exception up so that only the geometry with errors is shown
-				throw DebugBreakException( e.what() );
+				throw dbge;
 			}
 #endif
 		catch( std::exception& e)
@@ -687,21 +675,9 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	for( int i_item=0; i_item<product_items.size(); ++i_item )
 	{
 		shared_ptr<ItemData> item_data = product_items[i_item];
+		// create shape for closed shells
+		item_data->createMeshSetsFromClosedPolyhedrons();
 		osg::Group* item_group = new osg::Group();
-
-		// create meshsets from closed shell data
-		for( int i=0; i<item_data->item_closed_mesh_data.size(); ++i )
-		{
-			shared_ptr<carve::input::PolyhedronData>& closed_shells = item_data->item_closed_mesh_data[i];
-			if( closed_shells->getVertexCount() < 3 )
-			{
-				continue;
-			}
-			carve::input::Options carve_options;
-			item_data->item_meshsets.push_back( shared_ptr<carve::mesh::MeshSet<3> >( closed_shells->createMesh(carve_options) ) );
-
-			// TODO: check to avoid duplicate polyhedrons
-		}
 
 		// create shape for open shells
 		for( int i=0; i<item_data->item_open_mesh_data.size(); ++i )
@@ -712,8 +688,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 				continue;
 			}
 
-			carve::input::Options carve_options;
-			shared_ptr<carve::mesh::MeshSet<3> > open_shell_meshset( shell_data->createMesh(carve_options) );
+			shared_ptr<carve::mesh::MeshSet<3> > open_shell_meshset( shell_data->createMesh(carve::input::opts()) );
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 			ConverterOSG::drawMeshSet( open_shell_meshset, geode );
 			item_group->addChild(geode);
@@ -728,8 +703,7 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 				continue;
 			}
 
-			carve::input::Options carve_options;
-			shared_ptr<carve::mesh::MeshSet<3> > open_or_closed_shell_meshset( shell_data->createMesh(carve_options) );
+			shared_ptr<carve::mesh::MeshSet<3> > open_or_closed_shell_meshset( shell_data->createMesh(carve::input::opts()) );
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 			ConverterOSG::drawMeshSet( open_or_closed_shell_meshset, geode );
 			item_group->addChild(geode);
@@ -744,9 +718,10 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		// create shape for meshsets
 		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->item_meshsets.begin(); it_meshsets != item_data->item_meshsets.end(); ++it_meshsets )
 		{
-			shared_ptr<carve::mesh::MeshSet<3> >& product_meshset = (*it_meshsets);
+			shared_ptr<carve::mesh::MeshSet<3> >& item_meshset = (*it_meshsets);
+
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
-			ConverterOSG::drawMeshSet( product_meshset, geode_result );
+			ConverterOSG::drawMeshSet( item_meshset, geode_result );
 			item_group->addChild(geode_result);
 		}
 
@@ -772,7 +747,6 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 				}
 
 				osg::StateSet* existing_item_stateset = item_group->getStateSet();
-
 
 				if( existing_item_stateset )
 				{

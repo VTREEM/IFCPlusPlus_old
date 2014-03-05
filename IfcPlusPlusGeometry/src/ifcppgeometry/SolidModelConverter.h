@@ -11,10 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-06
-
-
 #pragma once
 
 #include <osgViewer/View>
@@ -54,8 +50,6 @@ public:
 	void convertIfcCsgPrimitive3D(		const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
 	void detailedReport( std::stringstream& strs );
 
-	osgViewer::View* m_debug_view;
-
 protected:
 	shared_ptr<GeometrySettings>			m_geom_settings;
 	shared_ptr<UnitConverter>				m_unit_converter;
@@ -68,4 +62,3 @@ protected:
 	omp_lock_t m_writelock_detailed_report;
 #endif
 };
-

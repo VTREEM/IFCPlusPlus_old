@@ -17,11 +17,7 @@
 #include "ifcpp/model/shared_ptr.h"
 
 #include <QtCore/qglobal.h>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-	#include <QtGui/qwidget.h>
-#else
-	#include <QtWidgets/qwidget.h>
-#endif
+#include <QtWidgets/qwidget.h>
 
 class QTextEdit;
 class QProgressBar;

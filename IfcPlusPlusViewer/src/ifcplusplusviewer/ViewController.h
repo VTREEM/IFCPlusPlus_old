@@ -15,13 +15,8 @@
 
 #include <QtCore/QObject>
 #include <osgGA/GUIEventHandler>
+#include <osg/Material>
 #include "ifcpp/model/shared_ptr.h"
-
-class IfcPPModel;
-class IfcPPEntity;
-class CommandManager;
-class IfcPlusPlusSystem;
-namespace osg { class Material; }
 
 class ViewController
 {
@@ -33,7 +28,7 @@ public:
 		VIEWER_MODE_HIDDEN_LINE
 	};
 
-	ViewController( IfcPlusPlusSystem*	system );
+	ViewController();
 	~ViewController();
 
 	osg::Group*		getRootNode()	{ return m_rootnode.get(); }
@@ -49,8 +44,6 @@ public:
 	ViewerMode getViewerMode() { return m_viewer_mode; }
 
 private:
-	IfcPlusPlusSystem*		m_system;
-
 	osg::ref_ptr<osg::Group>			m_rootnode;
 	osg::ref_ptr<osg::Switch>			m_sw_coord_axes;
 	osg::ref_ptr<osg::Switch>			m_sw_model;

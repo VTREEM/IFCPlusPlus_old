@@ -13,47 +13,44 @@
 
 #pragma once
 
+#ifdef _DEBUG
+
 #include <QtCore/qglobal.h>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QLabel>
 
-class QLabel;
-class QSplitter;
-class QToolBar;
-class IfcPlusPlusSystem;
-class TabReadWrite;
+#include <osg/Group>
+#include <osg/Vec4>
+
+#include "carve/mesh.hpp"
+#include "carve/input.hpp"
+#include "ifcpp/model/shared_ptr.h"
+
 class ViewerWidget;
+class ViewController;
 
-class MainWindow : public QMainWindow
+class DebugViewer : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	MainWindow( IfcPlusPlusSystem* sys, ViewerWidget* vw, QWidget *parent = 0 );
-	~MainWindow();
+	DebugViewer();
+	~DebugViewer();
 
-	TabReadWrite* getTabReadWrite() { return m_tab_read_write; }
+	static void renderMeshsetWrapper(void* obj_ptr, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe);
+	static void renderPolylineWrapper(void* obj_ptr, const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color);
+	
+	void renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe );
+	void renderPolyline( const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color );
+
+	ViewerWidget*			m_viewer_widget;
+	ViewController*			m_view_controller;
 
 protected:
 	void closeEvent( QCloseEvent *event );
 
-private:
-	IfcPlusPlusSystem* m_system;
-	ViewerWidget*	m_viewer_widget;
-	QTabWidget*		m_tabwidget;
-	QLabel*			m_label_status_cursor;
-	TabReadWrite*	m_tab_read_write;
-	QSplitter*		m_splitter;
-
-	QToolBar*		m_file_toolbar;
-	QToolBar*		m_edit_toolbar;
-
-	void createTabWidget();
-
-signals:
-	void signalMainWindowClosed();
-
 private slots:
 	void slotBtnZoomBoundingsClicked();
 	void slotBtnWireframeClicked();
-	void slotBtnRemoveSelectedObjectsClicked();
 };
+#endif

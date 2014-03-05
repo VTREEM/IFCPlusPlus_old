@@ -11,9 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2011-07-18
-
 #pragma once
 
 #include <set>
@@ -71,8 +68,6 @@ public:
 	void setHandleLayerAssignments( bool handle ) { m_handle_layer_assignments = handle; }
 	bool handleStyledItems() { return m_handle_styled_items; }
 	void setHandleStyledItems( bool handle ) { m_handle_styled_items = handle; }
-
-	osgViewer::View* m_debug_view;
 
 protected:
 	shared_ptr<GeometrySettings>				m_geom_settings;

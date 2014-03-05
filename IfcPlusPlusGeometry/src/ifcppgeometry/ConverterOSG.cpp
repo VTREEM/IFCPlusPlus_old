@@ -29,11 +29,17 @@
 #include "carve/poly.hpp"
 #include "carve/poly.hpp"
 #include "carve/triangulator.hpp"
+#include "carve/math.hpp"
 #include "common/geometry.hpp"
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/UnitConverter.h"
+#include "ifcpp/IFC4/include/IfcSphere.h"
+#include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
 #include "GeomUtils.h"
 #include "ProfileConverter.h"
+#include "RepresentationConverter.h"
+#include "SolidModelConverter.h"
 #include "ConverterOSG.h"
 
 //#define DEBUG_DRAW_NORMALS
@@ -128,11 +134,6 @@ void ConverterOSG::drawFace( const carve::mesh::Face<3>* face, osg::Geode* geode
 
 	geometry->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
 	geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::POLYGON,0,vertices->size()));
-	//
-	//new osg::DrawElementsUInt( osg::PrimitiveSet::POLYGON,0,vertices->size()));
-	
-
-	//geometry->addPrimitiveSet( triangles );
 
 	if( add_color_array )
 	{
@@ -143,11 +144,13 @@ void ConverterOSG::drawFace( const carve::mesh::Face<3>* face, osg::Geode* geode
 		geometry->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
 	}
 
-	if( num_vertices > 3 )
+	if( num_vertices > 4 )
 	{
+		// TODO: check if polygon is convex with Gift wrapping algorithm
+
 		osg::ref_ptr<osgUtil::Tessellator> tesselator = new osgUtil::Tessellator();
 		tesselator->setTessellationType(osgUtil::Tessellator::TESS_TYPE_POLYGONS);
-		tesselator->setWindingType( osgUtil::Tessellator::TESS_WINDING_ODD );
+		//tesselator->setWindingType( osgUtil::Tessellator::TESS_WINDING_ODD );
 		tesselator->retessellatePolygons(*geometry);
 	}
 	geode->addDrawable(geometry);
@@ -374,8 +377,7 @@ void ConverterOSG::drawOpenMesh(	const shared_ptr<carve::input::PolyhedronData>&
 void ConverterOSG::drawPolyline( const shared_ptr<carve::input::PolylineSetData>& polyline_data, osg::Geode* geode, bool add_color_array )
 {
 	osg::Vec3Array* vertices = new osg::Vec3Array();
-	carve::input::Options carve_options;
-	carve::line::PolylineSet* polyline_set = polyline_data->create(carve_options);
+	carve::line::PolylineSet* polyline_set = polyline_data->create(carve::input::opts());
 
 	if( polyline_set->vertices.size() < 2 )
 	{
@@ -416,10 +418,11 @@ void ConverterOSG::drawPolyline( const shared_ptr<carve::input::PolylineSetData>
 	}
 
 	geode->addDrawable(geometry);
-
 }
 
-bool ConverterOSG::checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id )
+//#define THOROUGH_MESHSET_CHECK
+
+bool ConverterOSG::checkMeshSet( const shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id )
 {
 	// check opening polyhedron
 	if( !mesh_set )
@@ -445,6 +448,7 @@ bool ConverterOSG::checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set,
 			if( mesh_i->isNegative() )
 			{
 				mesh_i->recalc();
+				mesh_i->calcOrientation();
 				if( mesh_i->isNegative() )
 				{
 					err << "mesh_set->meshes[" << i << "]->isNegative() " << std::endl;
@@ -456,13 +460,73 @@ bool ConverterOSG::checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set,
 		{
 			meshes_closed = false;
 		}
+
+#ifdef THOROUGH_MESHSET_CHECK
+
+		std::vector<carve::mesh::Face<3>* >& vec_faces = mesh_i->faces;
+		for( int j=0; j<vec_faces.size(); ++j )
+		{
+			carve::mesh::Face<3>* face = vec_faces[j];
+
+			
+			carve::geom::vector<3>& face_normal = face->plane.N;
+			//carve::geom::vector<3>& face_centroid = face->centroid;
+			carve::geom::vector<3>& point_on_face = face->edge->v1()->v;
+			carve::geom::linesegment<3> face_linesegment( point_on_face, point_on_face + face_normal*10000 );
+			int intersect_face_count = 0;
+			int intersect_vertex_count = 0;
+			int intersect_edge_count = 0;
+
+			for( int j_other=0; j_other<vec_faces.size(); ++j_other )
+			{
+				if( j == j_other )
+				{
+					// don't intersect face with itself
+					continue;
+				}
+				carve::mesh::Face<3>* other_face = vec_faces[j_other];
+
+				carve::geom::vector<3> intersection_point;
+				carve::IntersectionClass intersection_result = other_face->lineSegmentIntersection( face_linesegment, intersection_point );
+
+				double intersection_distance = DBL_MAX;
+							 
+				if( intersection_result > 0 )
+				{
+					if( intersection_result == carve::INTERSECT_FACE )
+					{
+						++intersect_face_count;
+					}
+					else if( intersection_result == carve::INTERSECT_VERTEX )
+					{
+						++intersect_vertex_count;
+					}
+					else if( intersection_result == carve::INTERSECT_EDGE )
+					{
+						++intersect_edge_count;
+					}
+				}
+			}
+			if( intersect_face_count > 0 )
+			{
+				if( intersect_face_count%2 == 1 )
+				{
+					if( intersect_vertex_count == 0 )
+					{
+						err_poly << "face normal pointing inside" << std::endl;
+						return false;
+					}
+				}
+			}
+		}
+#endif
 	}
 
 
 	if( !meshes_closed )
 	{
 #ifdef _DEBUG
-		std::cout << "mesh_set not closed" << std::endl;
+		err << "mesh_set not closed" << std::endl;
 #endif
 	}
 
@@ -620,228 +684,36 @@ double ConverterOSG::computeSurfaceAreaOfGroup( const osg::Group* grp )
 	return surface_area;
 }
 
-void ConverterOSG::convertOsgGroup( const osg::Group* src, carve::input::PolyhedronData& target )
-{
-	int num_children = src->getNumChildren();
-	for( int i=0; i<num_children; ++i )
-	{
-		const osg::Node* node = src->getChild(i);
-		const osg::Group* child_group = dynamic_cast<const osg::Group*>(node);
-		if( child_group )
-		{
-			convertOsgGroup( child_group, target );
-			continue;
-		}
-		const osg::Geode* child_geode = dynamic_cast<const osg::Geode*>(node);
-		if( child_geode )
-		{
-			const osg::Geode::DrawableList& drawable_list = child_geode->getDrawableList();
-			osg::Geode::DrawableList::const_iterator it_drawables;
-			for( it_drawables=drawable_list.begin(); it_drawables!=drawable_list.end(); ++it_drawables )
-			{
-				osg::Drawable* drawable = (*it_drawables);
-				const osg::Geometry* child_gemetry = dynamic_cast<const osg::Geometry*>(drawable);
-				if( child_gemetry )
-				{
-					const osg::Array* vertices_array = child_gemetry->getVertexArray();
-					const osg::Vec3dArray* vertices_d = dynamic_cast<const osg::Vec3dArray*>(vertices_array);
-					
-					const int vertex_offset = target.getVertexCount();
-
-					if( vertices_d )
-					{
-						const int num_vertices = vertices_d->size();
-						for( int i_vertex=0; i_vertex<num_vertices; ++i_vertex )
-						{
-							const osg::Vec3d& vertex = vertices_d->at(i_vertex);
-							target.addVertex(carve::geom::VECTOR(vertex.x(), vertex.y(), vertex.z() ) );
-
-						}
-					}
-					else
-					{
-						const osg::Vec3Array* vertices_float = dynamic_cast<const osg::Vec3Array*>(vertices_array);
-						if( vertices_float )
-						{
-							const int num_vertices = vertices_float->size();
-							for( int i_vertex=0; i_vertex<num_vertices; ++i_vertex )
-							{
-								const osg::Vec3& vertex = vertices_float->at(i_vertex);
-								target.addVertex(carve::geom::VECTOR(vertex.x(), vertex.y(), vertex.z() ) );
-							}
-						}
-						else
-						{
-							continue;
-						}
-					}
-
-					const osg::Geometry::PrimitiveSetList& primitive_sets = child_gemetry->getPrimitiveSetList();
-					osg::Geometry::PrimitiveSetList::const_iterator it_primitives;
-					for( it_primitives=primitive_sets.begin(); it_primitives!=primitive_sets.end(); ++it_primitives )
-					{
-						const osg::PrimitiveSet* p_set = (*it_primitives);
-
-						const osg::DrawElementsUInt* elements = dynamic_cast<const osg::DrawElementsUInt*>(p_set);
-						if( elements )
-						{
-							if( elements->getMode() == osg::PrimitiveSet::QUADS )
-							{
-
-								const osg::DrawElementsUInt& ele_ref = (*elements);
-								const int num_elements = elements->size();
-								if( elements->size() > 3 )
-								{
-									for( int k=0; k<num_elements-3; k+=4 )
-									{
-										int p0 = ele_ref[k] + vertex_offset;
-										int p1 = ele_ref[k+1] + vertex_offset;
-										int p2 = ele_ref[k+2] + vertex_offset;
-										int p3 = ele_ref[k+3] + vertex_offset;
-
-										carve::geom::vector<3> v0 = target.getVertex(p0);
-										carve::geom::vector<3> v1 = target.getVertex(p1);
-										carve::geom::vector<3> v2 = target.getVertex(p2);
-										carve::geom::vector<3> v3 = target.getVertex(p3);
-										osg::Vec3 pt0(v0.v[0],v0.v[1],v0.v[2]);
-										osg::Vec3 pt1(v1.v[0],v1.v[1],v1.v[2]);
-										osg::Vec3 pt2(v2.v[0],v2.v[1],v2.v[2]);
-										osg::Vec3 pt3(v3.v[0],v3.v[1],v3.v[2]);
-
-										if( (pt0 -pt1).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt1 -pt2).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt2 -pt3).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt3 -pt0).length2() < 0.00001 )
-										{
-											continue;
-										}
-										std::vector<int> face_verts;
-										face_verts.push_back(p0);
-										face_verts.push_back(p1);
-										face_verts.push_back(p2);
-										face_verts.push_back(p3);
-										target.addFace(face_verts.begin(), face_verts.end());
-
-									}
-								}
-							
-
-							}
-							else if( elements->getMode() == osg::PrimitiveSet::TRIANGLES )
-							{
-								const osg::DrawElementsUInt& ele_ref = (*elements);
-								const int num_elements = elements->size();
-								if( elements->size() > 3 )
-								{
-									for( int k=0; k<num_elements-2; k+=3 )
-									{
-										int p0 = ele_ref[k] + vertex_offset;
-										int p1 = ele_ref[k+1] + vertex_offset;
-										int p2 = ele_ref[k+2] + vertex_offset;
-										
-										std::vector<int> face_verts;
-										face_verts.push_back(p0);
-										face_verts.push_back(p1);
-										face_verts.push_back(p2);
-										target.addFace(face_verts.begin(), face_verts.end());
-
-										carve::geom::vector<3>  v0 = target.getVertex(p0);
-										carve::geom::vector<3>  v1 = target.getVertex(p1);
-										carve::geom::vector<3>  v2 = target.getVertex(p2);
-										osg::Vec3 pt0(v0.v[0],v0.v[1],v0.v[2]);
-										osg::Vec3 pt1(v1.v[0],v1.v[1],v1.v[2]);
-										osg::Vec3 pt2(v2.v[0],v2.v[1],v2.v[2]);
-										
-										if( (pt0 -pt1).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt1 -pt2).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt2 -pt0).length2() < 0.00001 )
-										{
-											continue;
-										}
-									}
-								}
-
-							}
-							else if( elements->getMode() == osg::PrimitiveSet::TRIANGLE_STRIP )
-							{
-								const osg::DrawElementsUInt& ele_ref = (*elements);
-								const int num_elements = elements->size();
-								if( elements->size() > 3 )
-								{
-									for( int k=0; k<num_elements-3; k+=2 )
-									{
-										int p0 = ele_ref[k] + vertex_offset;
-										int p1 = ele_ref[k+1] + vertex_offset;
-										int p2 = ele_ref[k+2] + vertex_offset;
-										int p3 = ele_ref[k+3] + vertex_offset;
-										
-										carve::geom::vector<3>  v0 = target.getVertex(p0);
-										carve::geom::vector<3>  v1 = target.getVertex(p1);
-										carve::geom::vector<3>  v2 = target.getVertex(p2);
-										carve::geom::vector<3>  v3 = target.getVertex(p3);
-										osg::Vec3 pt0(v0.v[0],v0.v[1],v0.v[2]);
-										osg::Vec3 pt1(v1.v[0],v1.v[1],v1.v[2]);
-										osg::Vec3 pt2(v2.v[0],v2.v[1],v2.v[2]);
-										osg::Vec3 pt3(v3.v[0],v3.v[1],v3.v[2]);
-
-										if( (pt0 -pt1).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt1 -pt2).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt2 -pt3).length2() < 0.00001 )
-										{
-											continue;
-										}
-										if( (pt3 -pt0).length2() < 0.00001 )
-										{
-											continue;
-										}
-										std::vector<int> face_verts;
-										face_verts.push_back(p0);
-										face_verts.push_back(p1);
-										face_verts.push_back(p2);
-										target.addFace(face_verts.begin(), face_verts.end());
-
-
-										std::vector<int> face_verts1;
-										face_verts1.push_back(p1);
-										face_verts1.push_back(p3);
-										face_verts1.push_back(p2);
-										target.addFace(face_verts1.begin(), face_verts1.end());
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define POINTS 10
 void ConverterOSG::createTest( osg::Group* group )
 {
+	{
+		shared_ptr<IfcSphere> sphere( new IfcSphere() );
+		sphere->m_Radius = shared_ptr<IfcPositiveLengthMeasure>( new IfcPositiveLengthMeasure() );
+		sphere->m_Radius->m_value = 0.75;
+
+		shared_ptr<ItemData> item_data( new ItemData() );
+		
+		shared_ptr<GeometrySettings> geom_settings( new GeometrySettings() );
+		geom_settings->m_num_vertices_per_circle = 50;
+		shared_ptr<UnitConverter> unit_converter( new UnitConverter() );
+		shared_ptr<RepresentationConverter> representation_converter( new RepresentationConverter( geom_settings, unit_converter ) );
+
+		representation_converter->getSolidConverter()->convertIfcCsgPrimitive3D( sphere, carve::math::Matrix::TRANS(2.0, 3.0, 4.0), item_data );
+		item_data->createMeshSetsFromClosedPolyhedrons();
+
+		for( int i=0; i<item_data->item_meshsets.size(); ++i )
+		{
+			osg::Geode* geode = new osg::Geode();
+			
+			drawMeshSet( item_data->item_meshsets[i], geode );
+			group->addChild(geode);
+		}
+		return;
+	}
+
 	osg::Geode* geode = new osg::Geode();
 	int slices = 16;
 	double rad = 1.5;
@@ -849,11 +721,9 @@ void ConverterOSG::createTest( osg::Group* group )
 	carve::mesh::MeshSet<3>* opening = makeCone( slices, rad*0.5, height*2, carve::math::Matrix::TRANS(0.0, 0.0, 0.0));
 	carve::mesh::MeshSet<3>* subtract_from = makeCube( carve::math::Matrix::TRANS(0.3, 0.0, 0.0));
 
-	std::map<const carve::poly::Polyhedron *, int> counter;
-	carve::csg::CSG csg1;
-
-	csg1.hooks.registerHook(new carve::csg::CarveTriangulator, carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-	shared_ptr<carve::mesh::MeshSet<3> > result( csg1.compute(subtract_from, opening, carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE) );
+	carve::csg::CSG csg;
+	csg.hooks.registerHook(new carve::csg::CarveTriangulator, carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+	shared_ptr<carve::mesh::MeshSet<3> > result( csg.compute(subtract_from, opening, carve::csg::CSG::A_MINUS_B) );
 
 	{
 		osg::Geode* geode = new osg::Geode();
@@ -979,8 +849,7 @@ void ConverterOSG::createTest4(osg::Group* group)
 		osg::Geode* geode = new osg::Geode();
 		group->addChild( geode );
 
-		carve::input::Options carve_options;
-		shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data.createMesh(carve_options) );
+		shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data.createMesh(carve::input::opts()) );
 		drawMeshSet( meshset, geode );
 	}
 
@@ -1010,8 +879,7 @@ void ConverterOSG::createTest4(osg::Group* group)
 		osg::Geode* geode = new osg::Geode();
 		group->addChild( geode );
 
-		carve::input::Options carve_options;
-		shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve_options) );
+		shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve::input::opts()) );
 
 		checkMeshSet( meshset, err, -1 );
 		drawMeshSet( meshset, geode );
@@ -1075,9 +943,8 @@ void ConverterOSG::createTest4(osg::Group* group)
 		poly_opening_data.addFace(1,0,5);
 	}
 
-	carve::input::Options carve_options;
-	shared_ptr<carve::poly::Polyhedron> poly( poly_data.create(carve_options) );
-	shared_ptr<carve::poly::Polyhedron> poly_opening( poly_opening_data.create(carve_options) );
+	shared_ptr<carve::poly::Polyhedron> poly( poly_data.create(carve::input::opts()) );
+	shared_ptr<carve::poly::Polyhedron> poly_opening( poly_opening_data.create(carve::input::opts()) );
 
 	osg::Geode* geode = new osg::Geode();
 	osg::MatrixTransform* mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 0 ) );
@@ -1095,7 +962,7 @@ void ConverterOSG::createTest4(osg::Group* group)
 		mt->addChild(geode);
 		group->addChild(mt);
 
-		shared_ptr<carve::mesh::MeshSet<3> > result( csg.compute( poly_data.createMesh(carve_options), poly_opening_data.createMesh(carve_options), carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE) );
+		shared_ptr<carve::mesh::MeshSet<3> > result( csg.compute( poly_data.createMesh(carve::input::opts()), poly_opening_data.createMesh(carve::input::opts()), carve::csg::CSG::A_MINUS_B) );
 		drawMeshSet( result, geode );
 	}
 }

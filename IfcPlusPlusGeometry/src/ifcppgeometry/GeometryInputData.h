@@ -11,9 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-02
-
 #pragma once
 
 #include <vector>
@@ -25,6 +22,7 @@
 #include <osg/StateSet>
 #include <osg/Switch>
 
+//\brief Class to hold input data of one IFC geometric representation item.
 class ItemData
 {
 public:
@@ -34,6 +32,21 @@ public:
 	std::vector<shared_ptr<carve::input::PolylineSetData> > item_polyline_data;
 	std::vector<shared_ptr<carve::mesh::MeshSet<3> > >		item_meshsets;
 	std::vector<osg::ref_ptr<osg::StateSet> >				item_statesets;
+	void createMeshSetsFromClosedPolyhedrons()
+	{
+		for( unsigned int i=0; i<item_closed_mesh_data.size(); ++i )
+		{
+			shared_ptr<carve::input::PolyhedronData>& first_operand_poly_data = item_closed_mesh_data[i];
+			if( first_operand_poly_data->getVertexCount() < 3 )
+			{
+				continue;
+			}
+
+			shared_ptr<carve::mesh::MeshSet<3> > first_operand_meshset( first_operand_poly_data->createMesh(carve::input::opts()) );
+			item_meshsets.push_back( first_operand_meshset );
+		}
+		item_closed_mesh_data.clear();
+	}
 };
 
 struct PlacementData

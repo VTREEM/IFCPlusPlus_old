@@ -291,6 +291,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bin\GeneratedFiles\Debug\moc_DebugViewer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="bin\GeneratedFiles\Debug\moc_IfcPlusPlusSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -365,6 +373,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="bin\GeneratedFiles\ReleaseNoOptimization\moc_DebugViewer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="bin\GeneratedFiles\ReleaseNoOptimization\moc_IfcPlusPlusSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -421,6 +437,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="bin\GeneratedFiles\ReleaseWithDebugInfo\moc_DebugViewer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="bin\GeneratedFiles\ReleaseWithDebugInfo\moc_IfcPlusPlusSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -476,6 +500,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="bin\GeneratedFiles\Release\moc_DebugViewer.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="bin\GeneratedFiles\Release\moc_IfcPlusPlusSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">true</ExcludedFromBuild>
@@ -538,6 +570,7 @@
     <ClCompile Include="src\ifcplusplusviewer\cmd\CmdWriteIfcFile.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\cmd\Command.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\cmd\CommandManager.cpp" />
+    <ClCompile Include="src\ifcplusplusviewer\gui\DebugViewer.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\gui\IfcTreeWidget.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\gui\MainWindow.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\gui\StepHighlighter.cpp" />
@@ -635,6 +668,40 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-I.\bin\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\bin\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I.\src\ifcplusplusviewer"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing IfcTreeWidget.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DIFCPP_OPENMP -DQT_DLL "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\qtcore" "-I$(QTDIR)\include\QtOpenGL" "-I$(OSG_DIR)\include" "-I.\bin\GeneratedFiles\$(Configuration)\." "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include" "-I.\..\Carve\src\include\carve\external" "-I.\bin\GeneratedFiles\$(ConfigurationName)\."</Command>
+    </CustomBuild>
+    <CustomBuild Include="src\ifcplusplusviewer\gui\DebugViewer.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">Moc%27ing DebugViewer.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-I.\bin\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\bin\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I.\src\ifcplusplusviewer"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">Moc%27ing DebugViewer.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DIFCPP_OPENMP -DQT_DLL "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\qtcore" "-I$(QTDIR)\include\QtOpenGL" "-I$(OSG_DIR)\include" "-I.\bin\GeneratedFiles\$(Configuration)\." "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include" "-I.\..\Carve\src\include\carve\external" "-I.\bin\GeneratedFiles\$(ConfigurationName)\."</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">Moc%27ing DebugViewer.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-I.\bin\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\bin\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I.\src\ifcplusplusviewer"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">Moc%27ing DebugViewer.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DIFCPP_OPENMP -DQT_DLL "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\qtcore" "-I$(QTDIR)\include\QtOpenGL" "-I$(OSG_DIR)\include" "-I.\bin\GeneratedFiles\$(Configuration)\." "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include" "-I.\..\Carve\src\include\carve\external" "-I.\bin\GeneratedFiles\$(ConfigurationName)\."</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing DebugViewer.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-I.\bin\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\bin\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I.\src\ifcplusplusviewer"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing DebugViewer.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DWIN32 -DWIN64 -D_WINDOWS -DWINDOWS -DUNICODE -D_UNICODE -D_DEBUG -D_CRT_SECURE_NO_WARNINGS -D_MBCS -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-I." "-I.\src\ifcplusplusviewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include" "-I.\..\Carve\src\include\carve\external" "-I.\bin\GeneratedFiles\$(ConfigurationName)\." "-I.\bin\GeneratedFiles" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I$(OSG_DIR)\include"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing DebugViewer.h...</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-I.\bin\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\bin\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets" "-I.\src\ifcplusplusviewer"</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing DebugViewer.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DIFCPP_OPENMP -DQT_DLL "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\qtcore" "-I$(QTDIR)\include\QtOpenGL" "-I$(OSG_DIR)\include" "-I.\bin\GeneratedFiles\$(Configuration)\." "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include" "-I.\..\Carve\src\include\carve\external" "-I.\bin\GeneratedFiles\$(ConfigurationName)\."</Command>
     </CustomBuild>

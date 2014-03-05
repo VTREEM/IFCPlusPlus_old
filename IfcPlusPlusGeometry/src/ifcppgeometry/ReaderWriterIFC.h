@@ -65,9 +65,6 @@ public:
 	static void slotMessageWrapper( void* obj_ptr, const std::string& str );
 	static void slotErrorWrapper( void* obj_ptr, const std::string& str );
 
-	void setDebugView( osgViewer::View* view );
-	osgViewer::View* m_debug_view;
-
 protected:
 	shared_ptr<IfcPPModel>				m_ifc_model;
 	shared_ptr<IfcPlusPlusReader>		m_step_reader;

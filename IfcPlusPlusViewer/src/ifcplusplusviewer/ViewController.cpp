@@ -25,7 +25,7 @@
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 
-ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
+ViewController::ViewController()
 {
 	m_rootnode	= new osg::Group();
 	m_rootnode->setName("m_rootnode");
@@ -65,7 +65,7 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	
 	osg::LightModel* light_model = new osg::LightModel();  
 	light_model->setAmbientIntensity( osg::Vec4f( 0.2f, 0.25f, 0.3f, 0.3f ) );
-	light_model->setTwoSided(true); 
+	light_model->setTwoSided(true); // TODO: fix triangle orientation and set TwoSided(false)
 	m_rootnode->getOrCreateStateSet()->setAttribute( light_model );
 
 	m_stateset_default = m_transform_model->getOrCreateStateSet();

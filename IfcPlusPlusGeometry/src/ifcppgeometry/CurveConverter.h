@@ -11,9 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-02
-
 #pragma once
 
 #include <carve/geom2d.hpp>
@@ -28,6 +25,8 @@ class IfcLoop;
 class IfcCurve;
 class IfcCartesianPoint;
 class IfcTrimmingSelect;
+
+//\brief class to convert different kinds of IFC curve representations into carve input geometry
 
 class CurveConverter
 {

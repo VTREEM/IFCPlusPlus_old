@@ -11,8 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-02
 
 #define _USE_MATH_DEFINES 
 #include <math.h>

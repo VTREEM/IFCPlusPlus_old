@@ -13,35 +13,19 @@
 
 #pragma warning( disable: 4996 )
 #include <QtCore/qglobal.h>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-	#include <QtGui/qboxlayout.h>
-	#include <QtGui/qtreewidget.h>
-	#include <QtGui/qfiledialog.h>
-	#include <QtGui/qlabel.h>
-	#include <QtGui/qcombobox.h>
-	#include <QtGui/qpushbutton.h>
-	#include <QtGui/qprogressbar.h>
-	#include <QtGui/qlineedit.h>
-	#include <QtGui/qsplitter.h>
-	#include <QtGui/qapplication.h>
-	#include <QtGui/qtextedit.h>
-	#include <QtGui/qevent.h>
-	#include <QtCore/qsettings.h>
-#else
-	#include <QtWidgets/QVBoxLayout>
-	#include <QtWidgets/QTreeWidget>
-	#include <QtWidgets/QFileDialog>
-	#include <QtWidgets/QLabel>
-	#include <QtWidgets/QComboBox>
-	#include <QtWidgets/QPushButton>
-	#include <QtWidgets/QProgressBar>
-	#include <QtWidgets/QLineEdit>
-	#include <QtWidgets/QSplitter>
-	#include <QtWidgets/QApplication>
-	#include <QtWidgets/QTextEdit>
-	#include <QtGui/qevent.h>
-	#include <QtCore/QSettings>
-#endif
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QTextEdit>
+#include <QtGui/qevent.h>
+#include <QtCore/QSettings>
 
 #include "ifcpp/reader/IfcPlusPlusReader.h"
 #include "ifcpp/writer/IfcStepWriter.h"
@@ -49,7 +33,6 @@
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcpp/guid/CreateGuid_64.h"
-//#include "ifcpp/IFC4/include/IfcLabel.h"
 #include "ifcpp/IFC4/include/IfcAxis2Placement.h"
 #include "ifcpp/IFC4/include/IfcAxis2Placement3D.h"
 #include "ifcpp/IFC4/include/IfcGeometricRepresentationContext.h"
@@ -65,7 +48,6 @@
 #include "cmd/CmdLoadIfcFile.h"
 #include "cmd/CmdWriteIfcFile.h"
 #include "cmd/CommandManager.h"
-//#include "IfcTreeWidget.h"
 #include "TabReadWrite.h"
 
 
@@ -389,7 +371,8 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 	// TODO: adapt near/far plane according to bounding sphere
 
 	clock_t time_diff = clock() - millisecs;
-	slotTxtOut( tr("File loaded") + " (" + QString::number( int(time_diff*0.1)*0.01 ) + " sec)" );
+	int num_entities = m_system->getIfcModel()->getMapIfcObjects().size();
+	slotTxtOut( tr("File loaded: ") + QString::number(num_entities) + " entities in " + QString::number( int(time_diff*0.1)*0.01 ) + " sec."  );
 
 	m_system->notifyModelLoadingDone();
 

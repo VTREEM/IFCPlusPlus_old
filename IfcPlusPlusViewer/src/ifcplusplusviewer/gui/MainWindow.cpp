@@ -138,6 +138,8 @@ void MainWindow::closeEvent( QCloseEvent *event )
 	// for some reason, closeEvent or other close methods are not called on widgets, so do it manually here...
 	m_tab_read_write->closeEvent( event );
 	QMainWindow::closeEvent( event );
+
+	emit( signalMainWindowClosed() );
 }
 
 void MainWindow::createTabWidget()

@@ -11,17 +11,16 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-11
-
 #pragma once
 
 #define GEOM_TOLERANCE  0.0000001
-#ifdef GEOM_DEBUG
+#ifdef _DEBUG
 	#define HALF_SPACE_BOX_SIZE 100
 #else
 	#define HALF_SPACE_BOX_SIZE 10000
 #endif
+
+//\brief Central storage class to hold settings that influence the geometry processing.
 
 class GeometrySettings
 {

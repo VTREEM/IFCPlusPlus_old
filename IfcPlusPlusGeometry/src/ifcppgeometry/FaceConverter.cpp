@@ -11,9 +11,6 @@
 * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-06
-
 #include <carve/csg_triangulator.hpp>
 
 #include "ifcpp/IFC4/include/IfcParameterValue.h"

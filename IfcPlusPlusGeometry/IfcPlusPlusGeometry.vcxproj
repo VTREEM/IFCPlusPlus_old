@@ -279,6 +279,7 @@
   <ItemGroup>
     <ClCompile Include="src\ifcppgeometry\ConverterOSG.cpp" />
     <ClCompile Include="src\ifcppgeometry\CurveConverter.cpp" />
+    <ClCompile Include="src\ifcppgeometry\DebugViewerCallback.cpp" />
     <ClCompile Include="src\ifcppgeometry\FaceConverter.cpp" />
     <ClCompile Include="src\ifcppgeometry\GeometrySettings.cpp" />
     <ClCompile Include="src\ifcppgeometry\GeomUtils.cpp" />
@@ -292,6 +293,7 @@
     <ClCompile Include="src\ifcppgeometry\ProfileCache.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ifcppgeometry\DebugViewerCallback.h" />
     <ClInclude Include="src\ifcppgeometry\GeometryInputData.h" />
     <ClInclude Include="src\ifcppgeometry\ConverterOSG.h" />
     <ClInclude Include="src\ifcppgeometry\CurveConverter.h" />
