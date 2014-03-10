@@ -21,10 +21,13 @@
 #include "ifcpp/model/shared_ptr.h"
 #include "GeometryInputData.h"
 
-void setRenderMeshsetCallBack( void* obj_ptr, void (*func)(void*, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe) );
+void setRenderMeshsetCallBack( void* obj_ptr, void (*func)(void*, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe) );
 void setRenderPolylineCallBack( void* obj_ptr, void (*func)(void*, const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color ) );
+
+void renderMeshsetInDebugViewer(const shared_ptr<carve::mesh::MeshSet<3> >& meshset, shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe);
 void renderMeshsetInDebugViewer(const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe);
 void renderMeshsetInDebugViewer( const shared_ptr<ShapeInputData>& product_shape, const osg::Vec4f& color, const bool wireframe );
+
 void renderPolylineInDebugViewer( shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color );
 
 #endif

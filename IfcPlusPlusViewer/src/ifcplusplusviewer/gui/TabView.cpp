@@ -51,16 +51,6 @@ TabView::TabView( IfcPlusPlusSystem* sys, ViewerWidget* vw ) : m_system(sys), m_
 	}
 	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
 
-
-	// light button
-	QToolButton* btn_toggle_light = new QToolButton();
-	btn_toggle_light->setIcon( QIcon( ":img/bulb.png" ) );
-	btn_toggle_light->setIconSize( QSize( 22, 22 ) );
-	btn_toggle_light->setToolTip( "Light on/off" );
-	btn_toggle_light->setCheckable( true );
-	btn_toggle_light->setChecked( true );
-	connect( btn_toggle_light,	SIGNAL( clicked() ),	this,	SLOT( slotToggleSceneLight() ) );
-	
 	// cull face buttons
 	QCheckBox* cull_front_faces = new QCheckBox( "Cull front faces" );
 	if( m_cull_front )
@@ -75,6 +65,16 @@ TabView::TabView( IfcPlusPlusSystem* sys, ViewerWidget* vw ) : m_system(sys), m_
 		cull_back_faces->setChecked( true );
 	}
 	connect( cull_back_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullBackFaces( int ) ) );
+
+
+	// light button
+	QToolButton* btn_toggle_light = new QToolButton();
+	btn_toggle_light->setIcon( QIcon( ":img/bulb.png" ) );
+	btn_toggle_light->setIconSize( QSize( 22, 22 ) );
+	btn_toggle_light->setToolTip( "Light on/off" );
+	btn_toggle_light->setCheckable( true );
+	btn_toggle_light->setChecked( true );
+	connect( btn_toggle_light,	SIGNAL( clicked() ),	this,	SLOT( slotToggleSceneLight() ) );
 
 	// perspective/parallel projection
 	//QRadioButton* radio_perspective = new QRadioButton("Perspective");

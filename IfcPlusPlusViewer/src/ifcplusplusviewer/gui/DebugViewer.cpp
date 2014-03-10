@@ -18,8 +18,9 @@
 
 #include <QtCore/qglobal.h>
 
-#include <QtWidgets/qaction.h>
-#include <QtWidgets/qtoolbar.h>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QCheckBox>
 #include <QtCore/QSettings>
 #include <QtCore/QFile>
 
@@ -34,7 +35,7 @@
 
 DebugViewer::DebugViewer() : QMainWindow()
 {
-	setWindowTitle("IfcPlusPlus DebugViewer");
+	setWindowTitle("IFC++ DebugViewer");
 	setWindowIcon( QIcon( ":img/IfcPlusPlusViewerWindowIcon.png" ) );
 	
 	// global style sheet definitions
@@ -67,18 +68,48 @@ DebugViewer::DebugViewer() : QMainWindow()
 	wireframe->setStatusTip("Wireframe [w]");
 	connect(wireframe, SIGNAL(triggered()), this, SLOT(slotBtnWireframeClicked()));
 
+	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
+	QStringList keys = settings.allKeys();
+	
+	m_cull_front = false;
+	m_cull_back = false;
+	if( keys.contains( "DebugViewerCullFrontFaces" ) )
+	{
+		m_cull_front = settings.value("DebugViewerCullFrontFaces").toBool();
+	}
+	if( keys.contains( "DebugViewerCullBackFaces" ) )
+	{
+		m_cull_back = settings.value("DebugViewerCullBackFaces").toBool();
+	}
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_view_controller->getRootNode()->getOrCreateStateSet() );
+
+	// cull face buttons
+	QCheckBox* cull_front_faces = new QCheckBox( "Cull front faces" );
+	if( m_cull_front )
+	{
+		cull_front_faces->setChecked( true );
+	}
+	connect( cull_front_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullFrontFaces( int ) ) );
+
+	QCheckBox* cull_back_faces = new QCheckBox( "Cull back faces" );
+	if( m_cull_back )
+	{
+		cull_back_faces->setChecked( true );
+	}
+	connect( cull_back_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullBackFaces( int ) ) );
+
 	QToolBar * m_file_toolbar = new QToolBar();
 	m_file_toolbar->setObjectName("FileToolbar");
 	m_file_toolbar->addAction(zoom_bounds_btn);
 	m_file_toolbar->addAction(wireframe);
+	m_file_toolbar->addWidget(cull_front_faces);
+	m_file_toolbar->addWidget(cull_back_faces);
 	addToolBar( Qt::LeftToolBarArea, m_file_toolbar );
 
 	// central widget
 	setCentralWidget( m_viewer_widget );
 
 	// restore geometry
-	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
-	QStringList keys = settings.allKeys();
 	if( keys.contains( "DebugViewerGeometry" ) )
 	{
 		restoreGeometry(settings.value("DebugViewerGeometry").toByteArray());
@@ -129,22 +160,22 @@ void DebugViewer::slotBtnWireframeClicked()
 
 	if( toggle_btn->isChecked() )
 	{
-		//m_system->getViewController()->setViewerMode( ViewController::VIEWER_MODE_WIREFRAME );
+		m_view_controller->setViewerMode( ViewController::VIEWER_MODE_WIREFRAME );
 		//m_viewer_widget->setViewerMode( ViewerWidget::VIEWER_MODE_WIREFRAME );
 	}
 	else
 	{
-		//m_system->getViewController()->setViewerMode( ViewController::VIEWER_MODE_SHADED );
+		m_view_controller->setViewerMode( ViewController::VIEWER_MODE_SHADED );
 		//m_viewer_widget->setViewerMode( ViewerWidget::VIEWER_MODE_SHADED );
 	}
 }
 
-void DebugViewer::renderMeshsetWrapper( void* ptr, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe )
+void DebugViewer::renderMeshsetWrapper( void* ptr, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe )
 {
 	DebugViewer* myself = (DebugViewer*)ptr;
 	if( myself )
 	{
-		myself->renderMeshset( meshset, color, wireframe );
+		myself->renderMeshset( meshset, poly, color, wireframe );
 	}
 }
 
@@ -157,28 +188,57 @@ void DebugViewer::renderPolylineWrapper(void* ptr, const shared_ptr<carve::input
 	}
 }
 
-void DebugViewer::renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe )
+void DebugViewer::renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, 
+								const osg::Vec4f& color, const bool wireframe )
 {
-	if( m_view_controller->getRootNode() )
+	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+	if( wireframe )
 	{
-		osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-		if( wireframe )
-		{
-			osg::ref_ptr<osg::PolygonMode> polygon_mode = new osg::PolygonMode();
-			polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE );
-			geode->getOrCreateStateSet()->setAttribute( polygon_mode );
-		}
-		osg::Material* material = new osg::Material();//(osg::Material *) geode->getStateSet()->getAttribute(osg::StateAttribute::MATERIAL); 
-		material->setColorMode(osg::Material::EMISSION); 
-		material->setEmission(osg::Material::FRONT_AND_BACK, color ); 
-		geode->getOrCreateStateSet()->setAttributeAndModes(material, osg::StateAttribute::OVERRIDE); 
-
-		ConverterOSG carve_converter;
-		carve_converter.drawMeshSet( meshset, geode );
-		m_view_controller->getRootNode()->addChild(geode);
-
-		m_viewer_widget->getViewer().frame();
+		osg::ref_ptr<osg::PolygonMode> polygon_mode = new osg::PolygonMode();
+		polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE );
+		geode->getOrCreateStateSet()->setAttribute( polygon_mode );
 	}
+	osg::Material* material = new osg::Material();//(osg::Material *) geode->getStateSet()->getAttribute(osg::StateAttribute::MATERIAL); 
+	material->setColorMode(osg::Material::EMISSION); 
+	material->setEmission(osg::Material::FRONT_AND_BACK, color ); 
+	geode->getOrCreateStateSet()->setAttributeAndModes(material, osg::StateAttribute::OVERRIDE); 
+
+	ConverterOSG::drawMeshSet( meshset, geode );
+	m_view_controller->getModelNode()->addChild(geode);
+
+	osg::ref_ptr<osg::Geode> geode_vertex_numbers = new osg::Geode();
+	m_view_controller->getRootNode()->addChild(geode_vertex_numbers);
+
+	if( poly )
+	{
+		ConverterOSG::drawVertexNumbers( poly, color, geode_vertex_numbers );
+	}
+	else
+	{
+		shared_ptr<carve::poly::Polyhedron> poly_from_mesh( carve::polyhedronFromMesh(meshset.get(), -1) );
+		shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
+		for( int i=0; i<poly_from_mesh->vertices.size(); ++i )
+		{
+			poly_data->addVertex( poly_from_mesh->vertices[i].v );
+		}
+		for( int i=0; i<poly_from_mesh->faces.size(); ++i )
+		{
+			carve::poly::Face<3>& f = poly_from_mesh->faces[i];
+			if( f.nVertices() == 3 )
+			{
+				poly_data->addFace( poly_from_mesh->vertexToIndex( f.vertex(0) ), poly_from_mesh->vertexToIndex( f.vertex(1) ), poly_from_mesh->vertexToIndex( f.vertex(2) ) );
+			}
+			else if( f.nVertices() == 4 )
+			{
+				poly_data->addFace( poly_from_mesh->vertexToIndex( f.vertex(0) ), poly_from_mesh->vertexToIndex( f.vertex(1) ), poly_from_mesh->vertexToIndex( f.vertex(2) ), poly_from_mesh->vertexToIndex( f.vertex(3) ) );
+			}
+		}
+
+		ConverterOSG::drawVertexNumbers( poly_data, color, geode_vertex_numbers );
+	}
+	
+
+	m_viewer_widget->getViewer().frame();
 }
 
 void DebugViewer::renderPolyline( const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color )
@@ -192,10 +252,43 @@ void DebugViewer::renderPolyline( const shared_ptr<carve::input::PolylineSetData
 		material->setEmission(osg::Material::FRONT_AND_BACK, color ); 
 		geode->getOrCreateStateSet()->setAttributeAndModes(material, osg::StateAttribute::OVERRIDE); 
 
-		ConverterOSG carve_converter;
-		carve_converter.drawPolyline( poly_line, geode );
+		ConverterOSG::drawPolyline( poly_line, geode );
 		m_view_controller->getRootNode()->addChild(geode);
 		m_viewer_widget->getViewer().frame();
 	}
 }
+
+
+void DebugViewer::slotCullFrontFaces( int state )
+{
+	if( state == Qt::Checked )
+	{
+		m_cull_front = true;
+	}
+	else
+	{
+		m_cull_front = false;
+	}
+	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
+	settings.setValue("DebugViewerCullFrontFaces", m_cull_front );
+
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_view_controller->getRootNode()->getOrCreateStateSet() );
+}
+
+void DebugViewer::slotCullBackFaces( int state )
+{
+	if( state == Qt::Checked )
+	{
+		m_cull_back = true;
+	}
+	else
+	{
+		m_cull_back = false;
+	}
+	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
+	settings.setValue("DebugViewerCullBackFaces", m_cull_back );
+
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_view_controller->getRootNode()->getOrCreateStateSet() );
+}
+
 #endif

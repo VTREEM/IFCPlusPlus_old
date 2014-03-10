@@ -17,6 +17,7 @@
 #include <carve/geom3d.hpp>
 #include <carve/input.hpp>
 #include <carve/csg_triangulator.hpp>
+#include <carve/mesh_simplify.hpp>
 
 #include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
 #include "ifcpp/IFC4/include/IfcPlaneAngleMeasure.h"
@@ -594,6 +595,8 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 		std::cout << strs_err.str().c_str() << std::endl;
 
 		renderMeshsetInDebugViewer( mesh_set, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+		ConverterOSG::dumpMeshsets( mesh_set, shared_ptr<carve::mesh::MeshSet<3> >(), shared_ptr<carve::mesh::MeshSet<3> >() );
+
 		shared_ptr<carve::input::PolylineSetData> polyline_data( new carve::input::PolylineSetData() );
 		polyline_data->beginPolyline();
 		if( paths.size() > 0 )
@@ -1141,23 +1144,30 @@ void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanRe
 		for( it_first_operands=first_operand_data->item_meshsets.begin(); it_first_operands!=first_operand_data->item_meshsets.end(); ++it_first_operands )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> >& first_operand_meshset = (*it_first_operands);
+			
+			// check meshset
+			bool first_op_meshset_ok = ConverterOSG::checkMeshSet( first_operand_meshset, strs_err, -1 );
+			if( !first_op_meshset_ok )
+			{
+#ifdef _DEBUG
+				std::cout << strs_err.str().c_str() << std::endl;
+				renderMeshsetInDebugViewer( first_operand_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+#endif
+				continue;
+			}
+
+			if( m_geom_settings->m_use_mesh_simplifier_before_csg )
+			{
+				// simplify
+				carve::mesh::MeshSimplifier simplifier;
+				simplifier.improveMesh( first_operand_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+			}
 
 			std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_second_operands;
 			for( it_second_operands=second_operand_data->item_meshsets.begin(); it_second_operands!=second_operand_data->item_meshsets.end(); ++it_second_operands )
 			{
 				shared_ptr<carve::mesh::MeshSet<3> >& second_operand_meshset = (*it_second_operands);
 
-				// check polyhedron
-				bool first_op_meshset_ok = ConverterOSG::checkMeshSet( first_operand_meshset, strs_err, -1 );
-				if( !first_op_meshset_ok )
-				{
-#ifdef _DEBUG
-					std::cout << strs_err.str().c_str() << std::endl;
-					renderMeshsetInDebugViewer( first_operand_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-#endif
-					continue;
-				}
-				
 				bool second_op_meshset_ok = ConverterOSG::checkMeshSet( second_operand_meshset, strs_err, -1 );
 				if( !second_op_meshset_ok )
 				{
@@ -1168,21 +1178,38 @@ void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanRe
 					continue;
 				}
 
+				if( m_geom_settings->m_use_mesh_simplifier_before_csg )
+				{
+					// simplify
+					carve::mesh::MeshSimplifier simplifier;
+					simplifier.improveMesh( second_operand_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+				}
+
 				bool csg_operation_successful = true;
 				try
 				{
-					//std::cout << bool_result_id << std::endl;
 					// TODO: switch off std::cerr output in carve in release mode
 					carve::csg::CSG csg;
-					//csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-					shared_ptr<carve::mesh::MeshSet<3> > result_meshset( csg.compute( first_operand_meshset.get(), second_operand_meshset.get(), csg_operation, NULL, carve::csg::CSG::CLASSIFY_EDGE) );
+					if( m_geom_settings->m_set_process_output_face )
+					{
+						csg.hooks.registerHook(new carve::csg::CarveTriangulator(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+					}
+					shared_ptr<carve::mesh::MeshSet<3> > result_meshset( csg.compute( first_operand_meshset.get(), second_operand_meshset.get(), csg_operation, NULL, m_geom_settings->m_classify_type) );
+					
+					if( m_geom_settings->m_use_mesh_simplifier_after_csg )
+					{
+						carve::mesh::MeshSimplifier simplifier;
+						simplifier.improveMesh( result_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+						// TODO: map with meshes that have been simplified already to avoid double improveMesh calls before other csg operations
+					}
 					bool result_meshset_ok = ConverterOSG::checkMeshSet( result_meshset, strs_err, -1 );
 #ifdef _DEBUG
 					if( !result_meshset_ok )
 					{
 						renderMeshsetInDebugViewer( first_operand_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
 						renderMeshsetInDebugViewer( second_operand_meshset, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
-						renderMeshsetInDebugViewer( result_meshset, osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f), true );
+						renderMeshsetInDebugViewer( result_meshset, osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f), false );
+						ConverterOSG::dumpMeshsets( first_operand_meshset, second_operand_meshset, result_meshset );
 					}
 #endif
 					first_operand_meshset = result_meshset;
@@ -1206,9 +1233,10 @@ void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanRe
 #ifdef _DEBUG
 				if( !csg_operation_successful )
 				{
-					std::cout << "!csg_operation_successful" << std::endl;
+					std::cout << "!csg_operation_successful. IfcBooleanResult id: " << boolean_result_id << std::endl;
 					renderMeshsetInDebugViewer( first_operand_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
 					renderMeshsetInDebugViewer( second_operand_meshset, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
+					ConverterOSG::dumpMeshsets( first_operand_meshset, second_operand_meshset, shared_ptr<carve::mesh::MeshSet<3> >() );
 				}
 #endif
 			}
@@ -1401,19 +1429,39 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 			if( !box_ok )
 			{
 				renderMeshsetInDebugViewer( half_space_box_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), false );
+				ConverterOSG::dumpMeshsets( half_space_box_meshset, shared_ptr<carve::mesh::MeshSet<3> >(), shared_ptr<carve::mesh::MeshSet<3> >() );
 				std::cout << "half_space_box_meshset not ok " << __func__ << std::endl;
 			}
 			if( !ConverterOSG::checkMeshSet( poly_data_meshset, strs_err, 0 ) )
 			{
 				renderMeshsetInDebugViewer( poly_data_meshset, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), false );
+				ConverterOSG::dumpMeshsets( poly_data_meshset, shared_ptr<carve::mesh::MeshSet<3> >(), shared_ptr<carve::mesh::MeshSet<3> >() );
 				std::cout << "poly_data_meshset not ok " << __func__ << std::endl;
 			}
 #endif
+			if( m_geom_settings->m_use_mesh_simplifier_before_csg )
+			{
+				// simplify
+				carve::mesh::MeshSimplifier simplifier;
+				simplifier.improveMesh( half_space_box_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+				carve::mesh::MeshSimplifier simplifier2;
+				simplifier2.improveMesh( poly_data_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+			}
 
 			carve::csg::CSG csg;
-			//csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-			shared_ptr<carve::mesh::MeshSet<3> > halfspace_meshset( csg.compute( poly_data_meshset.get(), half_space_box_meshset.get(), carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE ) );
+			if( m_geom_settings->m_set_process_output_face )
+			{
+				csg.hooks.registerHook(new carve::csg::CarveTriangulator(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+			}
+			shared_ptr<carve::mesh::MeshSet<3> > halfspace_meshset( csg.compute( poly_data_meshset.get(), half_space_box_meshset.get(), carve::csg::CSG::A_MINUS_B, NULL, m_geom_settings->m_classify_type ) );
 			
+			if( m_geom_settings->m_use_mesh_simplifier_after_csg )
+			{
+				// simplify result
+				carve::mesh::MeshSimplifier simplifier;
+				simplifier.improveMesh( halfspace_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+			}
+
 			bool result_meshset_ok = ConverterOSG::checkMeshSet( halfspace_meshset, strs_err, 0 );
 
 #ifdef _DEBUG
@@ -1421,8 +1469,8 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 			{
 				renderMeshsetInDebugViewer( half_space_box_meshset, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
 				renderMeshsetInDebugViewer( poly_data_meshset, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
-
 				renderMeshsetInDebugViewer( halfspace_meshset, osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f), false );
+				ConverterOSG::dumpMeshsets( half_space_box_meshset, poly_data_meshset, halfspace_meshset );
 				std::cout << "result_meshset_ok not ok " << __func__ << std::endl;
 			}
 #endif
@@ -1446,7 +1494,6 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 				vertex = pos*vertex;
 			}
 
-			item_data->item_closed_mesh_data.push_back(half_space_box_data);
 			return;
 		}
 		

@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 	debug_viewer->m_viewer_widget->startTimer();
 	debug_viewer->show();
 #endif
-	//ConverterOSG::createTest( sys->getViewController()->getModelNode() );
+	//ConverterOSG::createTest( sys->getViewController()->getModelNode(), sys->getViewController()->getRootNode() );
 
 	if( argc > 1 )
 	{

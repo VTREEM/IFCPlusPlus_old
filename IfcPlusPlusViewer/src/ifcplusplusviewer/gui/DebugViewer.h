@@ -37,20 +37,24 @@ public:
 	DebugViewer();
 	~DebugViewer();
 
-	static void renderMeshsetWrapper(void* obj_ptr, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe);
+	static void renderMeshsetWrapper(void* obj_ptr, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe);
 	static void renderPolylineWrapper(void* obj_ptr, const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color);
 	
-	void renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe );
+	void renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe );
 	void renderPolyline( const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color );
 
 	ViewerWidget*			m_viewer_widget;
 	ViewController*			m_view_controller;
+	bool m_cull_front;
+	bool m_cull_back;
 
 protected:
 	void closeEvent( QCloseEvent *event );
 
-private slots:
+public slots:
 	void slotBtnZoomBoundingsClicked();
 	void slotBtnWireframeClicked();
+	void slotCullFrontFaces( int state );
+	void slotCullBackFaces( int state );
 };
 #endif

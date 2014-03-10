@@ -13,14 +13,16 @@
 
 #pragma once
 
+#include "carve/csg.hpp"
+
 #define GEOM_TOLERANCE  0.0000001
 #ifdef _DEBUG
-	#define HALF_SPACE_BOX_SIZE 100
+	#define HALF_SPACE_BOX_SIZE 15
 #else
 	#define HALF_SPACE_BOX_SIZE 10000
 #endif
 
-//\brief Central storage class to hold settings that influence the geometry processing.
+//\brief Central class to hold settings that influence geometry processing.
 
 class GeometrySettings
 {
@@ -29,4 +31,13 @@ public:
 	~GeometrySettings();
 	int	m_num_vertices_per_circle;
 	int m_min_num_vertices_per_arc;
+
+	double m_min_colinearity;
+	double m_min_delta_v;
+	double m_min_normal_angle;
+	bool m_use_mesh_simplifier_before_csg;
+	bool m_use_mesh_simplifier_after_csg;
+	bool m_use_mesh_simplifier_before_draw;
+	bool m_set_process_output_face;
+	carve::csg::CSG::CLASSIFY_TYPE m_classify_type;
 };

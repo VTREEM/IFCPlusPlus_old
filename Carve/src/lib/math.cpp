@@ -65,8 +65,7 @@ namespace carve {
         re_1 = re_2 = re_3 = re;
         im_1 = im_2 = im_3 = im;
       } else {
-        //double r = cbrt(sqrt(re * re + im * im));
-		  double r = pow(sqrt(re * re + im * im), 1.0/3.0);
+        double r = cbrt(sqrt(re * re + im * im));
         double t = atan2(im, re) / 3.0;
         re_1 = r * cos(t);
         im_1 = r * sin(t);
@@ -139,10 +138,8 @@ namespace carve {
         double dis_sqrt = sqrt(dis);
         double r_p = yN - dis_sqrt;
         double r_q = yN + dis_sqrt;
-        //double p = cbrt(fabs(r_p)/(2.0 * c3));
-		double p = pow(fabs(r_p)/(2.0 * c3), 1.0/3.0);
-        //double q = cbrt(fabs(r_q)/(2.0 * c3));
-		double q = pow(fabs(r_q)/(2.0 * c3), 1.0/3.0);
+        double p = cbrt(fabs(r_p)/(2.0 * c3));
+        double q = cbrt(fabs(r_q)/(2.0 * c3));
 
         if (r_p > 0.0) p = -p;
         if (r_q > 0.0) q = -q;
@@ -172,8 +169,7 @@ namespace carve {
       } else {
         // Three real roots (two or three equal).
         double r = yN / (2.0 * c3);
-        //double delta = cbrt(r);
-		double delta = pow(r, 1.0/3.0);
+        double delta = cbrt(r);
 
         _r[0] = xN + delta;
         _r[1] = xN + delta;
@@ -294,10 +290,8 @@ namespace carve {
         l2 = m._22;   e2.x = 0.0; e2.y = 1.0; e2.z = 0.0;
         l3 = m._33;   e3.x = 0.0; e3.y = 0.0; e3.z = 1.0;
       } else if (Q > 0) {
-        //l1 = l2 = c2 / 3.0 + cbrt(b / 2.0);
-		  l1 = l2 = c2 / 3.0 + pow(b / 2.0, 1.0/3.0);
-        //l3 = c2 / 3.0 - 2.0 * cbrt(b / 2.0);
-		  l3 = c2 / 3.0 - 2.0 * pow(b / 2.0, 1.0/3.0);
+        l1 = l2 = c2 / 3.0 + cbrt(b / 2.0);
+        l3 = c2 / 3.0 - 2.0 * cbrt(b / 2.0);
 
         eig2(m, l1, e1, e2);
         eig1(m, l3, e3);
@@ -305,8 +299,7 @@ namespace carve {
         double t = atan2(sqrt(-Q), -b / 2.0);
         double cos_t3 = cos(t / 3.0);
         double sin_t3 = sin(t / 3.0);
-        //double r = cbrt(sqrt(b * b / 4.0 - Q));
-		double r = pow(sqrt(b * b / 4.0 - Q), 1.0/3.0);
+        double r = cbrt(sqrt(b * b / 4.0 - Q));
 
         l1 = c2 / 3.0 + 2 * r * cos_t3;
         l2 = c2 / 3.0 - r * (cos_t3 + M_SQRT_3 * sin_t3);

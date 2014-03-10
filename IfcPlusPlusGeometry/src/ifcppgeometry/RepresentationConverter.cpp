@@ -22,6 +22,7 @@
 #include <carve/poly.hpp>
 #include <carve/polyhedron_base.hpp>
 #include <carve/csg_triangulator.hpp>
+#include <carve/mesh_simplify.hpp>
 
 #include "ifcpp/IFC4/include/IfcProduct.h"
 #include "ifcpp/IFC4/include/IfcProductRepresentation.h"
@@ -427,7 +428,6 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	{
 		std::vector<shared_ptr<IfcConnectedFaceSet> >& vec_face_sets = surface_model->m_FbsmFaces;
 		std::vector<shared_ptr<IfcConnectedFaceSet> >::iterator it_face_sets;
-
 		
 		for( it_face_sets=vec_face_sets.begin(); it_face_sets!=vec_face_sets.end(); ++it_face_sets )
 		{
@@ -612,8 +612,20 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 	{
 		shared_ptr<carve::mesh::MeshSet<3> >& product_meshset = item_data->item_meshsets[i_product_meshset];
 
-		std::vector<weak_ptr<IfcRelVoidsElement> > vec_rel_voids( ifc_element->m_HasOpenings_inverse );
+		bool product_meshset_ok = ConverterOSG::checkMeshSet( product_meshset, strs_err, product_id );
+		if( !product_meshset_ok )
+		{
+			continue;
+		}
+		
+		if( m_geom_settings->m_use_mesh_simplifier_before_csg )
+		{
+			// simplify mesh
+			carve::mesh::MeshSimplifier simplifier;
+			simplifier.improveMesh( product_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+		}
 
+		std::vector<weak_ptr<IfcRelVoidsElement> > vec_rel_voids( ifc_element->m_HasOpenings_inverse );
 		if( vec_rel_voids.size() > 0 )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> > meshset_openings;
@@ -630,7 +642,7 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 					continue;
 				}
 
-				int opening_id = opening->getId();
+				const int opening_id = opening->getId();
 
 				// opening can have its own relative placement
 				shared_ptr<IfcObjectPlacement>	opening_placement = opening->m_ObjectPlacement;			//optional
@@ -642,8 +654,7 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 				}
 
 				std::vector<shared_ptr<IfcRepresentation> >& vec_opening_representations = opening->m_Representation->m_Representations;
-				std::vector<shared_ptr<IfcRepresentation> >::iterator it_representations;
-				for( it_representations=vec_opening_representations.begin(); it_representations!=vec_opening_representations.end(); ++it_representations )
+				for( std::vector<shared_ptr<IfcRepresentation> >::iterator it_representations=vec_opening_representations.begin(); it_representations!=vec_opening_representations.end(); ++it_representations )
 				{
 					shared_ptr<IfcRepresentation> opening_representation = (*it_representations);
 
@@ -672,10 +683,10 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 						strs_err << "subtractOpenings: convertIfcRepresentation failed at opening id " << opening_id << std::endl;
 					}
 
-					std::vector<shared_ptr<ItemData> >& opening_representation_items = opening_representation_data->vec_item_data;
-					for( int i_item=0; i_item<opening_representation_items.size(); ++i_item )
+					std::vector<shared_ptr<ItemData> >& vec_opening_items = opening_representation_data->vec_item_data;
+					for( int i_item=0; i_item<vec_opening_items.size(); ++i_item )
 					{
-						shared_ptr<ItemData> opening_item_data = opening_representation_items[i_item];
+						shared_ptr<ItemData> opening_item_data = vec_opening_items[i_item];
 						opening_item_data->createMeshSetsFromClosedPolyhedrons();
 
 						std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_opening_meshsets = opening_item_data->item_meshsets.begin();
@@ -689,10 +700,11 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 								continue;
 							}
 
-							bool product_meshset_ok = ConverterOSG::checkMeshSet( product_meshset, strs_err, product_id );
-							if( !product_meshset_ok )
+							if( m_geom_settings->m_use_mesh_simplifier_before_csg )
 							{
-								continue;
+								// simplify mesh
+								carve::mesh::MeshSimplifier simplifier2;
+								simplifier2.improveMesh( opening_meshset_single.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
 							}
 
 							// do the subtraction
@@ -701,8 +713,11 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 							try
 							{
 								carve::csg::CSG csg;
-								csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-								result_meshset = shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( product_meshset.get(), opening_meshset_single.get(), carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE ) );
+								if( m_geom_settings->m_set_process_output_face )
+								{
+									csg.hooks.registerHook(new carve::csg::CarveTriangulator(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+								}
+								result_meshset = shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( product_meshset.get(), opening_meshset_single.get(), carve::csg::CSG::A_MINUS_B, NULL, m_geom_settings->m_classify_type ) );
 							}
 							catch( IfcPPException& e )
 							{
@@ -723,46 +738,29 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 							{
 								csg_operation_successful = false;
 							}
-						
+
 							bool result_meshset_ok = ConverterOSG::checkMeshSet( result_meshset, strs_err, product_id );
 							if( result_meshset_ok )
 							{
+								if( m_geom_settings->m_use_mesh_simplifier_after_csg )
+								{
+									carve::mesh::MeshSimplifier simplifier;
+									simplifier.improveMesh( result_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+								}
 								product_meshset = result_meshset;
 							}
 							else
 							{
-								csg_operation_successful = true;
-								try
-								{
-									carve::csg::CSG csg;
-									//csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-									result_meshset = shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( product_meshset.get(), opening_meshset_single.get(), carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE ) );
-								}
-								catch(...)
-								{
-									csg_operation_successful = false;
-									strs_err << "subtractOpenings: csg operation failed" << std::endl;
-								}
-
-								bool result_meshset_ok = ConverterOSG::checkMeshSet( result_meshset, strs_err, -1 );
-								if( !result_meshset_ok )
-								{
-									csg_operation_successful = false;
-								}
-
-								if( csg_operation_successful )
-								{
-									product_meshset = result_meshset;
-								}
+								csg_operation_successful = false;
 							}
 
 #ifdef _DEBUG
 							if( !csg_operation_successful )
 							{
-								
 								strs_err << "subtractOpenings: csg operation failed at product id " << product_id << std::endl;
 								renderMeshsetInDebugViewer( product_meshset, osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f), true );
 								renderMeshsetInDebugViewer( opening_meshset_single, osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
+								ConverterOSG::dumpMeshsets( product_meshset, opening_meshset_single, shared_ptr<carve::mesh::MeshSet<3> >() );
 							}
 #endif
 						}

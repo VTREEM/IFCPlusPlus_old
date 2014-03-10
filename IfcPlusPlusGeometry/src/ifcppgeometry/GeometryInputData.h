@@ -36,14 +36,14 @@ public:
 	{
 		for( unsigned int i=0; i<item_closed_mesh_data.size(); ++i )
 		{
-			shared_ptr<carve::input::PolyhedronData>& first_operand_poly_data = item_closed_mesh_data[i];
-			if( first_operand_poly_data->getVertexCount() < 3 )
+			shared_ptr<carve::input::PolyhedronData>& poly_data = item_closed_mesh_data[i];
+			if( poly_data->getVertexCount() < 3 )
 			{
 				continue;
 			}
 
-			shared_ptr<carve::mesh::MeshSet<3> > first_operand_meshset( first_operand_poly_data->createMesh(carve::input::opts()) );
-			item_meshsets.push_back( first_operand_meshset );
+			shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve::input::opts()) );
+			item_meshsets.push_back( meshset );
 		}
 		item_closed_mesh_data.clear();
 	}

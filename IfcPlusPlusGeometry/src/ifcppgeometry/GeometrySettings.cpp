@@ -17,6 +17,15 @@ GeometrySettings::GeometrySettings()
 {
 	m_num_vertices_per_circle = 20;
 	m_min_num_vertices_per_arc = 6;
+
+	m_min_colinearity = 0.01;
+	m_min_delta_v = 0.01;
+	m_min_normal_angle = 0.01;
+	m_use_mesh_simplifier_after_csg = false;
+	m_use_mesh_simplifier_before_csg = false;
+	m_use_mesh_simplifier_before_draw = false;
+	m_set_process_output_face = true;
+	m_classify_type = carve::csg::CSG::CLASSIFY_NORMAL;
 }
 
 GeometrySettings::~GeometrySettings()

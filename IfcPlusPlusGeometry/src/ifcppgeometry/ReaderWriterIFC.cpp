@@ -55,6 +55,7 @@
 #include <ifcpp/model/UnitConverter.h>
 
 #include <carve/csg_triangulator.hpp>
+#include <carve/mesh_simplify.hpp>
 
 #include "GeometrySettings.h"
 #include "UnhandledRepresentationException.h"
@@ -719,6 +720,19 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->item_meshsets.begin(); it_meshsets != item_data->item_meshsets.end(); ++it_meshsets )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> >& item_meshset = (*it_meshsets);
+
+			if( m_geom_settings->m_use_mesh_simplifier_before_draw )
+			{
+				try
+				{
+					carve::mesh::MeshSimplifier simplifier;
+					simplifier.improveMesh( item_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+				}
+				catch( carve::exception& e )
+				{
+					strs_err << "improveMesh failed (" << e.str() << ") on product id " << product_id << std::endl;
+				}
+			}
 
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
 			ConverterOSG::drawMeshSet( item_meshset, geode_result );
