@@ -17,6 +17,7 @@ set(IFCPPGEOMETRY_HEADER_FILES
   src/ifcppgeometry/FaceConverter.h
   src/ifcppgeometry/GeometryInputData.h
   src/ifcppgeometry/GeometrySettings.h
+  src/ifcppgeometry/GeomUtils.h
   src/ifcppgeometry/PlacementConverter.h
   src/ifcppgeometry/ProfileCache.h
   src/ifcppgeometry/ProfileConverter.h
@@ -26,7 +27,6 @@ set(IFCPPGEOMETRY_HEADER_FILES
   src/ifcppgeometry/SolidModelConverter.h
   src/ifcppgeometry/StylesConverter.h
   src/ifcppgeometry/UnhandledRepresentationException.h
-  src/ifcppgeometry/Utility.h
 )
 
 set(IFCPPGEOMETRY_SOURCE_FILES 
@@ -34,6 +34,7 @@ set(IFCPPGEOMETRY_SOURCE_FILES
   src/ifcppgeometry/CurveConverter.cpp
   src/ifcppgeometry/FaceConverter.cpp
   src/ifcppgeometry/GeometrySettings.cpp
+  src/ifcppgeometry/GeomUtils.cpp
   src/ifcppgeometry/PlacementConverter.cpp
   src/ifcppgeometry/ProfileCache.cpp
   src/ifcppgeometry/ProfileConverter.cpp
@@ -42,7 +43,6 @@ set(IFCPPGEOMETRY_SOURCE_FILES
   src/ifcppgeometry/SectionedSpine.cpp
   src/ifcppgeometry/SolidModelConverter.cpp
   src/ifcppgeometry/StylesConverter.cpp
-  src/ifcppgeometry/Utility.cpp
 )
 
 find_package(Boost 1.53)
@@ -57,6 +57,7 @@ endif(Boost_FOUND)
 INCLUDE_DIRECTORIES(${INCLUDE_DIRECTORIES} ${CARVE_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${INCLUDE_DIRECTORIES} ${CARVE_SOURCE_DIR}/include)
 INCLUDE_DIRECTORIES(${INCLUDE_DIRECTORIES} ${CARVE_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(${INCLUDE_DIRECTORIES} ${CARVE_SOURCE_DIR}/src/common)
 INCLUDE_DIRECTORIES(${INCLUDE_DIRECTORIES} ${CARVE_SOURCE_DIR}/src/include)
 INCLUDE_DIRECTORIES(${INCLUDE_DIRECTORIES} ${CARVE_BINARY_DIR}/include) # For the generated Config file
 
