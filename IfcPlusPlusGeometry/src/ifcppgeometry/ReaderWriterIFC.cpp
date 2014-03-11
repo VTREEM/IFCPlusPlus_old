@@ -382,6 +382,11 @@ void ReaderWriterIFC::createGeometry()
 						// Build the shape representing the product, if required
 						convertIfcProduct( product, product_shape );
 					}
+					else
+					{
+						vec_products.pop_back();
+					}
+
 				}
 				catch( IfcPPException& e)
 				{
@@ -464,6 +469,11 @@ void ReaderWriterIFC::createGeometry()
 				// Build the shape representing the product, if required
 				convertIfcProduct( product, product_shape );
 			}
+			else
+			{
+				vec_products.pop_back();
+			}
+
 		}
 		catch( IfcPPException& e)
 		{
@@ -935,12 +945,12 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	// enable transparency for certain objects
 	if( dynamic_pointer_cast<IfcSpace>(product) )
 	{
-		product_switch->setStateSet( m_glass_stateset );
+		//product_switch->setStateSet( m_glass_stateset );
 	}
 	else if( dynamic_pointer_cast<IfcCurtainWall>(product) || dynamic_pointer_cast<IfcWindow>(product) )
 	{
 		// TODO: make only glass part of window transparent
-		product_switch->setStateSet( m_glass_stateset );
+		//product_switch->setStateSet( m_glass_stateset );
 	}
 	else if( dynamic_pointer_cast<IfcSite>(product) )
 	{
