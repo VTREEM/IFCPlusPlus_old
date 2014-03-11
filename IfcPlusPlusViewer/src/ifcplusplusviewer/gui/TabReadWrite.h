@@ -17,11 +17,7 @@
 #include "ifcpp/model/shared_ptr.h"
 
 #include <QtCore/qglobal.h>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-	#include <QtGui/qwidget.h>
-#else
-	#include <QtWidgets/qwidget.h>
-#endif
+#include <QtWidgets/qwidget.h>
 
 class QTextEdit;
 class QProgressBar;
@@ -32,7 +28,7 @@ class QPushButton;
 class QSplitter;
 class QTreeWidgetItem;
 class StoreyWidget;
-class IfcTreeWidget;
+//class IfcTreeWidget;
 
 class ViewerWidget;
 class IfcPPEntity;
@@ -60,9 +56,7 @@ public slots:
 	void slotLoadIfcFile( std::string& path );
 	void slotRecentFilesIndexChanged(int);
 	void updateRecentFilesCombo();
-	void slotObjectsSelected( std::map<int, shared_ptr<IfcPPEntity> >& map );
-	void slotTreewidgetSelectionChanged( QTreeWidgetItem* current, QTreeWidgetItem* previous );
-	void slotTreewidgetSelectionChanged();
+	
 
 protected:
 	void keyPressEvent( QKeyEvent* event );
@@ -80,11 +74,11 @@ private:
 	QWidget*		m_io_widget;
 
 	StoreyWidget*	m_storey_widget;
-	IfcTreeWidget*	m_ifc_tree_widget;
+	//IfcTreeWidget*	m_ifc_tree_widget;
 
 	QLineEdit*		m_le_path_write;
 	QSplitter*		m_io_splitter;
-	bool			m_block_selection_signals;
+	//bool			m_block_selection_signals;
 
 private slots:
 	void slotAddOtherIfcFileClicked();

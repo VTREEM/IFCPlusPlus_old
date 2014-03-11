@@ -320,7 +320,7 @@ void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T
 		if( arg_complete != NULL )
 		{
 			if( *arg_complete == '$' )
-			{
+			{ 
 				// empty list
 				return;
 			}
@@ -332,6 +332,7 @@ void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T
 	std::string arg( pos_opening+1, pos_closing-pos_opening-1 );
 	std::vector<int> list_items;
 	tokenizeEntityList( arg, list_items );
+	std::vector<int> vec_not_found;
 	std::map<int,shared_ptr<IfcPPEntity> >::const_iterator it_entity;
 	for( unsigned int i=0; i<list_items.size(); ++i )
 	{
@@ -342,6 +343,29 @@ void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T
 			shared_ptr<IfcPPEntity> found_obj = it_entity->second;
 			vec.push_back( dynamic_pointer_cast<T>(found_obj) );
 		}
+		else
+		{
+			vec_not_found.push_back( id );
+		}
+	}
+
+	// in case there are unresolved references
+	if( vec_not_found.size() > 0 )
+	{
+		std::stringstream err;
+		err << "object with id ";
+		
+		for( unsigned int i=0; i<vec_not_found.size(); ++i )
+		{
+			err	<< vec_not_found[i];
+			if( i <vec_not_found.size()-1 )
+			{
+				err << ", ";
+			}
+		}
+
+		err << "  not found" << std::endl;
+		throw IfcPPException( err.str(), __func__ );
 	}
 }
 

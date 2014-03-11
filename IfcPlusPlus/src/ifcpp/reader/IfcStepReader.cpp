@@ -828,16 +828,10 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 			break;
 		
 		case IFCPROPERTYSINGLEVALUE:
-			while( args.size() < 4 )
-			{
-				args.push_back( "$" );
-			}
+			while( args.size() < 4 ){	args.push_back( "$" );	}
 			break;
 		case IFCPROJECT:
-			while( args.size() < 9 )
-			{
-				args.push_back( "$" );
-			}
+			while( args.size() < 9 ){	args.push_back( "$" );	}
 			break;
 		default:
 			break;
@@ -850,239 +844,190 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 		{
 			// B
 		case IFCBEAM:
-			args.push_back( "$" );
+			while( args.size() < 9 ){	args.push_back( "$" );	}
 			break;
 		case IFCBUILDINGELEMENTPART:
-			args.push_back( "$" );
+			while( args.size() < 9 ){	args.push_back( "$" );	}
 			break;
 			// C
 		case IFCCLASSIFICATION:
-			args.push_back( "$" );
-			args.push_back( "$" );
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 7 ){	args.push_back( "$" );	}
 			break;
 		case IFCCLASSIFICATIONREFERENCE:
-			if( args.size() < 5 )
-				args.push_back( "$" );	//Description	 :	OPTIONAL IfcText;
-			if( args.size() < 6 )
-				args.push_back( "$" );	//Sort	 :	OPTIONAL IfcIdentifier;
+			while( args.size() < 6 ){	args.push_back( "$" );	}
 			break;
 		case IFCCOLUMN:
-			args.push_back( "$" );
+			while( args.size() < 9 ){	args.push_back( "$" );	}
+			break;
+		case IFCCSHAPEPROFILEDEF:
+			while( args.size() < 8 ){	args.push_back( "$" );	}
+			while( args.size() > 8 ){	args.pop_back();	}
 			break;
 		case IFCCURTAINWALL:
-			args.push_back( "$" );
+			while( args.size() < 9 ){	args.push_back( "$" );	}
 			break;
 		case IFCCURVESTYLE:
-			while( args.size() < 5 )
-			{
-				args.push_back( "$" );
-			}
-			
-			// workaround to fix export bugs from some CAD programs
-			//if( args.size() > 4 )
-			//{
-			//	size_t replace_pos = args[2].find( "IFCDESCRIPTIVEMEASURE" );
-			//	if( replace_pos != std::string::npos )
-			//	{
-			//		args[2] = "$";
-			//	}
-			//}
-
+			while( args.size() < 5 ){	args.push_back( "$" );}
 			break;
 			//D
 		case IFCDISCRETEACCESSORY:
-			args.push_back( "$" );
+			while( args.size() < 9 ){	args.push_back( "$" );	}
 			break;
 		case IFCDISCRETEACCESSORYTYPE:
-			args.push_back( "$" );
+			while( args.size() < 10 ){	args.push_back( "$" );	}
 			break;
 		case IFCDISTRIBUTIONPORT:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 10 ){	args.push_back( "$" );	}
 			break;
-		//IfcDocumentReference
 		case IFCDOCUMENTREFERENCE:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 5 ){	args.push_back( "$" );	}
 			break;
 		case IFCDOOR:
-			while( args.size() < 13 )
-			{
-				args.push_back( "$" );
-			}
+			while( args.size() < 13 ){	args.push_back( "$" );	}
 			break;
 		case IFCDOORLININGPROPERTIES:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 17 ){	args.push_back( "$" );	}
 			break;
 			// F
 		case IFCFILLAREASTYLE:
-			args.push_back( "$" );
+			while( args.size() < 3 ){	args.push_back( "$" );	}
+			break;
+		case IFCFLOWTERMINAL:
+			while( args.size() < 8 ){	args.push_back( "$" );	}
+			while( args.size() > 8 ) {	args.pop_back();	}
 			break;
 		case IFCFURNITURETYPE:
-			args.push_back( "$" );
+			while( args.size() < 11 ){	args.push_back( "$" );	}
 			break;
 
 			// I
 		case IFCISHAPEPROFILEDEF:
-			while( args.size() < 10 )
-			{
-				args.push_back( "$" );
-			}
-			
+			while( args.size() < 10 ){	args.push_back( "$" );	}
 			break;
 
 			// L
 		case IFCLIBRARYREFERENCE:
-			args.push_back( "$" );
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 6 ) {	args.push_back( "$" );	}
 			break;
 		case IFCLSHAPEPROFILEDEF:
-			if( args.size() == 11 )
-			{
-				args.pop_back();
-				args.pop_back();
-			}
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
+			while( args.size() > 9 ) {	args.pop_back();	}
 			break;
 			// M
 		case IFCMATERIAL:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 3 ) {	args.push_back( "$" );	}
 			break;
 		case IFCMATERIALLAYER:
-			args.push_back( "$" );
-			args.push_back( "$" );
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 7 ) {	args.push_back( "$" );	}
 			break;
 		case IFCMATERIALLAYERSET:
-			args.push_back( "$" );
+			while( args.size() < 3 ) {	args.push_back( "$" );	}
 			break;
 		case IFCMATERIALLAYERSETUSAGE:
-			args.push_back( "$" );
+			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
 		case IFCMECHANICALFASTENER:
-			args.push_back( "$" );
+			while( args.size() < 11 ) {	args.push_back( "$" );	}
 			break;
 		case IFCMECHANICALFASTENERTYPE:
-			args.push_back( "$" );
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 12 ) {	args.push_back( "$" );	}
 			break;
 
 		case IFCMEMBER:
-			args.push_back( "$" );
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
-
 		
 			// O
 		case IFCOPENINGELEMENT:
-			args.push_back( "$" );
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
 
 			// P
 		case IFCPLATE:
-			args.push_back( "$" );
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
 		case IFCPROPERTYBOUNDEDVALUE:
-			args.push_back( "$" );
+			while( args.size() < 6 ) {	args.push_back( "$" );	}
 			break;
 
 			// Q
 		case IFCQUANTITYAREA:
-			args.push_back( "$" );
+			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
 		case IFCQUANTITYCOUNT:
-			args.push_back( "$" );
+			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
 		case IFCQUANTITYLENGTH:
-			args.push_back( "$" );
+			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
 		case IFCQUANTITYVOLUME:
-			args.push_back( "$" );
+			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
 		case IFCQUANTITYWEIGHT:
-			args.push_back( "$" );
+			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
 
 			// R
 		case IFCRAMPFLIGHT:
-			args.push_back( "$" );
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
 
 			// S
 		case IFCSIMPLEPROPERTYTEMPLATE:
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 12 ) {	args.push_back( "$" );	}
 			break;
 		case IFCSTAIRFLIGHT:
-			args.push_back( "$" );
+			while( args.size() < 13 ) {	args.push_back( "$" );	}
 			break;
 		case IFCSTRUCTURALANALYSISMODEL:
-			args.push_back( "$" );
+			while( args.size() < 10 ) {	args.push_back( "$" );	}
 			break;
 		case IFCSTRUCTURALPOINTCONNECTION:
-			args.push_back( "$" );
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
 		case IFCSTRUCTURALCURVEMEMBER:
-			args.push_back( "$" );
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
 		case IFCSURFACESTYLE:
-			if( args.size() < 3 )
-			{
-				args.insert( args.begin()+1, "$" );
-			}
+			while( args.size() < 3 ) {	args.insert( args.begin()+1, "$" );	}
 			break;
 		case IFCSYSTEMFURNITUREELEMENTTYPE:
-			args.push_back( "$" );
+			while( args.size() < 10 ) {	args.push_back( "$" );	}
 			break;
 
 			// T
 		case IFCTSHAPEPROFILEDEF:
-			if( args.size() == 13 )
-			{
-				args.pop_back();
-			}
+			while( args.size() < 12 ) {	args.push_back( "$" );	}
+			while( args.size() > 12 ) {	args.pop_back();	}
 			break;
 		
 		case IFCTEXTSTYLE:
-			while( args.size() < 5 )
-			{
-				args.push_back( "$" );
-			}
+			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
-			
+
+		case IFCTRANSPORTELEMENT:
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
+			while( args.size() > 9 ) {	args.pop_back();	}
+			break;
 
 			// U
 		case IFCUSHAPEPROFILEDEF:
-			if( args.size() == 11 )
-			{
-				args.pop_back();
-			}
+			while( args.size() < 10 ) {	args.push_back( "$" );	}
+			while( args.size() > 10 ) {	args.pop_back();	}
 			break;
+
 			// W
 		case IFCWALL:
-			while( args.size() < 13 )
-			{
-				args.push_back( "$" );
-			}
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
 		case IFCWALLSTANDARDCASE:
-			args.push_back( "$" );
+			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
 		case IFCWINDOW:
-			while( args.size() < 13 )
-			{
-				args.push_back( "$" );
-			}
+			while( args.size() < 13 ){	args.push_back( "$" );	}
 			break;
 		case IFCWINDOWLININGPROPERTIES:
-			args.push_back( "$" );
-			args.push_back( "$" );
-			args.push_back( "$" );
+			while( args.size() < 16 ){	args.push_back( "$" );	}
 			break;
 
 		case IFCZONE:
@@ -1093,38 +1038,6 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 		}
 	}
 
-	//if( version <= IfcPPModel::IFC4 )
-	//{
-	//	switch( type_enum )
-	//	{
-	//		// D
-	//	case IFCDOOR:
-	//		if( args.size() == 12 )
-	//			args.push_back( "$" );
-	//		break;
-
-	//		// I
-	//	case IFCISHAPEPROFILEDEF:
-	//		while( args.size() < 10 )
-	//		{
-	//			args.push_back( "$" );
-	//			args.push_back( "$" );
-	//		}
-	//		break;
-
-	//		// M
-	//	case IFCMATERIALPROFILESETUSAGE:
-	//		if( args.size() == 2 )
-	//			args.push_back( "$" );
-	//		break;
-
-	//		// W
-	//	case IFCWINDOW:
-	//		if( args.size() == 12 )
-	//			args.push_back( "$" );
-	//		break;
-	//	}
-	//}
 	
 	//IfcRelDecomposes -> IfcRelAggregates
 }

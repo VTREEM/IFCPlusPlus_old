@@ -52,7 +52,7 @@ bool CmdLoadIfcFile::doCmd()
 	m_system->clearSelection();
 
 	osg::ref_ptr<ReaderWriterIFC> reader_writer = m_system->getReaderWriterIFC();
-	reader_writer->reset();
+	reader_writer->resetModel();
 	osg::ref_ptr<osgDB::ReaderWriter::Options> options = new osgDB::ReaderWriter::Options();
 	std::stringstream err;
 	osgDB::ReaderWriter::ReadResult res = osgDB::ReaderWriter::ReadResult::FILE_NOT_HANDLED;

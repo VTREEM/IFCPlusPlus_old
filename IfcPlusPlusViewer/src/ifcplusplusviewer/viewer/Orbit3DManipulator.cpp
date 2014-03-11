@@ -362,7 +362,10 @@ bool Orbit3DManipulator::handleMouseRelease( const osgGA::GUIEventAdapter& ea, o
 		if( !intersection_geometry_found )
 		{
 			// click to background -> unselect all
-			m_system->clearSelection();
+			if( m_system != NULL )
+			{
+				m_system->clearSelection();
+			}
 			
 		}
 	}
@@ -416,13 +419,13 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 	picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
 	SubGroupIntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
+
+	if( m_system == NULL )
+	{
+		return false;
+	}
 	osg::Group* model_node = m_system->getViewController()->getModelNode();
 	iv.apply( *cam, model_node );
-
-	//osgUtil::IntersectionVisitor iv( picker.get() );
-	//iv.apply( *(m_system->getViewController()->getModelNode()) );
-	//osg::Camera* cam = view->getCamera();
-	//cam->accept(iv);
 
 	if( picker->containsIntersections() )
 	{
@@ -466,6 +469,10 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 
 bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea, osgViewer::View* view )
 {
+	if( m_system == NULL )
+	{
+		return false;
+	}
 
 #ifdef POLYTOPE_INTERSECTOR
 	double mx = ea.getXnormalized();
@@ -576,7 +583,7 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 
 							//osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 1 ) );
 
-							shared_ptr<ReaderWriterIFC::ProductShape> read_result( new ReaderWriterIFC::ProductShape() );
+							shared_ptr<ShapeInputData> read_result( new ShapeInputData() );
 							osg::ref_ptr<ReaderWriterIFC> reader_writer( new ReaderWriterIFC() );
 							reader_writer->setModel( m_ifc_model );
 							reader_writer->convertIfcProduct( product_selected, read_result, &viewer );

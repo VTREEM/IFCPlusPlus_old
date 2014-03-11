@@ -23,15 +23,9 @@
 #include <osg/LightModel>
 
 #include <QtCore/qglobal.h>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-	#include <QtGui/qboxlayout.h>
-	#include <QtGui/qlabel.h>
-	#include <QtGui/qevent.h>
-#else
-	#include <QtWidgets/QVBoxLayout>
-	#include <QtWidgets/QLabel>
-	#include <QtGui/QKeyEvent>
-#endif
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtGui/QKeyEvent>
 
 #include <osgQt/GraphicsWindowQt>
 

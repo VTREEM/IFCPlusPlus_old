@@ -11,13 +11,11 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2011-07-18
-
 #pragma once
 
 #include <set>
 #include <osg/Matrix>
+#include "carve/math.hpp"
 #include "ifcpp/model/shared_ptr.h"
 
 class IfcObjectPlacement;
@@ -26,13 +24,6 @@ class IfcCartesianTransformationOperator;
 class IfcAxis2Placement2D;
 class IfcAxis2Placement3D;
 class UnitConverter;
-namespace carve
-{
-	namespace math
-	{
-		struct Matrix;
-	}
-}
 
 class PlacementConverter
 {

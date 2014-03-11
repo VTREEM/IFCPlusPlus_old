@@ -11,15 +11,14 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2011-07-18
-
 #pragma once
 
 #include <map>
 #include "shared_ptr.h"
-class IfcProject;
-class IfcSIPrefix;
+#include "ifcpp/IFC4/include/IfcProject.h"
+#include "ifcpp/IFC4/include/IfcSIPrefix.h"
+
+//\brief class to convert values from different units into meter and radian
 
 class UnitConverter
 {

@@ -12,22 +12,13 @@
 */
 
 #include <QtCore/qglobal.h>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-	#include <QtGui/qtoolbutton.h>
-	#include <QtGui/qboxlayout.h>
-	#include <QtGui/qcheckbox.h>
-	#include <QtGui/qradiobutton.h>
-	#include <QtGui/qbuttongroup.h>
-	#include <QtGui/qlabel.h>
-	
-#else
-	#include <QtWidgets/qtoolbutton.h>
-	#include <QtWidgets/qboxlayout.h>
-	#include <QtWidgets/qcheckbox.h>
-	#include <QtWidgets/qradiobutton.h>
-	#include <QtWidgets/qbuttongroup.h>
-	#include <QtWidgets/qlabel.h>
-#endif
+#include <QtCore/QSettings>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QBoxLayout>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QLabel>
 
 #include <osgGA/OrbitManipulator>
 
@@ -45,8 +36,36 @@
 
 TabView::TabView( IfcPlusPlusSystem* sys, ViewerWidget* vw ) : m_system(sys), m_vw(vw)
 {
+	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
+	QStringList keys = settings.allKeys();
+	
 	m_cull_front = false;
 	m_cull_back = false;
+	if( keys.contains( "cullFrontFaces" ) )
+	{
+		m_cull_front = settings.value("cullFrontFaces").toBool();
+	}
+	if( keys.contains( "cullBackFaces" ) )
+	{
+		m_cull_back = settings.value("cullBackFaces").toBool();
+	}
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
+
+	// cull face buttons
+	QCheckBox* cull_front_faces = new QCheckBox( "Cull front faces" );
+	if( m_cull_front )
+	{
+		cull_front_faces->setChecked( true );
+	}
+	connect( cull_front_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullFrontFaces( int ) ) );
+
+	QCheckBox* cull_back_faces = new QCheckBox( "Cull back faces" );
+	if( m_cull_back )
+	{
+		cull_back_faces->setChecked( true );
+	}
+	connect( cull_back_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullBackFaces( int ) ) );
+
 
 	// light button
 	QToolButton* btn_toggle_light = new QToolButton();
@@ -56,13 +75,6 @@ TabView::TabView( IfcPlusPlusSystem* sys, ViewerWidget* vw ) : m_system(sys), m_
 	btn_toggle_light->setCheckable( true );
 	btn_toggle_light->setChecked( true );
 	connect( btn_toggle_light,	SIGNAL( clicked() ),	this,	SLOT( slotToggleSceneLight() ) );
-	
-	// cull face buttons
-	QCheckBox* cull_front_faces = new QCheckBox( "Cull front faces" );
-	connect( cull_front_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullFrontFaces( int ) ) );
-
-	QCheckBox* cull_back_faces = new QCheckBox( "Cull back faces" );
-	connect( cull_back_faces, SIGNAL( stateChanged( int ) ), this, SLOT( slotCullBackFaces( int ) ) );
 
 	// perspective/parallel projection
 	//QRadioButton* radio_perspective = new QRadioButton("Perspective");
@@ -116,7 +128,10 @@ void TabView::slotCullFrontFaces( int state )
 	{
 		m_cull_front = false;
 	}
-	cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
+	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
+	settings.setValue("cullFrontFaces", m_cull_front );
+
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
 }
 
 void TabView::slotCullBackFaces( int state )
@@ -129,7 +144,10 @@ void TabView::slotCullBackFaces( int state )
 	{
 		m_cull_back = false;
 	}
-	cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
+	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
+	settings.setValue("cullBackFaces", m_cull_back );
+
+	GeomUtils::cullFrontBack( m_cull_front, m_cull_back, m_system->getViewController()->getRootNode()->getOrCreateStateSet() );
 }
 
 void TabView::slotProjectionButtonClicked( int btn )

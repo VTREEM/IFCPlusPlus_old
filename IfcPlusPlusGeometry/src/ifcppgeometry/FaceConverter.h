@@ -11,9 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-06
-
 #pragma once
 
 #include <carve/matrix.hpp>
