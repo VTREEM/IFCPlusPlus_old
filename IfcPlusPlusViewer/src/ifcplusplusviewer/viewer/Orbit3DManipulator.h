@@ -11,7 +11,7 @@ class IfcPlusPlusSystem;
 class Orbit3DManipulator : public osgGA::StandardManipulator
 {
     public:
-        Orbit3DManipulator( IfcPlusPlusSystem* k, int flags = UPDATE_MODEL_SIZE | COMPUTE_HOME_USING_BBOX | PROCESS_MOUSE_WHEEL );
+        Orbit3DManipulator( IfcPlusPlusSystem* sys, int flags = UPDATE_MODEL_SIZE | COMPUTE_HOME_USING_BBOX | PROCESS_MOUSE_WHEEL );
         Orbit3DManipulator( const Orbit3DManipulator& om, const osg::CopyOp& copyOp = osg::CopyOp::SHALLOW_COPY );
 
 		// inherited from osg::Object

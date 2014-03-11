@@ -11,34 +11,15 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2011-11-14
-
 #pragma once
 
 #include <osg/Matrix>
 #include <osg/Geode>
 #include "ifcpp/model/shared_ptr.h"
 
-namespace carve
-{
-	namespace input
-	{
-		struct PolyhedronData;
-		struct PolylineSetData;
-	}
-
-	namespace poly
-	{
-		class Polyhedron;
-	}
-	namespace mesh
-	{
-		template<unsigned int ndim> class Face;
-		template<unsigned int ndim> class Mesh;
-		template<unsigned int ndim> class MeshSet;
-	}
-}
+#include "carve/input.hpp"
+#include "carve/poly.hpp"
+#include "carve/mesh.hpp"
 
 class ConverterOSG
 {
@@ -52,9 +33,15 @@ public:
 	static void drawMeshSet(	const shared_ptr<carve::mesh::MeshSet<3> >& mesh_set,			osg::Geode* geode, bool add_color_array = false );
 	static void drawPolyhedron( const shared_ptr<carve::poly::Polyhedron>& polyhedron,			osg::Geode* geode, bool add_color_array = false );
 	static void drawPolyline(	const shared_ptr<carve::input::PolylineSetData>& polyline_data, osg::Geode* geode, bool add_color_array = false );
-	static bool checkMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id );
-	static void convertOsgGroup( const osg::Group* src, carve::input::PolyhedronData& target );
-	static void createTest( osg::Group* group );
+	static void drawVertexNumbers( const shared_ptr<carve::input::PolyhedronData> poly, const osg::Vec4f& color, osg::Geode* geode );
+	static bool checkMeshSet(	const shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id );
+	static double computeSurfaceAreaOfGroup( const osg::Group* grp );
+
+	static void createTest( osg::Group* group, osg::Group* root );
 	static void createTest2( osg::Group* group );
 	static void createTest4( osg::Group* group );
+
+#ifdef _DEBUG
+	static void dumpMeshsets( shared_ptr<carve::mesh::MeshSet<3> >& operand1, shared_ptr<carve::mesh::MeshSet<3> >& operand2, shared_ptr<carve::mesh::MeshSet<3> >& result_meshset );
+#endif
 };

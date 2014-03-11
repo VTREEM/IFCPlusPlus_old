@@ -43,7 +43,7 @@
 #include "GeomUtils.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void WireFrameModeOn( osg::StateSet* state )
+void GeomUtils::WireFrameModeOn( osg::StateSet* state )
 {
 	osg::ref_ptr<osg::PolygonMode> polygon_mode = dynamic_cast<osg::PolygonMode*>( state->getAttribute( osg::StateAttribute::POLYGONMODE ));
 	if(  !polygon_mode )
@@ -53,7 +53,8 @@ void WireFrameModeOn( osg::StateSet* state )
 	}
 	polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE );
 }
-void WireFrameModeOn( osg::Node* node )
+
+void GeomUtils::WireFrameModeOn( osg::Node* node )
 {
 	if( node == NULL )
 		return;
@@ -61,17 +62,9 @@ void WireFrameModeOn( osg::Node* node )
 	osg::StateSet* state = node->getOrCreateStateSet();
 	WireFrameModeOn( state );
 }
-void WireFrameModeOn( osg::Drawable* drawable )
-{
-	if( drawable == NULL )
-		return;
-
-	osg::StateSet* state = drawable->getOrCreateStateSet();
-	WireFrameModeOn( state );
-}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void WireFrameModeOff( osg::StateSet* state )
+void GeomUtils::WireFrameModeOff( osg::StateSet* state )
 {
 	osg::PolygonMode *polygon_mode = dynamic_cast< osg::PolygonMode* >( state->getAttribute( osg::StateAttribute::POLYGONMODE ));
 
@@ -82,7 +75,7 @@ void WireFrameModeOff( osg::StateSet* state )
 	}
 	polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::FILL );
 }
-void WireFrameModeOff( osg::Node *srisdNode )
+void GeomUtils::WireFrameModeOff( osg::Node *srisdNode )
 {
 	if( srisdNode == NULL )
 		return;
@@ -90,16 +83,8 @@ void WireFrameModeOff( osg::Node *srisdNode )
 	osg::StateSet *state = srisdNode->getOrCreateStateSet();
 	WireFrameModeOff( state );
 }
-void WireFrameModeOff( osg::Drawable* drawable )
-{
-	if( drawable == NULL )
-		return;
 
-	osg::StateSet *state = drawable->getOrCreateStateSet();
-	WireFrameModeOff( state );
-}
-
-void HiddenLineModeOn( osg::Group* node )
+void GeomUtils::HiddenLineModeOn( osg::Group* node )
 {
 	return;
 	osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet(); 
@@ -120,12 +105,12 @@ void HiddenLineModeOn( osg::Group* node )
 	ss->setAttributeAndModes(po,osg::StateAttribute::ON); 
 
 }
-void HiddenLineModeOff( osg::Group* node )
+void GeomUtils::HiddenLineModeOff( osg::Group* node )
 {
 
 }
 
-void cullFrontBack( bool front, bool back, osg::StateSet* stateset )
+void GeomUtils::cullFrontBack( bool front, bool back, osg::StateSet* stateset )
 {
 	if( front )
 	{
@@ -170,7 +155,7 @@ void cullFrontBack( bool front, bool back, osg::StateSet* stateset )
 
 //#define COORDINATE_AXES_NO_COLORS
 
-osg::ref_ptr<osg::Geode> createCoordinateAxes()
+osg::ref_ptr<osg::Geode> GeomUtils::createCoordinateAxes()
 {
 	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 	osg::ref_ptr<osg::StateSet> stateset = geode->getOrCreateStateSet();
@@ -265,7 +250,7 @@ osg::ref_ptr<osg::Geode> createCoordinateAxes()
 	return geode;
 }
 
-osg::ref_ptr<osg::Geode> createCoordinateGrid()
+osg::ref_ptr<osg::Geode> GeomUtils::createCoordinateGrid()
 {
 	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 	osg::ref_ptr<osg::StateSet> stateset = geode->getOrCreateStateSet();
@@ -298,7 +283,7 @@ osg::ref_ptr<osg::Geode> createCoordinateGrid()
 	return geode;
 }
 
-osg::ref_ptr<osg::Group> createCoordinateAxesArrows()
+osg::ref_ptr<osg::Group> GeomUtils::createCoordinateAxesArrows()
 {
 	float cone_tip = 1.2f;
 	float cone_base = 1.f;
@@ -374,7 +359,7 @@ osg::ref_ptr<osg::Group> createCoordinateAxesArrows()
 	return group;
 }
 
-osg::ref_ptr<osg::Geode> createQuarterCircles()
+osg::ref_ptr<osg::Geode> GeomUtils::createQuarterCircles()
 {
 	osg::ref_ptr<osg::DrawElementsUInt> circle_x = new osg::DrawElementsUInt( osg::PrimitiveSet::TRIANGLE_FAN, 13 );
 	osg::ref_ptr<osg::DrawElementsUInt> circle_y = new osg::DrawElementsUInt( osg::PrimitiveSet::TRIANGLE_FAN, 13 );
@@ -430,7 +415,7 @@ osg::ref_ptr<osg::Geode> createQuarterCircles()
 	return geode_circle;
 }
 
-carve::geom::vector<3> computePolygonCentroid( const std::vector<carve::geom::vector<3> >& polygon )
+carve::geom::vector<3> GeomUtils::computePolygonCentroid( const std::vector<carve::geom::vector<3> >& polygon )
 {
 	carve::geom::vector<3> polygon_centroid( carve::geom::VECTOR(0, 0, 0) );
 	for( std::vector<carve::geom::vector<3> >::const_iterator it = polygon.begin(); it != polygon.end(); ++it )
@@ -442,7 +427,7 @@ carve::geom::vector<3> computePolygonCentroid( const std::vector<carve::geom::ve
 	return polygon_centroid;
 }
 
-osg::Vec3d computePolygonNormal( const osg::Vec3dArray* polygon )
+osg::Vec3d GeomUtils::computePolygonNormal( const osg::Vec3dArray* polygon )
 {
 	const int num_points = polygon->size();
 	osg::Vec3d polygon_normal(0, 0, 0);
@@ -458,7 +443,7 @@ osg::Vec3d computePolygonNormal( const osg::Vec3dArray* polygon )
 	return polygon_normal;
 }
 
-osg::Vec3f computePolygonNormal( const osg::Vec3Array* polygon )
+osg::Vec3f GeomUtils::computePolygonNormal( const osg::Vec3Array* polygon )
 {
 	const int num_points = polygon->size();
 	osg::Vec3f polygon_normal(0, 0, 0);
@@ -474,7 +459,7 @@ osg::Vec3f computePolygonNormal( const osg::Vec3Array* polygon )
 	return polygon_normal;
 }
 
-carve::geom::vector<3> computePolygonNormal( const std::vector<carve::geom::vector<3> >& polygon )
+carve::geom::vector<3> GeomUtils::computePolygonNormal( const std::vector<carve::geom::vector<3> >& polygon )
 {
 	carve::geom::vector<3> polygon_normal( carve::geom::VECTOR(0, 0, 0) );
 	bool last_loop = false;
@@ -500,7 +485,7 @@ carve::geom::vector<3> computePolygonNormal( const std::vector<carve::geom::vect
 	return polygon_normal;
 }
 
-carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::vector<2> >& polygon )
+carve::geom::vector<3> GeomUtils::computePolygon2DNormal( const std::vector<carve::geom::vector<2> >& polygon )
 {
 	const int num_points = polygon.size();
 	carve::geom::vector<3> polygon_normal( carve::geom::VECTOR(0, 0, 0) );
@@ -514,7 +499,7 @@ carve::geom::vector<3> computePolygon2DNormal( const std::vector<carve::geom::ve
 	return polygon_normal;
 }
 
-void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loops_input, const carve::geom::vector<3> extrusion_vector, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
+void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loops_input, const carve::geom::vector<3> extrusion_vector, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
 {
 	if( face_loops_input.size() == 0 )
 	{
@@ -561,18 +546,13 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 			}
 		}
 
-		if( it_face_loops == face_loops_input.begin() )
-		{
-		}
-
-		std::vector<carve::geom2d::P2> loop_2d( loop );
-
 		// check winding order
 		bool reverse_loop = false;
+		std::vector<carve::geom2d::P2> loop_2d( loop );
 		carve::geom::vector<3>  normal_2d = computePolygon2DNormal( loop_2d );
 		if( it_face_loops == face_loops_input.begin() )
 		{
-			normal_first_loop = computePolygon2DNormal( loop );
+			normal_first_loop = normal_2d;
 			if( normal_2d.z < 0 )
 			{
 				reverse_loop = true;
@@ -838,438 +818,7 @@ void extrude( const std::vector<std::vector<carve::geom::vector<2> > >& face_loo
 	}
 }
 
-void extrude3D( const std::vector<std::vector<carve::geom::vector<3> > >& face_loops, const carve::geom::vector<3> extrusion_vector, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err )
-{
-	// TODO: rotate face_loops to xy plane, perform a 2D extrude(), then rotate all points back to original plane
-	if( face_loops.size() == 0 )
-	{
-		return;
-	}
-	if( poly_data->points.size() > 0 )
-	{
-		err << "extrude: points vec should be empty" << std::endl;
-		return;
-	}
-	if( poly_data->getFaceCount() > 0 )
-	{
-		err << "extrude: PolyhedronData::faceCount should be 0" << std::endl;
-		return;
-	}
-
-	// project face into 2d plane
-	std::vector<std::vector<carve::geom2d::P2> >	face_loops_projected;
-	std::vector<std::vector<double> >				face_loops_3rd_dim;
-	ProjectionPlane face_plane_projected = UNDEFINED;
-	bool flip_faces = false;
-
-	// figure 1: loops and indexes
-	//  3----------------------------2
-	//  |                            |
-	//  |   1-------------------2    |3---------2
-	//  |   |                   |    |          |
-	//  |   |                   |    |          |face_loops[2]
-	//  |   0---face_loops[1]---3    |0---------1
-	//  |                            |
-	//  0-------face_loops[0]--------1
-
-	carve::geom::vector<3> normal_first_loop;
-	for( std::vector<std::vector<carve::geom::vector<3> > >::const_iterator it_face_loops = face_loops.begin(); it_face_loops != face_loops.end(); ++it_face_loops )
-	{
-		const std::vector<carve::geom::vector<3> >& loop = (*it_face_loops);
-
-		if( loop.size() < 3 )
-		{
-			err << "loop.size() < 3" << std::endl;
-			if( it_face_loops == face_loops.begin() )
-			{
-				break;
-			}
-			else
-			{
-				continue;
-			}
-		}
-
-		if( it_face_loops == face_loops.begin() )
-		{
-			normal_first_loop = computePolygonNormal( loop );
-
-			// figure out the best 2D plane to project to
-			double nx = std::abs(normal_first_loop.x);
-			double ny = std::abs(normal_first_loop.y);
-			double nz = std::abs(normal_first_loop.z);
-			if( nz > nx && nz >= ny )
-			{
-				face_plane_projected = XY_PLANE;
-			}
-			else if( nx >= ny && nx >= nz )
-			{
-				face_plane_projected = YZ_PLANE;
-			}
-			else if( ny > nx && ny >= nz )
-			{
-				face_plane_projected = XZ_PLANE;
-			}
-			else
-			{
-				err << "extrude: unable to project to plane: nx" << nx << " ny " << ny << " nz " << nz << std::endl;
-				return;
-			}
-		}
-
-		std::vector<carve::geom2d::P2> loop_2d;
-		std::vector<double> loop_3rd_dim;
-
-		// project face into 2d plane
-		for( int i=0; i<loop.size(); ++i )
-		{
-			const carve::geom::vector<3> & point = loop.at(i);
-
-			if( face_plane_projected == XY_PLANE )
-			{
-				loop_2d.push_back( carve::geom::VECTOR(point.x, point.y ));
-				loop_3rd_dim.push_back(point.z);
-			}
-			else if( face_plane_projected == YZ_PLANE )
-			{
-				loop_2d.push_back( carve::geom::VECTOR(point.y, point.z ));
-				loop_3rd_dim.push_back(point.x);
-			}
-			else if( face_plane_projected == XZ_PLANE )
-			{
-				loop_2d.push_back( carve::geom::VECTOR(point.x, point.z ));
-				loop_3rd_dim.push_back(point.y);
-			}
-		}
-				
-		// check winding order
-		bool reverse_loop = false;
-		carve::geom::vector<3>  normal_2d = computePolygon2DNormal( loop_2d );
-		if( it_face_loops == face_loops.begin() )
-		{
-			if( normal_2d.z < 0 )
-			{
-				reverse_loop = true;
-			}
-		}
-		else
-		{
-			if( normal_2d.z > 0 )
-			{
-				reverse_loop = true;
-			}
-		}
-		if( reverse_loop )
-		{
-			normal_first_loop = -normal_first_loop;
-			std::reverse( loop_2d.begin(), loop_2d.end() );
-			std::reverse( loop_3rd_dim.begin(), loop_3rd_dim.end() );
-		}
-				
-		if( loop_2d.size() < 3 )
-		{
-			err << "extrude: loop_2d.size() < 3" << std::endl;
-		}
-		
-		// if last point is equal to first, remove it
-		while( loop_2d.size() > 2 )
-		{
-			carve::geom::vector<2> & first = loop_2d.front();
-			carve::geom::vector<2> & last = loop_2d.back();
-
-			if( std::abs(first.x-last.x) < 0.00001 )
-			{
-				if( std::abs(first.y-last.y) < 0.00001 )
-				{
-					if( std::abs(loop_3rd_dim.front() - loop_3rd_dim.back() ) < 0.00001 )
-					{
-						loop_2d.pop_back();
-						loop_3rd_dim.pop_back();
-						continue;
-					}
-				}
-			}
-			break;
-		}
-
-		face_loops_projected.push_back(loop_2d);
-		face_loops_3rd_dim.push_back(loop_3rd_dim);
-	}
-
-	double extrusion_dot_normal = dot( extrusion_vector, normal_first_loop );
-	if( extrusion_dot_normal > 0 )
-	{
-		flip_faces = true;
-	}
-
-	// triangulate
-	std::vector<carve::geom2d::P2> merged_path;
-	std::vector<carve::geom::vector<3> > merged_3d;
-	std::vector<carve::triangulate::tri_idx> triangulated;
-	std::vector<std::pair<size_t, size_t> > path_all_loops;
-	try
-	{
-		path_all_loops = carve::triangulate::incorporateHolesIntoPolygon(face_loops_projected);
-		// figure 2: path wich incorporates holes, described by path_all_loops
-		// (0/0) -> (1/3) -> (1/0) -> (1/1) -> (1/2) -> (1/3) -> (0/0) -> (0/1) -> (0/2) -> (0/3)
-		//  0/3<-----------------------0/2
-		//  |                            ^
-		//  |   1/0-------------->1/1    |
-		//  |   ^                   |    |
-		//  |   |                   v    |
-		//  |   1/3<--------------1/2    |
-		//  v                            |
-		//  0/0------------------------>0/1
-
-		merged_path.reserve(path_all_loops.size());
-		for( size_t i = 0; i < path_all_loops.size(); ++i )
-		{
-			int loop_number = path_all_loops[i].first;
-			int index_in_loop = path_all_loops[i].second;
-			
-			if( loop_number >= face_loops_projected.size() )
-			{
-				err << "extrude: loop_number >= face_loops_projected.size()" << std::endl;
-				continue;
-			}
-			if( loop_number >= face_loops_3rd_dim.size() )
-			{
-				err << "extrude: loop_number >= face_loops_3rd_dim.size()" << std::endl;
-				continue;
-			}
-			std::vector<carve::geom2d::P2>& loop_projected = face_loops_projected[loop_number];
-			std::vector<double>& loop_3rd_dim = face_loops_3rd_dim[loop_number];
-			
-			carve::geom2d::P2& point_projected = loop_projected[index_in_loop];
-			merged_path.push_back( point_projected );
-
-			carve::geom::vector<3>  v;
-			if( face_plane_projected == XY_PLANE )
-			{
-				double z = loop_3rd_dim[index_in_loop];
-				v = carve::geom::VECTOR(	point_projected.x,	point_projected.y,	z);
-			}
-			else if( face_plane_projected == YZ_PLANE )
-			{
-				double x = loop_3rd_dim[index_in_loop];
-				v = carve::geom::VECTOR(	x,	point_projected.x,	point_projected.y);
-			}
-			else if( face_plane_projected == XZ_PLANE )
-			{
-				double y = loop_3rd_dim[index_in_loop];
-				v = carve::geom::VECTOR(	point_projected.x,	y,	point_projected.y);
-			}
-			merged_3d.push_back( v );
-		}
-		// figure 3: merged path for triangulation
-		//  9<---------------------------8
-		//  |                            ^
-		//  |   2------------------>3    |
-		//  |   ^                   |    |
-		//  |   |                   v    |
-		//  |   1, 5<---------------4    |
-		//  | /                          |
-		//  0,6------------------------->7
-		carve::triangulate::triangulate(merged_path, triangulated);
-		carve::triangulate::improve(merged_path, triangulated);
-		// triangles: (9,0,1)  (5,6,7)  (4,5,7)  (4,7,8)  (9,1,2)  (8,9,2)  (3,4,8)  (2,3,8)
-	}
-	catch(...)
-	{
-		err << "carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
-
-		std::vector<std::vector<carve::geom2d::P2> >::iterator it_face_looops_2d;
-		for( it_face_looops_2d = face_loops_projected.begin(); it_face_looops_2d!=face_loops_projected.end(); ++it_face_looops_2d )
-		{
-			std::vector<carve::geom2d::P2>& single_loop_2d = *it_face_looops_2d;
-			std::vector<carve::geom2d::P2>::iterator it_face_loop;
-			err << "loop:\n";
-			for( it_face_loop = single_loop_2d.begin(); it_face_loop!=single_loop_2d.end(); ++it_face_loop )
-			{
-				carve::geom2d::P2& loop_point = *it_face_loop;
-				err << "	bound vertex (" << loop_point.x << "," << loop_point.y << ")\n";
-			}
-		}
-		std::cout << err.str().c_str();
-		return;
-	}
-
-	if( merged_path.size() != merged_3d.size() )
-	{
-		err << "extrude: merged.size() != merged_3d.size()" << std::endl;
-		return;
-	}
-
-	// now insert points to polygon, avoiding points with same coordinates
-	std::map<carve::geom::vector<3> , size_t> vert_idx;
-	std::map<carve::geom::vector<3> , size_t>::iterator vert_it;
-	std::map<carve::geom::vector<3> , size_t>::iterator vert_it_found;
-	std::map<int,int> map_merged_idx;
-	for( size_t i = 0; i != merged_3d.size(); ++i )
-	{
-		carve::geom::vector<3>  v = merged_3d[i];
-		
-		for( vert_it = vert_idx.begin(); vert_it != vert_idx.end(); ++vert_it )
-		{
-			const carve::geom::vector<3>& existing_point = (*vert_it).first;
-			if( std::abs(v.x - existing_point.x) < 0.00001 )
-			{
-				if( std::abs(v.y - existing_point.y) < 0.00001 )
-				{
-					if( std::abs(v.z - existing_point.z) < 0.00001 )
-					{
-						break;
-					}
-				}
-			}
-		}
-
-		if( vert_it == vert_idx.end() )
-		{
-			poly_data->addVertex(v);
-			int vertex_id = poly_data->getVertexCount()-1;
-			vert_idx[v] = vertex_id;
-			map_merged_idx[i] = vertex_id;
-		}
-		else
-		{
-			// vertex already exists in polygon. remember its index for triangles
-			map_merged_idx[i]=(*vert_it).second;
-		}
-	}
-
-	// figure 4: points in poly_data (merged path without duplicate vertices):
-	//  7<---------------------------6
-	//  |                            ^
-	//  |   2------------------>3    |
-	//  |   ^                   |    |     map_merged_idx: figure 3 -> figure 4
-	//  |   |                   v    |
-	//  |   1<------------------4    |
-	//  | /                          |
-	//  0--------------------------->5
-
-	// copy points from base to top
-	std::vector<carve::geom::vector<3> >& points = poly_data->points;
-	const int num_points_base = points.size();
-	for( int i=0; i<num_points_base; ++i )
-	{
-		carve::geom::vector<3>& pt = points[i];
-		poly_data->addVertex( pt + extrusion_vector );
-	}
-
-	std::map<int, std::vector<int> > loop_vert_idx;
-	for( size_t merged_idx = 0; merged_idx < path_all_loops.size(); ++merged_idx )
-	{
-		int loop_number = path_all_loops[merged_idx].first;
-		int point_idx = map_merged_idx[merged_idx];
-	
-		std::map<int, std::vector<int> >::iterator it_result_loops = loop_vert_idx.find( loop_number );
-		if( it_result_loops == loop_vert_idx.end() )
-		{
-			loop_vert_idx.insert( std::pair<int, std::vector<int> >( loop_number, std::vector<int>() ) );
-		}
-		std::vector<int>& result_loop_vec = loop_vert_idx[loop_number];
-		
-		// check if point index is already in loop
-		bool already_in_loop = false;
-		for( int i2 = 0; i2 < result_loop_vec.size(); ++i2 )
-		{
-			if( point_idx == result_loop_vec[i2] )
-			{
-				already_in_loop = true;
-				break;
-			}
-		}
-		if( !already_in_loop )
-		{
-			result_loop_vec.push_back( point_idx );
-		}
-	}
-
-	// add faces along outer and inner loops
-	for( std::map<int, std::vector<int> >::iterator it_result_loop = loop_vert_idx.begin(); it_result_loop != loop_vert_idx.end(); ++it_result_loop )
-	{
-		const std::vector<int>& loop_idx = (*it_result_loop).second;
-		const int num_points_in_loop = loop_idx.size();
-		
-		for( int i=0; i<num_points_in_loop; ++i )
-		{
-			
-			int point_idx		= loop_idx[i];
-			int point_idx_next	= loop_idx[(i+1)%num_points_in_loop];
-			int point_idx_up = point_idx + num_points_base;
-			int point_idx_next_up = point_idx_next + num_points_base;
-
-			if( point_idx_next_up >= 2*num_points_base )
-			{
-				std::cout << "point_idx_next_up >= 2*num_points_base" << std::endl;
-				continue;
-			}
-			if( flip_faces )
-			{
-				poly_data->addFace( point_idx, point_idx_next, point_idx_next_up, point_idx_up );
-			}
-			else
-			{
-				poly_data->addFace( point_idx, point_idx_up, point_idx_next_up, point_idx_next );
-				
-			}
-		}
-	}
-
-	// now the triangulated bottom and top cap
-	for( size_t i = 0; i != triangulated.size(); ++i )
-	{
-		carve::triangulate::tri_idx triangle = triangulated[i];
-		int a = triangle.a;
-		int b = triangle.b;
-		int c = triangle.c;
-
-		int vertex_id_a = map_merged_idx[a];
-		int vertex_id_b = map_merged_idx[b];
-		int vertex_id_c = map_merged_idx[c];
-
-		if( vertex_id_a == vertex_id_b || vertex_id_a == vertex_id_c || vertex_id_b == vertex_id_c )
-		{
-			continue;
-		}
-
-		int vertex_id_a_top = vertex_id_a + num_points_base;
-		int vertex_id_b_top = vertex_id_b + num_points_base;
-		int vertex_id_c_top = vertex_id_c + num_points_base;
-
-#ifdef _DEBUG
-		const carve::poly::Vertex<3>& v_a = poly_data->getVertex(vertex_id_a);
-		const carve::poly::Vertex<3>& v_b = poly_data->getVertex(vertex_id_b);
-		const carve::poly::Vertex<3>& v_c = poly_data->getVertex(vertex_id_c);
-
-		carve::geom::vector<3> pa( carve::geom::VECTOR( v_a.v[0],	v_a.v[1],	v_a.v[2] ) );
-		carve::geom::vector<3> pb( carve::geom::VECTOR( v_b.v[0],	v_b.v[1],	v_b.v[2] ) );
-		carve::geom::vector<3> pc( carve::geom::VECTOR( v_c.v[0],	v_c.v[1],	v_c.v[2] ) );
-
-		double A = 0.5*(cross( pa-pb, pa-pc ).length());
-		if( std::abs(A) < 0.000000001 )
-		{
-			std::cout << "area < 0.000000001\n" << std::endl;
-		}
-#endif
-
-		if( flip_faces )
-		{
-			poly_data->addFace( vertex_id_a,		vertex_id_c,		vertex_id_b );		// bottom cap
-			poly_data->addFace( vertex_id_a_top,	vertex_id_b_top,	vertex_id_c_top );	// top cap, flipped outward
-		}
-		else
-		{
-			poly_data->addFace( vertex_id_a,		vertex_id_b,		vertex_id_c );		// bottom cap
-			poly_data->addFace( vertex_id_a_top,	vertex_id_c_top,	vertex_id_b_top );	// top cap, flipped outward
-
-			
-		}
-	}
-}
-
-void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& inv ) 
+void GeomUtils::computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& inv ) 
 {
 	int i, j;	// col, row
 	int s;		// step
@@ -1397,7 +946,7 @@ void computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& i
 	inv._44 = a[3][7];
 }
 
-void closestPointOnLine( carve::geom::vector<3>& closest, const carve::geom::vector<3>& point, const carve::geom::vector<3>& line_origin, const carve::geom::vector<3>& line_direction )
+void GeomUtils::closestPointOnLine( const carve::geom::vector<3>& point, const carve::geom::vector<3>& line_origin, const carve::geom::vector<3>& line_direction, carve::geom::vector<3>& closest )
 {
 	double denom = point.x*line_direction.x + point.y*line_direction.y + point.z*line_direction.z - line_direction.x*line_origin.x - line_direction.y*line_origin.y - line_direction.z*line_origin.z;
 	double numer = line_direction.x*line_direction.x + line_direction.y*line_direction.y + line_direction.z*line_direction.z;
@@ -1410,7 +959,7 @@ void closestPointOnLine( carve::geom::vector<3>& closest, const carve::geom::vec
 }
 
 
-void closestPointOnLine( osg::Vec3d& closest, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction )
+void GeomUtils::closestPointOnLine( const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction, osg::Vec3d& closest )
 {
 	double denom = point.x()*line_direction.x() + point.y()*line_direction.y() + point.z()*line_direction.z() - line_direction.x()*line_origin.x() - line_direction.y()*line_origin.y() - line_direction.z()*line_origin.z();
 	double numer = line_direction.x()*line_direction.x() + line_direction.y()*line_direction.y() + line_direction.z()*line_direction.z();
@@ -1423,7 +972,7 @@ void closestPointOnLine( osg::Vec3d& closest, const osg::Vec3d& point, const osg
 }
 
 //void closestPointOnLineSegment( osg::Vec3d& closest, osg::Vec3d& point, osg::Vec3d& line_origin, osg::Vec3d& line_end )
-bool isPointOnLineSegment( double& target_lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_end )
+bool GeomUtils::isPointOnLineSegment( double& target_lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_end )
 {
 	const osg::Vec3d line_direction = line_end - line_origin;
 	const double denom = point.x()*line_direction.x() + point.y()*line_direction.y() + point.z()*line_direction.z() - line_direction.x()*line_origin.x() - line_direction.y()*line_origin.y() - line_direction.z()*line_origin.z();
@@ -1456,16 +1005,15 @@ bool isPointOnLineSegment( double& target_lambda, const osg::Vec3d& point, const
 
 bool LineToLineIntersectionHelper(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, double & r, double & s)
 {
-	double d;
 	// check if lines are parallel
-	carve::geom::vector<2> vertex1to2 = v2 - v1;
-	carve::geom::vector<2> vertex3to4 = v4 - v3;
+	const carve::geom::vector<2> vertex1to2 = v2 - v1;
+	const carve::geom::vector<2> vertex3to4 = v4 - v3;
 	if( vertex1to2.y / vertex1to2.x != vertex3to4.y / vertex3to4.x )
 	{
-		d = vertex1to2.x*vertex3to4.y - vertex1to2.y*vertex3to4.x;
+		const double d = vertex1to2.x*vertex3to4.y - vertex1to2.y*vertex3to4.x;
 		if( d != 0 )
 		{
-			carve::geom::vector<2> vertex3to1 = v1 - v3;
+			const carve::geom::vector<2> vertex3to1 = v1 - v3;
 			r = (vertex3to1.y*vertex3to4.x - vertex3to1.x*vertex3to4.y) / d;
 			s = (vertex3to1.y*vertex1to2.x - vertex3to1.x*vertex1to2.y) / d;
 			return true;
@@ -1475,7 +1023,7 @@ bool LineToLineIntersectionHelper(carve::geom::vector<2>& v1, carve::geom::vecto
 
 }
 
-bool LineSegmentToLineIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result )
+bool GeomUtils::LineSegmentToLineIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result )
 {
 	double r, s;
 	if( LineToLineIntersectionHelper(v1, v2, v3, v4, r, s) )
@@ -1489,7 +1037,7 @@ bool LineSegmentToLineIntersection(carve::geom::vector<2>& v1, carve::geom::vect
 	return false;
 }
 
-bool LineSegmentToLineSegmentIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result )
+bool GeomUtils::LineSegmentToLineSegmentIntersection(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, std::vector<carve::geom::vector<2> >& result )
 {
 	double r, s;
 	if( LineToLineIntersectionHelper(v1, v2, v3, v4, r, s) )
@@ -1506,7 +1054,7 @@ bool LineSegmentToLineSegmentIntersection(carve::geom::vector<2>& v1, carve::geo
 	return false;
 }
 
-void appendPointsToCurve( const std::vector<carve::geom::vector<2> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec )
+void GeomUtils::appendPointsToCurve( const std::vector<carve::geom::vector<2> >& points_vec, std::vector<carve::geom::vector<3> >& target_vec )
 {
 	// sometimes, sense agreement is not given correctly. try to correct sense of segment if necessary
 	//if( target_vec.size() > 0 && points_vec.size() > 1 )
@@ -1582,7 +1130,7 @@ void appendPointsToCurve( const std::vector<carve::geom::vector<2> >& points_vec
 	// TODO: handle all segments separately: std::vector<std::vector<carve::geom::vector<3> > >& target_vec
 }
 
-void appendPointsToCurve( const std::vector<carve::geom::vector<3> >& points_vec_src, std::vector<carve::geom::vector<3> >& target_vec )
+void GeomUtils::appendPointsToCurve( const std::vector<carve::geom::vector<3> >& points_vec_src, std::vector<carve::geom::vector<3> >& target_vec )
 {
 	// sometimes, sense agreement is not given correctly. try to correct sense of segment if necessary
 	std::vector<carve::geom::vector<3> > points_vec( points_vec_src );
@@ -1647,7 +1195,7 @@ void appendPointsToCurve( const std::vector<carve::geom::vector<3> >& points_vec
 }
 
 
-void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m )
+void GeomUtils::makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m )
 {
 	carve::geom::vector<3> f(center-eye);
     f.normalize();
@@ -1685,7 +1233,7 @@ void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& 
     }
 }
 
-bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal )
+bool GeomUtils::bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal )
 {
 	bool valid = false;
 	carve::geom::vector<3> v21 = v2 - v1;
@@ -1743,7 +1291,7 @@ bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector
 	return valid;
 }
 
-void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
+void GeomUtils::convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
 						 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix )
 {
 	carve::geom::vector<3> local_x( plane_normal );
@@ -1771,53 +1319,4 @@ void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carv
 	resulting_matrix._42 = plane_position.y;
 	resulting_matrix._43 = plane_position.z;
 	resulting_matrix._44 = 1;
-}
-
-void renderMeshsetInDebugViewer( osgViewer::View* view, shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, osg::Vec4f& color, bool wireframe )
-{
-	if( view )
-	{
-		osg::Node* root_node = view->getSceneData();
-		osg::Group* root_node_group = dynamic_cast<osg::Group*>( root_node );
-		if( root_node_group )
-		{
-			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			if( wireframe )
-			{
-				osg::ref_ptr<osg::PolygonMode> polygon_mode = new osg::PolygonMode();
-				polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE );
-				geode->getOrCreateStateSet()->setAttribute( polygon_mode );
-			}
-			osg::Material* material = new osg::Material();//(osg::Material *) geode->getStateSet()->getAttribute(osg::StateAttribute::MATERIAL); 
-			material->setColorMode(osg::Material::EMISSION); 
-			material->setEmission(osg::Material::FRONT_AND_BACK, color ); 
-			geode->getOrCreateStateSet()->setAttributeAndModes(material, osg::StateAttribute::OVERRIDE); 
-
-			ConverterOSG carve_converter;
-			carve_converter.drawMeshSet( mesh_set, geode );
-			root_node_group->addChild(geode);
-		}
-	}
-}
-
-void renderPolylineInDebugViewer( osgViewer::View* view, shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color )
-{
-	if( view )
-	{
-		osg::Node* root_node = view->getSceneData();
-		osg::Group* root_node_group = dynamic_cast<osg::Group*>( root_node );
-		if( root_node_group )
-		{
-			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			
-			osg::Material* material = new osg::Material();//(osg::Material *) geode->getStateSet()->getAttribute(osg::StateAttribute::MATERIAL); 
-			material->setColorMode(osg::Material::EMISSION); 
-			material->setEmission(osg::Material::FRONT_AND_BACK, color ); 
-			geode->getOrCreateStateSet()->setAttributeAndModes(material, osg::StateAttribute::OVERRIDE); 
-
-			ConverterOSG carve_converter;
-			carve_converter.drawPolyline( poly_line, geode );
-			root_node_group->addChild(geode);
-		}
-	}
 }

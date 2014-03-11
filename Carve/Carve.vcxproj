@@ -166,6 +166,9 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -225,6 +228,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">
     <ClCompile>
@@ -290,8 +296,10 @@
     <ClCompile Include="src\lib\pointset.cpp" />
     <ClCompile Include="src\lib\polyhedron.cpp" />
     <ClCompile Include="src\lib\polyline.cpp" />
+    <ClCompile Include="src\lib\shewchuk_predicates.cpp" />
     <ClCompile Include="src\lib\tag.cpp" />
     <ClCompile Include="src\lib\timing.cpp" />
+    <ClCompile Include="src\lib\triangle_intersection.cpp" />
     <ClCompile Include="src\lib\triangulator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -299,6 +307,43 @@
     <ClInclude Include="src\common\opts.hpp" />
     <ClInclude Include="src\common\rgb.hpp" />
     <ClInclude Include="src\common\stringfuncs.hpp" />
+    <ClInclude Include="src\include\carve\aabb.hpp" />
+    <ClInclude Include="src\include\carve\aabb_impl.hpp" />
+    <ClInclude Include="src\include\carve\carve.hpp" />
+    <ClInclude Include="src\include\carve\classification.hpp" />
+    <ClInclude Include="src\include\carve\csg.hpp" />
+    <ClInclude Include="src\include\carve\csg_triangulator.hpp" />
+    <ClInclude Include="src\include\carve\edge_decl.hpp" />
+    <ClInclude Include="src\include\carve\edge_impl.hpp" />
+    <ClInclude Include="src\include\carve\face_decl.hpp" />
+    <ClInclude Include="src\include\carve\face_impl.hpp" />
+    <ClInclude Include="src\include\carve\geom.hpp" />
+    <ClInclude Include="src\include\carve\geom2d.hpp" />
+    <ClInclude Include="src\include\carve\geom3d.hpp" />
+    <ClInclude Include="src\include\carve\geom_impl.hpp" />
+    <ClInclude Include="src\include\carve\input.hpp" />
+    <ClInclude Include="src\include\carve\intersection.hpp" />
+    <ClInclude Include="src\include\carve\math.hpp" />
+    <ClInclude Include="src\include\carve\math_constants.hpp" />
+    <ClInclude Include="src\include\carve\matrix.hpp" />
+    <ClInclude Include="src\include\carve\mesh.hpp" />
+    <ClInclude Include="src\include\carve\mesh_impl.hpp" />
+    <ClInclude Include="src\include\carve\mesh_ops.hpp" />
+    <ClInclude Include="src\include\carve\mesh_simplify.hpp" />
+    <ClInclude Include="src\include\carve\octree_decl.hpp" />
+    <ClInclude Include="src\include\carve\poly.hpp" />
+    <ClInclude Include="src\include\carve\polyhedron_base.hpp" />
+    <ClInclude Include="src\include\carve\polyhedron_decl.hpp" />
+    <ClInclude Include="src\include\carve\polyhedron_impl.hpp" />
+    <ClInclude Include="src\include\carve\polyline.hpp" />
+    <ClInclude Include="src\include\carve\polyline_decl.hpp" />
+    <ClInclude Include="src\include\carve\polyline_impl.hpp" />
+    <ClInclude Include="src\include\carve\polyline_iter.hpp" />
+    <ClInclude Include="src\include\carve\poly_decl.hpp" />
+    <ClInclude Include="src\include\carve\poly_impl.hpp" />
+    <ClInclude Include="src\include\carve\triangle_intersection.hpp" />
+    <ClInclude Include="src\include\carve\triangulator.hpp" />
+    <ClInclude Include="src\include\carve\triangulator_impl.hpp" />
     <ClInclude Include="src\lib\csg_collector.hpp" />
     <ClInclude Include="src\lib\csg_data.hpp" />
     <ClInclude Include="src\lib\csg_detail.hpp" />

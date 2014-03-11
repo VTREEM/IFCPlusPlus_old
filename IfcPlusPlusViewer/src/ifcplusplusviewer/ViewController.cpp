@@ -25,7 +25,7 @@
 #include "IfcPlusPlusSystem.h"
 #include "ViewController.h"
 
-ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
+ViewController::ViewController()
 {
 	m_rootnode	= new osg::Group();
 	m_rootnode->setName("m_rootnode");
@@ -34,7 +34,7 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	m_transform_model->setName("m_transform_model");
 	m_transform_model->addChild( m_sw_model.get() );
 	m_rootnode->addChild( m_transform_model.get() );
-	m_rootnode->setDataVariance( osg::Object::DYNAMIC );
+	//m_rootnode->setDataVariance( osg::Object::DYNAMIC );
 
 	// background camera
 	//osg::Camera* sky = new osg::Camera();
@@ -65,7 +65,7 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	
 	osg::LightModel* light_model = new osg::LightModel();  
 	light_model->setAmbientIntensity( osg::Vec4f( 0.2f, 0.25f, 0.3f, 0.3f ) );
-	light_model->setTwoSided(true); 
+	light_model->setTwoSided(true); // TODO: fix triangle orientation and set TwoSided(false)
 	m_rootnode->getOrCreateStateSet()->setAttribute( light_model );
 
 	m_stateset_default = m_transform_model->getOrCreateStateSet();
@@ -91,8 +91,8 @@ ViewController::ViewController( IfcPlusPlusSystem* system ) : m_system(system)
 	// create coordinate axes
 	m_sw_coord_axes = new osg::Switch();
 	m_sw_coord_axes->setName("m_sw_coord_axes");
-	m_sw_coord_axes->addChild( createCoordinateAxes() );
-	m_sw_coord_axes->addChild( createCoordinateAxesArrows() );
+	m_sw_coord_axes->addChild( GeomUtils::createCoordinateAxes() );
+	m_sw_coord_axes->addChild( GeomUtils::createCoordinateAxesArrows() );
 	//m_sw_coord_axes->addChild( createQuarterCircles() );
 	m_rootnode->addChild( m_sw_coord_axes.get() );
 
@@ -123,21 +123,21 @@ void ViewController::setViewerMode( ViewerMode mode )
 		// first disable previous mode
 		if( m_viewer_mode == VIEWER_MODE_WIREFRAME )
 		{
-			WireFrameModeOff( m_transform_model.get() );
+			GeomUtils::WireFrameModeOff( m_transform_model.get() );
 		}
 		else if( m_viewer_mode == VIEWER_MODE_HIDDEN_LINE )
 		{
-			HiddenLineModeOff( m_transform_model.get() );
+			GeomUtils::HiddenLineModeOff( m_transform_model.get() );
 		}
 
 		m_viewer_mode = mode;
 		if( m_viewer_mode == VIEWER_MODE_WIREFRAME )
 		{
-			WireFrameModeOn( m_transform_model.get() );
+			GeomUtils::WireFrameModeOn( m_transform_model.get() );
 		}
 		else if( m_viewer_mode == VIEWER_MODE_HIDDEN_LINE )
 		{
-			HiddenLineModeOn( m_transform_model.get() );
+			GeomUtils::HiddenLineModeOn( m_transform_model.get() );
 		}
 	}
 }

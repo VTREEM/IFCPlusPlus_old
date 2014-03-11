@@ -20,48 +20,24 @@
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
-#include "ifcpp/model/shared_ptr.h"
-#include "ifcpp/model/StatusObservable.h"
+#include <ifcpp/model/shared_ptr.h>
+#include <ifcpp/model/IfcPPObject.h>
+#include <ifcpp/model/IfcPPModel.h>
+#include <ifcpp/model/StatusObservable.h>
+#include <ifcpp/reader/IfcPlusPlusReader.h>
+#include <ifcpp/writer/IfcStepWriter.h>
+#include <ifcpp/IFC4/include/IfcProject.h>
+#include <ifcpp/IFC4/include/IfcProduct.h>
 
-#ifdef __GNUC__
-#include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/IfcPPEntities.h"
 #include "RepresentationConverter.h"
-#include "ifcpp/reader/IfcPlusPlusReader.h"
-#include "ifcpp/writer/IfcStepWriter.h"
-#else
+#include "GeometryInputData.h"
+#include "GeometrySettings.h"
 
-class IfcPPObject;
-class IfcPPModel;
-class IfcPlusPlusReader;
-class IfcStepWriter;
-class UnitConverter;
-class RepresentationConverter;
-class RepresentationData;
-class IfcProject;
-class IfcProduct;
-class IfcRelContainedInSpatialStructure;
-class IfcRelAggregates;
-class IfcBuildingStorey;
-#endif
-class GeometrySettings;
+
 
 class ReaderWriterIFC : public osgDB::ReaderWriter, public StatusObservable
 {
 public:
-	class ProductShape
-	{
-	public:
-		ProductShape() { added_to_storey = false; }
-
-		shared_ptr<IfcProduct> ifc_product;
-		osg::ref_ptr<osg::Switch> product_switch;
-		osg::ref_ptr<osg::Group> space_group;
-		std::vector<shared_ptr<IfcProduct> > vec_openings;
-		shared_ptr<RepresentationData> representation_data;
-		bool added_to_storey;
-	};
-
 	ReaderWriterIFC();
 	~ReaderWriterIFC();	
 	
@@ -69,27 +45,25 @@ public:
 	virtual osgDB::ReaderWriter::ReadResult readNode(const std::string& filename, const osgDB::ReaderWriter::Options* options);
 
 	void createGeometry();
-	void convertIfcProduct(	shared_ptr<IfcProduct> product, shared_ptr<ProductShape>& product_shape );
+	void convertIfcProduct(	shared_ptr<IfcProduct> product, shared_ptr<ShapeInputData>& product_shape );
 	void resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg::Group* parent_group );
-	void reset();
 	void setModel( shared_ptr<IfcPPModel> model );
 	shared_ptr<IfcPPModel> getIfcPPModel() { return m_ifc_model; }
 	shared_ptr<IfcPlusPlusReader> getIfcPPReader() { return m_step_reader; }
 	shared_ptr<IfcStepWriter> getIfcPPWriter() { return m_step_writer; }
 	shared_ptr<RepresentationConverter> getRepresentationConverter() { return m_representation_converter; }
-	std::map<int,shared_ptr<ProductShape> >& getProductShapeData() { return m_product_shapes; }
+	std::map<int,shared_ptr<ShapeInputData> >& getShapeInputData() { return m_shape_input_data; }
 	std::stringstream& getErrors() { return m_err; }
 	std::stringstream& getMessages() { return m_messages; }
 	void setNumVerticesPerCircle( int num_circles );
 	void resetNumVerticesPerCircle();
+	void deleteInputCache();
+	void resetModel();
 
 	static void slotProgressValueWrapper( void* obj_ptr, double value );
 	static void slotProgressTextWrapper( void* obj_ptr, const std::string& str );
 	static void slotMessageWrapper( void* obj_ptr, const std::string& str );
 	static void slotErrorWrapper( void* obj_ptr, const std::string& str );
-
-	void setDebugView( osgViewer::View* view );
-	osgViewer::View* m_debug_view;
 
 protected:
 	shared_ptr<IfcPPModel>				m_ifc_model;
@@ -97,14 +71,13 @@ protected:
 	shared_ptr<IfcStepWriter>			m_step_writer;
 	std::stringstream					m_err;
 	std::stringstream					m_messages;
-	bool								m_keep_geom_input_data;
 	shared_ptr<GeometrySettings>		m_geom_settings;
 
 	shared_ptr<UnitConverter>			m_unit_converter;
 	shared_ptr<RepresentationConverter> m_representation_converter;
 	osg::ref_ptr<osg::StateSet>			m_glass_stateset;
 
-	std::map<int,shared_ptr<ProductShape> > m_product_shapes;
+	std::map<int,shared_ptr<ShapeInputData> > m_shape_input_data;
 	std::map<int,shared_ptr<IfcProduct> > m_processed_products;
 
 	std::map<int, shared_ptr<IfcPPObject> > m_map_visited;

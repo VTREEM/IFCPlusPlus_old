@@ -11,9 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2011-07-18
-
 #pragma once
 
 #include <osg/StateSet>
@@ -40,4 +37,3 @@ public:
 	
 	std::map<int,osg::ref_ptr<osg::StateSet> > m_map_ifc_styles;
 };
-

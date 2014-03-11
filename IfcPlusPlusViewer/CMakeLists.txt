@@ -59,6 +59,8 @@ set(IFCPPVIEWER_SOURCE_FILES
   src/ifcplusplusviewer/cmd/CmdWriteIfcFile.cpp
   src/ifcplusplusviewer/cmd/Command.cpp
   src/ifcplusplusviewer/cmd/CommandManager.cpp
+  src/ifcplusplusviewer/gui/DebugViewer.cpp
+  src/ifcplusplusviewer/gui/IfcTreeWidget.cpp
   src/ifcplusplusviewer/gui/MainWindow.cpp
   src/ifcplusplusviewer/gui/StepHighlighter.cpp
   src/ifcplusplusviewer/gui/TabReadWrite.cpp
@@ -78,6 +80,8 @@ set(IFCPPVIEWER_HEADER_FILES
   src/ifcplusplusviewer/cmd/CmdWriteIfcFile.h
   src/ifcplusplusviewer/cmd/Command.h
   src/ifcplusplusviewer/cmd/CommandManager.h
+  src/ifcplusplusviewer/gui/DebugViewer.h
+  src/ifcplusplusviewer/gui/IfcTreeWidget.h
   src/ifcplusplusviewer/gui/MainWindow.h
   src/ifcplusplusviewer/gui/StepHighlighter.h
   src/ifcplusplusviewer/gui/TabReadWrite.h

@@ -18,6 +18,7 @@
 #include <QtWidgets/qsplitter.h>
 #include <QtWidgets/qstatusbar.h>
 #include <QtWidgets/qlabel.h>
+#include <QtWidgets/QDockWidget>
 #include <QtCore/qfile.h>
 #include <QtCore/qsettings.h>
 
@@ -30,12 +31,13 @@
 #include "ifcppgeometry/GeomUtils.h"
 #include "TabReadWrite.h"
 #include "TabView.h"
+#include "IfcTreeWidget.h"
 #include "MainWindow.h"
 
 MainWindow::MainWindow( IfcPlusPlusSystem* sys, ViewerWidget* vw, QWidget *parent) : m_system(sys), m_viewer_widget(vw), QMainWindow(parent)
 {
 	m_system = sys;
-	setWindowTitle("IfcPlusPlus Viewer");
+	setWindowTitle("IFC++ Viewer");
 	setWindowIcon( QIcon( ":img/IfcPlusPlusViewerWindowIcon.png" ) );
 	
 	// global style sheet definitions
@@ -75,12 +77,25 @@ MainWindow::MainWindow( IfcPlusPlusSystem* sys, ViewerWidget* vw, QWidget *paren
 	m_file_toolbar->addAction(remove_selected_objects);
 	addToolBar( Qt::LeftToolBarArea, m_file_toolbar );
 
+	// building structure widget
+	QDockWidget *dock = new QDockWidget(tr("Project structure"), this);
+	dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	addDockWidget(Qt::RightDockWidgetArea, dock);
+	
+	IfcTreeWidget* ifc_tree_widget = new IfcTreeWidget( m_system );
+	//connect( m_ifc_tree_widget, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), this, SLOT( slotTreewidgetSelectionChanged(QTreeWidgetItem*, QTreeWidgetItem*) ) );
+	dock->setWidget( ifc_tree_widget );
+
 	m_splitter = new QSplitter( Qt::Vertical );
 	m_splitter->setContentsMargins( 0, 0, 0, 0 );
 	m_splitter->addWidget( m_viewer_widget );
 	m_splitter->addWidget( m_tabwidget );
-	m_splitter->setStretchFactor( 0, 1 );
+	m_splitter->setStretchFactor( 0, 2 );
 	m_splitter->setStretchFactor( 1, 0 );
+
+	QList<int> splitter_sizes;
+	splitter_sizes << 400 << 100;
+	m_splitter->setSizes( splitter_sizes );
 
 	// status bar
 	QStatusBar* status = new QStatusBar();
@@ -123,6 +138,8 @@ void MainWindow::closeEvent( QCloseEvent *event )
 	// for some reason, closeEvent or other close methods are not called on widgets, so do it manually here...
 	m_tab_read_write->closeEvent( event );
 	QMainWindow::closeEvent( event );
+
+	emit( signalMainWindowClosed() );
 }
 
 void MainWindow::createTabWidget()

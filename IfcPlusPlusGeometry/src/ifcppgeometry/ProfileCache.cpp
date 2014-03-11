@@ -11,9 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-06
-
 #include "ifcpp/IFC4/include/IfcProfileDef.h"
 
 #include "ProfileConverter.h"
