@@ -25,6 +25,7 @@
 #include "ifcpp/IFC4/include/IfcProduct.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
 #include "ifcppgeometry/RepresentationConverter.h"
+#include "ifcppgeometry/DebugViewerCallback.h"
 
 #include "viewer/Orbit3DManipulator.h"
 #include "cmd/CmdRemoveSelectedObjects.h"
@@ -34,7 +35,7 @@
 
 IfcPlusPlusSystem::IfcPlusPlusSystem()
 {
-	m_view_controller = shared_ptr<ViewController>( new ViewController( this ) );
+	m_view_controller = shared_ptr<ViewController>( new ViewController() );
 	m_command_manager = shared_ptr<CommandManager>( new CommandManager() );
 	m_ifc_model		= shared_ptr<IfcPPModel>( new IfcPPModel() );
 
@@ -265,23 +266,14 @@ void IfcPlusPlusSystem::setObjectSelected( shared_ptr<IfcPPEntity> ifc_object, b
 		if( product )
 		{
 			const int product_id = product->getId();
-			shared_ptr<ReaderWriterIFC::ProductShape> product_shape( new ReaderWriterIFC::ProductShape() );
+			shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
 			product_shape->ifc_product = product;
 
 			if( product->m_Representation )
 			{
 				m_reader_writer->convertIfcProduct( product, product_shape );
 			}
-
-
-			osg::MatrixTransform* mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 5 ) );
-			m_view_controller->getModelNode()->addChild( mt );
-
-			osg::ref_ptr<osg::Switch> product_switch = product_shape->product_switch;
-			if( product_switch.valid() )
-			{
-				mt->addChild( product_switch );
-			}
+			renderMeshsetInDebugViewer( product_shape, osg::Vec4f( 0.5, 0.5, 0.5, 1.0 ), true  );
 		}
 
 #endif
@@ -350,4 +342,19 @@ void IfcPlusPlusSystem::clearSelection()
 		}
 	}
 	m_map_selected.clear();
+}
+
+void IfcPlusPlusSystem::notifyModelCleared()
+{
+	emit( signalModelCleared() );
+}
+
+void IfcPlusPlusSystem::notifyModelLoadingStart()
+{
+	emit( signalModelLoadingStart() );
+}
+
+void IfcPlusPlusSystem::notifyModelLoadingDone()
+{
+	emit( signalModelLoadingDone() );
 }

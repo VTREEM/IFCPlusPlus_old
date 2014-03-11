@@ -230,8 +230,7 @@ namespace carve {
 #endif
 
 #if !defined(CARVE_NODEBUG)
-#  define CARVE_ASSERT(x) MACRO_BEGIN if (!(x))\
-	throw carve::exception() << __FILE__ << ":" << __LINE__ << "  " << #x; MACRO_END
+#  define CARVE_ASSERT(x) MACRO_BEGIN if (!(x)) throw carve::exception() << __FILE__ << ":" << __LINE__ << "  " << #x; MACRO_END
 #else
 #  define CARVE_ASSERT(X)
 #endif

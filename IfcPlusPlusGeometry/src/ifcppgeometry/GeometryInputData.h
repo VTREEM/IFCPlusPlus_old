@@ -11,38 +11,62 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-02
-
 #pragma once
 
 #include <vector>
 #include <ifcpp/model/shared_ptr.h>
+#include <ifcpp/IFC4/include/IfcProduct.h>
 #include <carve/input.hpp>
 
 #include <osg/ref_ptr>
 #include <osg/StateSet>
+#include <osg/Switch>
 
+//\brief Class to hold input data of one IFC geometric representation item.
 class ItemData
 {
 public:
-	std::vector<shared_ptr<carve::input::PolyhedronData> >	closed_mesh_data;
-	std::vector<shared_ptr<carve::input::PolyhedronData> >	open_mesh_data;
-	std::vector<shared_ptr<carve::input::PolyhedronData> >	open_or_closed_mesh_data;
-	std::vector<shared_ptr<carve::input::PolylineSetData> > polyline_data;
-	std::vector<shared_ptr<carve::mesh::MeshSet<3> > >		meshsets;
-	std::vector<osg::ref_ptr<osg::StateSet> >				statesets;
-};
+	std::vector<shared_ptr<carve::input::PolyhedronData> >	item_closed_mesh_data;
+	std::vector<shared_ptr<carve::input::PolyhedronData> >	item_open_mesh_data;
+	std::vector<shared_ptr<carve::input::PolyhedronData> >	item_open_or_closed_mesh_data;
+	std::vector<shared_ptr<carve::input::PolylineSetData> > item_polyline_data;
+	std::vector<shared_ptr<carve::mesh::MeshSet<3> > >		item_meshsets;
+	std::vector<osg::ref_ptr<osg::StateSet> >				item_statesets;
+	void createMeshSetsFromClosedPolyhedrons()
+	{
+		for( unsigned int i=0; i<item_closed_mesh_data.size(); ++i )
+		{
+			shared_ptr<carve::input::PolyhedronData>& poly_data = item_closed_mesh_data[i];
+			if( poly_data->getVertexCount() < 3 )
+			{
+				continue;
+			}
 
-class RepresentationData
-{
-public:
-	std::vector<shared_ptr<ItemData> >			vec_item_data;
-	std::vector<osg::ref_ptr<osg::StateSet> >	statesets;
+			shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve::input::opts()) );
+			item_meshsets.push_back( meshset );
+		}
+		item_closed_mesh_data.clear();
+	}
 };
 
 struct PlacementData
 {
 	std::set<int> placement_already_applied;
 	carve::math::Matrix pos;
+};
+
+class ShapeInputData
+{
+public:
+	ShapeInputData() { added_to_storey = false; }
+	~ShapeInputData() {}
+
+	shared_ptr<IfcProduct> ifc_product;
+	osg::ref_ptr<osg::Switch> product_switch;
+	osg::ref_ptr<osg::Group> space_group;
+	std::vector<shared_ptr<IfcProduct> > vec_openings;
+
+	std::vector<shared_ptr<ItemData> >			vec_item_data;
+	std::vector<osg::ref_ptr<osg::StateSet> >	vec_statesets;
+	bool added_to_storey;
 };

@@ -11,9 +11,6 @@
  * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2011-07-18
-
 #pragma once
 
 #include <set>
@@ -27,12 +24,12 @@
 #include <carve/input.hpp>
 #include <ifcpp/model/shared_ptr.h>
 #include "GeometryInputData.h"
+#include "GeometrySettings.h"
 
 #ifdef IFCPP_OPENMP
 #include <omp.h>
 #endif
 
-class GeometrySettings;
 class UnitConverter;
 class StylesConverter;
 class CurveConverter;
@@ -55,7 +52,7 @@ public:
 	RepresentationConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> unit_converter );
 	~RepresentationConverter();
 
-	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,			const carve::math::Matrix& pos,		shared_ptr<RepresentationData>& representation_data, std::set<int>& visited );
+	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,			const carve::math::Matrix& pos,		shared_ptr<ShapeInputData>& shape_data, std::set<int>& visited );
 	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
 	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,						const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
 	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
@@ -71,8 +68,6 @@ public:
 	void setHandleLayerAssignments( bool handle ) { m_handle_layer_assignments = handle; }
 	bool handleStyledItems() { return m_handle_styled_items; }
 	void setHandleStyledItems( bool handle ) { m_handle_styled_items = handle; }
-
-	osgViewer::View* m_debug_view;
 
 protected:
 	shared_ptr<GeometrySettings>				m_geom_settings;

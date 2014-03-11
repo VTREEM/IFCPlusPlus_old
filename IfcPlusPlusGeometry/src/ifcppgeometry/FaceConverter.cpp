@@ -11,9 +11,6 @@
 * OpenSceneGraph Public License for more details.
 */
 
-//! @author Fabian Gerold
-//! @date 2013-12-06
-
 #include <carve/csg_triangulator.hpp>
 
 #include "ifcpp/IFC4/include/IfcParameterValue.h"
@@ -366,7 +363,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 				continue;
 			}
 
-			carve::geom3d::Vector normal = computePolygonNormal( loop_points );
+			carve::geom3d::Vector normal = GeomUtils::computePolygonNormal( loop_points );
 			if( it_bounds == vec_bounds.begin() )
 			{
 				double nx = std::abs(normal.x);
@@ -417,7 +414,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			}
 
 			// check winding order
-			carve::geom3d::Vector normal_2d = computePolygon2DNormal( path_loop );
+			carve::geom3d::Vector normal_2d = GeomUtils::computePolygon2DNormal( path_loop );
 			if( it_bounds == vec_bounds.begin() )
 			{
 				if( normal_2d.z < 0 )
@@ -605,7 +602,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 	}
 
 	// IfcFaceList can be a closed or open shell, so let the calling function decide where to put it
-	item_data->open_or_closed_mesh_data.push_back( poly_data );
+	item_data->item_open_or_closed_mesh_data.push_back( poly_data );
 
 	if( err.tellp() > 0 )
 	{

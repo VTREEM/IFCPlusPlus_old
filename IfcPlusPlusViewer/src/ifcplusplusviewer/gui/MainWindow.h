@@ -14,11 +14,7 @@
 #pragma once
 
 #include <QtCore/qglobal.h>
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-	#include <QtGui/QMainWindow>
-#else
-	#include <QtWidgets/QMainWindow>
-#endif
+#include <QtWidgets/QMainWindow>
 
 class QLabel;
 class QSplitter;
@@ -52,6 +48,9 @@ private:
 	QToolBar*		m_edit_toolbar;
 
 	void createTabWidget();
+
+signals:
+	void signalMainWindowClosed();
 
 private slots:
 	void slotBtnZoomBoundingsClicked();

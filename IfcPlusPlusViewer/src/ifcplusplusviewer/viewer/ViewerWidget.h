@@ -19,21 +19,10 @@
 
 
 #include <QtCore/qglobal.h>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-	#include <QtGui/qwidget.h>
-	#include <QtCore/QTimer>
-#else
-	#include <QtWidgets/qwidget.h>
-	#include <QtCore/QTimer>
-#endif
+#include <QtWidgets/qwidget.h>
+#include <QtCore/QTimer>
 
-class Orbitmanipulator;
-
-
-//! @brief class to combine OSG Viewer and Qt widget
-//! @author Fabian Gerold, Bauhaus University Weimar
-//! @date 2013-10-27
-
+//\brief class to combine OSG Viewer and Qt widget
 
 class ViewerWidget : public QWidget
 {

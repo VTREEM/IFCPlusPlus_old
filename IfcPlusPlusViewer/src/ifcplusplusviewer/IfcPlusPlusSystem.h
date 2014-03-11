@@ -52,9 +52,12 @@ public:
 	void setObjectSelected( shared_ptr<IfcPPEntity> object, bool selected, osg::Group* node = 0 );
 	const std::map<int, shared_ptr<selectedEntity> >& getSelectedObjects() { return m_map_selected; }
 	void clearSelection();
+	void notifyModelCleared();
+	void notifyModelLoadingStart();
+	void notifyModelLoadingDone();
 	
 private:
-	shared_ptr<IfcPPModel>			m_ifc_model;
+	shared_ptr<IfcPPModel>				m_ifc_model;
 	osg::ref_ptr<ReaderWriterIFC>		m_reader_writer;
 	shared_ptr<CommandManager>			m_command_manager;
 	shared_ptr<ViewController>			m_view_controller;
@@ -63,4 +66,7 @@ private:
 signals:
 	void signalObjectsSelected( std::map<int, shared_ptr<IfcPPEntity> >& map_objects );
 	void signalObjectsUnselected( std::map<int, shared_ptr<IfcPPEntity> >& map_objects );
+	void signalModelCleared();
+	void signalModelLoadingStart();
+	void signalModelLoadingDone();
 };

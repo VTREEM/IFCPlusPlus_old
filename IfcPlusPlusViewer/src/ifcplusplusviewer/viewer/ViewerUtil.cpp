@@ -24,3 +24,22 @@ void intersectRayWithPlane( const osg::Vec3d& ray_origin, const osg::Vec3d& ray_
 	intersection_point.set( ray_origin.x() + n * (ray_direction.x()),  ray_origin.y() + n * (ray_direction.y()), ray_origin.z() + n * (ray_direction.z() ) );
 }
 
+QTreeWidgetItem* findItemByIfcId( QTreeWidgetItem* item, int ifc_id )
+{
+	int num_children = item->childCount();
+	for( int i=0; i<num_children; ++i )
+	{
+		QTreeWidgetItem* child = item->child( i );
+		int id = child->text(1).toUInt();
+		if( id == ifc_id )
+		{
+			return child;
+		}
+		QTreeWidgetItem* child_of_child = findItemByIfcId( child, ifc_id );
+		if( child_of_child != 0 )
+		{
+			return child_of_child;
+		}
+	}
+	return 0;
+}
