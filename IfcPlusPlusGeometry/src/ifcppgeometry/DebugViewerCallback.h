@@ -16,18 +16,25 @@
 #ifdef  _DEBUG
 
 #include <osg/Vec4>
-#include "carve/mesh.hpp"
-#include "carve/input.hpp"
-#include "ifcpp/model/shared_ptr.h"
+#include "IncludeCarveHeaders.h"
 #include "GeometryInputData.h"
 
-void setRenderMeshsetCallBack( void* obj_ptr, void (*func)(void*, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe) );
-void setRenderPolylineCallBack( void* obj_ptr, void (*func)(void*, const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color ) );
+void setRenderPolyhedronCallBack( void* obj_ptr, void (*func)(void*, const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe) );
+void setRenderMeshsetCallBack( void* obj_ptr, void (*func)(void*, const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe) );
+void setRenderPolylineCallBack( void* obj_ptr, void (*func)(void*, const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color ) );
+void setRenderPathsCallBack( void* obj_ptr, void (*func)(void*, const std::vector<std::vector<carve::geom::vector<2> > >& paths ) );
 
-void renderMeshsetInDebugViewer(const shared_ptr<carve::mesh::MeshSet<3> >& meshset, shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe);
-void renderMeshsetInDebugViewer(const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const osg::Vec4f& color, const bool wireframe);
-void renderMeshsetInDebugViewer( const shared_ptr<ShapeInputData>& product_shape, const osg::Vec4f& color, const bool wireframe );
+void renderShapeInputDataInDebugViewer( const ShapeInputData* product_shape, const osg::Vec4f& color, const bool wireframe );
+void renderPolyhedronInDebugViewer( const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe);
+void renderMeshsetInDebugViewer(const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe);
+void renderPolylineInDebugViewer( const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color );
+void renderPathsInDebugViewer( const std::vector<std::vector<carve::geom::vector<2> > >& paths );
 
-void renderPolylineInDebugViewer( shared_ptr<carve::input::PolylineSetData >& poly_line, osg::Vec4f& color );
+void createTest( osg::Group* group, osg::Group* root );
+void createTest2( osg::Group* group );
+void createTest4( osg::Group* group );
+void dumpMeshsets( carve::mesh::MeshSet<3>* operand1, carve::mesh::MeshSet<3>* operand2, carve::mesh::MeshSet<3>* result, int id_operand1, int id_operand2 );
+void dumpToVTK( const std::vector<std::vector<carve::geom::vector<2> > >& paths );
+void drawVertexNumbers( const carve::input::PolyhedronData* poly, const osg::Vec4f& color, osg::Geode* geode );
 
 #endif

@@ -166,7 +166,7 @@ namespace carve {
         out:
 
           if (fc == FACE_UNCLASSIFIED) {
-            std::cerr << "group " << grp << " is unclassified!" << std::endl;
+            //std::cerr << "group " << grp << " is unclassified!" << std::endl;
 
 #if defined(CARVE_DEBUG_WRITE_PLY_DATA)
             static int uc_count = 0;

@@ -15,8 +15,8 @@
 
 #include <set>
 #include <osg/Matrix>
-#include "carve/math.hpp"
-#include "ifcpp/model/shared_ptr.h"
+#include <ifcpp/model/shared_ptr.h>
+#include "IncludeCarveHeaders.h"
 
 class IfcObjectPlacement;
 class IfcPlacement;

@@ -15,6 +15,7 @@
 
 #include <osg/PolygonMode>
 #include <osg/Material>
+#include <osgText/Text>
 
 #include <QtCore/qglobal.h>
 
@@ -53,8 +54,10 @@ DebugViewer::DebugViewer() : QMainWindow()
 	m_viewer_widget->setRootNode( m_view_controller->getRootNode() );
 
 
+	setRenderPolyhedronCallBack( this, &DebugViewer::renderPolyhedronWrapper );
 	setRenderMeshsetCallBack( this, &DebugViewer::renderMeshsetWrapper );
 	setRenderPolylineCallBack( this, &DebugViewer::renderPolylineWrapper );
+	setRenderPathsCallBack( this, &DebugViewer::renderPathsWrapper );
 
 	// gui
 	QAction* zoom_bounds_btn = new QAction(QIcon(":img/zoomBoundings.png"), "&Zoom to boundings", this );
@@ -140,7 +143,7 @@ void DebugViewer::closeEvent( QCloseEvent *event )
 
 void DebugViewer::slotBtnZoomBoundingsClicked()
 {
-	osg::BoundingSphere bs = m_view_controller->getRootNode()->computeBound();
+	osg::BoundingSphere bs = m_view_controller->getModelNode()->computeBound();
 	
 	osgViewer::View* main_view = m_viewer_widget->getMainView();
 	if( main_view )
@@ -170,16 +173,25 @@ void DebugViewer::slotBtnWireframeClicked()
 	}
 }
 
-void DebugViewer::renderMeshsetWrapper( void* ptr, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe )
+void DebugViewer::renderPolyhedronWrapper( void* ptr, const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe )
 {
 	DebugViewer* myself = (DebugViewer*)ptr;
 	if( myself )
 	{
-		myself->renderMeshset( meshset, poly, color, wireframe );
+		myself->renderPolyhedron( poly, color, wireframe );
 	}
 }
 
-void DebugViewer::renderPolylineWrapper(void* ptr, const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color)
+void DebugViewer::renderMeshsetWrapper( void* ptr, const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe )
+{
+	DebugViewer* myself = (DebugViewer*)ptr;
+	if( myself )
+	{
+		myself->renderMeshset( meshset, color, wireframe );
+	}
+}
+
+void DebugViewer::renderPolylineWrapper(void* ptr, const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color)
 {
 	DebugViewer* myself = (DebugViewer*)ptr;
 	if( myself )
@@ -188,9 +200,55 @@ void DebugViewer::renderPolylineWrapper(void* ptr, const shared_ptr<carve::input
 	}
 }
 
-void DebugViewer::renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, 
-								const osg::Vec4f& color, const bool wireframe )
+void DebugViewer::renderPathsWrapper(void* ptr, const std::vector<std::vector<carve::geom::vector<2> > >& paths )
 {
+	DebugViewer* myself = (DebugViewer*)ptr;
+	if( myself )
+	{
+		myself->renderPaths( paths );
+	}
+}
+
+void DebugViewer::renderPolyhedron( const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe )
+{
+	if( !poly )
+	{
+		return;
+	}
+	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+	if( wireframe )
+	{
+		osg::ref_ptr<osg::PolygonMode> polygon_mode = new osg::PolygonMode();
+		polygon_mode->setMode(  osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE );
+		geode->getOrCreateStateSet()->setAttribute( polygon_mode );
+	}
+	osg::Material* material = new osg::Material();//(osg::Material *) geode->getStateSet()->getAttribute(osg::StateAttribute::MATERIAL); 
+	material->setColorMode(osg::Material::EMISSION); 
+	material->setEmission(osg::Material::FRONT_AND_BACK, color ); 
+	geode->getOrCreateStateSet()->setAttributeAndModes(material, osg::StateAttribute::OVERRIDE); 
+
+	carve::mesh::MeshSet<3> * meshset = poly->createMesh( carve::input::opts() );
+	ConverterOSG::drawMeshSet( meshset, geode );
+	m_view_controller->getModelNode()->addChild(geode);
+
+	osg::ref_ptr<osg::Geode> geode_vertex_numbers = new osg::Geode();
+	m_view_controller->getModelNode()->addChild(geode_vertex_numbers);
+	drawVertexNumbers( poly, color, geode_vertex_numbers );
+
+	m_viewer_widget->getViewer().frame();
+}
+
+void DebugViewer::renderMeshset( const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe )
+{
+	if( !meshset )
+	{
+		return;
+	}
+	if( meshset->meshes.size() < 1 )
+	{
+		return;
+	}
+
 	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 	if( wireframe )
 	{
@@ -207,15 +265,11 @@ void DebugViewer::renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& mes
 	m_view_controller->getModelNode()->addChild(geode);
 
 	osg::ref_ptr<osg::Geode> geode_vertex_numbers = new osg::Geode();
-	m_view_controller->getRootNode()->addChild(geode_vertex_numbers);
+	m_view_controller->getModelNode()->addChild(geode_vertex_numbers);
 
-	if( poly )
+	shared_ptr<carve::poly::Polyhedron> poly_from_mesh( carve::polyhedronFromMesh(meshset, -1) );
+	if( poly_from_mesh )
 	{
-		ConverterOSG::drawVertexNumbers( poly, color, geode_vertex_numbers );
-	}
-	else
-	{
-		shared_ptr<carve::poly::Polyhedron> poly_from_mesh( carve::polyhedronFromMesh(meshset.get(), -1) );
 		shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
 		for( int i=0; i<poly_from_mesh->vertices.size(); ++i )
 		{
@@ -234,14 +288,13 @@ void DebugViewer::renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& mes
 			}
 		}
 
-		ConverterOSG::drawVertexNumbers( poly_data, color, geode_vertex_numbers );
+		drawVertexNumbers( poly_data.get(), color, geode_vertex_numbers );
 	}
-	
 
 	m_viewer_widget->getViewer().frame();
 }
 
-void DebugViewer::renderPolyline( const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color )
+void DebugViewer::renderPolyline( const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color )
 {
 	if( m_view_controller->getRootNode() )
 	{
@@ -258,6 +311,75 @@ void DebugViewer::renderPolyline( const shared_ptr<carve::input::PolylineSetData
 	}
 }
 
+double render_path_x_pos = 0.1;
+double render_path_y_pos = 0.1;
+void DebugViewer::renderPaths( const std::vector<std::vector<carve::geom::vector<2> > >& paths )
+{
+	osg::Vec3Array* vertices = new osg::Vec3Array();
+	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+
+	double x_min = DBL_MAX;
+	double x_max = -DBL_MAX;
+	double y_min = DBL_MAX;
+	double y_max = -DBL_MAX;
+	std::vector<carve::geom::vector<2> > vec_merged;
+	for( std::vector<std::vector<carve::geom::vector<2> > >::const_iterator it = paths.begin(); it!=paths.end(); ++it )
+	{
+		const std::vector<carve::geom::vector<2> >& vec_path = (*it);
+		
+		for( std::vector<carve::geom::vector<2> >::const_iterator it2 = vec_path.begin(); it2!=vec_path.end(); ++it2 )
+		{
+			carve::geom::vector<2> point = (*it2);
+			vec_merged.push_back( point );
+			
+			x_min = std::min( x_min, point.x );
+			x_max = std::max( x_max, point.x );
+			y_min = std::min( y_min, point.y );
+			y_max = std::max( y_max, point.y );
+		}
+	}
+
+	double max_extend = std::max( x_max-x_min, y_max-y_min );
+	double min_extend = std::min( x_max-x_min, y_max-y_min );
+
+	double scale = 1.0;
+	if( min_extend < 1 )
+	{
+		scale = 1.0/min_extend;
+	}
+
+	//double font_size = 0.5*(max_extend + min_extend)*0.1;
+	double font_size = min_extend*0.05*scale;
+	for( int i=0; i<vec_merged.size(); ++i )
+	{
+		carve::geom::vector<2>& point = vec_merged[i];
+		vertices->push_back( osg::Vec3f( point.x*scale + render_path_x_pos, point.y*scale + render_path_y_pos, 0 ) );
+
+		osgText::Text* txt = new osgText::Text;
+		txt->setFont("fonts/arial.ttf");
+		txt->setColor( osg::Vec4f( 0.1, 0.1, 0.1, 1 ) );
+		txt->setCharacterSize( font_size );
+		txt->setAutoRotateToScreen( true );
+		txt->setPosition( osg::Vec3( point.x*scale + render_path_x_pos, point.y*scale + render_path_y_pos, 0 ) );
+
+		std::stringstream strs;
+		strs << i;
+		txt->setText( strs.str().c_str() );
+		geode->addDrawable(txt);
+
+		
+	}
+	render_path_x_pos += (x_max-x_min)*scale;
+
+	osg::Geometry* geometry = new osg::Geometry();
+	geometry->setVertexArray( vertices );
+	geometry->addPrimitiveSet( new osg::DrawArrays(osg::PrimitiveSet::LINE_STRIP, 0, vertices->size()) );
+	geometry->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
+
+	
+	geode->addDrawable( geometry );
+	m_view_controller->getRootNode()->addChild(geode);
+}
 
 void DebugViewer::slotCullFrontFaces( int state )
 {

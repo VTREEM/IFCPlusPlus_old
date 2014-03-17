@@ -18,6 +18,7 @@ set(IFCPPGEOMETRY_HEADER_FILES
   src/ifcppgeometry/GeometryInputData.h
   src/ifcppgeometry/GeometrySettings.h
   src/ifcppgeometry/GeomUtils.h
+  src/ifcppgeometry/GeometryInputData.h
   src/ifcppgeometry/PlacementConverter.h
   src/ifcppgeometry/ProfileCache.h
   src/ifcppgeometry/ProfileConverter.h
@@ -35,6 +36,7 @@ set(IFCPPGEOMETRY_SOURCE_FILES
   src/ifcppgeometry/FaceConverter.cpp
   src/ifcppgeometry/GeometrySettings.cpp
   src/ifcppgeometry/GeomUtils.cpp
+  src/ifcppgeometry/GeometryInputData.cpp
   src/ifcppgeometry/PlacementConverter.cpp
   src/ifcppgeometry/ProfileCache.cpp
   src/ifcppgeometry/ProfileConverter.cpp

@@ -14,7 +14,7 @@
 #pragma once
 
 #include "ifcpp/model/shared_ptr.h"
-#include <carve/geom3d.hpp>
+#include "IncludeCarveHeaders.h"
 
 class GeometrySettings;
 class UnitConverter;
@@ -40,11 +40,15 @@ public:
 	void convertIfcParameterizedProfileDefWithPosition(		const shared_ptr<IfcParameterizedProfileDef>& profile_def,		std::vector<std::vector<carve::geom::vector<2> > >& paths ) const;
 	void addArc(					std::vector<carve::geom::vector<2> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int segments = -1 ) const;
 	void addArcWithEndPoint(		std::vector<carve::geom::vector<2> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM ) const;
+	void simplifyPaths();
+	
 	static void addArcWithEndPoint(	std::vector<carve::geom::vector<2> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int segments );
 	static void mirrorCopyPath(			std::vector<carve::geom::vector<2> >& coords, bool mirror_on_y_axis, bool mirror_on_x_axis );
 	static void mirrorCopyPathReverse(		std::vector<carve::geom::vector<2> >& coords, bool mirror_on_y_axis, bool mirror_on_x_axis );
 	static void addAvoidingDuplicates( const std::vector<carve::geom::vector<2> >& polygon, std::vector<std::vector<carve::geom::vector<2> > >& paths );
 	static void deleteLastPointIfEqualToFirst( std::vector<carve::geom::vector<2> >& polygon );
+	static void simplifyPaths( std::vector<std::vector<carve::geom::vector<2> > >& paths );
+	static void simplifyPath( std::vector<carve::geom::vector<2> >& paths );
 	const std::vector<std::vector<carve::geom::vector<2> > >& getCoordinates() { return m_paths; }
 
 protected:

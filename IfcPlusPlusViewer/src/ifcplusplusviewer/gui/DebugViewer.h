@@ -22,9 +22,7 @@
 #include <osg/Group>
 #include <osg/Vec4>
 
-#include "carve/mesh.hpp"
-#include "carve/input.hpp"
-#include "ifcpp/model/shared_ptr.h"
+#include "ifcppgeometry/IncludeCarveHeaders.h"
 
 class ViewerWidget;
 class ViewController;
@@ -37,11 +35,15 @@ public:
 	DebugViewer();
 	~DebugViewer();
 
-	static void renderMeshsetWrapper(void* obj_ptr, const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe);
-	static void renderPolylineWrapper(void* obj_ptr, const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color);
+	static void renderPolyhedronWrapper(void* obj_ptr, const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe);
+	static void renderMeshsetWrapper(void* obj_ptr, const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe);
+	static void renderPolylineWrapper(void* obj_ptr, const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color);
+	static void renderPathsWrapper(void* obj_ptr, const std::vector<std::vector<carve::geom::vector<2> > >& paths );
 	
-	void renderMeshset( const shared_ptr<carve::mesh::MeshSet<3> >& meshset, const shared_ptr<carve::input::PolyhedronData>& poly, const osg::Vec4f& color, const bool wireframe );
-	void renderPolyline( const shared_ptr<carve::input::PolylineSetData >& poly_line, const osg::Vec4f& color );
+	void renderPolyhedron( const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe );
+	void renderMeshset( const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe );
+	void renderPolyline( const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color );
+	void renderPaths( const std::vector<std::vector<carve::geom::vector<2> > >& paths );
 
 	ViewerWidget*			m_viewer_widget;
 	ViewController*			m_view_controller;

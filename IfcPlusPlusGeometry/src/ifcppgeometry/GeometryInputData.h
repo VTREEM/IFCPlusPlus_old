@@ -16,7 +16,8 @@
 #include <vector>
 #include <ifcpp/model/shared_ptr.h>
 #include <ifcpp/IFC4/include/IfcProduct.h>
-#include <carve/input.hpp>
+#include <ifcpp/IFC4/include/IfcRepresentation.h>
+#include "IncludeCarveHeaders.h"
 
 #include <osg/ref_ptr>
 #include <osg/StateSet>
@@ -26,27 +27,14 @@
 class ItemData
 {
 public:
-	std::vector<shared_ptr<carve::input::PolyhedronData> >	item_closed_mesh_data;
-	std::vector<shared_ptr<carve::input::PolyhedronData> >	item_open_mesh_data;
-	std::vector<shared_ptr<carve::input::PolyhedronData> >	item_open_or_closed_mesh_data;
-	std::vector<shared_ptr<carve::input::PolylineSetData> > item_polyline_data;
-	std::vector<shared_ptr<carve::mesh::MeshSet<3> > >		item_meshsets;
-	std::vector<osg::ref_ptr<osg::StateSet> >				item_statesets;
-	void createMeshSetsFromClosedPolyhedrons()
-	{
-		for( unsigned int i=0; i<item_closed_mesh_data.size(); ++i )
-		{
-			shared_ptr<carve::input::PolyhedronData>& poly_data = item_closed_mesh_data[i];
-			if( poly_data->getVertexCount() < 3 )
-			{
-				continue;
-			}
-
-			shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve::input::opts()) );
-			item_meshsets.push_back( meshset );
-		}
-		item_closed_mesh_data.clear();
-	}
+	std::vector<shared_ptr<carve::input::PolyhedronData> >	closed_polyhedrons;
+	std::vector<shared_ptr<carve::input::PolyhedronData> >	open_polyhedrons;
+	std::vector<shared_ptr<carve::input::PolyhedronData> >	open_or_closed_polyhedrons;
+	std::vector<shared_ptr<carve::input::PolylineSetData> > polylines;
+	std::vector<shared_ptr<carve::mesh::MeshSet<3> > >		meshsets;
+	//std::vector<shared_ptr<carve::mesh::MeshSet<3> > >	meshsets_open;
+	std::vector<osg::ref_ptr<osg::StateSet> >				statesets;
+	void createMeshSetsFromClosedPolyhedrons();
 };
 
 struct PlacementData
@@ -62,10 +50,11 @@ public:
 	~ShapeInputData() {}
 
 	shared_ptr<IfcProduct> ifc_product;
+	shared_ptr<IfcRepresentation> representation;
 	osg::ref_ptr<osg::Switch> product_switch;
 	osg::ref_ptr<osg::Group> space_group;
-	std::vector<shared_ptr<IfcProduct> > vec_openings;
-
+	//std::vector<shared_ptr<IfcProduct> > vec_openings;
+	
 	std::vector<shared_ptr<ItemData> >			vec_item_data;
 	std::vector<osg::ref_ptr<osg::StateSet> >	vec_statesets;
 	bool added_to_storey;

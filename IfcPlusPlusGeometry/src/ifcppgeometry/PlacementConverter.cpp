@@ -15,9 +15,6 @@
 #include <osg/Geometry>
 #include <osg/Matrix>
 
-#include "carve/geom3d.hpp"
-#include "carve/matrix.hpp"
-
 #include "ifcpp/IFC4/include/IfcPlacement.h"
 #include "ifcpp/IFC4/include/IfcAxis1Placement.h"
 #include "ifcpp/IFC4/include/IfcAxis2Placement2D.h"
@@ -232,11 +229,14 @@ void PlacementConverter::convertIfcObjectPlacement( const shared_ptr<IfcObjectPl
 {
 	// prevent cyclic relative placement
 	const int placement_id = ifc_object_placement->getId();
-	if( placement_already_applied.find(placement_id) != placement_already_applied.end() )
+	if( placement_id > 0 )
 	{
-		throw IfcPPException( "PlacementConverter::convertIfcObjectPlacement: detected placement cycle", __func__ );
+		if( placement_already_applied.find(placement_id) != placement_already_applied.end() )
+		{
+			throw IfcPPException( "PlacementConverter::convertIfcObjectPlacement: detected placement cycle", __func__ );
+		}
+		placement_already_applied.insert(placement_id);
 	}
-	placement_already_applied.insert(placement_id);
 
 	carve::math::Matrix object_placement( carve::math::Matrix::IDENT() );
 	shared_ptr<IfcLocalPlacement> local_placement = dynamic_pointer_cast<IfcLocalPlacement>( ifc_object_placement );
