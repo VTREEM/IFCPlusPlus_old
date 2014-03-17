@@ -13,8 +13,8 @@
 
 #pragma once
 
-#include <ifcpp/model/shared_ptr.h>
 #include "IncludeCarveHeaders.h"
+#include <ifcpp/model/shared_ptr.h>
 
 class UnitConverter;
 class GeometrySettings;
