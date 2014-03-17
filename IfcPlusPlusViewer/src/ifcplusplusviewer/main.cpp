@@ -25,6 +25,7 @@
 #include "ifcppgeometry/ReaderWriterIFC.h"
 #include "ifcppgeometry/RepresentationConverter.h"
 #include "ifcppgeometry/ConverterOSG.h"
+#include "ifcppgeometry/DebugViewerCallback.h"
 #include "viewer/ViewerWidget.h"
 #include "viewer/Orbit3DManipulator.h"
 #include "gui/DebugViewer.h"
@@ -82,6 +83,14 @@ int main(int argc, char *argv[])
 #endif
 
 	IfcPlusPlusSystem* sys = new IfcPlusPlusSystem();
+
+#ifdef _DEBUG
+	DebugViewer* debug_viewer = new DebugViewer();
+	debug_viewer->m_viewer_widget->startTimer();
+	debug_viewer->show();
+	createTest( sys->getViewController()->getModelNode(), sys->getViewController()->getRootNode() );
+#endif
+
 	ViewerWidget* viewer_widget = new ViewerWidget();
 	Orbit3DManipulator* camera_manip = new Orbit3DManipulator( sys );
 	viewer_widget->getMainView()->setCameraManipulator( camera_manip );
@@ -94,13 +103,6 @@ int main(int argc, char *argv[])
 	viewer_widget->setFocus();
 	viewer_widget->startTimer();
 	viewer_widget->getMainView()->addEventHandler( sys );
-
-#ifdef _DEBUG
-	DebugViewer* debug_viewer = new DebugViewer();
-	debug_viewer->m_viewer_widget->startTimer();
-	debug_viewer->show();
-#endif
-	//ConverterOSG::createTest( sys->getViewController()->getModelNode(), sys->getViewController()->getRootNode() );
 
 	if( argc > 1 )
 	{

@@ -13,18 +13,12 @@
 
 #pragma once
 
-#include <osgViewer/View>
-#include <carve/matrix.hpp>
+#include "IncludeCarveHeaders.h"
 #include <ifcpp/model/shared_ptr.h>
 #include "GeometryInputData.h"
 
-#ifdef IFCPP_OPENMP
-#include <omp.h>
-#endif
-
 class GeometrySettings;
 class UnitConverter;
-class ProfileConverter;
 class ProfileCache;
 class FaceConverter;
 class CurveConverter;
@@ -42,13 +36,15 @@ public:
 	SolidModelConverter( shared_ptr<GeometrySettings> settings, shared_ptr<UnitConverter> uc, shared_ptr<CurveConverter>	cc, shared_ptr<FaceConverter> fc, shared_ptr<ProfileCache>	pc );
 	~SolidModelConverter();
 
-	void convertIfcBooleanResult(		const shared_ptr<IfcBooleanResult>& operand,				const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcBooleanOperand(		const shared_ptr<IfcBooleanOperand>& operand,				const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcSolidModel(			const shared_ptr<IfcSolidModel>& solid_model,				const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcExtrudedAreaSolid(	const shared_ptr<IfcExtrudedAreaSolid>& extruded_area,		const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcRevolvedAreaSolid(	const shared_ptr<IfcRevolvedAreaSolid>& revolved_area,		const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcCsgPrimitive3D(		const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void detailedReport( std::stringstream& strs );
+	void convertIfcBooleanResult(		const shared_ptr<IfcBooleanResult>& operand,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcBooleanOperand(		const shared_ptr<IfcBooleanOperand>& operand,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcSolidModel(			const shared_ptr<IfcSolidModel>& solid_model,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcExtrudedAreaSolid(	const shared_ptr<IfcExtrudedAreaSolid>& extruded_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcRevolvedAreaSolid(	const shared_ptr<IfcRevolvedAreaSolid>& revolved_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcCsgPrimitive3D(		const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,		const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void simplifyMesh( carve::mesh::MeshSet<3>* meshset );
+	bool computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh::MeshSet<3>* op2, const carve::csg::CSG::OP operation, 
+				const int entity1, const int entity2, std::stringstream& err, shared_ptr<carve::mesh::MeshSet<3> >& result );
 
 protected:
 	shared_ptr<GeometrySettings>			m_geom_settings;
@@ -56,9 +52,4 @@ protected:
 	shared_ptr<CurveConverter>				m_curve_converter;
 	shared_ptr<FaceConverter>				m_face_converter;
 	shared_ptr<ProfileCache>				m_profile_cache;
-	std::stringstream						m_detailed_report;
-	
-#ifdef IFCPP_OPENMP
-	omp_lock_t m_writelock_detailed_report;
-#endif
 };

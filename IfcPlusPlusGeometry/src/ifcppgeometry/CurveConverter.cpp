@@ -634,8 +634,6 @@ void CurveConverter::convertIfcCartesianPointVector( const std::vector<shared_pt
 		else
 		{
 			std::cout << "convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2" << std::endl;
-			//detailedReport( strs );
-			//throw IfcPPException("convertIfcCartesianPointVector: ifc_pt->m_Coordinates.size() != 2", __func__);
 		}
 	}
 }
@@ -664,13 +662,6 @@ void CurveConverter::convertIfcCartesianPointVectorSkipDuplicates( const std::ve
 		{
 			x = int(coords[0]->m_value*length_factor*100000)*0.00001;
 			y = int(coords[1]->m_value*length_factor*100000)*0.00001;
-		}
-		else
-		{
-			//std::stringstream strs;
-			//strs << "IfcCartesianPoint (#" << cp_id << "): coords.size() < 2";
-			//detailedReport( strs );
-			//throw IfcPPException( strs.str().c_str(), __func__ );
 		}
 
 		carve::geom::vector<3>  vertex( carve::geom::VECTOR( x, y, z ) );

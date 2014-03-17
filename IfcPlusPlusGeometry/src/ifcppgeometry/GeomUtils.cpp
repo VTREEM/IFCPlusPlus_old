@@ -27,19 +27,16 @@
 #include <utility>
 #include <sstream>
 
-#pragma warning (disable: 4267)
-#include <carve/geom3d.hpp>
-#include <carve/input.hpp>
-#include <carve/csg_triangulator.hpp>
+#include <ifcpp/model/shared_ptr.h>
+#include <ifcpp/model/IfcPPException.h>
+#include <ifcpp/IFC4/include/IfcFace.h>
 
-#include "ifcpp/model/shared_ptr.h"
-#include "ifcpp/model/IfcPPException.h"
-#include "ifcpp/IFC4/include/IfcFace.h"
-
+#include "IncludeCarveHeaders.h"
 #include "GeometrySettings.h"
 #include "ProfileConverter.h"
 #include "ConverterOSG.h"
 #include "RepresentationConverter.h"
+#include "DebugViewerCallback.h"
 #include "GeomUtils.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -576,21 +573,16 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 			err << "extrude: loop_2d.size() < 3" << std::endl;
 		}
 		
-		// if last point is equal to first, remove it
-		while( loop_2d.size() > 2 )
+		// close loop, insert first point at end if not already there
+//		while( loop_2d.size() > 2 )
 		{
-			carve::geom::vector<2> & first = loop_2d.front();
-			carve::geom::vector<2> & last = loop_2d.back();
+			carve::geom::vector<2> first = loop_2d.front();
+			carve::geom::vector<2>& last = loop_2d.back();
 
-			if( std::abs(first.x-last.x) < 0.00001 )
+			if( std::abs(first.x-last.x) > 0.00001 || std::abs(first.y-last.y) > 0.00001 )
 			{
-				if( std::abs(first.y-last.y) < 0.00001 )
-				{
-					loop_2d.pop_back();
-					continue;
-				}
+				loop_2d.push_back( first );
 			}
-			break;
 		}
 
 		face_loops.push_back(loop_2d);
@@ -759,11 +751,13 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 			}
 			if( flip_faces )
 			{
-				poly_data->addFace( point_idx, point_idx_next, point_idx_next_up, point_idx_up );
+				poly_data->addFace( point_idx, point_idx_next, point_idx_next_up );
+				poly_data->addFace( point_idx_next_up, point_idx_up, point_idx );
 			}
 			else
 			{
-				poly_data->addFace( point_idx, point_idx_up, point_idx_next_up, point_idx_next );
+				poly_data->addFace( point_idx, point_idx_up, point_idx_next_up );
+				poly_data->addFace( point_idx_next_up, point_idx_next, point_idx );
 			}
 		}
 	}

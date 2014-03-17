@@ -13,13 +13,13 @@
 
 #pragma once
 
-#include "carve/csg.hpp"
+#include "IncludeCarveHeaders.h"
 
 #define GEOM_TOLERANCE  0.0000001
 #ifdef _DEBUG
-	#define HALF_SPACE_BOX_SIZE 15
+	#define HALF_SPACE_BOX_SIZE 100
 #else
-	#define HALF_SPACE_BOX_SIZE 10000
+	#define HALF_SPACE_BOX_SIZE 100
 #endif
 
 //\brief Central class to hold settings that influence geometry processing.
@@ -35,6 +35,7 @@ public:
 	double m_min_colinearity;
 	double m_min_delta_v;
 	double m_min_normal_angle;
+	double m_min_length;
 	bool m_use_mesh_simplifier_before_csg;
 	bool m_use_mesh_simplifier_after_csg;
 	bool m_use_mesh_simplifier_before_draw;

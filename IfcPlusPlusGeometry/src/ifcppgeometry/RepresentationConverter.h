@@ -14,15 +14,10 @@
 #pragma once
 
 #include <set>
-#include <osg/ref_ptr>
-#include <osg/Group>
-#include <osgViewer/View>
+#include <sstream>
 
-#include <carve/matrix.hpp>
-#include <carve/geom2d.hpp>
-#include <carve/geom3d.hpp>
-#include <carve/input.hpp>
 #include <ifcpp/model/shared_ptr.h>
+#include "IncludeCarveHeaders.h"
 #include "GeometryInputData.h"
 #include "GeometrySettings.h"
 
@@ -37,7 +32,6 @@ class SolidModelConverter;
 class FaceConverter;
 class ProfileCache;
 
-class IfcProduct;
 class IfcElement;
 class IfcRepresentation;
 class IfcRepresentationItem;
@@ -52,18 +46,17 @@ public:
 	RepresentationConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> unit_converter );
 	~RepresentationConverter();
 
-	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,			const carve::math::Matrix& pos,		shared_ptr<ShapeInputData>& shape_data, std::set<int>& visited );
-	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,						const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,			const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
+	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	const carve::math::Matrix& pos,	shared_ptr<ShapeInputData>& shape_data, std::set<int>& visited, std::stringstream& err );
+	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,				const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcPropertySet(					const shared_ptr<IfcPropertySet>& property_set,	osg::Group* group );
 	void convertStyledItem(						const shared_ptr<IfcRepresentationItem>& representation_item, shared_ptr<ItemData>& item_data );
-	void subtractOpenings(						const shared_ptr<IfcElement>& ifc_element, shared_ptr<ItemData>& item_data, std::stringstream& strs_err );
+	void convertOpenings(						const shared_ptr<IfcElement>& ifc_element, std::vector<shared_ptr<ShapeInputData> >& vec_opening_data, std::stringstream& strs_err );
+	void subtractOpenings(						const shared_ptr<IfcElement>& ifc_element, shared_ptr<ItemData>& item_data, std::vector<shared_ptr<ShapeInputData> >& vec_opening_data, std::stringstream& err );
 
 	shared_ptr<SolidModelConverter>& getSolidConverter() { return m_solid_converter; }
 	shared_ptr<ProfileCache>& getProfileCache() { return m_profile_cache; }
-	std::string getDetailedReport() { return m_detailed_report.str(); }
-	void detailedReport( std::stringstream& strs );
 	bool handleLayerAssignments() { return m_handle_layer_assignments; }
 	void setHandleLayerAssignments( bool handle ) { m_handle_layer_assignments = handle; }
 	bool handleStyledItems() { return m_handle_styled_items; }
@@ -78,12 +71,10 @@ protected:
 	shared_ptr<FaceConverter>					m_face_converter;
 	shared_ptr<ProfileCache>					m_profile_cache;
 	
-	std::stringstream							m_detailed_report;
 	bool										m_handle_styled_items;
 	bool										m_handle_layer_assignments;
 	
 #ifdef IFCPP_OPENMP
-	omp_lock_t m_writelock_detailed_report;
 	omp_lock_t m_writelock_styles_converter;
 #endif
 };

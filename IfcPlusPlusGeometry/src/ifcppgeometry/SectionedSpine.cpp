@@ -11,34 +11,33 @@
  * OpenSceneGraph Public License for more details.
 */
 
-#pragma warning (disable: 4267)
-#include "carve/input.hpp"
-#include "carve/geom3d.hpp"
+#include <ifcpp/IFC4/include/IfcSectionedSpine.h>
+#include <ifcpp/IFC4/include/IfcCompositeCurve.h>
+#include <ifcpp/IFC4/include/IfcRationalBSplineCurveWithKnots.h>
+#include <ifcpp/IFC4/include/IfcProfileDef.h>
 
-#include "ifcpp/IFC4/include/IfcSectionedSpine.h"
-#include "ifcpp/IFC4/include/IfcCompositeCurve.h"
-#include "ifcpp/IFC4/include/IfcRationalBSplineCurveWithKnots.h"
-#include "ifcpp/IFC4/include/IfcProfileDef.h"
+#include <ifcpp/IFC4/include/IfcCartesianPoint.h>
+#include <ifcpp/IFC4/include/IfcArbitraryClosedProfileDef.h>
+#include <ifcpp/IFC4/include/IfcPolyline.h>
+#include <ifcpp/IFC4/include/IfcParameterValue.h>
+#include <ifcpp/IFC4/include/IfcCartesianPoint.h>
+#include <ifcpp/IFC4/include/IfcLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcDirection.h>
+#include <ifcpp/IFC4/include/IfcArbitraryProfileDefWithVoids.h>
+#include <ifcpp/IFC4/include/IfcRationalBSplineSurfaceWithKnots.h>
 
-#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
-#include "ifcpp/IFC4/include/IfcArbitraryClosedProfileDef.h"
-#include "ifcpp/IFC4/include/IfcPolyline.h"
-#include "ifcpp/IFC4/include/IfcParameterValue.h"
-#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
-#include "ifcpp/IFC4/include/IfcLengthMeasure.h"
-#include "ifcpp/IFC4/include/IfcDirection.h"
-#include "ifcpp/IFC4/include/IfcArbitraryProfileDefWithVoids.h"
-#include "ifcpp/IFC4/include/IfcRationalBSplineSurfaceWithKnots.h"
-
-#include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/model/UnitConverter.h"
-#include "ifcpp/model/IfcPPException.h"
-#include "ifcpp/model/shared_ptr.h"
+#include <ifcpp/model/IfcPPModel.h>
+#include <ifcpp/model/UnitConverter.h>
+#include <ifcpp/model/IfcPPException.h>
+#include <ifcpp/model/shared_ptr.h>
 #include "ProfileConverter.h"
 #include "CurveConverter.h"
 #include "RepresentationConverter.h"
 
-void RepresentationConverter::convertIfcSectionedSpine( const shared_ptr<IfcSectionedSpine>& spine, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
+void RepresentationConverter::convertIfcSectionedSpine( const shared_ptr<IfcSectionedSpine>& spine,
+													   const carve::math::Matrix& pos,
+													   shared_ptr<ItemData> item_data,
+													   std::stringstream& strs_err )
 {
 	const shared_ptr<IfcCompositeCurve> spine_curve = spine->m_SpineCurve;
 	if( !spine_curve )

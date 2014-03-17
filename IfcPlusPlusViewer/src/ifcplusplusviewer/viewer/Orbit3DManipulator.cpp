@@ -420,12 +420,23 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 	SubGroupIntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
 
-	if( m_system == NULL )
+	osg::Group* root_node = NULL;
+	if( m_system )
+	{
+		root_node = m_system->getViewController()->getRootNode();
+	}
+	else
+	{
+		root_node = (osg::Group*)view->getSceneData();
+	}
+
+	if( root_node == NULL )
 	{
 		return false;
 	}
-	osg::Group* model_node = m_system->getViewController()->getModelNode();
-	iv.apply( *cam, model_node );
+
+	//osg::Group* root_node = m_system->getViewController()->getRootNode();
+	iv.apply( *cam, root_node );
 
 	if( picker->containsIntersections() )
 	{
@@ -439,11 +450,11 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 		for( unsigned int i=0; i<nodePath.size(); ++i )
 		{
 			osg::Node* node = nodePath[nodePath.size()-i-1];
-			const std::string node_name = node->getName();
+			//const std::string node_name = node->getName();
 
 			// check if picked object is a representation of an IfcProduct
-			if( node_name.length() == 0 ) continue;
-			if( node_name.substr( 0, 9 ).compare( "intersect" ) == 0 ) continue;
+			//if( node_name.length() == 0 ) continue;
+			//if( node_name.substr( 0, 9 ).compare( "intersect" ) == 0 ) continue;
 
 			m_pointer_intersection.set( intersection.getWorldIntersectPoint() );
 			// set rotate center to intersection point
@@ -487,6 +498,7 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 	picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
 	SubGroupIntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
+	view->getScene();
 	osg::Group* model_node = m_system->getViewController()->getModelNode();
 	iv.apply( *cam, model_node );
 
@@ -549,60 +561,6 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 						m_system->clearSelection();
 					}
 					m_system->setObjectSelected( entitiy_selected, true, group );
-
-#ifdef _DEBUG_GEOMETRY
-					shared_ptr<IfcProduct> product_selected = dynamic_pointer_cast<IfcProduct>(entitiy_selected);
-
-					if( product_selected )
-					{
-						std::stringstream err;
-						try
-						{
-							//shared_ptr<Kernel> sys = new Kernel();
-							//shared_ptr<ViewerWidget> viewer_widget = new ViewerWidget();
-							osgViewer::Viewer viewer;
-							viewer.setCameraManipulator( new osgGA::TrackballManipulator() );
-							viewer.addEventHandler(new osgViewer::WindowSizeHandler());
-
-							//osgViewer::View::setUpViewInWindow(x,y,width,height). 
-							osgViewer::ViewerBase::Views views;
-							viewer.getViews( views );
-							if( views.size() > 0 )
-							{
-								views[0]->setUpViewInWindow( 200, 10, 400, 400 );
-							}
-							//osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> gw = viewer.setUpViewerAsEmbeddedInWindow( 0, 0, 400, 400 );
-							viewer.setSceneData( new osg::Group() );
-							viewer.realize();
-							viewer.frame();
-
-							//viewer.getViews()[0]->getCamera()->setViewport(new osg::Viewport(0,0, 400, 400));
-
-							//viewer_widget->setRootNode( sys->getViewController()->getRootNode() );
-							//viewer_widget->setModelNode( sys->getViewController()->getModelNode() );
-
-							//osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, 1 ) );
-
-							shared_ptr<ShapeInputData> read_result( new ShapeInputData() );
-							osg::ref_ptr<ReaderWriterIFC> reader_writer( new ReaderWriterIFC() );
-							reader_writer->setModel( m_ifc_model );
-							reader_writer->convertIfcProduct( product_selected, read_result, &viewer );
-							//mt->addChild( read_result->product_group );
-							//viewer.getSceneData()->addChild( mt );
-							viewer.run();
-
-							viewer.setDone( true );
-							//viewer_widget->show();//window->show();
-							//viewer_widget->setFocus();
-							//viewer_widget->startTimer();
-							//viewer_widget->addEventHandler( sys );
-						}
-						catch( IfcPPException& e )
-						{
-							err << e.what();
-						}
-					}
-#endif
 				}
 				return true;
 			}
