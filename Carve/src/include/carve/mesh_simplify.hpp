@@ -584,7 +584,7 @@ namespace carve {
           int n_int4 = countIntersections(v4, v3, v1, overlapping);
 
           if ((n_int3 + n_int4) - (n_int1 + n_int2) > 0) {
-            std::cerr << "delta[ints] = " << (n_int3 + n_int4) - (n_int1 + n_int2) << std::endl;
+            //std::cerr << "delta[ints] = " << (n_int3 + n_int4) - (n_int1 + n_int2) << std::endl;
             // avoid creating a self intersection.
             continue;
           }
@@ -788,12 +788,12 @@ namespace carve {
                                           near_faces.begin(), near_faces.end(),
                                           v1, v2, merge);
           if (i2 != i1) {
-            std::cerr << "near faces: " << near_faces.size() << " affected faces: " << affected_faces.size() << std::endl;
-            std::cerr << "merge delta[ints] = " << i2 - i1 << " pre: " << i1 << " post: " << i2 << std::endl;
+            //std::cerr << "near faces: " << near_faces.size() << " affected faces: " << affected_faces.size() << std::endl;
+            //std::cerr << "merge delta[ints] = " << i2 - i1 << " pre: " << i1 << " post: " << i2 << std::endl;
             if (i2 > i1) continue;
           }
 
-          std::cerr << "collapse " << e << std::endl;
+          //std::cerr << "collapse " << e << std::endl;
 
           v2->v = merge;
           ++n_mods;
@@ -1350,7 +1350,7 @@ namespace carve {
 
         initEdgeInfo(meshset);
 
-        std::cerr << "initial merge" << std::endl;
+        //std::cerr << "initial merge" << std::endl;
         modifications = collapseEdges(meshset, EdgeMerger(0.0));
         removeRemnantFaces(meshset);
 
@@ -1361,24 +1361,24 @@ namespace carve {
           // std::cerr << " " << n << std::endl;
           // n_flip = n;
 
-          std::cerr << "flip conservative";
+          //std::cerr << "flip conservative";
           n = flipEdges(meshset, FlippableConservative());
-          std::cerr << " " << n << std::endl;
+          //std::cerr << " " << n << std::endl;
           n_flip += n;
 
-          std::cerr << "flip";
+          //std::cerr << "flip";
           n = flipEdges(meshset, Flippable(min_colinearity, min_delta_v, min_normal_angle));
-          std::cerr << " " << n << std::endl;
+          //std::cerr << " " << n << std::endl;
           n_flip += n;
 
-          std::cerr << "merge";
+          //std::cerr << "merge";
           n = collapseEdges(meshset, EdgeMerger(min_length));
           removeRemnantFaces(meshset);
-          std::cerr << " " << n << std::endl;
+          //std::cerr << " " << n << std::endl;
           n_merge = n;
 
           modifications += n_flip + n_merge;
-          std::cerr << "stats:" << n_flip << " " << n_merge << std::endl;
+          //std::cerr << "stats:" << n_flip << " " << n_merge << std::endl;
         } while (n_flip || n_merge);
 
         clearEdgeInfo();
@@ -1414,7 +1414,7 @@ namespace carve {
 
 
       size_t removeLowVolumeManifolds(meshset_t *meshset, double min_abs_volume) {
-        size_t n_removed;
+        size_t n_removed = 0;
         for (size_t i = 0; i < meshset->meshes.size(); ++i) {
           if (fabs(meshset->meshes[i]->volume()) < min_abs_volume) {
             delete meshset->meshes[i];

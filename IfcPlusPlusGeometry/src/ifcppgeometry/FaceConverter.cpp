@@ -11,8 +11,6 @@
 * OpenSceneGraph Public License for more details.
 */
 
-#include <carve/csg_triangulator.hpp>
-
 #include "ifcpp/IFC4/include/IfcParameterValue.h"
 #include "ifcpp/IFC4/include/IfcLengthMeasure.h"
 #include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
@@ -602,7 +600,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 	}
 
 	// IfcFaceList can be a closed or open shell, so let the calling function decide where to put it
-	item_data->item_open_or_closed_mesh_data.push_back( poly_data );
+	item_data->open_or_closed_polyhedrons.push_back( poly_data );
 
 	if( err.tellp() > 0 )
 	{
