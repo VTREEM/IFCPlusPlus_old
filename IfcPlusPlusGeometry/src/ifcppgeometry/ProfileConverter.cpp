@@ -52,10 +52,6 @@
 #include "ifcpp/model/UnitConverter.h"
 #include "ifcpp/model/IfcPPException.h"
 
-#include "carve/geom2d.hpp"
-#include "carve/geom3d.hpp"
-#include "carve/matrix.hpp"
-
 #include "GeometrySettings.h"
 #include "GeomUtils.h"
 #include "RepresentationConverter.h"
@@ -1126,6 +1122,78 @@ void ProfileConverter::deleteLastPointIfEqualToFirst( std::vector<carve::geom::v
 		break;
 	}
 }
+
+void ProfileConverter::simplifyPaths()
+{
+	simplifyPaths( m_paths );
+}
+
+void ProfileConverter::simplifyPaths( std::vector<std::vector<carve::geom::vector<2> > >& paths )
+{
+	for( std::vector<std::vector<carve::geom::vector<2> > >::iterator it_paths = paths.begin(); it_paths != paths.end(); ++it_paths )
+	{
+		std::vector<carve::geom::vector<2> >& path = (*it_paths);
+		if( path.size() < 3 )
+		{
+			continue;
+		}
+		simplifyPath( path );
+	}
+}
+
+void ProfileConverter::simplifyPath( std::vector<carve::geom::vector<2> >& path )
+{
+	if( path.size() < 3 )
+	{
+		return;
+	}
+
+	for( int i=1; i<path.size()-1; )
+	{
+		carve::geom::vector<2>& previous = path[i-1];
+		carve::geom::vector<2>& current = path[i];
+		carve::geom::vector<2>& next = path[i+1];
+
+		carve::geom::vector<2> segment1 = current - previous;
+		segment1.normalize();
+		carve::geom::vector<2> segment2 = next - current;
+		segment2.normalize();
+		double angle = abs( segment1.x*segment2.x + segment1.y*segment2.y);
+		if( abs(angle-1) < 0.00001 )
+		{
+			// points are colinear, current point can be removed
+			path.erase( path.begin() + i );
+			continue;
+		}
+		++i;
+	}
+
+	// 1-----0 5-----4      0-----------3         1---0 4---3      0-----------2
+	// |             |  ->  |           |         |   _ ---    ->  |   _ ---
+	// 2-------------3      1-----------2         2--              1---
+
+	if( path.size() > 4 )
+	{
+		carve::geom::vector<2>& first = path.front();
+		carve::geom::vector<2>& last = path.back();
+
+		if( (last - first).length2() < 0.000001 )
+		{
+			carve::geom::vector<2> first_segment = path[1] - first;
+			first_segment.normalize();
+			carve::geom::vector<2> last_segment = last - path[path.size()-2];
+			last_segment.normalize();
+			double angle = abs( first_segment.x*last_segment.x + first_segment.y*last_segment.y);
+			if( abs(angle-1) < 0.00001 )
+			{
+				// remove first and last point
+				path.erase( path.begin() );
+				path.pop_back();
+			}
+		}
+	}
+}
+
 
 void ProfileConverter::addArc( std::vector<carve::geom::vector<2> >& coords, double radius, double start_angle, double opening_angle, double xM, double yM, int num_segments ) const
 {

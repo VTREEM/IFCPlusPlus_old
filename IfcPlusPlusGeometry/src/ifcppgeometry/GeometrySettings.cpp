@@ -18,14 +18,16 @@ GeometrySettings::GeometrySettings()
 	m_num_vertices_per_circle = 20;
 	m_min_num_vertices_per_arc = 6;
 
-	m_min_colinearity = 0.01;
-	m_min_delta_v = 0.01;
-	m_min_normal_angle = 0.01;
-	m_use_mesh_simplifier_after_csg = false;
+	m_min_colinearity = 0.1;
+	m_min_delta_v = 1.0;
+	m_min_normal_angle = M_PI/180.0;
+	m_min_length = 0.0002;
+
+	m_use_mesh_simplifier_after_csg = true;
 	m_use_mesh_simplifier_before_csg = false;
 	m_use_mesh_simplifier_before_draw = false;
 	m_set_process_output_face = true;
-	m_classify_type = carve::csg::CSG::CLASSIFY_NORMAL;
+	m_classify_type = carve::csg::CSG::CLASSIFY_EDGE;
 }
 
 GeometrySettings::~GeometrySettings()

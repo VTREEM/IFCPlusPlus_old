@@ -24,6 +24,7 @@
 #include <osgDB/ReadFile>
 #include <osgDB/ReaderWriter>
 #include <osgDB/FileNameUtils>
+#include <osg/CullFace>
 
 #include <ifcpp/IFC4/include/IfcProduct.h>
 #include <ifcpp/IFC4/include/IfcProject.h>
@@ -54,18 +55,14 @@
 #include <ifcpp/writer/IfcStepWriter.h>
 #include <ifcpp/model/UnitConverter.h>
 
-#include <carve/csg_triangulator.hpp>
-#include <carve/mesh_simplify.hpp>
-
 #include "GeometrySettings.h"
+#include "GeomUtils.h"
 #include "UnhandledRepresentationException.h"
 #include "RepresentationConverter.h"
 #include "PlacementConverter.h"
 #include "SolidModelConverter.h"
 #include "ConverterOSG.h"
 #include "ReaderWriterIFC.h"
-
-
 
 ReaderWriterIFC::ReaderWriterIFC()
 {
@@ -81,6 +78,8 @@ ReaderWriterIFC::ReaderWriterIFC()
 
 	m_geom_settings = shared_ptr<GeometrySettings>( new GeometrySettings() );
 	resetNumVerticesPerCircle();
+	m_unit_converter = shared_ptr<UnitConverter>( new UnitConverter() );
+	m_representation_converter = shared_ptr<RepresentationConverter>( new RepresentationConverter( m_geom_settings, m_unit_converter ) );
 
 	m_glass_stateset = new osg::StateSet();
 	m_glass_stateset->setMode( GL_BLEND, osg::StateAttribute::ON );
@@ -354,6 +353,11 @@ void ReaderWriterIFC::createGeometry()
 			{
 				shared_ptr<IfcProduct> product = vec_products[i];
 				std::stringstream thread_err;
+				if( dynamic_pointer_cast<IfcFeatureElementSubtraction>(product) )
+				{
+					// geometry will be created in method subtractOpenings
+					continue;
+				}
 				if( !product->m_Representation )
 				{
 					continue;
@@ -361,6 +365,8 @@ void ReaderWriterIFC::createGeometry()
 
 				const int product_id = product->getId();
 				shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
+				product_shape->ifc_product = product;
+
 				try
 				{
 					// (Compare types in lowercase to avoid typos)
@@ -397,7 +403,7 @@ void ReaderWriterIFC::createGeometry()
 				}
 				catch( ... )
 				{
-					thread_err << "error in ReaderWriterIFC::convertIfcRelContainedInSpatialStructure, product id " << product_id << std::endl;
+					thread_err << "error in " << __FUNC__ << ", product id " << product_id << std::endl;
 				}
 
 				//#pragma omp critical
@@ -406,11 +412,11 @@ void ReaderWriterIFC::createGeometry()
 					map_products_ptr->insert( std::make_pair( product_id, product_shape ) );
 					m_processed_products[product_id] = product;
 			
-					for( int opening_i = 0; opening_i<product_shape->vec_openings.size(); ++opening_i )
-					{
-						shared_ptr<IfcProduct>& opening_product = product_shape->vec_openings[opening_i];
-						m_processed_products[opening_product->getId()] = opening_product;
-					}
+					//for( int opening_i = 0; opening_i<product_shape->vec_openings.size(); ++opening_i )
+					//{
+					//	shared_ptr<IfcProduct>& opening_product = product_shape->vec_openings[opening_i];
+					//	m_processed_products[opening_product->getId()] = opening_product;
+					//}
 					if( thread_err.tellp() > 0 )
 					{
 						err << thread_err.str().c_str();
@@ -439,14 +445,20 @@ void ReaderWriterIFC::createGeometry()
 	for( int i=0; i<num_products; ++i )
 	{
 		shared_ptr<IfcProduct> product = vec_products[i];
-		const int product_id = product->getId();
-		shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
-		product_shape->ifc_product = product;
-
+		
+		if( dynamic_pointer_cast<IfcFeatureElementSubtraction>(product) )
+		{
+			// geometry will be created in method subtractOpenings
+			continue;
+		}
 		if( !product->m_Representation )
 		{
 			continue;
 		}
+
+		const int product_id = product->getId();
+		shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
+		product_shape->ifc_product = product;
 
 		try
 		{
@@ -490,7 +502,7 @@ void ReaderWriterIFC::createGeometry()
 		}
 		catch( ... )
 		{
-			err << "error in ReaderWriterIFC::convertIfcRelContainedInSpatialStructure, product id " << product_id << std::endl;
+			err << "error in " << __FUNC__ << ", product id " << product_id << std::endl;
 		}
 
 		m_shape_input_data[product_id] = product_shape;
@@ -554,9 +566,8 @@ void ReaderWriterIFC::createGeometry()
 	}
 	catch( ... )
 	{
-		err << "error in ReaderWriterIFC::convertIfcProject" << std::endl;
+		err << "error in " << __FUNC__ << std::endl;
 	}
-
 
 	progressCallback( 1.0 );
 	progressTextCallback( "Loading file done" );
@@ -567,7 +578,7 @@ void ReaderWriterIFC::createGeometry()
 	}
 }
 
-void ReaderWriterIFC::resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg::Group* parent_group )
+void ReaderWriterIFC::resolveProjectStructure( const shared_ptr<IfcPPObject>& obj, osg::Group* parent_group )
 {
 	shared_ptr<IfcObjectDefinition> obj_def = dynamic_pointer_cast<IfcObjectDefinition>(obj);
 	if( !obj_def )
@@ -691,18 +702,14 @@ void ReaderWriterIFC::resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg:
 
 // @brief creates geometry objects from an IfcProduct object
 // caution: when using OpenMP, this method runs in parallel threads, so every write access to member variables needs a write lock
-void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_ptr<ShapeInputData>& product_shape )
+void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, shared_ptr<ShapeInputData>& product_shape )
 {
-	// IfcProduct needs to have a representation
 	if( !product->m_Representation )
 	{
+		// IfcProduct needs to have a representation
 		return;
 	}
-	if( dynamic_pointer_cast<IfcFeatureElementSubtraction>(product) )
-	{
-		return;
-	}
-
+	
 	const int product_id = product->getId();
 	std::stringstream strs_err;
 	osg::ref_ptr<osg::Switch> product_switch = new osg::Switch();
@@ -727,33 +734,18 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 	std::vector<shared_ptr<IfcRepresentation> >::iterator it_representations;
 	for( it_representations=vec_representations.begin(); it_representations!=vec_representations.end(); ++it_representations )
 	{
-		try
-		{
-			shared_ptr<IfcRepresentation> representation = (*it_representations);
-			std::set<int> visited_representation;
-			m_representation_converter->convertIfcRepresentation( representation, product_placement_matrix, product_shape, visited_representation );
-		}
-		catch( IfcPPException& e )
-		{
-			strs_err << e.what();
-		}
-#ifdef _DEBUG
-			catch( DebugBreakException& dbge )
-			{
-				throw dbge;
-			}
-#endif
-		catch( std::exception& e)
-		{
-			strs_err << e.what();
-		}
-		catch(...)
-		{
-			strs_err << "convertIfcProduct: convertIfcRepresentation failed at product id " << product_id << std::endl;
-		}
+		shared_ptr<IfcRepresentation> representation = (*it_representations);
+		std::set<int> visited_representation;
+		m_representation_converter->convertIfcRepresentation( representation, product_placement_matrix, product_shape, visited_representation, strs_err );
 	}
 
+	std::vector<shared_ptr<ShapeInputData> > vec_opening_data;
 	const shared_ptr<IfcElement> ifc_element = dynamic_pointer_cast<IfcElement>(product);
+	if( ifc_element )
+	{
+		m_representation_converter->convertOpenings( ifc_element, vec_opening_data, strs_err );
+	}
+
 
 	std::vector<shared_ptr<ItemData> >& product_items = product_shape->vec_item_data;
 	for( int i_item=0; i_item<product_items.size(); ++i_item )
@@ -764,24 +756,28 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		osg::Group* item_group = new osg::Group();
 
 		// create shape for open shells
-		for( int i=0; i<item_data->item_open_mesh_data.size(); ++i )
+		for( int i=0; i<item_data->open_polyhedrons.size(); ++i )
 		{
-			shared_ptr<carve::input::PolyhedronData>& shell_data = item_data->item_open_mesh_data[i];
+			shared_ptr<carve::input::PolyhedronData>& shell_data = item_data->open_polyhedrons[i];
 			if( shell_data->getVertexCount() < 3 )
 			{
 				continue;
 			}
-
+			
 			shared_ptr<carve::mesh::MeshSet<3> > open_shell_meshset( shell_data->createMesh(carve::input::opts()) );
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			ConverterOSG::drawMeshSet( open_shell_meshset, geode );
+			ConverterOSG::drawMeshSet( open_shell_meshset.get(), geode );
 			item_group->addChild(geode);
+
+			// disable back face culling for open meshes
+			osg::ref_ptr<osg::CullFace> cull_back_off = new osg::CullFace( osg::CullFace::BACK );
+			geode->getOrCreateStateSet()->setAttributeAndModes( cull_back_off.get(), osg::StateAttribute::OFF );
 		}
 
 		// create shape for open or closed shells
-		for( int i=0; i<item_data->item_open_or_closed_mesh_data.size(); ++i )
+		for( int i_poly=0; i_poly<item_data->open_or_closed_polyhedrons.size(); ++i_poly )
 		{
-			shared_ptr<carve::input::PolyhedronData>& shell_data = item_data->item_open_or_closed_mesh_data[i];
+			shared_ptr<carve::input::PolyhedronData>& shell_data = item_data->open_or_closed_polyhedrons[i_poly];
 			if( shell_data->getVertexCount() < 3 )
 			{
 				continue;
@@ -789,18 +785,18 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 
 			shared_ptr<carve::mesh::MeshSet<3> > open_or_closed_shell_meshset( shell_data->createMesh(carve::input::opts()) );
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			ConverterOSG::drawMeshSet( open_or_closed_shell_meshset, geode );
+			ConverterOSG::drawMeshSet( open_or_closed_shell_meshset.get(), geode );
 			item_group->addChild(geode);
 		}
 
 		// cut out openings like windows etc.
 		if( ifc_element )
 		{
-			m_representation_converter->subtractOpenings( ifc_element, item_data, strs_err );
+			m_representation_converter->subtractOpenings( ifc_element, item_data, vec_opening_data, strs_err );
 		}
 
 		// create shape for meshsets
-		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->item_meshsets.begin(); it_meshsets != item_data->item_meshsets.end(); ++it_meshsets )
+		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->meshsets.begin(); it_meshsets != item_data->meshsets.end(); ++it_meshsets )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> >& item_meshset = (*it_meshsets);
 
@@ -808,36 +804,35 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 			{
 				try
 				{
-					carve::mesh::MeshSimplifier simplifier;
-					simplifier.improveMesh( item_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+					m_representation_converter->getSolidConverter()->simplifyMesh( item_meshset.get() );
 				}
 				catch( carve::exception& e )
 				{
-					strs_err << "improveMesh failed (" << e.str() << ") on product id " << product_id << std::endl;
+					strs_err << "simplifyMesh failed (" << e.str() << ") on product id " << product_id << std::endl;
 				}
 			}
 
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
-			ConverterOSG::drawMeshSet( item_meshset, geode_result );
+			ConverterOSG::drawMeshSet( item_meshset.get(), geode_result );
 			item_group->addChild(geode_result);
 		}
 
 		
 		// create shape for polylines
-		for( int polyline_i = 0; polyline_i < item_data->item_polyline_data.size(); ++polyline_i )
+		for( int polyline_i = 0; polyline_i < item_data->polylines.size(); ++polyline_i )
 		{
-			shared_ptr<carve::input::PolylineSetData>& polyline_data = item_data->item_polyline_data.at(polyline_i);
+			shared_ptr<carve::input::PolylineSetData>& polyline_data = item_data->polylines.at(polyline_i);
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			ConverterOSG::drawPolyline( polyline_data, geode );
+			ConverterOSG::drawPolyline( polyline_data.get(), geode );
 			item_group->addChild(geode);
 		}
 
 		// apply statesets if there are any
-		if( item_data->item_statesets.size() > 0 )
+		if( item_data->statesets.size() > 0 )
 		{
-			for( int i=0; i<item_data->item_statesets.size(); ++i )
+			for( int i=0; i<item_data->statesets.size(); ++i )
 			{
-				osg::StateSet* next_item_stateset = item_data->item_statesets[i];
+				osg::StateSet* next_item_stateset = item_data->statesets[i];
 				if( !next_item_stateset )
 				{
 					continue;
@@ -919,8 +914,6 @@ void ReaderWriterIFC::convertIfcProduct( shared_ptr<IfcProduct> product, shared_
 		}
 
 		osg::StateSet* existing_item_stateset = product_switch->getStateSet();
-
-
 		if( existing_item_stateset )
 		{
 			osg::StateSet* merged_product_stateset = new osg::StateSet( *existing_item_stateset );

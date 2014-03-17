@@ -13,10 +13,8 @@
 
 #pragma once
 
-#include <carve/matrix.hpp>
-#include <carve/input.hpp>
 #include <ifcpp/model/shared_ptr.h>
-
+#include "IncludeCarveHeaders.h"
 #include "GeometryInputData.h"
 
 class GeometrySettings;

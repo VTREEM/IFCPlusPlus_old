@@ -15,11 +15,8 @@
 
 #include <osg/Matrix>
 #include <osg/Geode>
-#include "ifcpp/model/shared_ptr.h"
-
-#include "carve/input.hpp"
-#include "carve/poly.hpp"
-#include "carve/mesh.hpp"
+#include <ifcpp/model/shared_ptr.h>
+#include "IncludeCarveHeaders.h"
 
 class ConverterOSG
 {
@@ -27,21 +24,12 @@ public:
 	ConverterOSG();
 	~ConverterOSG();
 
-	static void drawFace(		const carve::mesh::Face<3>* face,								osg::Geode* geode, bool add_color_array = false );
-	static void drawMesh(		const carve::mesh::Mesh<3>* mesh,								osg::Geode* geode, bool add_color_array = false );
-	static void drawOpenMesh(	const shared_ptr<carve::input::PolyhedronData>& poly_data,		osg::Geode* geode, bool add_color_array = false );
-	static void drawMeshSet(	const shared_ptr<carve::mesh::MeshSet<3> >& mesh_set,			osg::Geode* geode, bool add_color_array = false );
-	static void drawPolyhedron( const shared_ptr<carve::poly::Polyhedron>& polyhedron,			osg::Geode* geode, bool add_color_array = false );
-	static void drawPolyline(	const shared_ptr<carve::input::PolylineSetData>& polyline_data, osg::Geode* geode, bool add_color_array = false );
-	static void drawVertexNumbers( const shared_ptr<carve::input::PolyhedronData> poly, const osg::Vec4f& color, osg::Geode* geode );
-	static bool checkMeshSet(	const shared_ptr<carve::mesh::MeshSet<3> >& mesh_set, std::stringstream& err_poly, int entity_id );
+	static void drawFace(		const carve::mesh::Face<3>* face,					osg::Geode* geode, bool add_color_array = false );
+	static void drawMesh(		const carve::mesh::Mesh<3>* mesh,					osg::Geode* geode, bool add_color_array = false );
+	static void drawOpenMesh(	const carve::input::PolyhedronData* poly_data,		osg::Geode* geode, bool add_color_array = false );
+	static void drawMeshSet(	const carve::mesh::MeshSet<3>* mesh_set,			osg::Geode* geode, bool add_color_array = false );
+	static void drawPolyhedron( const carve::poly::Polyhedron* polyhedron,			osg::Geode* geode, bool add_color_array = false );
+	static void drawPolyline(	const carve::input::PolylineSetData* polyline_data, osg::Geode* geode, bool add_color_array = false );
+	static bool checkMeshSet(	const carve::mesh::MeshSet<3>* mesh_set, std::stringstream& err_poly, int entity_id );
 	static double computeSurfaceAreaOfGroup( const osg::Group* grp );
-
-	static void createTest( osg::Group* group, osg::Group* root );
-	static void createTest2( osg::Group* group );
-	static void createTest4( osg::Group* group );
-
-#ifdef _DEBUG
-	static void dumpMeshsets( shared_ptr<carve::mesh::MeshSet<3> >& operand1, shared_ptr<carve::mesh::MeshSet<3> >& operand2, shared_ptr<carve::mesh::MeshSet<3> >& result_meshset );
-#endif
 };

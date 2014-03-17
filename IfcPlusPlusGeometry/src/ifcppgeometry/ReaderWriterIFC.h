@@ -45,14 +45,18 @@ public:
 	virtual osgDB::ReaderWriter::ReadResult readNode(const std::string& filename, const osgDB::ReaderWriter::Options* options);
 
 	void createGeometry();
-	void convertIfcProduct(	shared_ptr<IfcProduct> product, shared_ptr<ShapeInputData>& product_shape );
-	void resolveProjectStructure( shared_ptr<IfcPPObject> obj, osg::Group* parent_group );
+	void convertIfcProduct(	const shared_ptr<IfcProduct>& product, shared_ptr<ShapeInputData>& product_shape );
+	void resolveProjectStructure( const shared_ptr<IfcPPObject>& obj, osg::Group* parent_group );
+
+	// getters and setters
 	void setModel( shared_ptr<IfcPPModel> model );
-	shared_ptr<IfcPPModel> getIfcPPModel() { return m_ifc_model; }
-	shared_ptr<IfcPlusPlusReader> getIfcPPReader() { return m_step_reader; }
-	shared_ptr<IfcStepWriter> getIfcPPWriter() { return m_step_writer; }
-	shared_ptr<RepresentationConverter> getRepresentationConverter() { return m_representation_converter; }
-	std::map<int,shared_ptr<ShapeInputData> >& getShapeInputData() { return m_shape_input_data; }
+	shared_ptr<IfcPPModel>&						getIfcPPModel()					{ return m_ifc_model; }
+	shared_ptr<IfcPlusPlusReader>&				getIfcPPReader()				{ return m_step_reader; }
+	shared_ptr<IfcStepWriter>&					getIfcPPWriter()				{ return m_step_writer; }
+	shared_ptr<RepresentationConverter>&		getRepresentationConverter()	{ return m_representation_converter; }
+	std::map<int,shared_ptr<ShapeInputData> >&	getShapeInputData()				{ return m_shape_input_data; }
+	shared_ptr<UnitConverter>&					getUnitConverter()				{ return m_unit_converter; }
+
 	std::stringstream& getErrors() { return m_err; }
 	std::stringstream& getMessages() { return m_messages; }
 	void setNumVerticesPerCircle( int num_circles );

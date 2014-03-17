@@ -19,15 +19,8 @@
 #include <osg/Group>
 #include <osgViewer/Viewer>
 #include <ifcpp/model/shared_ptr.h>
-
-namespace carve
-{
-	namespace geom		{ 	template<unsigned ndim> struct vector;	}
-	namespace mesh		{	template<unsigned ndim> class MeshSet;	}
-	namespace math		{	struct Quaternion;	struct Matrix;	}
-	namespace input		{	struct PolyhedronData;	struct PolylineSetData;	}
-	namespace poly		{	class Polyhedron;	}
-}
+#include "GeometrySettings.h"
+#include "IncludeCarveHeaders.h"
 
 enum ProjectionPlane
 {
@@ -72,4 +65,5 @@ public:
 	static bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal );
 	static void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
 							 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix );
+	
 };

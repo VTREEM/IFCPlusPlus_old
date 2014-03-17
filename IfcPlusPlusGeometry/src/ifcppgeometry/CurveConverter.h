@@ -13,9 +13,7 @@
 
 #pragma once
 
-#include <carve/geom2d.hpp>
-#include <carve/geom3d.hpp>
-#include <carve/input.hpp>
+#include "IncludeCarveHeaders.h"
 #include <ifcpp/model/shared_ptr.h>
 
 class UnitConverter;

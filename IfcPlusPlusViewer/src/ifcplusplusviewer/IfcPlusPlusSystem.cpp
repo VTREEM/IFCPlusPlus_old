@@ -273,7 +273,7 @@ void IfcPlusPlusSystem::setObjectSelected( shared_ptr<IfcPPEntity> ifc_object, b
 			{
 				m_reader_writer->convertIfcProduct( product, product_shape );
 			}
-			renderMeshsetInDebugViewer( product_shape, osg::Vec4f( 0.5, 0.5, 0.5, 1.0 ), true  );
+			renderShapeInputDataInDebugViewer( product_shape.get(), osg::Vec4f( 0.5, 0.5, 0.5, 1.0 ), true  );
 		}
 
 #endif
