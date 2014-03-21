@@ -157,20 +157,18 @@ void convertIfcColour( shared_ptr<IfcColour> ifc_color, osg::Vec4f& color )
 
 osg::StateSet* StylesConverter::convertIfcSurfaceStyle( shared_ptr<IfcSurfaceStyle> surface_style )
 {
-	std::vector<shared_ptr<IfcSurfaceStyleElementSelect> >& vec_styles = surface_style->m_Styles;
-	std::vector<shared_ptr<IfcSurfaceStyleElementSelect> >::iterator it;
-
 	const int style_id = surface_style->getId();
 	std::map<int,osg::ref_ptr<osg::StateSet> >::iterator it_styles = m_map_ifc_styles.find(style_id);
-	if( it_styles != m_map_ifc_styles.end() ){	return m_map_ifc_styles[style_id]; }
+	if( it_styles != m_map_ifc_styles.end() ){	return it_styles->second; }
 
+	std::vector<shared_ptr<IfcSurfaceStyleElementSelect> >& vec_styles = surface_style->m_Styles;
 	if( vec_styles.size() == 0 )
 	{
 		return NULL;
 	}
 
 	osg::StateSet* stateset = NULL;
-	for( it=vec_styles.begin(); it!=vec_styles.end(); ++it )
+	for( std::vector<shared_ptr<IfcSurfaceStyleElementSelect> >::iterator it=vec_styles.begin(); it!=vec_styles.end(); ++it )
 	{
 		shared_ptr<IfcSurfaceStyleElementSelect> surf_style_element_select = (*it);
 		if( !surf_style_element_select )
@@ -394,7 +392,7 @@ osg::StateSet* StylesConverter::convertIfcComplexPropertyColor( shared_ptr<IfcCo
 	if( it_styles != m_map_ifc_styles.end() )
 	{
 		// use existing stateset
-		return m_map_ifc_styles[complex_property_id];
+		return it_styles->second;
 	}
 
 	shared_ptr<IfcPropertySingleValue> prop1 = dynamic_pointer_cast<IfcPropertySingleValue>(complex_property->m_HasProperties[0]);

@@ -419,6 +419,24 @@ shared_ptr<IfcCartesianPoint> createCartesianPoint( double x, double y, double z
 
 void createTest( osg::Group* group, osg::Group* root )
 {
+//	{
+//		shared_ptr<carve::mesh::MeshSet<3> > meshset1( makeCube( carve::math::Matrix::TRANS(0.0, 0.0, 0.0) ) );
+//		shared_ptr<carve::mesh::MeshSet<3> > meshset2( makeCube( carve::math::Matrix::TRANS(2.00000000000000001, 0.1, 0.0) ) );
+//	
+//		std::stringstream err;
+//bool meshset1_ok = ConverterOSG::checkMeshSet( meshset1.get(), err, -1 );
+//bool meshset2_ok = ConverterOSG::checkMeshSet( meshset2.get(), err, -1 );
+//
+//renderMeshsetInDebugViewer( meshset1.get(), osg::Vec4f( 0.5, 0.5, 0.5, 1 ), false );
+//renderMeshsetInDebugViewer( meshset2.get(), osg::Vec4f( 0.5, 0, 0, 1 ), true );
+//
+//		carve::csg::CSG csg6;
+//		csg6.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement, carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+//		shared_ptr<carve::mesh::MeshSet<3> > solid_result( csg6.compute(meshset1.get(), meshset2.get(), carve::csg::CSG::INTERSECTION) );
+//
+//		return;
+//	}
+
 	if( false )
 	{
 		//#149238= IFCCARTESIANPOINT((286.999999742634,14545.0960300668,6591.20787626065));
@@ -723,297 +741,51 @@ void createTest( osg::Group* group, osg::Group* root )
 
 	{
 
-		// entity_id: 180190
-carve::input::PolyhedronData* poly_data1 = new carve::input::PolyhedronData();
-poly_data1->addVertex( carve::geom::VECTOR(0.0425, 36.3854, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.0425, 36.3754, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.0425, 36.3754, 6.59221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.0425, 36.3854, 6.59221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11525, 36.3807, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11525, 36.3754, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.1975, 36.3754, 6.59221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11525, 36.3854, 6.4088 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11525, 36.3854, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11637, 36.3854, 6.43805 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.1975, 36.3854, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12475, 36.3854, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12475, 36.3854, 6.3564 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12475, 36.3854, 6.435 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11525, 36.3854, 6.435 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11838, 36.3854, 6.43946 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.118192, 36.3854, 6.43937 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11763, 36.3854, 6.43911 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11554, 36.3854, 6.43662 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.115487, 36.3854, 6.43642 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11533, 36.3854, 6.43582 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12163, 36.3854, 6.43946 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12143, 36.3854, 6.43951 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12083, 36.3854, 6.43968 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11746, 36.3854, 6.43899 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11695, 36.3854, 6.43864 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.124732, 36.3854, 6.4352 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12468, 36.3854, 6.43582 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12, 36.3854, 6.43975 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.119795, 36.3854, 6.43973 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11918, 36.3854, 6.43968 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12447, 36.3854, 6.43662 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.124382, 36.3854, 6.4368 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12412, 36.3854, 6.43737 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11625, 36.3854, 6.43788 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11589, 36.3854, 6.43737 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.116805, 36.3854, 6.43849 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11531, 36.3854, 6.43561 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.124627, 36.3854, 6.43602 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.124, 36.3854, 6.43754 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12364, 36.3854, 6.43805 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.123495, 36.3854, 6.43819 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12306, 36.3854, 6.43864 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12289, 36.3854, 6.43875 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12238, 36.3854, 6.43911 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.122192, 36.3854, 6.43919 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.120622, 36.3854, 6.43969 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11898, 36.3854, 6.43962 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.115802, 36.3854, 6.43718 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12475, 36.3754, 6.4088 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12475, 36.3754, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.1975, 36.3754, 6.34221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12364, 36.3754, 6.43805 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11525, 36.3754, 6.3564 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12475, 36.3754, 6.435 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11525, 36.3754, 6.435 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11838, 36.3754, 6.43946 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11858, 36.3754, 6.43951 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11918, 36.3754, 6.43968 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12376, 36.3754, 6.43788 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12412, 36.3754, 6.43737 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12163, 36.3754, 6.43946 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.121817, 36.3754, 6.43937 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12238, 36.3754, 6.43911 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12, 36.3754, 6.43975 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.120207, 36.3754, 6.43973 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12083, 36.3754, 6.43968 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11527, 36.3754, 6.4352 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11533, 36.3754, 6.43582 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11554, 36.3754, 6.43662 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.115627, 36.3754, 6.4368 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11589, 36.3754, 6.43737 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12447, 36.3754, 6.43662 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.124522, 36.3754, 6.43642 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12468, 36.3754, 6.43582 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11695, 36.3754, 6.43864 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11712, 36.3754, 6.43875 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11763, 36.3754, 6.43911 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12306, 36.3754, 6.43864 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.123205, 36.3754, 6.43849 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.124697, 36.3754, 6.43561 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.115382, 36.3754, 6.43602 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11601, 36.3754, 6.43754 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.11637, 36.3754, 6.43805 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.116515, 36.3754, 6.43819 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.117817, 36.3754, 6.43919 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.119385, 36.3754, 6.43969 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12103, 36.3754, 6.43962 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12255, 36.3754, 6.43899 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.124207, 36.3754, 6.43718 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.1975, 36.3854, 6.59221 ) );
-poly_data1->addVertex( carve::geom::VECTOR(0.12475, 36.3801, 6.34221 ) );
-poly_data1->addFace( 0, 1, 2);
-poly_data1->addFace( 2, 3, 0);
-poly_data1->addFace( 1, 0, 4);
-poly_data1->addFace( 4, 5, 1);
-poly_data1->addFace( 2, 1, 68);
-poly_data1->addFace( 3, 2, 6);
-poly_data1->addFace( 7, 8, 0);
-poly_data1->addFace( 3, 9, 34);
-poly_data1->addFace( 10, 11, 12);
-poly_data1->addFace( 10, 12, 13);
-poly_data1->addFace( 14, 7, 0);
-poly_data1->addFace( 16, 17, 3);
-poly_data1->addFace( 20, 0, 3);
-poly_data1->addFace( 90, 23, 46);
-poly_data1->addFace( 24, 25, 3);
-poly_data1->addFace( 26, 27, 10);
-poly_data1->addFace( 29, 30, 3);
-poly_data1->addFace( 32, 33, 90);
-poly_data1->addFace( 3, 35, 48);
-poly_data1->addFace( 36, 9, 3);
-poly_data1->addFace( 37, 14, 0);
-poly_data1->addFace( 10, 13, 26);
-poly_data1->addFace( 27, 38, 90);
-poly_data1->addFace( 38, 31, 90);
-poly_data1->addFace( 31, 32, 90);
-poly_data1->addFace( 90, 39, 40);
-poly_data1->addFace( 20, 37, 0);
-poly_data1->addFace( 90, 40, 41);
-poly_data1->addFace( 90, 33, 39);
-poly_data1->addFace( 90, 41, 42);
-poly_data1->addFace( 90, 42, 43);
-poly_data1->addFace( 90, 43, 44);
-poly_data1->addFace( 90, 44, 45);
-poly_data1->addFace( 90, 45, 21);
-poly_data1->addFace( 90, 21, 22);
-poly_data1->addFace( 90, 22, 23);
-poly_data1->addFace( 90, 46, 28);
-poly_data1->addFace( 28, 3, 90);
-poly_data1->addFace( 3, 28, 29);
-poly_data1->addFace( 3, 30, 47);
-poly_data1->addFace( 3, 47, 15);
-poly_data1->addFace( 3, 15, 16);
-poly_data1->addFace( 3, 17, 24);
-poly_data1->addFace( 3, 25, 36);
-poly_data1->addFace( 3, 34, 35);
-poly_data1->addFace( 3, 48, 18);
-poly_data1->addFace( 3, 18, 19);
-poly_data1->addFace( 3, 19, 20);
-poly_data1->addFace( 4, 0, 8);
-poly_data1->addFace( 49, 50, 51);
-poly_data1->addFace( 6, 52, 59);
-poly_data1->addFace( 1, 5, 53);
-poly_data1->addFace( 54, 49, 51);
-poly_data1->addFace( 1, 53, 55);
-poly_data1->addFace( 2, 58, 86);
-poly_data1->addFace( 6, 60, 89);
-poly_data1->addFace( 62, 63, 6);
-poly_data1->addFace( 65, 66, 6);
-poly_data1->addFace( 67, 68, 1);
-poly_data1->addFace( 70, 71, 2);
-poly_data1->addFace( 74, 51, 6);
-poly_data1->addFace( 2, 77, 85);
-poly_data1->addFace( 79, 52, 6);
-poly_data1->addFace( 80, 54, 51);
-poly_data1->addFace( 1, 55, 67);
-poly_data1->addFace( 68, 81, 2);
-poly_data1->addFace( 81, 69, 2);
-poly_data1->addFace( 69, 70, 2);
-poly_data1->addFace( 2, 82, 83);
-poly_data1->addFace( 74, 80, 51);
-poly_data1->addFace( 2, 83, 84);
-poly_data1->addFace( 2, 71, 82);
-poly_data1->addFace( 2, 84, 75);
-poly_data1->addFace( 2, 75, 76);
-poly_data1->addFace( 2, 76, 77);
-poly_data1->addFace( 2, 85, 56);
-poly_data1->addFace( 2, 56, 57);
-poly_data1->addFace( 2, 57, 58);
-poly_data1->addFace( 2, 86, 64);
-poly_data1->addFace( 64, 6, 2);
-poly_data1->addFace( 6, 64, 65);
-poly_data1->addFace( 6, 66, 87);
-poly_data1->addFace( 6, 87, 61);
-poly_data1->addFace( 6, 61, 62);
-poly_data1->addFace( 6, 63, 88);
-poly_data1->addFace( 6, 88, 78);
-poly_data1->addFace( 6, 78, 79);
-poly_data1->addFace( 6, 59, 60);
-poly_data1->addFace( 6, 89, 72);
-poly_data1->addFace( 6, 72, 73);
-poly_data1->addFace( 6, 73, 74);
-poly_data1->addFace( 6, 90, 3);
-poly_data1->addFace( 90, 10, 27);
-poly_data1->addFace( 10, 51, 91);
-poly_data1->addFace( 91, 11, 10);
-poly_data1->addFace( 91, 51, 50);
-poly_data1->addFace( 90, 6, 51);
-poly_data1->addFace( 51, 10, 90);
-poly_data1->addFace( 49, 54, 13);
-poly_data1->addFace( 13, 12, 49);
-poly_data1->addFace( 54, 80, 26);
-poly_data1->addFace( 54, 26, 13);
-poly_data1->addFace( 12, 11, 91);
-poly_data1->addFace( 50, 49, 12);
-poly_data1->addFace( 12, 91, 50);
-poly_data1->addFace( 27, 26, 80);
-poly_data1->addFace( 27, 80, 74);
-poly_data1->addFace( 74, 73, 38);
-poly_data1->addFace( 74, 38, 27);
-poly_data1->addFace( 31, 38, 73);
-poly_data1->addFace( 31, 73, 72);
-poly_data1->addFace( 72, 89, 32);
-poly_data1->addFace( 72, 32, 31);
-poly_data1->addFace( 33, 32, 89);
-poly_data1->addFace( 33, 89, 60);
-poly_data1->addFace( 60, 59, 39);
-poly_data1->addFace( 60, 39, 33);
-poly_data1->addFace( 40, 39, 59);
-poly_data1->addFace( 40, 59, 52);
-poly_data1->addFace( 52, 79, 41);
-poly_data1->addFace( 52, 41, 40);
-poly_data1->addFace( 42, 41, 79);
-poly_data1->addFace( 42, 79, 78);
-poly_data1->addFace( 78, 88, 43);
-poly_data1->addFace( 78, 43, 42);
-poly_data1->addFace( 44, 43, 88);
-poly_data1->addFace( 44, 88, 63);
-poly_data1->addFace( 63, 62, 45);
-poly_data1->addFace( 63, 45, 44);
-poly_data1->addFace( 21, 45, 62);
-poly_data1->addFace( 21, 62, 61);
-poly_data1->addFace( 61, 87, 22);
-poly_data1->addFace( 61, 22, 21);
-poly_data1->addFace( 23, 22, 87);
-poly_data1->addFace( 23, 87, 66);
-poly_data1->addFace( 66, 65, 46);
-poly_data1->addFace( 66, 46, 23);
-poly_data1->addFace( 28, 46, 65);
-poly_data1->addFace( 28, 65, 64);
-poly_data1->addFace( 64, 86, 29);
-poly_data1->addFace( 64, 29, 28);
-poly_data1->addFace( 30, 29, 86);
-poly_data1->addFace( 30, 86, 58);
-poly_data1->addFace( 58, 57, 47);
-poly_data1->addFace( 58, 47, 30);
-poly_data1->addFace( 15, 47, 57);
-poly_data1->addFace( 15, 57, 56);
-poly_data1->addFace( 56, 85, 16);
-poly_data1->addFace( 56, 16, 15);
-poly_data1->addFace( 17, 16, 85);
-poly_data1->addFace( 17, 85, 77);
-poly_data1->addFace( 77, 76, 24);
-poly_data1->addFace( 77, 24, 17);
-poly_data1->addFace( 25, 24, 76);
-poly_data1->addFace( 25, 76, 75);
-poly_data1->addFace( 75, 84, 36);
-poly_data1->addFace( 75, 36, 25);
-poly_data1->addFace( 9, 36, 84);
-poly_data1->addFace( 9, 84, 83);
-poly_data1->addFace( 83, 82, 34);
-poly_data1->addFace( 83, 34, 9);
-poly_data1->addFace( 35, 34, 82);
-poly_data1->addFace( 35, 82, 71);
-poly_data1->addFace( 71, 70, 48);
-poly_data1->addFace( 71, 48, 35);
-poly_data1->addFace( 18, 48, 70);
-poly_data1->addFace( 18, 70, 69);
-poly_data1->addFace( 69, 81, 19);
-poly_data1->addFace( 69, 19, 18);
-poly_data1->addFace( 20, 19, 81);
-poly_data1->addFace( 20, 81, 68);
-poly_data1->addFace( 68, 67, 37);
-poly_data1->addFace( 68, 37, 20);
-poly_data1->addFace( 14, 37, 67);
-poly_data1->addFace( 14, 67, 55);
-poly_data1->addFace( 7, 14, 55);
-poly_data1->addFace( 55, 53, 7);
-poly_data1->addFace( 53, 5, 4);
-poly_data1->addFace( 8, 7, 53);
-poly_data1->addFace( 53, 4, 8);
-// entity_id: 180231
-carve::input::PolyhedronData* poly_data2 = new carve::input::PolyhedronData();
-poly_data2->addVertex( carve::geom::VECTOR(0.12475, 36.2754, 6.35721 ) );
-poly_data2->addVertex( carve::geom::VECTOR(0.139748, 36.2754, 6.34221 ) );
-poly_data2->addVertex( carve::geom::VECTOR(0.12475, 36.2754, 6.34222 ) );
-poly_data2->addVertex( carve::geom::VECTOR(0.12475, 36.4854, 6.35721 ) );
-poly_data2->addVertex( carve::geom::VECTOR(0.139748, 36.4854, 6.34221 ) );
-poly_data2->addVertex( carve::geom::VECTOR(0.12475, 36.4854, 6.34222 ) );
-poly_data2->addFace( 0, 1, 4);
-poly_data2->addFace( 4, 3, 0);
-poly_data2->addFace( 1, 2, 5);
-poly_data2->addFace( 5, 4, 1);
-poly_data2->addFace( 2, 0, 3);
-poly_data2->addFace( 3, 5, 2);
-poly_data2->addFace( 1, 0, 2);
-poly_data2->addFace( 4, 5, 3);
 
+// entity_id: 229314
+carve::input::PolyhedronData* poly_data1 = new carve::input::PolyhedronData();
+poly_data1->addVertex( carve::geom::VECTOR(510.022, 330.719, 7 ) );
+poly_data1->addVertex( carve::geom::VECTOR(510.288, 330.928, 7 ) );
+poly_data1->addVertex( carve::geom::VECTOR(511.067, 337.672, 7 ) );
+poly_data1->addVertex( carve::geom::VECTOR(510.857, 337.945, 7 ) );
+poly_data1->addVertex( carve::geom::VECTOR(510.022, 330.719, 17.3 ) );
+poly_data1->addVertex( carve::geom::VECTOR(510.288, 330.928, 17.3 ) );
+poly_data1->addVertex( carve::geom::VECTOR(511.067, 337.672, 17.3 ) );
+poly_data1->addVertex( carve::geom::VECTOR(510.857, 337.945, 17.3 ) );
+poly_data1->addFace( 0, 1, 5);
+poly_data1->addFace( 5, 4, 0);
+poly_data1->addFace( 1, 2, 6);
+poly_data1->addFace( 6, 5, 1);
+poly_data1->addFace( 2, 3, 7);
+poly_data1->addFace( 7, 6, 2);
+poly_data1->addFace( 3, 0, 4);
+poly_data1->addFace( 4, 7, 3);
+poly_data1->addFace( 2, 0, 3);
+poly_data1->addFace( 6, 7, 4);
+poly_data1->addFace( 1, 0, 2);
+poly_data1->addFace( 5, 6, 4);
+// entity_id: 229269
+carve::input::PolyhedronData* poly_data2 = new carve::input::PolyhedronData();
+poly_data2->addVertex( carve::geom::VECTOR(509.426, 323.465, 7.19926 ) );
+poly_data2->addVertex( carve::geom::VECTOR(510.507, 332.822, 17.3 ) );
+poly_data2->addVertex( carve::geom::VECTOR(510.03, 332.877, 17.3 ) );
+poly_data2->addVertex( carve::geom::VECTOR(508.95, 323.52, 7.19926 ) );
+poly_data2->addVertex( carve::geom::VECTOR(509.426, 323.465, 107 ) );
+poly_data2->addVertex( carve::geom::VECTOR(510.507, 332.822, 107 ) );
+poly_data2->addVertex( carve::geom::VECTOR(510.03, 332.877, 107 ) );
+poly_data2->addVertex( carve::geom::VECTOR(508.95, 323.52, 107 ) );
+poly_data2->addFace( 0, 1, 5);
+poly_data2->addFace( 5, 4, 0);
+poly_data2->addFace( 1, 2, 6);
+poly_data2->addFace( 6, 5, 1);
+poly_data2->addFace( 2, 3, 7);
+poly_data2->addFace( 7, 6, 2);
+poly_data2->addFace( 3, 0, 4);
+poly_data2->addFace( 4, 7, 3);
+poly_data2->addFace( 0, 2, 1);
+poly_data2->addFace( 4, 5, 6);
+poly_data2->addFace( 2, 0, 3);
+poly_data2->addFace( 6, 7, 4);
 
 
 carve::mesh::MeshSet<3>* meshset1 = poly_data1->createMesh(carve::input::opts());
@@ -1024,38 +796,84 @@ std::stringstream err;
 bool meshset1_ok = ConverterOSG::checkMeshSet( meshset1, err, -1 );
 bool meshset2_ok = ConverterOSG::checkMeshSet( meshset2, err, -1 );
 
-	carve::mesh::MeshSimplifier simplifier;
-	double min_colinearity = 0.0001;
-	double min_delta_v = 1.0;
-	double min_normal_angle = M_PI/180.0;//0.001;
-	double min_length = 0.001;
-	//simplifier.improveMesh( result1, min_colinearity, min_delta_v, min_normal_angle );
-	simplifier.simplify( meshset1, min_colinearity, min_delta_v, min_normal_angle, min_length );
 
 
-//renderMeshsetInDebugViewer( meshset1, osg::Vec4f( 0, 0, 0.5, 1 ), false );
-renderMeshsetInDebugViewer( meshset2, osg::Vec4f( 0, 0.5, 0.5, 1 ), true );
+//renderMeshsetInDebugViewer( meshset1, osg::Vec4f( 0.5, 0.5, 0.5, 1 ), true );
+//renderMeshsetInDebugViewer( meshset2, osg::Vec4f( 0.5, 0, 0, 1 ), true );
 
 osg::Geode* geode_txt = new osg::Geode();
 root->addChild( geode_txt );
 
-drawVertexNumbers( poly_data1, osg::Vec4( 0, 0, 1, 1 ), geode_txt );
-drawVertexNumbers( poly_data2, osg::Vec4( 0, 0, 0, 1 ), geode_txt );
+//drawVertexNumbers( poly_data1, osg::Vec4( 0, 0, 1, 1 ), geode_txt );
+//drawVertexNumbers( poly_data2, osg::Vec4( 0, 0, 0, 1 ), geode_txt );
 
+carve::mesh::MeshSimplifier simplifier;
+shared_ptr<GeometrySettings> geom_settings( new GeometrySettings() );
+	double min_colinearity = geom_settings->m_min_colinearity;
+	double min_delta_v = geom_settings->m_min_delta_v;
+	double min_normal_angle = geom_settings->m_min_normal_angle;
+	double min_length = geom_settings->m_min_length;
+	//simplifier.removeFins(meshset);
+	//simplifier.cleanFaceEdges( meshset );
+	//simplifier.removeRemnantFaces( meshset );
+	//simplifier.simplify( meshset, min_colinearity, min_delta_v, min_normal_angle, min_length );
+//	int merged1 = simplifier.mergeCoplanarFaces( meshset1, 1e-2 );
+//	int merged2 = simplifier.mergeCoplanarFaces( meshset2, 1e-2 );
+	//simplifier.removeLowVolumeManifolds(meshset, 0.01);
+	//simplifier.improveMesh( item_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+
+	if( false )
+	{
+	std::vector<carve::mesh::Mesh<3>* >& vec_meshes = meshset1->meshes;
+	for (size_t i = 0; i < vec_meshes.size(); ++i)
+	{
+		carve::mesh::Mesh<3>* mesh_i = vec_meshes[i];
+
+		std::vector<carve::mesh::Edge<3>* >& vec_edges = mesh_i->closed_edges;
+		size_t n_removed = 0;
+		for (size_t i = 0; i < vec_edges.size(); ++i)
+		{
+			carve::mesh::Edge<3> *edge = vec_edges[i];
+
+			//carve::mesh::Edge<3> *start = face->edge;
+			//carve::mesh::Edge<3> *edge = start;
+			//do
+			//{
+				if (edge->next == edge->rev || edge->prev == edge->rev)
+				{
+					edge = edge->mergeFaces();//removeEdge();
+					++n_removed;
+					//start = edge->prev;
+				}
+				else if( edge->length2() < 0.000000001 )
+				{
+					edge = edge->mergeFaces();//removeEdge();
+					++n_removed;
+					//start = edge->prev;
+				}
+				else
+				{
+					//edge = edge->next;
+				}
+			//} while (edge != start);
+		}
+		if( n_removed > 0 )
+		{
+			mesh_i->recalc();
+		}
+	}
+	}
 
 carve::csg::CSG csg;
 csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+csg.hooks.registerHook(new carve::csg::CarveHoleResolver(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 
 carve::mesh::MeshSet<3>* result1 = NULL;
 bool failed = false;
 try
 {
 	result1 = csg.compute( meshset1, meshset2, carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE );
-	for( int i=0; i<result1->meshes.size(); ++i )
-	{
-	//	result1->meshes[i]->recalc();
-	}
-
+	
 	bool result1_ok = ConverterOSG::checkMeshSet( result1, err, -1 );
 
 	if( result1_ok )
@@ -1064,12 +882,19 @@ try
 		carve::mesh::MeshSimplifier simplifier;
 		double min_colinearity = 0.1;
 		double min_delta_v = 1.0;
-		double min_normal_angle = M_PI/180.0;//0.001;
+		double min_normal_angle = 0.001;//M_PI/180.0;//0.001;
 		double min_length = 0.001;
 		//simplifier.improveMesh( result1, min_colinearity, min_delta_v, min_normal_angle );
+		//int eliminated = simplifier.eliminateShortEdges( result1, 0.00001 );
+		//int merged1 = simplifier.mergeCoplanarFaces( result1, 0.0 );
 		simplifier.simplify( result1, min_colinearity, min_delta_v, min_normal_angle, min_length );
-		simplifier.removeFins(result1);
+		//simplifier.removeFins(result1);
+		//
 	}
+}
+catch(carve::exception& e )
+{
+	std::cout << e.str() << std::endl;
 }
 catch(...)
 {
@@ -1101,6 +926,7 @@ if( result2 )
 else if( result1 )
 {
 	renderMeshsetInDebugViewer( result1, osg::Vec4f( 0, 0, 0.5, 1 ), false );
+	dumpMeshset( result1, 1, 0 );
 }
 
 
@@ -1430,41 +1256,7 @@ void createTest4(osg::Group* group)
 		ConverterOSG::drawMeshSet( meshset.get(), geode );
 	}
 
-	{
-
-		std::vector<carve::geom::vector<2> > merged;
-		merged.push_back( carve::geom::VECTOR( 0.21, 0.21 ) );
-		merged.push_back( carve::geom::VECTOR( 2.06, -1.02 ) );
-		merged.push_back( carve::geom::VECTOR( 4.24, -1.45 ) );
-		merged.push_back( carve::geom::VECTOR( 6.42, -1.02 ) );
-		merged.push_back( carve::geom::VECTOR( 8.27,  0.21 ) );
-		merged.push_back( carve::geom::VECTOR( 8.45,  0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 6.53, -1.30 ) );
-		merged.push_back( carve::geom::VECTOR( 4.24, -1.75 ) );
-		merged.push_back( carve::geom::VECTOR( 1.94, -1.30 ) );
-		merged.push_back( carve::geom::VECTOR( 0.0,  0.0 ) );
-		merged.push_back( carve::geom::VECTOR( 0.21, 0.21 ) );
-
-		std::vector<std::vector<carve::geom::vector<2> > > face_loops;
-		face_loops.push_back( merged );
-
-		carve::geom::vector<3> extrusion_vector( carve::geom::VECTOR( 0.0, 0.0,	-2.78 ) );
-		shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
-		std::stringstream err;
-		GeomUtils::extrude( face_loops, extrusion_vector, poly_data, err );
-
-		osg::Geode* geode = new osg::Geode();
-		group->addChild( geode );
-
-		shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve::input::opts()) );
-
-		ConverterOSG::checkMeshSet( meshset.get(), err, -1 );
-		ConverterOSG::drawMeshSet( meshset.get(), geode );
-
-	}
-
 	carve::input::PolyhedronData poly_data;
-
 	{
 		poly_data.addVertex( carve::geom::VECTOR(1, 0, 0 ));
 		poly_data.addVertex( carve::geom::VECTOR(0, 0, 0 ));

@@ -194,7 +194,48 @@ void ConverterOSG::drawMesh( const carve::mesh::Mesh<3>* mesh, osg::Geode* geode
 		osg::Vec3 normal(f->plane.N.v[0],f->plane.N.v[1],f->plane.N.v[2]);
 		f->getVertices(v);
 
-		if( f->nVertices() == 3 )
+
+		//		if( f->nEdges() == 3 )
+		//{
+		//	carve::geom::vector<3>& v = edge->vert->v;
+		//	vertices_tri->push_back( osg::Vec3(v.x, v.y, v.z ) );
+		//	
+		//	edge = edge->next;
+		//	v = edge->vert->v;
+		//	vertices_tri->push_back( osg::Vec3(v.x, v.y, v.z ) );
+		//	
+		//	edge = edge->next;
+		//	v = edge->vert->v;
+		//	vertices_tri->push_back( osg::Vec3(v.x, v.y, v.z ) );
+
+		//	normals_tri->push_back( normal );
+		//	normals_tri->push_back( normal );
+		//	normals_tri->push_back( normal );
+		//}
+		//else if( f->nEdges() == 4 )
+		//{
+		//	carve::geom::vector<3>& v = edge->vert->v;
+		//	vertices_quad->push_back( osg::Vec3(v.x, v.y, v.z ) );
+
+		//	edge = edge->next;
+		//	v = edge->vert->v;
+		//	vertices_quad->push_back( osg::Vec3(v.x, v.y, v.z ) );
+		//	
+		//	edge = edge->next;
+		//	v = edge->vert->v;
+		//	vertices_quad->push_back( osg::Vec3(v.x, v.y, v.z ) );
+		//	
+		//	edge = edge->next;
+		//	v = edge->vert->v;
+		//	vertices_quad->push_back( osg::Vec3(v.x, v.y, v.z ) );
+
+		//	normals_quad->push_back( normal );
+		//	normals_quad->push_back( normal );
+		//	normals_quad->push_back( normal );
+		//	normals_quad->push_back( normal );
+		//}
+
+		if( v.size() == 3 )
 		{
 			v0 = &(v[0]->v);
 			v1 = &(v[1]->v);
@@ -207,7 +248,7 @@ void ConverterOSG::drawMesh( const carve::mesh::Mesh<3>* mesh, osg::Geode* geode
 			vertices_tri->push_back( osg::Vec3(v1->x, v1->y, v1->z ) );
 			vertices_tri->push_back( osg::Vec3(v2->x, v2->y, v2->z ) );
 		}
-		else if( f->nVertices() == 4 )
+		else if( v.size() == 4 )
 		{
 			v0 = &(v[0]->v);
 			v1 = &(v[1]->v);
@@ -457,6 +498,33 @@ bool ConverterOSG::checkMeshSet( const carve::mesh::MeshSet<3>* mesh_set, std::s
 		{
 			meshes_closed = false;
 		}
+
+
+
+		
+		//for( int j=0; j<vec_faces.size(); ++j )
+		//{
+		//	carve::mesh::Face<3>* face = vec_faces[j];
+
+		//	carve::mesh::Edge<3>* edge = face->edge;
+		//	do
+		//	{
+		//		double length2 = (edge->v2()->v - edge->v1()->v).length2();
+		//		if( length2 < 0.0000001 )
+		//		{
+		//			//carve::mesh::Edge<3>* edge_back = edge->prev;
+		//			edge = edge->removeEdge();
+		//			continue;
+		//			// start over
+		//			//edge = face->edge;
+		//			//
+		//		}
+		//		edge = edge->next;
+		//	} while (edge != face->edge);
+		//}
+
+		//mesh_i->cacheEdges();
+
 
 #ifdef THOROUGH_MESHSET_CHECK
 

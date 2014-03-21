@@ -1537,6 +1537,7 @@ carve::mesh::MeshSet<3> *carve::csg::CSG::compute(meshset_t *a,
     result_list.push_back(result);
     returnSharedEdges(shared_edges, result_list, shared_edges_ptr);
   }
+
   return result;
 }
 

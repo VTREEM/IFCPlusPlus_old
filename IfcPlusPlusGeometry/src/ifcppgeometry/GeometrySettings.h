@@ -22,6 +22,12 @@
 	#define HALF_SPACE_BOX_SIZE 100
 #endif
 
+//#define ROUND_IFC_COORDINATES
+#ifdef ROUND_IFC_COORDINATES
+	#define ROUND_IFC_COORDINATES_UP 100000.0
+	#define ROUND_IFC_COORDINATES_DOWN 0.00001
+#endif
+
 //\brief Central class to hold settings that influence geometry processing.
 
 class GeometrySettings
@@ -36,7 +42,6 @@ public:
 	double m_min_delta_v;
 	double m_min_normal_angle;
 	double m_min_length;
-	bool m_use_mesh_simplifier_before_csg;
 	bool m_use_mesh_simplifier_after_csg;
 	bool m_use_mesh_simplifier_before_draw;
 	bool m_set_process_output_face;

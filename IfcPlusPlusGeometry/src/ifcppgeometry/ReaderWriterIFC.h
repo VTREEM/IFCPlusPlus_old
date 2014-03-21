@@ -82,7 +82,7 @@ protected:
 	osg::ref_ptr<osg::StateSet>			m_glass_stateset;
 
 	std::map<int,shared_ptr<ShapeInputData> > m_shape_input_data;
-	std::map<int,shared_ptr<IfcProduct> > m_processed_products;
+	//std::map<int,shared_ptr<IfcProduct> > m_processed_products;
 
 	std::map<int, shared_ptr<IfcPPObject> > m_map_visited;
 	osg::ref_ptr<osg::Group> m_group_result;

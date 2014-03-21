@@ -42,7 +42,7 @@ public:
 	void convertIfcExtrudedAreaSolid(	const shared_ptr<IfcExtrudedAreaSolid>& extruded_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcRevolvedAreaSolid(	const shared_ptr<IfcRevolvedAreaSolid>& revolved_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcCsgPrimitive3D(		const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,		const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
-	void simplifyMesh( carve::mesh::MeshSet<3>* meshset );
+	void simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& meshset );
 	bool computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh::MeshSet<3>* op2, const carve::csg::CSG::OP operation, 
 				const int entity1, const int entity2, std::stringstream& err, shared_ptr<carve::mesh::MeshSet<3> >& result );
 

@@ -46,7 +46,7 @@ public:
 	RepresentationConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> unit_converter );
 	~RepresentationConverter();
 
-	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	const carve::math::Matrix& pos,	shared_ptr<ShapeInputData>& shape_data, std::set<int>& visited, std::stringstream& err );
+	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	const carve::math::Matrix& pos,	shared_ptr<ShapeInputData>& shape_data, std::stringstream& err );
 	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,				const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );

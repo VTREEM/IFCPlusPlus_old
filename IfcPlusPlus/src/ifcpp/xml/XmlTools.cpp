@@ -180,7 +180,7 @@ int readNextXmlTag( const char* data, std::stringstream& err, XmlDataContainer& 
 					if( *pos == '"' || *pos == '\'' )
 					{
 						attribute_value.assign( pos_attribute_value, pos-pos_attribute_value );
-						container.attributes.insert( std::pair<std::string, std::string>( attribute_name, attribute_value ) );
+						container.attributes.insert( std::make_pair( attribute_name, attribute_value ) );
 						break;
 					}
 					else

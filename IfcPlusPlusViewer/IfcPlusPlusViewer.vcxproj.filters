@@ -124,9 +124,6 @@
     <ClCompile Include="bin\GeneratedFiles\ReleaseWithDebugInfo\moc_IfcPlusPlusSystem.cpp">
       <Filter>Generierte Dateien\ReleaseWithDebugInfo</Filter>
     </ClCompile>
-    <ClCompile Include="src\ifcplusplusviewer\viewer\SubGroupIntersectionVisitor.cpp">
-      <Filter>Source Dateien</Filter>
-    </ClCompile>
     <ClCompile Include="src\ifcplusplusviewer\gui\IfcTreeWidget.cpp">
       <Filter>Source Dateien</Filter>
     </ClCompile>
@@ -179,9 +176,6 @@
       <Filter>Header Dateien</Filter>
     </ClInclude>
     <ClInclude Include="src\ifcplusplusviewer\viewer\ViewerUtil.h">
-      <Filter>Header Dateien</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ifcplusplusviewer\viewer\SubGroupIntersectionVisitor.h">
       <Filter>Header Dateien</Filter>
     </ClInclude>
   </ItemGroup>
