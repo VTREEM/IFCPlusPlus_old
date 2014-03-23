@@ -725,33 +725,8 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 	{
 		throw IfcPPException( "Unsupported IFC version", __func__ );
 	}
-	if( version <= IfcPPModel::IFC2X )
-	{
 
-	}
-
-	if( version <= IfcPPModel::IFC2X2 )
-	{
-		switch( type_enum )
-		{
-		case IFCCOLOURRGB:
-			//#315= IFCCOLOURRGB($,0.65882353,0.6627451,0.61960784);
-			if( args.size() == 3 )
-			{
-				args.insert( args.begin(), "$" );
-			}
-			break;
-		
-		case IFCPROPERTYSINGLEVALUE:
-			while( args.size() < 4 ){	args.push_back( "$" );	}
-			break;
-		case IFCPROJECT:
-			while( args.size() < 9 ){	args.push_back( "$" );	}
-			break;
-		}
-	}
-
-	if( version <= IfcPPModel::IFC2X3 )
+	if( version < IfcPPModel::IFC4 )
 	{
 		switch( type_enum )
 		{
@@ -768,6 +743,12 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 			break;
 		case IFCCLASSIFICATIONREFERENCE:
 			while( args.size() < 6 ){	args.push_back( "$" );	}
+			break;
+		case IFCCOLOURRGB:
+			if( args.size() == 3 ) //#315= IFCCOLOURRGB($,0.65882353,0.6627451,0.61960784);
+			{
+				args.insert( args.begin(), "$" );
+			}
 			break;
 		case IFCCOLUMN:
 			while( args.size() < 9 ){	args.push_back( "$" );	}
@@ -839,6 +820,9 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 		case IFCMATERIALLAYERSETUSAGE:
 			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
+		case IFCMATERIALPROFILESETUSAGE:
+			while( args.size() < 3 ) {	args.push_back( "$" );	}
+			break;
 		case IFCMECHANICALFASTENER:
 			while( args.size() < 11 ) {	args.push_back( "$" );	}
 			break;
@@ -859,8 +843,14 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 		case IFCPLATE:
 			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
+		case IFCPROJECT:
+			while( args.size() < 9 ){	args.push_back( "$" );	}
+			break;
 		case IFCPROPERTYBOUNDEDVALUE:
 			while( args.size() < 6 ) {	args.push_back( "$" );	}
+			break;
+		case IFCPROPERTYSINGLEVALUE:
+			while( args.size() < 4 ){	args.push_back( "$" );	}
 			break;
 
 			// Q

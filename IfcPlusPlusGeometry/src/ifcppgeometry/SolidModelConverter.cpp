@@ -618,6 +618,290 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 #endif
 }
 
+void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevolvedAreaSolid>& revolved_area, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
+{
+	if( !revolved_area->m_SweptArea )
+	{
+		return;
+	}
+	double length_factor = m_unit_converter->getLengthInMeterFactor();
+
+	// angle and axis
+	double angle_factor = m_unit_converter->getAngleInRadianFactor();
+	shared_ptr<IfcProfileDef> swept_area_profile = revolved_area->m_SweptArea;
+	double revolution_angle = revolved_area->m_Angle->m_value*angle_factor;
+
+	carve::geom::vector<3>  axis_location;
+	carve::geom::vector<3>  axis_direction;
+	if(revolved_area->m_Axis)
+	{
+		shared_ptr<IfcAxis1Placement> axis_placement = revolved_area->m_Axis;
+
+		if( axis_placement->m_Location )
+		{
+			shared_ptr<IfcCartesianPoint> location_point = axis_placement->m_Location;
+			m_curve_converter->convertIfcCartesianPoint( location_point, axis_location );
+		}
+
+		if( axis_placement->m_Axis )
+		{
+			shared_ptr<IfcDirection> axis = axis_placement->m_Axis;
+			axis_direction = carve::geom::VECTOR( axis->m_DirectionRatios[0], axis->m_DirectionRatios[1], axis->m_DirectionRatios[2] );
+		}
+	}
+
+	// rotation base point is the one with the smallest distance on the rotation axis
+	carve::geom::vector<3>  origin;
+	carve::geom::vector<3>  base_point;
+	GeomUtils::closestPointOnLine( origin, axis_location, axis_direction, base_point );
+	base_point *= -1;
+
+	// swept area
+	shared_ptr<ProfileConverter> profile_converter = m_profile_cache->getProfileConverter(swept_area_profile);
+	const std::vector<std::vector<carve::geom::vector<2> > >& profile_coords = profile_converter->getCoordinates();
+
+	// tesselate
+	std::vector<std::vector<carve::geom::vector<2> > > profile_coords_2d;
+	for( int i = 0; i<profile_coords.size(); ++i )
+	{
+		const std::vector<carve::geom::vector<2> >& profile_loop = profile_coords[i];
+		//std::vector<carve::geom::vector<2> > profile_loop_2d;
+		//for( int j = 0; j<profile_loop.size(); ++j )
+		//{
+		//	profile_loop_2d.push_back( carve::geom::VECTOR( profile_loop[j].x, profile_loop[j].y ) );
+		//}
+		profile_coords_2d.push_back( profile_loop );
+	}
+
+	std::vector<carve::geom::vector<2> > merged;
+	std::vector<carve::triangulate::tri_idx> triangulated;
+	try
+	{
+		std::vector<std::pair<size_t, size_t> > result = carve::triangulate::incorporateHolesIntoPolygon(profile_coords_2d);	// first is loop index, second is vertex index in loop
+		merged.reserve(result.size());
+		for( size_t i = 0; i < result.size(); ++i )
+		{
+			int loop_number = result[i].first;
+			int index_in_loop = result[i].second;
+
+			if( loop_number >= profile_coords_2d.size() )
+			{
+				std::cout << __FUNC__ << ": loop_number >= face_loops_projected.size()" << std::endl;
+				continue;
+			}
+
+			std::vector<carve::geom2d::P2>& loop_projected = profile_coords_2d[loop_number];
+
+			carve::geom2d::P2& point_projected = loop_projected[index_in_loop];
+			merged.push_back( point_projected );
+		}
+		carve::triangulate::triangulate(merged, triangulated);
+		carve::triangulate::improve(merged, triangulated);
+	}
+	catch(...)
+	{
+		strs_err << "carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
+		return;
+	}
+
+	if( profile_coords.size() == 0 )
+	{
+		strs_err << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_loops == 0";
+		return;
+	}
+	if( profile_coords[0].size() < 3 )
+	{
+		strs_err << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_polygon_points < 3";
+		return;
+	}
+
+	if( revolution_angle > M_PI*2 ) revolution_angle = M_PI*2;
+	if( revolution_angle < -M_PI*2 ) revolution_angle = M_PI*2;
+
+	// TODO: calculate num segments according to length/width/height ratio and overall size of the object
+	int num_segments = m_geom_settings->m_num_vertices_per_circle*(abs(revolution_angle)/(2.0*M_PI));
+	if( num_segments < 6 )
+	{
+		num_segments = 6;
+	}
+	double angle = 0.0;
+	double d_angle = revolution_angle/num_segments;
+
+	// check if we have to change the direction
+	carve::geom::vector<3>  polygon_normal = GeomUtils::computePolygon2DNormal( profile_coords[0] );
+	const carve::geom::vector<2>&  pt0_2d = profile_coords[0][0];
+	carve::geom::vector<3>  pt0_3d( carve::geom::VECTOR( pt0_2d.x, pt0_2d.y, 0 ) );
+	carve::geom::vector<3>  pt0 = carve::math::Matrix::ROT(d_angle, axis_direction )*(pt0_3d + base_point);
+	if( polygon_normal.z*pt0.z > 0 )
+	{
+		angle = revolution_angle;
+		d_angle = -d_angle;
+	}
+
+	shared_ptr<carve::input::PolyhedronData> polyhedron_data( new carve::input::PolyhedronData() );
+	item_data->closed_polyhedrons.push_back(polyhedron_data);
+
+	// create vertices
+	carve::math::Matrix m;
+	for( int i = 0; i <= num_segments; ++i )
+	{
+		m = carve::math::Matrix::ROT( angle, -axis_direction );
+		for( int j=0; j<profile_coords.size(); ++j )
+		{
+			const std::vector<carve::geom::vector<2> >& loop = profile_coords[j];
+
+			for( int k=0; k<loop.size(); ++k )
+			{
+				const carve::geom::vector<2>& point = loop[k];
+
+				carve::geom::vector<3>  vertex= m*( carve::geom::VECTOR( point.x, point.y, 0 ) + base_point) - base_point;
+				polyhedron_data->addVertex( pos*vertex );
+			}
+		}
+		angle += d_angle;
+	}
+
+	// front cap
+	std::vector<int> front_face_loop;
+	int num_polygon_points = 0;
+	for( int j=0; j<profile_coords.size(); ++j )
+	{
+		const std::vector<carve::geom::vector<2> >& loop = profile_coords[j];
+
+		for( int k=0; k<loop.size(); ++k )
+		{
+			front_face_loop.push_back( j*loop.size() + k );
+			++num_polygon_points;
+		}
+	}
+	// TODO: use triangulated
+	polyhedron_data->addFace( front_face_loop.rbegin(), front_face_loop.rend() );
+
+	// end cap
+	std::vector<int> end_face_loop;
+	const int end_face_begin = num_segments*num_polygon_points;
+	for( int j = 0; j < num_polygon_points; ++j )
+	{
+		end_face_loop.push_back( end_face_begin + j );
+	}
+	polyhedron_data->addFace( end_face_loop.begin(), end_face_loop.end() );
+
+	// faces of revolved shape
+	for( int i = 0; i < num_polygon_points-1; ++i )
+	{
+		int i_offset_next = i + num_polygon_points;
+		for( int j = 0; j < num_segments; ++j )
+		{
+			int j_offset = j*num_polygon_points;
+			polyhedron_data->addFace( j_offset+i, j_offset+i+1, j_offset+1+i_offset_next, j_offset+i_offset_next );
+		}
+	}
+
+	for( int j = 0; j < num_segments; ++j )
+	{
+		int j_offset = j*num_polygon_points;
+		polyhedron_data->addFace( j_offset+num_polygon_points-1, j_offset, j_offset+num_polygon_points, j_offset+num_polygon_points+num_polygon_points-1 );
+	}
+
+#ifdef _DEBUG
+	std::stringstream strs_err;
+	shared_ptr<carve::mesh::MeshSet<3> > mesh_set( polyhedron_data->createMesh(carve::input::opts()) );
+	if( mesh_set->meshes.size() != 1 )
+	{
+		std::cout << __FUNC__ << ": mesh_set->meshes.size() != 1" << std::endl;
+	}
+	bool meshset_ok = ConverterOSG::checkMeshSet( mesh_set.get(), strs_err, -1 );
+
+	if( !meshset_ok )
+	{
+		std::cout << strs_err.str().c_str() << std::endl;
+	}
+#endif
+}
+
+
+void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanResult>& bool_result, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
+{
+	const int boolean_result_id = bool_result->getId();
+	shared_ptr<IfcBooleanClippingResult> boolean_clipping_result = dynamic_pointer_cast<IfcBooleanClippingResult>(bool_result);
+	if( boolean_clipping_result )
+	{
+		shared_ptr<IfcBooleanOperator> ifc_boolean_operator = boolean_clipping_result->m_Operator;
+		shared_ptr<IfcBooleanOperand> ifc_first_operand = boolean_clipping_result->m_FirstOperand;
+		shared_ptr<IfcBooleanOperand> ifc_second_operand = boolean_clipping_result->m_SecondOperand;
+
+		if( !ifc_boolean_operator || !ifc_first_operand || !ifc_second_operand )
+		{
+			std::cout << __FUNC__ << ": invalid IfcBooleanOperator or IfcBooleanOperand" << std::endl;
+			return;
+		}
+
+		carve::csg::CSG::OP csg_operation = carve::csg::CSG::A_MINUS_B;
+		if( ifc_boolean_operator->m_enum == IfcBooleanOperator::ENUM_UNION )
+		{
+			csg_operation = carve::csg::CSG::UNION;
+		}
+		else if( ifc_boolean_operator->m_enum == IfcBooleanOperator::ENUM_INTERSECTION )
+		{
+			csg_operation = carve::csg::CSG::INTERSECTION;
+		}
+		else if( ifc_boolean_operator->m_enum == IfcBooleanOperator::ENUM_DIFFERENCE )
+		{
+			csg_operation = carve::csg::CSG::A_MINUS_B;
+		}
+		else
+		{
+			strs_err << __FUNC__ << ": invalid IfcBooleanOperator" << std::endl;
+		}
+
+		// convert the first operand
+		shared_ptr<ItemData> first_operand_data( new ItemData() );
+		shared_ptr<ItemData> empty_operand;
+		convertIfcBooleanOperand( ifc_first_operand, pos, first_operand_data, empty_operand, strs_err );
+		first_operand_data->createMeshSetsFromClosedPolyhedrons();
+
+		// convert the second operand
+		shared_ptr<ItemData> second_operand_data( new ItemData() );
+		convertIfcBooleanOperand( ifc_second_operand, pos, second_operand_data, first_operand_data, strs_err );
+		second_operand_data->createMeshSetsFromClosedPolyhedrons();
+
+		// for every first operand polyhedrons, apply all second operand polyhedrons
+		std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_first_operands;
+		for( it_first_operands=first_operand_data->meshsets.begin(); it_first_operands!=first_operand_data->meshsets.end(); ++it_first_operands )
+		{
+			shared_ptr<carve::mesh::MeshSet<3> >& first_operand_meshset = (*it_first_operands);
+
+			std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_second_operands;
+			for( it_second_operands=second_operand_data->meshsets.begin(); it_second_operands!=second_operand_data->meshsets.end(); ++it_second_operands )
+			{
+				shared_ptr<carve::mesh::MeshSet<3> >& second_operand_meshset = (*it_second_operands);
+
+				int id1 = 0;
+				if( dynamic_pointer_cast<IfcPPEntity>( ifc_first_operand ) )
+				{
+					id1 = dynamic_pointer_cast<IfcPPEntity>( ifc_first_operand )->getId();
+				}
+				int id2 = 0;
+				if( dynamic_pointer_cast<IfcPPEntity>( ifc_second_operand ) )
+				{
+					id2 = dynamic_pointer_cast<IfcPPEntity>( ifc_second_operand )->getId();
+				}
+
+				shared_ptr<carve::mesh::MeshSet<3> > result;
+				bool csg_op_ok = computeCSG( first_operand_meshset.get(), second_operand_meshset.get(), csg_operation, id1, id2, strs_err, result );
+
+				if( csg_op_ok )
+				{
+					first_operand_meshset = result;
+				}
+			}
+		}
+
+		// now copy processed first operands to result input data
+		std::copy( first_operand_data->meshsets.begin(), first_operand_data->meshsets.end(), std::back_inserter(item_data->meshsets) );
+	}
+}
+
 
 void SolidModelConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,	const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
@@ -887,290 +1171,6 @@ void SolidModelConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgPrimi
 }
 
 
-void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevolvedAreaSolid>& revolved_area, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
-{
-	if( !revolved_area->m_SweptArea )
-	{
-		return;
-	}
-	double length_factor = m_unit_converter->getLengthInMeterFactor();
-
-	// angle and axis
-	double angle_factor = m_unit_converter->getAngleInRadianFactor();
-	shared_ptr<IfcProfileDef> swept_area_profile = revolved_area->m_SweptArea;
-	double revolution_angle = revolved_area->m_Angle->m_value*angle_factor;
-
-	carve::geom::vector<3>  axis_location;
-	carve::geom::vector<3>  axis_direction;
-	if(revolved_area->m_Axis)
-	{
-		shared_ptr<IfcAxis1Placement> axis_placement = revolved_area->m_Axis;
-
-		if( axis_placement->m_Location )
-		{
-			shared_ptr<IfcCartesianPoint> location_point = axis_placement->m_Location;
-			m_curve_converter->convertIfcCartesianPoint( location_point, axis_location );
-		}
-
-		if( axis_placement->m_Axis )
-		{
-			shared_ptr<IfcDirection> axis = axis_placement->m_Axis;
-			axis_direction = carve::geom::VECTOR( axis->m_DirectionRatios[0], axis->m_DirectionRatios[1], axis->m_DirectionRatios[2] );
-		}
-	}
-
-	// rotation base point is the one with the smallest distance on the rotation axis
-	carve::geom::vector<3>  origin;
-	carve::geom::vector<3>  base_point;
-	GeomUtils::closestPointOnLine( origin, axis_location, axis_direction, base_point );
-	base_point *= -1;
-
-	// swept area
-	shared_ptr<ProfileConverter> profile_converter = m_profile_cache->getProfileConverter(swept_area_profile);
-	const std::vector<std::vector<carve::geom::vector<2> > >& profile_coords = profile_converter->getCoordinates();
-
-	// tesselate
-	std::vector<std::vector<carve::geom::vector<2> > > profile_coords_2d;
-	for( int i = 0; i<profile_coords.size(); ++i )
-	{
-		const std::vector<carve::geom::vector<2> >& profile_loop = profile_coords[i];
-		//std::vector<carve::geom::vector<2> > profile_loop_2d;
-		//for( int j = 0; j<profile_loop.size(); ++j )
-		//{
-		//	profile_loop_2d.push_back( carve::geom::VECTOR( profile_loop[j].x, profile_loop[j].y ) );
-		//}
-		profile_coords_2d.push_back( profile_loop );
-	}
-
-	std::vector<carve::geom::vector<2> > merged;
-	std::vector<carve::triangulate::tri_idx> triangulated;
-	try
-	{
-		std::vector<std::pair<size_t, size_t> > result = carve::triangulate::incorporateHolesIntoPolygon(profile_coords_2d);	// first is loop index, second is vertex index in loop
-		merged.reserve(result.size());
-		for( size_t i = 0; i < result.size(); ++i )
-		{
-			int loop_number = result[i].first;
-			int index_in_loop = result[i].second;
-
-			if( loop_number >= profile_coords_2d.size() )
-			{
-				std::cout << __FUNC__ << ": loop_number >= face_loops_projected.size()" << std::endl;
-				continue;
-			}
-
-			std::vector<carve::geom2d::P2>& loop_projected = profile_coords_2d[loop_number];
-
-			carve::geom2d::P2& point_projected = loop_projected[index_in_loop];
-			merged.push_back( point_projected );
-		}
-		carve::triangulate::triangulate(merged, triangulated);
-		carve::triangulate::improve(merged, triangulated);
-	}
-	catch(...)
-	{
-		strs_err << "carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
-		return;
-	}
-
-	if( profile_coords.size() == 0 )
-	{
-		strs_err << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_loops == 0";
-		return;
-	}
-	if( profile_coords[0].size() < 3 )
-	{
-		strs_err << "#" << revolved_area->getId() << " = IfcRevolvedAreaSolid: convertIfcRevolvedAreaSolid: num_polygon_points < 3";
-		return;
-	}
-
-	if( revolution_angle > M_PI*2 ) revolution_angle = M_PI*2;
-	if( revolution_angle < -M_PI*2 ) revolution_angle = M_PI*2;
-
-	// TODO: calculate num segments according to length/width/height ratio and overall size of the object
-	int num_segments = m_geom_settings->m_num_vertices_per_circle*(abs(revolution_angle)/(2.0*M_PI));
-	if( num_segments < 6 )
-	{
-		num_segments = 6;
-	}
-	double angle = 0.0;
-	double d_angle = revolution_angle/num_segments;
-
-	// check if we have to change the direction
-	carve::geom::vector<3>  polygon_normal = GeomUtils::computePolygon2DNormal( profile_coords[0] );
-	const carve::geom::vector<2>&  pt0_2d = profile_coords[0][0];
-	carve::geom::vector<3>  pt0_3d( carve::geom::VECTOR( pt0_2d.x, pt0_2d.y, 0 ) );
-	carve::geom::vector<3>  pt0 = carve::math::Matrix::ROT(d_angle, axis_direction )*(pt0_3d + base_point);
-	if( polygon_normal.z*pt0.z > 0 )
-	{
-		angle = revolution_angle;
-		d_angle = -d_angle;
-	}
-
-	shared_ptr<carve::input::PolyhedronData> polyhedron_data( new carve::input::PolyhedronData() );
-	item_data->closed_polyhedrons.push_back(polyhedron_data);
-
-	// create vertices
-	carve::math::Matrix m;
-	for( int i = 0; i <= num_segments; ++i )
-	{
-		m = carve::math::Matrix::ROT( angle, -axis_direction );
-		for( int j=0; j<profile_coords.size(); ++j )
-		{
-			const std::vector<carve::geom::vector<2> >& loop = profile_coords[j];
-
-			for( int k=0; k<loop.size(); ++k )
-			{
-				const carve::geom::vector<2>& point = loop[k];
-
-				carve::geom::vector<3>  vertex= m*( carve::geom::VECTOR( point.x, point.y, 0 ) + base_point) - base_point;
-				polyhedron_data->addVertex( pos*vertex );
-			}
-		}
-		angle += d_angle;
-	}
-
-	// front cap
-	std::vector<int> front_face_loop;
-	int num_polygon_points = 0;
-	for( int j=0; j<profile_coords.size(); ++j )
-	{
-		const std::vector<carve::geom::vector<2> >& loop = profile_coords[j];
-
-		for( int k=0; k<loop.size(); ++k )
-		{
-			front_face_loop.push_back( j*loop.size() + k );
-			++num_polygon_points;
-		}
-	}
-	// TODO: use triangulated
-	polyhedron_data->addFace( front_face_loop.rbegin(), front_face_loop.rend() );
-
-	// end cap
-	std::vector<int> end_face_loop;
-	const int end_face_begin = num_segments*num_polygon_points;
-	for( int j = 0; j < num_polygon_points; ++j )
-	{
-		end_face_loop.push_back( end_face_begin + j );
-	}
-	polyhedron_data->addFace( end_face_loop.begin(), end_face_loop.end() );
-
-	// faces of revolved shape
-	for( int i = 0; i < num_polygon_points-1; ++i )
-	{
-		int i_offset_next = i + num_polygon_points;
-		for( int j = 0; j < num_segments; ++j )
-		{
-			int j_offset = j*num_polygon_points;
-			polyhedron_data->addFace( j_offset+i, j_offset+i+1, j_offset+1+i_offset_next, j_offset+i_offset_next );
-		}
-	}
-
-	for( int j = 0; j < num_segments; ++j )
-	{
-		int j_offset = j*num_polygon_points;
-		polyhedron_data->addFace( j_offset+num_polygon_points-1, j_offset, j_offset+num_polygon_points, j_offset+num_polygon_points+num_polygon_points-1 );
-	}
-
-#ifdef _DEBUG
-	std::stringstream strs_err;
-	shared_ptr<carve::mesh::MeshSet<3> > mesh_set( polyhedron_data->createMesh(carve::input::opts()) );
-	if( mesh_set->meshes.size() != 1 )
-	{
-		std::cout << __FUNC__ << ": mesh_set->meshes.size() != 1" << std::endl;
-	}
-	bool meshset_ok = ConverterOSG::checkMeshSet( mesh_set.get(), strs_err, -1 );
-
-	if( !meshset_ok )
-	{
-		std::cout << strs_err.str().c_str() << std::endl;
-	}
-#endif
-}
-
-
-void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanResult>& bool_result, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
-{
-	const int boolean_result_id = bool_result->getId();
-	shared_ptr<IfcBooleanClippingResult> boolean_clipping_result = dynamic_pointer_cast<IfcBooleanClippingResult>(bool_result);
-	if( boolean_clipping_result )
-	{
-		shared_ptr<IfcBooleanOperator> ifc_boolean_operator = boolean_clipping_result->m_Operator;
-		shared_ptr<IfcBooleanOperand> ifc_first_operand = boolean_clipping_result->m_FirstOperand;
-		shared_ptr<IfcBooleanOperand> ifc_second_operand = boolean_clipping_result->m_SecondOperand;
-
-		if( !ifc_boolean_operator || !ifc_first_operand || !ifc_second_operand )
-		{
-			std::cout << __FUNC__ << ": invalid IfcBooleanOperator or IfcBooleanOperand" << std::endl;
-			return;
-		}
-
-		carve::csg::CSG::OP csg_operation = carve::csg::CSG::A_MINUS_B;
-		if( ifc_boolean_operator->m_enum == IfcBooleanOperator::ENUM_UNION )
-		{
-			csg_operation = carve::csg::CSG::UNION;
-		}
-		else if( ifc_boolean_operator->m_enum == IfcBooleanOperator::ENUM_INTERSECTION )
-		{
-			csg_operation = carve::csg::CSG::INTERSECTION;
-		}
-		else if( ifc_boolean_operator->m_enum == IfcBooleanOperator::ENUM_DIFFERENCE )
-		{
-			csg_operation = carve::csg::CSG::A_MINUS_B;
-		}
-		else
-		{
-			std::cout << __FUNC__ << ": invalid IfcBooleanOperator" << std::endl;
-		}
-
-		// convert the first operand
-		shared_ptr<ItemData> first_operand_data( new ItemData() );
-		convertIfcBooleanOperand( ifc_first_operand, pos, first_operand_data, strs_err );
-		first_operand_data->createMeshSetsFromClosedPolyhedrons();
-
-		// convert the second operand
-		shared_ptr<ItemData> second_operand_data( new ItemData() );
-		convertIfcBooleanOperand( ifc_second_operand, pos, second_operand_data, strs_err );
-		second_operand_data->createMeshSetsFromClosedPolyhedrons();
-
-		// for every first operand polyhedrons, apply all second operand polyhedrons
-		std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_first_operands;
-		for( it_first_operands=first_operand_data->meshsets.begin(); it_first_operands!=first_operand_data->meshsets.end(); ++it_first_operands )
-		{
-			shared_ptr<carve::mesh::MeshSet<3> >& first_operand_meshset = (*it_first_operands);
-
-			std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_second_operands;
-			for( it_second_operands=second_operand_data->meshsets.begin(); it_second_operands!=second_operand_data->meshsets.end(); ++it_second_operands )
-			{
-				shared_ptr<carve::mesh::MeshSet<3> >& second_operand_meshset = (*it_second_operands);
-
-				int id1 = 0;
-				if( dynamic_pointer_cast<IfcPPEntity>( ifc_first_operand ) )
-				{
-					id1 = dynamic_pointer_cast<IfcPPEntity>( ifc_first_operand )->getId();
-				}
-				int id2 = 0;
-				if( dynamic_pointer_cast<IfcPPEntity>( ifc_second_operand ) )
-				{
-					id2 = dynamic_pointer_cast<IfcPPEntity>( ifc_second_operand )->getId();
-				}
-
-				shared_ptr<carve::mesh::MeshSet<3> > result;
-				bool csg_op_ok = computeCSG( first_operand_meshset.get(), second_operand_meshset.get(), csg_operation, id1, id2, strs_err, result );
-
-				if( csg_op_ok )
-				{
-					first_operand_meshset = result;
-				}
-			}
-		}
-
-		// now copy processed first operands to result input data
-		std::copy( first_operand_data->meshsets.begin(), first_operand_data->meshsets.end(), std::back_inserter(item_data->meshsets) );
-	}
-}
-
-
 void extrudeBox( const std::vector<carve::geom::vector<3> >& boundary_points, const carve::geom::vector<3>& extrusion_vector, shared_ptr<carve::input::PolyhedronData>& box_data )
 {
 	box_data->addVertex( boundary_points[0] );
@@ -1195,7 +1195,8 @@ void extrudeBox( const std::vector<carve::geom::vector<3> >& boundary_points, co
 	box_data->addFace( 7,3,2 );
 }
 
-void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanOperand>& operand, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
+void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanOperand>& operand, const carve::math::Matrix& pos,
+												   shared_ptr<ItemData> item_data, const shared_ptr<ItemData>& other_operand, std::stringstream& strs_err )
 {
 	shared_ptr<IfcSolidModel> solid_model = dynamic_pointer_cast<IfcSolidModel>(operand);
 	if( solid_model )
@@ -1210,45 +1211,116 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 	{
 		//ENTITY IfcHalfSpaceSolid SUPERTYPE OF(ONEOF(IfcBoxedHalfSpace, IfcPolygonalBoundedHalfSpace))
 		shared_ptr<IfcSurface> base_surface = half_space_solid->m_BaseSurface;
-		if( !dynamic_pointer_cast<IfcPlane>(base_surface) )
-		{
-			std::cout << "RepresentationConverter::convertIfcBooleanOperand: The BaseSurface defined at supertype IfcHalfSpaceSolid shall be of type IfcPlane" << std::endl;
-			return;
-		}
 
 		// base surface
-		shared_ptr<carve::input::PolylineSetData> surface_data ( new carve::input::PolylineSetData() );
-		m_face_converter->convertIfcSurface( base_surface, carve::math::Matrix::IDENT(), surface_data );
-		std::vector<carve::geom::vector<3> > base_surface_points = surface_data->points;
-
-		if( base_surface_points.size() != 4 )
+		shared_ptr<IfcElementarySurface> elem_base_surface = dynamic_pointer_cast<IfcElementarySurface>(base_surface);
+		if( !elem_base_surface )
 		{
-			std::cout << "RepresentationConverter::convertIfcBooleanOperand: invalid IfcHalfSpaceSolid.BaseSurface" << std::endl;
+			std::cout << __FUNC__ << ": The base surface shall be an unbounded surface (subtype of IfcElementarySurface)" << std::endl;
 			return;
+		}
+		shared_ptr<IfcAxis2Placement3D>& base_surface_pos = elem_base_surface->m_Position;
+		carve::geom::plane<3> base_surface_plane;
+		carve::geom::vector<3> base_surface_position;
+		carve::math::Matrix base_position_matrix( carve::math::Matrix::IDENT() );
+		if( base_surface_pos )
+		{
+			PlacementConverter::getPlane( base_surface_pos, base_surface_plane, base_surface_position, length_factor );
+			PlacementConverter::convertIfcAxis2Placement3D( base_surface_pos, base_position_matrix, length_factor );
 		}
 
 		// If the agreement flag is TRUE, then the subset is the one the normal points away from
 		bool agreement = half_space_solid->m_AgreementFlag;
 		if( !agreement )
 		{
-			std::reverse( base_surface_points.begin(), base_surface_points.end() );
+			base_surface_plane.negate();
 		}
 
 		shared_ptr<IfcBoxedHalfSpace> boxed_half_space = dynamic_pointer_cast<IfcBoxedHalfSpace>(half_space_solid);
 		if( boxed_half_space )
 		{
 			shared_ptr<IfcBoundingBox> bbox = boxed_half_space->m_Enclosure;
+			if( !bbox )
+			{
+				strs_err << __FUNC__ << ": IfcBoxedHalfSpace: Enclosure not given" << std::endl;
+				return;
+			}
+
+			if( !bbox->m_Corner || !bbox->m_XDim || !bbox->m_YDim || !bbox->m_ZDim )
+			{
+				strs_err << __FUNC__ << ": IfcBoxedHalfSpace: Enclosure not valid" << std::endl;
+				return;
+			}
 			shared_ptr<IfcCartesianPoint>&			bbox_corner = bbox->m_Corner;
 			shared_ptr<IfcPositiveLengthMeasure>&	bbox_x_dim = bbox->m_XDim;
 			shared_ptr<IfcPositiveLengthMeasure>&	bbox_y_dim = bbox->m_YDim;
 			shared_ptr<IfcPositiveLengthMeasure>&	bbox_z_dim = bbox->m_ZDim;
-			// TODO: implement according to http://www.buildingsmart-tech.org/ifc/IFC4/final/html/figures/IfcBoxedHalfSpace_01.png
-			std::cout << "convertIfcBooleanOperand: IfcBoxedHalfSpace not implemented" << std::endl;
 
-			// if we do not return here, an unbounded plane will be used for now
-			//return;
+			carve::geom::vector<3> corner;
+			m_curve_converter->convertIfcCartesianPoint( bbox_corner, corner );
+			carve::math::Matrix box_position_matrix = pos*base_position_matrix*carve::math::Matrix::TRANS( corner );
+
+			// else, its an unbounded half space solid, create simple box
+			shared_ptr<carve::input::PolyhedronData> polyhedron_data( new carve::input::PolyhedronData() );
+			polyhedron_data->addVertex( carve::geom::VECTOR( bbox_x_dim->m_value, bbox_y_dim->m_value, bbox_z_dim->m_value));
+			polyhedron_data->addVertex( carve::geom::VECTOR(-bbox_x_dim->m_value, bbox_y_dim->m_value, bbox_z_dim->m_value));
+			polyhedron_data->addVertex( carve::geom::VECTOR(-bbox_x_dim->m_value,-bbox_y_dim->m_value, bbox_z_dim->m_value));
+			polyhedron_data->addVertex( carve::geom::VECTOR( bbox_x_dim->m_value,-bbox_y_dim->m_value, bbox_z_dim->m_value));
+			polyhedron_data->addVertex( carve::geom::VECTOR( bbox_x_dim->m_value, bbox_y_dim->m_value,-bbox_z_dim->m_value));
+			polyhedron_data->addVertex( carve::geom::VECTOR(-bbox_x_dim->m_value, bbox_y_dim->m_value,-bbox_z_dim->m_value));
+			polyhedron_data->addVertex( carve::geom::VECTOR(-bbox_x_dim->m_value,-bbox_y_dim->m_value,-bbox_z_dim->m_value));
+			polyhedron_data->addVertex( carve::geom::VECTOR( bbox_x_dim->m_value,-bbox_y_dim->m_value,-bbox_z_dim->m_value));
+
+			polyhedron_data->addFace(0,	1, 2);
+			polyhedron_data->addFace(2, 3, 0);
+			polyhedron_data->addFace(7, 6, 5);
+			polyhedron_data->addFace(5, 4, 7);
+			polyhedron_data->addFace(0,	4, 5);
+			polyhedron_data->addFace(5, 1, 0);
+			polyhedron_data->addFace(1, 5, 6);
+			polyhedron_data->addFace(6, 2, 1);
+			polyhedron_data->addFace(2, 6, 7);
+			polyhedron_data->addFace(7, 3, 2);
+			polyhedron_data->addFace(3, 7, 4);
+			polyhedron_data->addFace(4, 0, 3);
+
+			item_data->closed_polyhedrons.push_back( polyhedron_data );
+
+			// apply object coordinate system
+			for( std::vector<carve::geom::vector<3> >::iterator it_points = polyhedron_data->points.begin(); it_points != polyhedron_data->points.end(); ++it_points )
+			{
+				carve::geom::vector<3> & poly_point = (*it_points);
+				poly_point = box_position_matrix*poly_point;
+			}
+
+			return;
 		}
 
+		// check dimenstions of other operand
+		double extrusion_depth = HALF_SPACE_BOX_SIZE;
+		carve::geom::vector<3> other_operand_pos = base_surface_position;
+		if( other_operand )
+		{
+			carve::geom::aabb<3> aabb;
+			other_operand->createMeshSetsFromClosedPolyhedrons();
+			for( int ii=0; ii<other_operand->meshsets.size(); ++ii )
+			{
+				shared_ptr<carve::mesh::MeshSet<3> >& meshset = other_operand->meshsets[ii];
+				if( ii == 0 )
+				{
+					aabb =	meshset->getAABB();
+				}
+				else
+				{
+					aabb.unionAABB( meshset->getAABB() );
+				}
+			}
+			aabb.max();
+			carve::geom::vector<3>& aabb_extent = aabb.extent;
+			double max_extent = std::max( aabb_extent.x, std::max( aabb_extent.y, aabb_extent.z ) );
+			extrusion_depth = 2.0*max_extent;
+			other_operand_pos = aabb.pos;
+		}
 
 		shared_ptr<IfcPolygonalBoundedHalfSpace> polygonal_half_space = dynamic_pointer_cast<IfcPolygonalBoundedHalfSpace>(half_space_solid);
 		if( polygonal_half_space )
@@ -1259,9 +1331,13 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 			//	PolygonalBoundary	 :	IfcBoundedCurve;
 
 			carve::math::Matrix boundary_position_matrix( carve::math::Matrix::IDENT() );
+			carve::geom::vector<3> boundary_plane_normal( carve::geom::VECTOR( 0, 0, 1 ) );
+			carve::geom::vector<3> boundary_position;
 			if( polygonal_half_space->m_Position )
 			{
 				PlacementConverter::convertIfcAxis2Placement3D( polygonal_half_space->m_Position, boundary_position_matrix, length_factor );
+				boundary_plane_normal = carve::geom::VECTOR( boundary_position_matrix._31, boundary_position_matrix._32, boundary_position_matrix._33 );
+				boundary_position = carve::geom::VECTOR( boundary_position_matrix._41, boundary_position_matrix._42, boundary_position_matrix._43 );
 			}
 
 			// PolygonalBoundary is given in 2D
@@ -1272,69 +1348,57 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 			ProfileConverter::deleteLastPointIfEqualToFirst( polygonal_boundary );
 			ProfileConverter::simplifyPath( polygonal_boundary );
 
+			if( other_operand )
+			{
+				extrusion_depth = extrusion_depth*2.0;
+			}
 			std::stringstream err;
 			std::vector<std::vector<carve::geom::vector<2> > > paths;
 			paths.push_back( polygonal_boundary );
 			shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData );
-			GeomUtils::extrude( paths, carve::geom::vector<3>( carve::geom::VECTOR( 0, 0, HALF_SPACE_BOX_SIZE*2 ) ), poly_data, err );
+			GeomUtils::extrude( paths, carve::geom::vector<3>( carve::geom::VECTOR( 0, 0, extrusion_depth ) ), poly_data, err );
 
 			const int num_poly_boundary_points = polygonal_boundary.size();
 			if( poly_data->points.size() != 2*num_poly_boundary_points )
 			{
 				strs_err << __FUNC__ << " problems in extrude: poly_data->points.size() != 2*polygonal_boundary.size()" << std::endl;
+				return;
 			}
 
 			// apply position of PolygonalBoundary
 			for( std::vector<carve::geom::vector<3> >::iterator it_points = poly_data->points.begin(); it_points != poly_data->points.end(); ++it_points )
 			{
 				carve::geom::vector<3>& vertex = (*it_points);
-				vertex.z -= HALF_SPACE_BOX_SIZE;  // move the solid down, will be cut later
-				// TODO: adjust box size to other operand size
 				vertex = boundary_position_matrix*vertex;
 			}
 
-			// compute normal of extruded solid bottom face
-			std::vector<carve::geom::vector<3> > extruded_solid_base_loop;
-			for( int i=0; i<num_poly_boundary_points; ++i )
-			{
-				extruded_solid_base_loop.push_back( poly_data->points[i] );
-			}
-			carve::geom::vector<3>  extruded_base_loop_normal = GeomUtils::computePolygonNormal( extruded_solid_base_loop );
-
-			// plane equation of the base surface
-			carve::geom::vector<3>  base_surface_normal = GeomUtils::computePolygonNormal( base_surface_points );
-			carve::geom::plane<3> base_surface_plane( base_surface_normal, base_surface_points[0] );
 
 			// project to base surface
-			int num_projected_points = 0;
-			for( std::vector<carve::geom::vector<3> >::iterator it_points = poly_data->points.begin(); it_points != poly_data->points.end(); ++it_points )
+			for( int i_base_point = 0; i_base_point < poly_data->points.size(); ++i_base_point )
 			{
-				carve::geom::vector<3>& poly_point = (*it_points);
+				carve::geom::vector<3>& poly_point = poly_data->points[i_base_point];//(*it_points);
 
 				// points below the base surface are projected into plane
 				double distance_to_base_surface = carve::geom::distance(base_surface_plane, poly_point);
-				if( distance_to_base_surface > 0 )
+				carve::geom::vector<3> v;
+				double t;
+				carve::IntersectionClass intersect = carve::geom3d::rayPlaneIntersection( base_surface_plane, poly_point, poly_point + boundary_plane_normal, v, t);
+				if( intersect > 0 )
 				{
-					carve::geom::vector<3> v;
-					double t;
-					carve::IntersectionClass intersect = carve::geom3d::rayPlaneIntersection( base_surface_plane, poly_point, poly_point + extruded_base_loop_normal, v, t);
-					if( intersect > 0 )
+					if( i_base_point < num_poly_boundary_points )
 					{
 						poly_point = v;
-						++num_projected_points;
 					}
 					else
 					{
-						std::cout << "no intersection found" << std::endl;
+						poly_point = v + boundary_plane_normal*extrusion_depth;
 					}
 				}
+				else
+				{
+					std::cout << "no intersection found" << std::endl;
+				}
 			}
-#ifdef _DEBUG
-			if( num_projected_points*2 != poly_data->points.size() )
-			{
-				std::cout << "could not cut solid with base surface" << std::endl;
-			}
-#endif
 
 			// apply object coordinate system
 			for( std::vector<carve::geom::vector<3> >::iterator it_points = poly_data->points.begin(); it_points != poly_data->points.end(); ++it_points )
@@ -1344,25 +1408,86 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 			}
 
 			item_data->closed_polyhedrons.push_back( poly_data );
+
+
+			//shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve::input::opts()) );
+			//	renderMeshsetInDebugViewer( meshset.get(), osg::Vec4(1.0f, 0.5f, 0.0f, 1.0f), true );
+
+			//	for( int ii=0; ii<other_operand->meshsets.size(); ++ii )
+			//	{
+			//	shared_ptr<carve::mesh::MeshSet<3> >& meshset = other_operand->meshsets[ii];
+			//	renderMeshsetInDebugViewer( meshset.get(), osg::Vec4(0.8f, 0.0f, 1.0f, 1.0f), true );
+			//	}
+
+				
 		}
 		else
 		{
 			// else, its an unbounded half space solid, create simple box
 
-			// plane equation of the base surface
-			carve::geom::vector<3>  base_surface_normal = GeomUtils::computePolygonNormal( base_surface_points );
+			int var = 0;
 
-			carve::geom::vector<3>  half_space_extrusion_direction = -base_surface_normal;
-			carve::geom::vector<3>  half_space_extrusion_vector = half_space_extrusion_direction*HALF_SPACE_BOX_SIZE;
-			shared_ptr<carve::input::PolyhedronData> half_space_box_data( new carve::input::PolyhedronData() );
-			item_data->closed_polyhedrons.push_back(half_space_box_data);
-			extrudeBox( base_surface_points, half_space_extrusion_vector, half_space_box_data );
-
-			// apply object coordinate system
-			for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_box_data->points.begin(); it_points != half_space_box_data->points.end(); ++it_points )
+			if( var == 0 )
 			{
-				carve::geom::vector<3> & poly_point = (*it_points);
-				poly_point = pos*poly_point;
+				shared_ptr<carve::input::PolylineSetData> surface_data ( new carve::input::PolylineSetData() );
+				m_face_converter->convertIfcSurface( base_surface, carve::math::Matrix::IDENT(), surface_data );
+				std::vector<carve::geom::vector<3> > base_surface_points = surface_data->points;
+
+				if( base_surface_points.size() != 4 )
+				{
+					std::cout << "RepresentationConverter::convertIfcBooleanOperand: invalid IfcHalfSpaceSolid.BaseSurface" << std::endl;
+					return;
+				}
+				// If the agreement flag is TRUE, then the subset is the one the normal points away from
+				bool agreement = half_space_solid->m_AgreementFlag;
+				if( !agreement )
+				{
+					std::reverse( base_surface_points.begin(), base_surface_points.end() );
+				}
+				carve::geom::vector<3>  base_surface_normal = GeomUtils::computePolygonNormal( base_surface_points );
+
+				carve::geom::vector<3>  half_space_extrusion_direction = -base_surface_normal;
+				carve::geom::vector<3>  half_space_extrusion_vector = half_space_extrusion_direction*HALF_SPACE_BOX_SIZE;
+				shared_ptr<carve::input::PolyhedronData> half_space_box_data( new carve::input::PolyhedronData() );
+				item_data->closed_polyhedrons.push_back(half_space_box_data);
+				extrudeBox( base_surface_points, half_space_extrusion_vector, half_space_box_data );
+
+				// apply object coordinate system
+				for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_box_data->points.begin(); it_points != half_space_box_data->points.end(); ++it_points )
+				{
+					carve::geom::vector<3> & poly_point = (*it_points);
+					poly_point = pos*poly_point;
+				}
+			}
+			
+			if( var == 1 )
+			{
+				std::vector<carve::geom::vector<3> > box_base_points;
+				box_base_points.push_back( base_position_matrix*carve::geom::VECTOR( extrusion_depth,  extrusion_depth, 0.0 ));
+				box_base_points.push_back( base_position_matrix*carve::geom::VECTOR(-extrusion_depth,  extrusion_depth, 0.0 ));
+				box_base_points.push_back( base_position_matrix*carve::geom::VECTOR(-extrusion_depth, -extrusion_depth, 0.0 ));
+				box_base_points.push_back( base_position_matrix*carve::geom::VECTOR( extrusion_depth, -extrusion_depth, 0.0 ));
+
+				carve::geom::vector<3>  half_space_extrusion_direction = -base_surface_plane.N;
+				carve::geom::vector<3>  half_space_extrusion_vector = half_space_extrusion_direction*extrusion_depth;
+
+				carve::geom::vector<3>  box_base_normal = GeomUtils::computePolygonNormal( box_base_points );
+				double dot_normal = dot( box_base_normal, base_surface_plane.N );
+				if( dot_normal > 0 )
+				{
+				std::reverse( box_base_points.begin(), box_base_points.end() );
+				}
+
+				shared_ptr<carve::input::PolyhedronData> half_space_box_data( new carve::input::PolyhedronData() );
+				item_data->closed_polyhedrons.push_back(half_space_box_data);
+				extrudeBox( box_base_points, half_space_extrusion_vector, half_space_box_data );
+
+				// apply object coordinate system
+				for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_box_data->points.begin(); it_points != half_space_box_data->points.end(); ++it_points )
+				{
+					carve::geom::vector<3> & poly_point = (*it_points);
+					poly_point = pos*poly_point;
+				}
 			}
 
 			return;
@@ -1388,208 +1513,201 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 }
 
 
-void SolidModelConverter::simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
+void retriangulateMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 {
-	return;
-	carve::mesh::MeshSimplifier simplifier;
-	double min_colinearity = m_geom_settings->m_min_colinearity;
-	double min_delta_v = m_geom_settings->m_min_delta_v;
-	double min_normal_angle = m_geom_settings->m_min_normal_angle;
-	double min_length = m_geom_settings->m_min_length;
-	//simplifier.removeFins(meshset);
-	//simplifier.cleanFaceEdges( meshset );
-	//simplifier.removeRemnantFaces( meshset );
-	//simplifier.simplify( meshset, min_colinearity, min_delta_v, min_normal_angle, min_length );
-
-	//simplifier.removeRemnantFaces( meshset );
-	//simplifier.removeLowVolumeManifolds(meshset, 0.01);
-	//simplifier.improveMesh( item_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+	//carve::poly::Polyhedron* poly = carve::polyhedronFromMesh(meshset, -1);
+	//carve::mesh::MeshSet<3>* meshset_new = carve::meshFromPolyhedron(poly, -1);
 
 	int num_vertices1 = meshset->vertex_storage.size();
+	shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
+	std::map<double, std::map<double, std::map<double, int> > > existing_vertices_coords;
+	std::map<double, std::map<double, std::map<double, int> > >::iterator vert_it;
+	std::map<double, std::map<double, int> >::iterator it_find_y;
+	std::map<double, int>::iterator it_find_z;
+	std::map<int,int> map_merged_idx;
+	double volume_check = 0;
 
-	//int num_closed_edges = 0;
-	//for( size_t i = 0; i < meshset->meshes.size(); ++i )
-	//{
-	//	carve::mesh::Mesh<3>* mesh = meshset->meshes[i];
-	//	num_closed_edges += mesh->closed_edges.size();
-	//}
-
-	////simplifier.mergeCoplanarFaces( meshset.get(), 0.0 );
-	try
+	for( size_t ii = 0; ii < meshset->meshes.size(); ++ii )
 	{
-		simplifier.eliminateShortEdges( meshset.get(), 0.00001 );
-	}
-	catch(...)
-	{
-		std::cout << "simplifier.eliminateShortEdges failed." << std::endl;
-	}
+		carve::mesh::Mesh<3>* mesh = meshset->meshes[ii];
+		volume_check += mesh->volume();
+		std::vector<carve::mesh::Face<3>* >& vec_faces = mesh->faces;
 
-	//int num_closed_edges_simplified = 0;
-	//for (size_t i = 0; i < meshset->meshes.size(); ++i)
-	//{
-	//	carve::mesh::Mesh<3>* mesh = meshset->meshes[i];
-	//	num_closed_edges_simplified += mesh->closed_edges.size();
-	//}
-
-	//if( num_closed_edges != num_closed_edges_simplified )
-	if( num_vertices1 > 8 )
-	{
-
-		int num_vertices2 = meshset->vertex_storage.size();
-
-		//carve::poly::Polyhedron* poly = carve::polyhedronFromMesh(meshset, -1);
-		//carve::mesh::MeshSet<3>* meshset_new = carve::meshFromPolyhedron(poly, -1);
-
-		shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
-		std::map<double, std::map<double, std::map<double, int> > > existing_vertices_coords;
-		std::map<double, std::map<double, std::map<double, int> > >::iterator vert_it;
-		std::map<double, std::map<double, int> >::iterator it_find_y;
-		std::map<double, int>::iterator it_find_z;
-		std::map<int,int> map_merged_idx;
-		double volume_check = 0;
-
-		for( size_t ii = 0; ii < meshset->meshes.size(); ++ii )
+		for( size_t i2 = 0; i2 < vec_faces.size(); ++i2 )
 		{
-			carve::mesh::Mesh<3>* mesh = meshset->meshes[ii];
-			volume_check += mesh->volume();
-			std::vector<carve::mesh::Face<3>* >& vec_faces = mesh->faces;
+			carve::mesh::Face<3>* face = vec_faces[i2];
+			std::vector<int> face_idx;
 
-			for( size_t i2 = 0; i2 < vec_faces.size(); ++i2 )
+			carve::geom3d::Vector normal = face->plane.N;
+
+			std::vector<carve::geom::vector<2> > verts2d;
+			face->getProjectedVertices( verts2d );
+
+			// check winding order
+			//carve::geom3d::Vector normal_2d = GeomUtils::computePolygon2DNormal( verts2d );
+			//if( normal_2d.z < 0 )
+			//{
+			//	std::reverse( verts2d.begin(), verts2d.end() );
+			//}
+
+			std::vector<carve::triangulate::tri_idx> triangulated;
+			if( verts2d.size() > 3 )
 			{
-				carve::mesh::Face<3>* face = vec_faces[i2];
-				std::vector<int> face_idx;
-
-				carve::geom3d::Vector normal = face->plane.N;
-								
-				std::vector<carve::geom::vector<2> > verts2d;
-				face->getProjectedVertices( verts2d );
-
-				// check winding order
-				//carve::geom3d::Vector normal_2d = GeomUtils::computePolygon2DNormal( verts2d );
-				//if( normal_2d.z < 0 )
-				//{
-				//	std::reverse( verts2d.begin(), verts2d.end() );
-				//}
-
-				std::vector<carve::triangulate::tri_idx> triangulated;
-				if( verts2d.size() > 3 )
+				try
 				{
-					try
-					{
-						carve::triangulate::triangulate(verts2d, triangulated);
-						carve::triangulate::improve(verts2d, triangulated);
-					}
-					catch(...)
-					{
-						std::cout << __FUNC__ << " carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
-						continue;
-					}
+					carve::triangulate::triangulate(verts2d, triangulated);
+					carve::triangulate::improve(verts2d, triangulated);
+				}
+				catch(...)
+				{
+					std::cout << __FUNC__ << " carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
+					continue;
+				}
+			}
+			else
+			{
+				triangulated.push_back( carve::triangulate::tri_idx( 0, 1, 2 ) );
+			}
+
+			// now insert points to polygon, avoiding points with same coordinates
+			int i_vert = 0;
+			carve::mesh::Edge<3>* edge = face->edge;
+			do
+			{
+				const carve::geom::vector<3>& v = edge->vert->v;//verts3d[i]->v;
+				edge = edge->next;
+
+#ifdef ROUND_IFC_COORDINATES
+				const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+				const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+				const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+				const double vertex_x = v.x;
+				const double vertex_y = v.y;
+				const double vertex_z = v.z;
+#endif
+
+				//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
+				vert_it = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double, std::map<double, int> >() ) ).first;
+				std::map<double, std::map<double, int> >& map_y_index = (*vert_it).second;
+
+				it_find_y = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first;
+				std::map<double, int>& map_z_index = it_find_y->second;
+
+				it_find_z = map_z_index.find( vertex_z );
+				if( it_find_z != map_z_index.end() )
+				{
+					// vertex already exists in polygon. remember its index for triangles
+					int vertex_index = it_find_z->second;
+					map_merged_idx[i_vert] = vertex_index;
 				}
 				else
 				{
-					triangulated.push_back( carve::triangulate::tri_idx( 0, 1, 2 ) );
+					int vertex_id = poly_data->addVertex( v );
+					map_z_index[vertex_z] = vertex_id;
+					map_merged_idx[i_vert] = vertex_id;
 				}
-				
-				// now insert points to polygon, avoiding points with same coordinates
-				int i_vert = 0;
-				carve::mesh::Edge<3>* edge = face->edge;
-				do
+
+				++i_vert;
+			} while( edge != face->edge );
+
+			for( size_t i = 0; i != triangulated.size(); ++i )
+			{
+				carve::triangulate::tri_idx triangle = triangulated[i];
+				int a = triangle.a;
+				int b = triangle.b;
+				int c = triangle.c;
+
+				int vertex_id_a = map_merged_idx[a];
+				int vertex_id_b = map_merged_idx[b];
+				int vertex_id_c = map_merged_idx[c];
+
+#ifdef _DEBUG
+				const carve::poly::Vertex<3>& v_a = poly_data->getVertex(vertex_id_a);
+				const carve::poly::Vertex<3>& v_b = poly_data->getVertex(vertex_id_b);
+
+				double dx = v_a.v[0] - v_b.v[0];
+				if( abs(dx) < 0.0000001 )
 				{
-
-					const carve::geom::vector<3>& v = edge->vert->v;//verts3d[i]->v;
-					edge = edge->next;
-			
-#ifdef ROUND_IFC_COORDINATES
-					const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-					const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-					const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-#else
-					const double vertex_x = v.x;
-					const double vertex_y = v.y;
-					const double vertex_z = v.z;
-#endif
-					
-					//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
-					vert_it = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double, std::map<double, int> >() ) ).first;
-					std::map<double, std::map<double, int> >& map_y_index = (*vert_it).second;
-
-					it_find_y = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first;
-					std::map<double, int>& map_z_index = it_find_y->second;
-
-					it_find_z = map_z_index.find( vertex_z );
-					if( it_find_z != map_z_index.end() )
+					double dy = v_a.v[1] - v_b.v[1];
+					if( abs(dy) < 0.0000001 )
 					{
-						// vertex already exists in polygon. remember its index for triangles
-						int vertex_index = it_find_z->second;
-						map_merged_idx[i_vert] = vertex_index;
-					}
-					else
-					{
-						int vertex_id = poly_data->addVertex( v );
-						map_z_index[vertex_z] = vertex_id;
-						map_merged_idx[i_vert] = vertex_id;
-					}
-
-					++i_vert;
-				} while( edge != face->edge );
-
-				for( size_t i = 0; i != triangulated.size(); ++i )
-				{
-					carve::triangulate::tri_idx triangle = triangulated[i];
-					int a = triangle.a;
-					int b = triangle.b;
-					int c = triangle.c;
-
-					int vertex_id_a = map_merged_idx[a];
-					int vertex_id_b = map_merged_idx[b];
-					int vertex_id_c = map_merged_idx[c];
-
-		#ifdef _DEBUG
-					const carve::poly::Vertex<3>& v_a = poly_data->getVertex(vertex_id_a);
-					const carve::poly::Vertex<3>& v_b = poly_data->getVertex(vertex_id_b);
-
-					double dx = v_a.v[0] - v_b.v[0];
-					if( abs(dx) < 0.0000001 )
-					{
-						double dy = v_a.v[1] - v_b.v[1];
-						if( abs(dy) < 0.0000001 )
+						double dz = v_a.v[2] - v_b.v[2];
+						if( abs(dz) < 0.0000001 )
 						{
-							double dz = v_a.v[2] - v_b.v[2];
-							if( abs(dz) < 0.0000001 )
-							{
-								std::cerr << "abs(dx) < 0.00001 && abs(dy) < 0.00001 && abs(dz) < 0.00001\n";
-							}
+							std::cerr << "abs(dx) < 0.00001 && abs(dy) < 0.00001 && abs(dz) < 0.00001\n";
 						}
 					}
-		#endif
-					poly_data->addFace( vertex_id_a, vertex_id_b, vertex_id_c );
 				}
+#endif
+				poly_data->addFace( vertex_id_a, vertex_id_b, vertex_id_c );
 			}
-		}
-
-
-		meshset = NULL;
-		meshset = shared_ptr<carve::mesh::MeshSet<3> >( poly_data->createMesh(carve::input::opts()) );
-
-		double volume_check2 = 0;
-		for( size_t i = 0; i < meshset->meshes.size(); ++i )
-		{
-			carve::mesh::Mesh<3>* mesh = meshset->meshes[i];
-			volume_check2 += mesh->volume();
-		}
-
-		if( abs(volume_check - volume_check2) > 0.0001 )
-		{
-			std::cout << __FUNC__ << " volume check failed." << std::endl;
-		}
-
-		int num_vertices3 = meshset->vertex_storage.size();
-		if( num_vertices1 != num_vertices2 || num_vertices2 != num_vertices3 )
-		{
-			int wait = 0;
 		}
 	}
 
+	meshset = NULL;
+	meshset = shared_ptr<carve::mesh::MeshSet<3> >( poly_data->createMesh(carve::input::opts()) );
+
+	double volume_check2 = 0;
+	for( size_t i = 0; i < meshset->meshes.size(); ++i )
+	{
+		carve::mesh::Mesh<3>* mesh = meshset->meshes[i];
+		volume_check2 += mesh->volume();
+	}
+
+	if( abs(volume_check - volume_check2) > 0.0001 )
+	{
+		std::cout << __FUNC__ << " volume check failed." << std::endl;
+	}
+
+	int num_vertices2 = meshset->vertex_storage.size();
+	if( num_vertices1 != num_vertices2 )
+	{
+		std::cout << __FUNC__ << " num vertices check failed." << std::endl;
+	}
+}
+
+void SolidModelConverter::simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
+{
+	//carve::mesh::MeshSimplifier simplifier;
+	//double min_colinearity = m_geom_settings->m_min_colinearity;
+	//double min_delta_v = m_geom_settings->m_min_delta_v;
+	//double min_normal_angle = m_geom_settings->m_min_normal_angle;
+	//double min_length = 0.0001;//m_geom_settings->m_min_length;
+
+	//try
+	//{
+	//	simplifier.removeFins(meshset.get());
+	//	//simplifier.cleanFaceEdges( meshset.get() );
+	//	//simplifier.removeRemnantFaces( meshset.get() );
+	//	//simplifier.mergeCoplanarFaces( meshset.get(), 0.0 );
+	//	//simplifier.eliminateShortEdges( meshset.get(), min_length );
+	//	//simplifier.removeFins(meshset.get());
+	//	simplifier.simplify( meshset.get(), min_colinearity, min_delta_v, min_normal_angle, min_length );
+	//	simplifier.removeFins(meshset.get());
+	//	//simplifier.removeLowVolumeManifolds(meshset, 0.01);
+	//	simplifier.improveMesh( meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+	//}
+	//catch(...)
+	//{
+	//	std::cout << "simplifier.eliminateShortEdges failed." << std::endl;
+	//}
+
+	//carve::csg::CarveTriangulatorWithImprovement triang;
+	//for( size_t ii = 0; ii < meshset->meshes.size(); ++ii )
+	//{
+	//	carve::mesh::Mesh<3>* mesh = meshset->meshes[ii];
+	//	std::vector<carve::mesh::Face<3>* >& vec_faces = mesh->faces;
+	//	carve::mesh::Face<3>* face_orig = NULL;
+	//	triang.processOutputFace( vec_faces, face_orig, false );
+	//}
+	
+	bool rebuild = true;
+	int num_vertices = meshset->vertex_storage.size();
+	if( rebuild && num_vertices > 8 )
+	{
+		retriangulateMeshSet( meshset );
+	}
 }
 
 bool SolidModelConverter::computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh::MeshSet<3>* op2, const carve::csg::CSG::OP operation, 
@@ -1603,18 +1721,10 @@ bool SolidModelConverter::computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh:
 
 		if( meshset1_ok && meshset2_ok )
 		{
-			//carve::mesh::MeshSimplifier simplifier;
-			//int removed1 = simplifier.removeLowVolumeManifolds(op1, 0.01);
-			//int removed2 = simplifier.removeLowVolumeManifolds(op2, 0.01);
-
-			// TODO: switch off std::cerr output in carve in release mode
 			carve::csg::CSG csg;
-			if( m_geom_settings->m_set_process_output_face )
-			{
-				csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-				//csg.hooks.registerHook(new carve::csg::CarveHoleResolver(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-			}
-			//result_meshset = shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( op1, op2, operation, NULL, m_geom_settings->m_classify_type) );
+			//csg.hooks.registerHook(new carve::csg::CarveTriangulator(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+			//csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+			//csg.hooks.registerHook(new carve::csg::CarveHoleResolver(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 			result = shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( op1, op2, operation, NULL, m_geom_settings->m_classify_type) );
 			bool result_meshset_ok = ConverterOSG::checkMeshSet( result.get(), err, -1 );
 			if( result_meshset_ok )
@@ -1651,36 +1761,6 @@ bool SolidModelConverter::computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh:
 	{
 		csg_operation_ok = false;
 		err << "csg operation failed, id1=" << entity1 << ", id2=" << entity2 << std::endl;
-	}
-
-	if( csg_operation_ok )
-	{
-		if( m_geom_settings->m_use_mesh_simplifier_after_csg )
-		{
-			try
-			{
-				simplifyMesh( result );
-			}
-			catch( carve::exception& ce )
-			{
-				std::cout << "csg operation failed, id1=" << entity1 << ", id2=" << entity2 << ", ";
-				std::cout << ce.str() << std::endl;
-			}
-			catch(std::exception& e)
-			{
-				std::cout << "csg operation failed, id1=" << entity1 << ", id2=" << entity2 << ", ";
-				std::cout << e.what() << std::endl;
-			}
-			catch(...)
-			{
-				std::cout << "csg operation failed, id1=" << entity1 << ", id2=" << entity2 << std::endl;
-			}
-			// TODO: map with meshes that have been simplified already to avoid double simplifyMesh calls before other csg operations
-		}
-	}
-	else
-	{
-		csg_operation_ok = false;
 	}
 
 #ifdef _DEBUG

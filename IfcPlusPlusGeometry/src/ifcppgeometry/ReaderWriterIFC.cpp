@@ -61,6 +61,7 @@
 #include "RepresentationConverter.h"
 #include "PlacementConverter.h"
 #include "SolidModelConverter.h"
+#include "ProfileCache.h"
 #include "ConverterOSG.h"
 #include "ReaderWriterIFC.h"
 
@@ -84,6 +85,8 @@ ReaderWriterIFC::ReaderWriterIFC()
 	m_glass_stateset = new osg::StateSet();
 	m_glass_stateset->setMode( GL_BLEND, osg::StateAttribute::ON );
 	m_glass_stateset->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
+
+	m_cull_back_off = new osg::CullFace( osg::CullFace::BACK );
 
 	m_group_result = new osg::Group();
 }
@@ -269,6 +272,7 @@ void ReaderWriterIFC::createGeometry()
 	}
 
 	m_shape_input_data.clear();
+	m_representation_converter->getProfileCache()->clearProfileCache();
 
 	std::vector<shared_ptr<IfcProduct> > vec_products;
 	std::stringstream err;
@@ -435,6 +439,8 @@ void ReaderWriterIFC::createGeometry()
 	{
 		err << "error in " << __FUNC__ << std::endl;
 	}
+
+	m_representation_converter->getProfileCache()->clearProfileCache();
 
 	progressCallback( 1.0 );
 	progressTextCallback( "Loading file done" );
@@ -636,8 +642,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 			item_group->addChild(geode);
 
 			// disable back face culling for open meshes
-			osg::ref_ptr<osg::CullFace> cull_back_off = new osg::CullFace( osg::CullFace::BACK );
-			geode->getOrCreateStateSet()->setAttributeAndModes( cull_back_off.get(), osg::StateAttribute::OFF );
+			geode->getOrCreateStateSet()->setAttributeAndModes( m_cull_back_off.get(), osg::StateAttribute::OFF );
 		}
 
 		// create shape for open or closed shells
@@ -665,6 +670,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->meshsets.begin(); it_meshsets != item_data->meshsets.end(); ++it_meshsets )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> >& item_meshset = (*it_meshsets);
+			m_representation_converter->getSolidConverter()->simplifyMesh( item_meshset );
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
 			ConverterOSG::drawMeshSet( item_meshset.get(), geode_result );
 			item_group->addChild(geode_result);

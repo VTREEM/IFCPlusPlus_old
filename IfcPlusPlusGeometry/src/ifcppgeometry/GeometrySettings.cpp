@@ -23,9 +23,6 @@ GeometrySettings::GeometrySettings()
 	m_min_normal_angle = M_PI/180.0;
 	m_min_length = 0.0002;
 
-	m_use_mesh_simplifier_after_csg = true;
-	m_use_mesh_simplifier_before_draw = false;
-	m_set_process_output_face = true;
 	m_classify_type = carve::csg::CSG::CLASSIFY_EDGE;
 }
 

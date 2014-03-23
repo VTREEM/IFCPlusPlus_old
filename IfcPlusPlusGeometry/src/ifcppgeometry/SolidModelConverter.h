@@ -37,7 +37,7 @@ public:
 	~SolidModelConverter();
 
 	void convertIfcBooleanResult(		const shared_ptr<IfcBooleanResult>& operand,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
-	void convertIfcBooleanOperand(		const shared_ptr<IfcBooleanOperand>& operand,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcBooleanOperand(		const shared_ptr<IfcBooleanOperand>& operand,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, const shared_ptr<ItemData>& other_operand, std::stringstream& err );
 	void convertIfcSolidModel(			const shared_ptr<IfcSolidModel>& solid_model,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcExtrudedAreaSolid(	const shared_ptr<IfcExtrudedAreaSolid>& extruded_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcRevolvedAreaSolid(	const shared_ptr<IfcRevolvedAreaSolid>& revolved_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );

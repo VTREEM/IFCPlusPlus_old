@@ -42,8 +42,5 @@ public:
 	double m_min_delta_v;
 	double m_min_normal_angle;
 	double m_min_length;
-	bool m_use_mesh_simplifier_after_csg;
-	bool m_use_mesh_simplifier_before_draw;
-	bool m_set_process_output_face;
 	carve::csg::CSG::CLASSIFY_TYPE m_classify_type;
 };

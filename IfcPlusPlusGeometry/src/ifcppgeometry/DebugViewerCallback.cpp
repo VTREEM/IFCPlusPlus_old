@@ -741,39 +741,77 @@ void createTest( osg::Group* group, osg::Group* root )
 
 	{
 
-
-// entity_id: 229314
+// entity_id: 102580
 carve::input::PolyhedronData* poly_data1 = new carve::input::PolyhedronData();
-poly_data1->addVertex( carve::geom::VECTOR(510.022, 330.719, 7 ) );
-poly_data1->addVertex( carve::geom::VECTOR(510.288, 330.928, 7 ) );
-poly_data1->addVertex( carve::geom::VECTOR(511.067, 337.672, 7 ) );
-poly_data1->addVertex( carve::geom::VECTOR(510.857, 337.945, 7 ) );
-poly_data1->addVertex( carve::geom::VECTOR(510.022, 330.719, 17.3 ) );
-poly_data1->addVertex( carve::geom::VECTOR(510.288, 330.928, 17.3 ) );
-poly_data1->addVertex( carve::geom::VECTOR(511.067, 337.672, 17.3 ) );
-poly_data1->addVertex( carve::geom::VECTOR(510.857, 337.945, 17.3 ) );
-poly_data1->addFace( 0, 1, 5);
-poly_data1->addFace( 5, 4, 0);
-poly_data1->addFace( 1, 2, 6);
-poly_data1->addFace( 6, 5, 1);
-poly_data1->addFace( 2, 3, 7);
-poly_data1->addFace( 7, 6, 2);
-poly_data1->addFace( 3, 0, 4);
-poly_data1->addFace( 4, 7, 3);
-poly_data1->addFace( 2, 0, 3);
-poly_data1->addFace( 6, 7, 4);
-poly_data1->addFace( 1, 0, 2);
-poly_data1->addFace( 5, 6, 4);
-// entity_id: 229269
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 4.365, 2.94 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 0, 2.94 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 0, 8.32819 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 4.365, 8.32819 ) );
+poly_data1->addVertex( carve::geom::VECTOR(7.115, 0, 2.94 ) );
+poly_data1->addVertex( carve::geom::VECTOR(7.115, 0, 8.32819 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 7.855, 2.94 ) );
+poly_data1->addVertex( carve::geom::VECTOR(7.115, 11.74, 2.94 ) );
+poly_data1->addVertex( carve::geom::VECTOR(7.115, 7.275, 8.32819 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.89402, 7.275, 8.32819 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 7.275, 8.32819 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 7.275, 7.06408 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 7.855, 6.75569 ) );
+poly_data1->addVertex( carve::geom::VECTOR(7.115, 8.06755, 6.64268 ) );
+poly_data1->addVertex( carve::geom::VECTOR(7.115, 11.74, 4.69 ) );
+poly_data1->addVertex( carve::geom::VECTOR(7.115, 7.275, 7.06408 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.79768, 7.275, 8.32819 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 9.69372, 5.77803 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 11.74, 2.94 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.99645, 11.74, 4.69 ) );
+poly_data1->addVertex( carve::geom::VECTOR(6.75, 11.74, 4.69 ) );
+poly_data1->addFace( 0, 1, 2);
+poly_data1->addFace( 2, 3, 0);
+poly_data1->addFace( 0, 4, 1);
+poly_data1->addFace( 5, 2, 1);
+poly_data1->addFace( 3, 2, 5);
+poly_data1->addFace( 0, 3, 11);
+poly_data1->addFace( 4, 0, 7);
+poly_data1->addFace( 1, 4, 5);
+poly_data1->addFace( 8, 9, 3);
+poly_data1->addFace( 3, 5, 8);
+poly_data1->addFace( 3, 10, 11);
+poly_data1->addFace( 0, 11, 12);
+poly_data1->addFace( 12, 6, 0);
+poly_data1->addFace( 0, 6, 7);
+poly_data1->addFace( 13, 4, 7);
+poly_data1->addFace( 13, 7, 14);
+poly_data1->addFace( 4, 13, 15);
+poly_data1->addFace( 15, 8, 5);
+poly_data1->addFace( 15, 5, 4);
+poly_data1->addFace( 10, 3, 9);
+poly_data1->addFace( 9, 16, 10);
+poly_data1->addFace( 6, 17, 20);
+poly_data1->addFace( 17, 6, 12);
+poly_data1->addFace( 7, 6, 18);
+poly_data1->addFace( 14, 7, 19);
+poly_data1->addFace( 20, 18, 6);
+poly_data1->addFace( 19, 7, 18);
+poly_data1->addFace( 19, 18, 20);
+poly_data1->addFace( 11, 16, 9);
+poly_data1->addFace( 9, 15, 11);
+poly_data1->addFace( 9, 8, 15);
+poly_data1->addFace( 10, 16, 11);
+poly_data1->addFace( 12, 11, 15);
+poly_data1->addFace( 12, 15, 13);
+poly_data1->addFace( 19, 20, 17);
+poly_data1->addFace( 14, 19, 17);
+poly_data1->addFace( 17, 13, 14);
+poly_data1->addFace( 13, 17, 12);
+// entity_id: 102559
 carve::input::PolyhedronData* poly_data2 = new carve::input::PolyhedronData();
-poly_data2->addVertex( carve::geom::VECTOR(509.426, 323.465, 7.19926 ) );
-poly_data2->addVertex( carve::geom::VECTOR(510.507, 332.822, 17.3 ) );
-poly_data2->addVertex( carve::geom::VECTOR(510.03, 332.877, 17.3 ) );
-poly_data2->addVertex( carve::geom::VECTOR(508.95, 323.52, 7.19926 ) );
-poly_data2->addVertex( carve::geom::VECTOR(509.426, 323.465, 107 ) );
-poly_data2->addVertex( carve::geom::VECTOR(510.507, 332.822, 107 ) );
-poly_data2->addVertex( carve::geom::VECTOR(510.03, 332.877, 107 ) );
-poly_data2->addVertex( carve::geom::VECTOR(508.95, 323.52, 107 ) );
+poly_data2->addVertex( carve::geom::VECTOR(6.75, 7.275, 8.32819 ) );
+poly_data2->addVertex( carve::geom::VECTOR(6.75, -11.74, -1.78227 ) );
+poly_data2->addVertex( carve::geom::VECTOR(7.48, -11.74, -1.78227 ) );
+poly_data2->addVertex( carve::geom::VECTOR(7.48, 7.275, 8.32819 ) );
+poly_data2->addVertex( carve::geom::VECTOR(6.75, 7.275, 26.42 ) );
+poly_data2->addVertex( carve::geom::VECTOR(6.75, -11.74, 26.42 ) );
+poly_data2->addVertex( carve::geom::VECTOR(7.48, -11.74, 26.42 ) );
+poly_data2->addVertex( carve::geom::VECTOR(7.48, 7.275, 26.42 ) );
 poly_data2->addFace( 0, 1, 5);
 poly_data2->addFace( 5, 4, 0);
 poly_data2->addFace( 1, 2, 6);
@@ -798,8 +836,6 @@ bool meshset2_ok = ConverterOSG::checkMeshSet( meshset2, err, -1 );
 
 
 
-//renderMeshsetInDebugViewer( meshset1, osg::Vec4f( 0.5, 0.5, 0.5, 1 ), true );
-//renderMeshsetInDebugViewer( meshset2, osg::Vec4f( 0.5, 0, 0, 1 ), true );
 
 osg::Geode* geode_txt = new osg::Geode();
 root->addChild( geode_txt );
@@ -807,20 +843,31 @@ root->addChild( geode_txt );
 //drawVertexNumbers( poly_data1, osg::Vec4( 0, 0, 1, 1 ), geode_txt );
 //drawVertexNumbers( poly_data2, osg::Vec4( 0, 0, 0, 1 ), geode_txt );
 
-carve::mesh::MeshSimplifier simplifier;
-shared_ptr<GeometrySettings> geom_settings( new GeometrySettings() );
+bool simplify = true;
+if( simplify )
+{
+	carve::mesh::MeshSimplifier simplifier;
+	shared_ptr<GeometrySettings> geom_settings( new GeometrySettings() );
 	double min_colinearity = geom_settings->m_min_colinearity;
 	double min_delta_v = geom_settings->m_min_delta_v;
 	double min_normal_angle = geom_settings->m_min_normal_angle;
 	double min_length = geom_settings->m_min_length;
-	//simplifier.removeFins(meshset);
+	simplifier.removeFins(meshset1);
+	simplifier.eliminateShortEdges( meshset1, min_length );
 	//simplifier.cleanFaceEdges( meshset );
 	//simplifier.removeRemnantFaces( meshset );
-	//simplifier.simplify( meshset, min_colinearity, min_delta_v, min_normal_angle, min_length );
+	
+	simplifier.simplify( meshset1, min_colinearity, min_delta_v, min_normal_angle, min_length );
+	simplifier.removeFins(meshset1);
 //	int merged1 = simplifier.mergeCoplanarFaces( meshset1, 1e-2 );
 //	int merged2 = simplifier.mergeCoplanarFaces( meshset2, 1e-2 );
 	//simplifier.removeLowVolumeManifolds(meshset, 0.01);
 	//simplifier.improveMesh( item_meshset.get(), m_geom_settings->m_min_colinearity, m_geom_settings->m_min_delta_v, m_geom_settings->m_min_normal_angle );
+}
+
+renderMeshsetInDebugViewer( meshset1, osg::Vec4f( 0.2, 0.2, 0.2, 1 ), true );
+renderMeshsetInDebugViewer( meshset2, osg::Vec4f( 0.5, 0, 0, 1 ), true );
+
 
 	if( false )
 	{
@@ -865,8 +912,8 @@ shared_ptr<GeometrySettings> geom_settings( new GeometrySettings() );
 	}
 
 carve::csg::CSG csg;
-csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-csg.hooks.registerHook(new carve::csg::CarveHoleResolver(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+csg.hooks.registerHook(new carve::csg::CarveTriangulator(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
+//csg.hooks.registerHook(new carve::csg::CarveHoleResolver(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 
 carve::mesh::MeshSet<3>* result1 = NULL;
 bool failed = false;

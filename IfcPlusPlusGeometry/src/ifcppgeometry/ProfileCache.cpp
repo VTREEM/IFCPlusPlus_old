@@ -30,6 +30,11 @@ ProfileCache::~ProfileCache()
 {
 }
 
+void ProfileCache::clearProfileCache()
+{
+	m_profile_cache.clear();
+}
+
 shared_ptr<ProfileConverter> ProfileCache::getProfileConverter( shared_ptr<IfcProfileDef>& ifc_profile )
 {
 	const int profile_id = ifc_profile->getId();
