@@ -51,6 +51,7 @@ public:
 
 	shared_ptr<IfcProduct> ifc_product;
 	shared_ptr<IfcRepresentation> representation;
+	shared_ptr<IfcObjectPlacement> object_placement;
 	osg::ref_ptr<osg::Switch> product_switch;
 	osg::ref_ptr<osg::Group> space_group;
 	//std::vector<shared_ptr<IfcProduct> > vec_openings;

@@ -46,7 +46,7 @@ public:
 	RepresentationConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> unit_converter );
 	~RepresentationConverter();
 
-	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	const carve::math::Matrix& pos,	shared_ptr<ShapeInputData>& shape_data, std::set<int>& visited, std::stringstream& err );
+	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	const carve::math::Matrix& pos,	shared_ptr<ShapeInputData>& shape_data, std::stringstream& err );
 	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,				const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
@@ -63,16 +63,16 @@ public:
 	void setHandleStyledItems( bool handle ) { m_handle_styled_items = handle; }
 
 protected:
-	shared_ptr<GeometrySettings>				m_geom_settings;
-	shared_ptr<UnitConverter>					m_unit_converter;
-	shared_ptr<StylesConverter>					m_styles_converter;
-	shared_ptr<CurveConverter>					m_curve_converter;
-	shared_ptr<SolidModelConverter>				m_solid_converter;
-	shared_ptr<FaceConverter>					m_face_converter;
-	shared_ptr<ProfileCache>					m_profile_cache;
+	shared_ptr<GeometrySettings>		m_geom_settings;
+	shared_ptr<UnitConverter>			m_unit_converter;
+	shared_ptr<StylesConverter>			m_styles_converter;
+	shared_ptr<CurveConverter>			m_curve_converter;
+	shared_ptr<SolidModelConverter>		m_solid_converter;
+	shared_ptr<FaceConverter>			m_face_converter;
+	shared_ptr<ProfileCache>			m_profile_cache;
 	
-	bool										m_handle_styled_items;
-	bool										m_handle_layer_assignments;
+	bool								m_handle_styled_items;
+	bool								m_handle_layer_assignments;
 	
 #ifdef IFCPP_OPENMP
 	omp_lock_t m_writelock_styles_converter;

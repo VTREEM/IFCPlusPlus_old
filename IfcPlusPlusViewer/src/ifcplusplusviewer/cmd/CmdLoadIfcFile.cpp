@@ -128,6 +128,7 @@ bool CmdLoadIfcFile::doCmd()
 
 	shared_ptr<IfcPPModel> ifc_model = reader_writer->getIfcPPModel();
 	m_system->setIfcModel( ifc_model );
+	reader_writer->deleteInputCache();
 
 	if( err.tellp() > 0 )
 	{

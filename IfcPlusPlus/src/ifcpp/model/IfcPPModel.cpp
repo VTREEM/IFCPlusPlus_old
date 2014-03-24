@@ -308,9 +308,6 @@ void IfcPPModel::setFileSchema( std::string schema )
 
 void IfcPPModel::clearIfcModel()
 {
-	m_ifc_project.reset();
-	m_geom_context_3d.reset();
-
 	std::map<int,shared_ptr<IfcPPEntity> >::iterator it_entities;
 	for( it_entities = m_map_entities.begin(); it_entities != m_map_entities.end(); ++it_entities )
 	{
@@ -318,6 +315,14 @@ void IfcPPModel::clearIfcModel()
 		entity->unlinkSelf();
 	}
 	m_map_entities.clear();
+
+	m_ifc_project = NULL;
+	m_geom_context_3d = NULL;
+	m_ifc_schema_version = IFC_VERSION_UNKNOWN;
+	m_IFC_FILE_SCHEMA = "";
+	m_IFC_FILE_NAME = "";
+	m_IFC_FILE_DESCRIPTION = "";
+	m_file_header = "";
 }
 
 void IfcPPModel::resetIfcModel()
@@ -373,8 +378,8 @@ void IfcPPModel::updateCache()
 
 void IfcPPModel::clearCache()
 {
-	m_ifc_project.reset();
-	m_geom_context_3d.reset();
+	m_ifc_project = NULL;
+	m_geom_context_3d = NULL;
 }
 
 void IfcPPModel::resolveInverseAttributes()

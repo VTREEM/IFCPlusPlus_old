@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	DebugViewer* debug_viewer = new DebugViewer();
 	debug_viewer->m_viewer_widget->startTimer();
 	debug_viewer->show();
-	createTest( sys->getViewController()->getModelNode(), sys->getViewController()->getRootNode() );
+	//createTest( sys->getViewController()->getModelNode(), sys->getViewController()->getRootNode() );
 #endif
 
 	ViewerWidget* viewer_widget = new ViewerWidget();

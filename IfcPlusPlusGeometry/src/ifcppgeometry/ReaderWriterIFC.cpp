@@ -61,6 +61,7 @@
 #include "RepresentationConverter.h"
 #include "PlacementConverter.h"
 #include "SolidModelConverter.h"
+#include "ProfileCache.h"
 #include "ConverterOSG.h"
 #include "ReaderWriterIFC.h"
 
@@ -85,6 +86,8 @@ ReaderWriterIFC::ReaderWriterIFC()
 	m_glass_stateset->setMode( GL_BLEND, osg::StateAttribute::ON );
 	m_glass_stateset->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
 
+	m_cull_back_off = new osg::CullFace( osg::CullFace::BACK );
+
 	m_group_result = new osg::Group();
 }
 
@@ -99,7 +102,7 @@ void ReaderWriterIFC::resetModel()
 	m_messages.str(std::string());
 
 	deleteInputCache();
-	m_processed_products.clear();
+	//m_processed_products.clear();
 
 	m_group_result->removeChildren( 0, m_group_result->getNumChildren() );
 	m_recent_progress = 0.0;
@@ -269,6 +272,7 @@ void ReaderWriterIFC::createGeometry()
 	}
 
 	m_shape_input_data.clear();
+	m_representation_converter->getProfileCache()->clearProfileCache();
 
 	std::vector<shared_ptr<IfcProduct> > vec_products;
 	std::stringstream err;
@@ -289,153 +293,103 @@ void ReaderWriterIFC::createGeometry()
 	}
 	
 	// create geometry for for each IfcProduct independently, spatial structure will be resolved later
+	std::map<int,shared_ptr<ShapeInputData> > *map_products_ptr = &m_shape_input_data;
+	const int num_products = vec_products.size();
 
 #ifdef IFCPP_OPENMP
+	omp_lock_t writelock_map;
+	omp_init_lock(&writelock_map);
+		
+	#pragma omp parallel firstprivate(num_products) shared(map_products_ptr)
 	{
-		std::map<int,shared_ptr<ShapeInputData> > *map_products_ptr = &m_shape_input_data;
-		const int num_products = vec_products.size();
-		
-		omp_lock_t writelock_map;
-		omp_init_lock(&writelock_map);
-		
-		#pragma omp parallel firstprivate(num_products) shared(map_products_ptr)
+		// time for one product may vary significantly, so schedule not so many
+		#pragma omp for schedule(dynamic,10)
+#endif
+		for( int i=0; i<num_products; ++i )
 		{
-			// time for one product may vary significantly, so schedule not so many
-			#pragma omp for schedule(dynamic,10)
-			for( int i=0; i<num_products; ++i )
+			shared_ptr<IfcProduct> product = vec_products[i];
+			std::stringstream thread_err;
+			if( dynamic_pointer_cast<IfcFeatureElementSubtraction>(product) )
 			{
-				shared_ptr<IfcProduct> product = vec_products[i];
-				std::stringstream thread_err;
-				if( dynamic_pointer_cast<IfcFeatureElementSubtraction>(product) )
-				{
-					// geometry will be created in method subtractOpenings
-					continue;
-				}
-				if( !product->m_Representation )
-				{
-					continue;
-				}
+				// geometry will be created in method subtractOpenings
+				continue;
+			}
+			if( !product->m_Representation )
+			{
+				continue;
+			}
 
-				const int product_id = product->getId();
-				shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
-				product_shape->ifc_product = product;
+			const int product_id = product->getId();
+			shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
+			product_shape->ifc_product = product;
 
-				try
-				{
-					convertIfcProduct( product, product_shape );
-				}
-				catch( IfcPPException& e)
-				{
-					thread_err << e.what();
-				}		
-				catch( carve::exception& e)
-				{
-					thread_err << e.str();
-				}
-				catch( std::exception& e )
-				{
-					thread_err << e.what();
-				}
-				catch( ... )
-				{
-					thread_err << "error in " << __FUNC__ << ", product id " << product_id << std::endl;
-				}
+			try
+			{
+				convertIfcProduct( product, product_shape );
+			}
+			catch( IfcPPException& e)
+			{
+				thread_err << e.what();
+			}		
+			catch( carve::exception& e)
+			{
+				thread_err << e.str();
+			}
+#ifdef _DEBUG
+			catch( DebugBreakException& dbge )
+			{
+				throw dbge;
+			}
+#endif
+			catch( std::exception& e )
+			{
+				thread_err << e.what();
+			}
+			catch( ... )
+			{
+				thread_err << "error in " << __FUNC__ << ", product id " << product_id << std::endl;
+			}
 
-				//#pragma omp critical
+#ifdef IFCPP_OPENMP
+			//#pragma omp critical
 				omp_set_lock(&writelock_map);
-				{
-					map_products_ptr->insert( std::make_pair( product_id, product_shape ) );
-					m_processed_products[product_id] = product;
+#endif
+			{
+				map_products_ptr->insert( std::make_pair( product_id, product_shape ) );
+				//m_processed_products[product_id] = product;
 			
-					//for( int opening_i = 0; opening_i<product_shape->vec_openings.size(); ++opening_i )
-					//{
-					//	shared_ptr<IfcProduct>& opening_product = product_shape->vec_openings[opening_i];
-					//	m_processed_products[opening_product->getId()] = opening_product;
-					//}
-					if( thread_err.tellp() > 0 )
-					{
-						err << thread_err.str().c_str();
-					}
-				}
-				omp_unset_lock(&writelock_map);
-
-				if( omp_get_thread_num() == 0 )
+				//for( int opening_i = 0; opening_i<product_shape->vec_openings.size(); ++opening_i )
+				//{
+				//	shared_ptr<IfcProduct>& opening_product = product_shape->vec_openings[opening_i];
+				//	m_processed_products[opening_product->getId()] = opening_product;
+				//}
+				if( thread_err.tellp() > 0 )
 				{
-					// progress callback
-					double progress = (double)i/(double)num_products;
-					if( progress - m_recent_progress > 0.02 )
-					{
-						// leave 10% of progress to openscenegraph internals
-						progressCallback( progress*0.9 );
-						m_recent_progress = progress;
-					}
+					err << thread_err.str().c_str();
+				}
+			}
+#ifdef IFCPP_OPENMP
+			omp_unset_lock(&writelock_map);
+			if( omp_get_thread_num() == 0 )
+#endif
+			{
+
+				// progress callback
+				double progress = (double)i/(double)num_products;
+				if( progress - m_recent_progress > 0.02 )
+				{
+					// leave 10% of progress to openscenegraph internals
+					progressCallback( progress*0.9 );
+					m_recent_progress = progress;
 				}
 			}
 		}
+#ifdef IFCPP_OPENMP
+	}
 #pragma omp barrier
 		omp_destroy_lock(&writelock_map);
-	}
-#else
-	const int num_products = vec_products.size();
-	for( int i=0; i<num_products; ++i )
-	{
-		shared_ptr<IfcProduct> product = vec_products[i];
-		
-		if( dynamic_pointer_cast<IfcFeatureElementSubtraction>(product) )
-		{
-			// geometry will be created in method subtractOpenings
-			continue;
-		}
-		if( !product->m_Representation )
-		{
-			continue;
-		}
-
-		const int product_id = product->getId();
-		shared_ptr<ShapeInputData> product_shape( new ShapeInputData() );
-		product_shape->ifc_product = product;
-
-		try
-		{
-			convertIfcProduct( product, product_shape );
-		}
-		catch( IfcPPException& e)
-		{
-			err << e.what();
-		}		
-		catch( carve::exception& e)
-		{
-			err << e.str();
-		}
-#ifdef _DEBUG
-		catch( DebugBreakException& dbge )
-		{
-			throw dbge;
-		}
-#endif
-		catch( std::exception& e )
-		{
-			err << e.what();
-		}
-		catch( ... )
-		{
-			err << "error in " << __FUNC__ << ", product id " << product_id << std::endl;
-		}
-
-		m_shape_input_data[product_id] = product_shape;
-		m_processed_products[product_id] = product;
-		// progress callback
-		double progress = (double)i/(double)num_products;
-		if( progress - m_recent_progress > 0.03 )
-		{
-			// leave 10% of progress to openscenegraph internals
-			progressCallback( progress*0.9 );
-			m_recent_progress = progress;
-		}
-	}
 #endif
 
-	
 	try
 	{
 		// now resolve spatial structure
@@ -485,6 +439,8 @@ void ReaderWriterIFC::createGeometry()
 	{
 		err << "error in " << __FUNC__ << std::endl;
 	}
+
+	m_representation_converter->getProfileCache()->clearProfileCache();
 
 	progressCallback( 1.0 );
 	progressTextCallback( "Loading file done" );
@@ -652,8 +608,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 	for( it_representations=vec_representations.begin(); it_representations!=vec_representations.end(); ++it_representations )
 	{
 		shared_ptr<IfcRepresentation> representation = (*it_representations);
-		std::set<int> visited_representation;
-		m_representation_converter->convertIfcRepresentation( representation, product_placement_matrix, product_shape, visited_representation, strs_err );
+		m_representation_converter->convertIfcRepresentation( representation, product_placement_matrix, product_shape, strs_err );
 	}
 
 	std::vector<shared_ptr<ShapeInputData> > vec_opening_data;
@@ -687,8 +642,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 			item_group->addChild(geode);
 
 			// disable back face culling for open meshes
-			osg::ref_ptr<osg::CullFace> cull_back_off = new osg::CullFace( osg::CullFace::BACK );
-			geode->getOrCreateStateSet()->setAttributeAndModes( cull_back_off.get(), osg::StateAttribute::OFF );
+			geode->getOrCreateStateSet()->setAttributeAndModes( m_cull_back_off.get(), osg::StateAttribute::OFF );
 		}
 
 		// create shape for open or closed shells
@@ -716,19 +670,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->meshsets.begin(); it_meshsets != item_data->meshsets.end(); ++it_meshsets )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> >& item_meshset = (*it_meshsets);
-
-			if( m_geom_settings->m_use_mesh_simplifier_before_draw )
-			{
-				try
-				{
-					m_representation_converter->getSolidConverter()->simplifyMesh( item_meshset.get() );
-				}
-				catch( carve::exception& e )
-				{
-					strs_err << "simplifyMesh failed (" << e.str() << ") on product id " << product_id << std::endl;
-				}
-			}
-
+			m_representation_converter->getSolidConverter()->simplifyMesh( item_meshset );
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
 			ConverterOSG::drawMeshSet( item_meshset.get(), geode_result );
 			item_group->addChild(geode_result);

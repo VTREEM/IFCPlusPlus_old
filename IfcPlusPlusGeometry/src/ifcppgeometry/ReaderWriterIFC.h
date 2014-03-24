@@ -15,8 +15,8 @@
 
 #include <sstream>
 #include <osgDB/ReaderWriter>
-
 #include <osg/Switch>
+#include <osg/CullFace>
 #include <osg/MatrixTransform>
 #include <osgViewer/Viewer>
 
@@ -32,8 +32,6 @@
 #include "RepresentationConverter.h"
 #include "GeometryInputData.h"
 #include "GeometrySettings.h"
-
-
 
 class ReaderWriterIFC : public osgDB::ReaderWriter, public StatusObservable
 {
@@ -80,10 +78,9 @@ protected:
 	shared_ptr<UnitConverter>			m_unit_converter;
 	shared_ptr<RepresentationConverter> m_representation_converter;
 	osg::ref_ptr<osg::StateSet>			m_glass_stateset;
+	osg::ref_ptr<osg::CullFace>			m_cull_back_off;
 
-	std::map<int,shared_ptr<ShapeInputData> > m_shape_input_data;
-	std::map<int,shared_ptr<IfcProduct> > m_processed_products;
-
+	std::map<int, shared_ptr<ShapeInputData> > m_shape_input_data;
 	std::map<int, shared_ptr<IfcPPObject> > m_map_visited;
 	osg::ref_ptr<osg::Group> m_group_result;
 	double m_recent_progress;

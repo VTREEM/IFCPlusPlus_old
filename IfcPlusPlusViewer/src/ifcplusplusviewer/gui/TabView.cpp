@@ -40,7 +40,7 @@ TabView::TabView( IfcPlusPlusSystem* sys, ViewerWidget* vw ) : m_system(sys), m_
 	QStringList keys = settings.allKeys();
 	
 	m_cull_front = false;
-	m_cull_back = false;
+	m_cull_back = true; // default to back face culling
 	if( keys.contains( "cullFrontFaces" ) )
 	{
 		m_cull_front = settings.value("cullFrontFaces").toBool();

@@ -658,27 +658,29 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 	{
 		const carve::geom::vector<2>&  v = merged_path[i];
 		
-		vert_it = existing_vertices_coords.find( v.x );
-		if( vert_it == existing_vertices_coords.end() )
-		{
-			existing_vertices_coords.insert( std::pair<double, std::map<double, int> >(v.x, std::map<double,int>() ) );
-			vert_it = existing_vertices_coords.find( v.x );
-		}
+#ifdef ROUND_IFC_COORDINATES
+		const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+		const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+		const double vertex_x = v.x;
+		const double vertex_y = v.y;
+#endif
 
-		std::map<double, int>& map_y_index = (*vert_it).second;
+		//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
+		vert_it = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double,int>() ) ).first;
+		std::map<double, int>& map_y_index = vert_it->second;
 
-		it_find_y = map_y_index.find( v.y );
+		it_find_y = map_y_index.find( vertex_y );
 		if( it_find_y != map_y_index.end() )
 		{
 			// vertex already exists in polygon. remember its index for triangles
-			map_merged_idx[i] = (*it_find_y).second;
+			map_merged_idx[i] = it_find_y->second;
 			continue;
 		}
 
 		carve::geom::vector<3>  vertex3D( carve::geom::VECTOR( v.x, v.y, 0 ) );
-		poly_data->addVertex(vertex3D);
-		int vertex_id = poly_data->getVertexCount()-1;
-		map_y_index[v.y] = vertex_id;  // TODO: it works for now, but check if we have to round here. maybe use checksum of rounded x and y as a single map key
+		int vertex_id = poly_data->addVertex(vertex3D);
+		map_y_index[vertex_y] = vertex_id;  // TODO: it works for now, but check if we have to round here. maybe use checksum of rounded x and y as a single map key
 		map_merged_idx[i] = vertex_id;
 	}
 
@@ -708,12 +710,8 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 		int loop_number = path_all_loops[merged_idx].first;
 		int point_idx_merged = map_merged_idx[merged_idx];
 	
-		std::map<int, std::vector<int> >::iterator it_result_loops = loop_vert_idx.find( loop_number );
-		if( it_result_loops == loop_vert_idx.end() )
-		{
-			loop_vert_idx.insert( std::pair<int, std::vector<int> >( loop_number, std::vector<int>() ) );
-		}
-		std::vector<int>& result_loop_vec = loop_vert_idx[loop_number];
+		std::map<int, std::vector<int> >::iterator it_result_loops = loop_vert_idx.insert( std::make_pair( loop_number, std::vector<int>() ) ).first;
+		std::vector<int>& result_loop_vec = it_result_loops->second;
 		
 		// check if point index is already in loop
 		bool already_in_loop = false;
@@ -734,7 +732,7 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 	// add faces along outer and inner loops
 	for( std::map<int, std::vector<int> >::iterator it_result_loop = loop_vert_idx.begin(); it_result_loop != loop_vert_idx.end(); ++it_result_loop )
 	{
-		const std::vector<int>& loop_idx = (*it_result_loop).second;
+		const std::vector<int>& loop_idx = it_result_loop->second;
 		const int num_points_in_loop = loop_idx.size();
 		
 		for( int i=0; i<num_points_in_loop; ++i )
