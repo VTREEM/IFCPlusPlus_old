@@ -727,8 +727,6 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 	}
 
 	if( version < IfcPPModel::IFC4 )
-		default:
-			break;
 	{
 		switch( type_enum )
 		{
