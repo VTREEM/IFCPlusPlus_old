@@ -1645,7 +1645,7 @@ void retriangulateMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 		}
 	}
 
-	meshset = NULL;
+	meshset = nullptr;
 	meshset = shared_ptr<carve::mesh::MeshSet<3> >( poly_data->createMesh(carve::input::opts()) );
 
 	double volume_check2 = 0;
