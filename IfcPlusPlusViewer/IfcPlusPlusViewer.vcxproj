@@ -581,7 +581,6 @@
     <ClCompile Include="src\ifcplusplusviewer\main.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\ViewController.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\viewer\Orbit3DManipulator.cpp" />
-    <ClCompile Include="src\ifcplusplusviewer\viewer\SubGroupIntersectionVisitor.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\viewer\ViewerUtil.cpp" />
     <ClCompile Include="src\ifcplusplusviewer\viewer\ViewerWidget.cpp" />
   </ItemGroup>
@@ -705,7 +704,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\bin\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DNDEBUG -DQT_NO_DEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DIFCPP_OPENMP -DQT_DLL  "-I$(QTDIR)\include" "-I$(QTDIR)\include\qtmain" "-I$(QTDIR)\include\qtcore" "-I$(QTDIR)\include\QtOpenGL" "-I$(OSG_DIR)\include" "-I.\bin\GeneratedFiles\$(Configuration)\." "-I.\src\IfcPlusPlusViewer" "-I.\..\IfcPlusPlus\src" "-I.\..\IfcPlusPlusGeometry\src" "-I.\..\Carve\src" "-I.\..\Carve\src\include" "-I.\..\Carve\src\common" "-I.\..\Carve\src\include\carve\external" "-I.\bin\GeneratedFiles\$(ConfigurationName)\."</Command>
     </CustomBuild>
-    <ClInclude Include="src\ifcplusplusviewer\viewer\SubGroupIntersectionVisitor.h" />
     <ClInclude Include="src\ifcplusplusviewer\viewer\ViewerUtil.h" />
     <CustomBuild Include="src\ifcplusplusviewer\viewer\ViewerWidget.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

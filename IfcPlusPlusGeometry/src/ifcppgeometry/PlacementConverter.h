@@ -14,7 +14,6 @@
 #pragma once
 
 #include <set>
-#include <osg/Matrix>
 #include <ifcpp/model/shared_ptr.h>
 #include "IncludeCarveHeaders.h"
 
@@ -30,17 +29,11 @@ class PlacementConverter
 public:
 	static void convertIfcPlacement(			const shared_ptr<IfcPlacement> placement,					carve::math::Matrix& matrix,	double length_factor );
 	static void convertIfcObjectPlacement(		const shared_ptr<IfcObjectPlacement> object_placement,		carve::math::Matrix& matrix,	double length_factor, std::set<int>& already_applied );
+	static void getWorldCoordinateSystem(		const shared_ptr<IfcRepresentationContext>& context,		carve::math::Matrix& matrix,	double length_factor, std::set<int>& already_applied );
 	static void convertTransformationOperator(	const shared_ptr<IfcCartesianTransformationOperator> tr_op,	carve::math::Matrix& matrix,	double length_factor );
 	static void convertIfcAxis2Placement2D(		const shared_ptr<IfcAxis2Placement2D> axis2placement2d,		carve::math::Matrix& matrix,	double length_factor );
 	static void convertIfcAxis2Placement3D(		const shared_ptr<IfcAxis2Placement3D> axis2placement3d,		carve::math::Matrix& matrix,	double length_factor );
+	static void getPlane(						const shared_ptr<IfcAxis2Placement3D> axis2placement3d,		carve::geom::plane<3>& plane,	carve::geom::vector<3>& translate, double length_factor );
 	static void convertMatrix( const carve::math::Matrix& matrix, shared_ptr<IfcAxis2Placement3D>& axis2placement3d, double length_factor, int& entity_id, std::vector<shared_ptr<IfcPPEntity> >& vec_entities );
 
-	static void convertIfcPlacement(			const shared_ptr<IfcPlacement> placement,					osg::Matrix& resulting_matrix, double length_factor );
-	static void convertIfcObjectPlacement(		const shared_ptr<IfcObjectPlacement> object_placement,		osg::Matrix& matrix,			double length_factor, std::set<int>& already_applied );
-	static void convertIfcAxis2Placement2D(		const shared_ptr<IfcAxis2Placement2D> axis2placement2d,		osg::Matrix& resulting_matrix, double length_factor );
-	static void convertIfcAxis2Placement3D(		const shared_ptr<IfcAxis2Placement3D> axis2placement3d,		osg::Matrix& resulting_matrix, double length_factor );
-	
-	static void convertOsgMatrix( const osg::Matrixd& matrix, shared_ptr<IfcAxis2Placement3D>& axis2placement3d, double length_factor );
-	static void convertOsgMatrix( const osg::Matrixd& matrix, shared_ptr<IfcAxis2Placement3D>& axis2placement3d, double length_factor, int& entity_id );
-	static void convertOsgMatrix( const osg::Matrixd& matrix, shared_ptr<IfcAxis2Placement3D>& axis2placement3d, double length_factor, int& entity_id, std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 };

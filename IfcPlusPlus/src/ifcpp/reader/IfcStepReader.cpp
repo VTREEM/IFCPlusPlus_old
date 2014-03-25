@@ -420,16 +420,17 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 
 	double progress = 0.2;
 	double last_progress = 0.2;
-	int num_lines = (int)step_lines.size();
+	const int num_lines = (int)step_lines.size();
 	
-#ifdef IFCPP_OPENMP
 	std::vector<shared_ptr<IfcPPEntity> >* target_vec_ptr = &target_entity_vec;
 	std::set<std::string>* unkown_entities_ptr = &unkown_entities;
 
+#ifdef IFCPP_OPENMP
 #pragma omp parallel firstprivate(num_lines) shared(target_vec_ptr,unkown_entities_ptr)
 	{
 		// time for reading a step line does not differ much, so schedule many per thread
 #pragma omp for schedule(dynamic,100)
+#endif
 		for( int i=0; i<num_lines; ++i )
 		{
 			const std::string& step_line = step_lines[i];
@@ -445,7 +446,9 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 					continue;
 				}
 
+#ifdef IFCPP_OPENMP
 #pragma omp critical
+#endif
 				{
 					target_vec_ptr->push_back( entity );
 				}
@@ -462,7 +465,9 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 
 					if( entity )
 					{
+#ifdef IFCPP_OPENMP
 #pragma omp critical
+#endif
 						target_vec_ptr->push_back( entity );
 					}
 				}
@@ -470,7 +475,9 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 				{
 					if( unkown_entities.find( unknown_keyword ) == unkown_entities.end() )
 					{
+#ifdef IFCPP_OPENMP
 #pragma omp critical
+#endif
 						{
 							unkown_entities.insert( unknown_keyword );
 							err_unknown_entity << "unknown IFC entity: " << unknown_keyword << std::endl;
@@ -484,7 +491,9 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 				progress = 0.2 + 0.1*(double)i/num_lines;
 				if( progress - last_progress > 0.03 )
 				{
+#ifdef IFCPP_OPENMP
 					if( omp_get_thread_num() == 0 )
+#endif
 					{
 						progressCallback( progress );
 						last_progress = progress;
@@ -492,63 +501,10 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 				}
 			}
 		}
-	}
-
-#else // IFCPP_OPENMP
-
-	for( int i=0; i<num_lines; ++i )
-	{
-		const std::string& step_line = step_lines[i];
-
-		// read lines: #1234=IFCOBJECTNAME(...,...,(...,...),...)
-		try
-		{
-			shared_ptr<IfcPPEntity> entity;
-			readSingleStepLine( step_line, entity );
-
-			if( !entity )
-			{
-				continue;
-			}
-			
-			target_entity_vec.push_back( entity );
-			
-		}
-		catch( UnknownEntityException& e )
-		{
-			std::string unknown_keyword = e.m_keyword;
-			std::string step_line = step_lines[i];
-			applyBackwardCompatibility( unknown_keyword, step_line );
-			try
-			{
-				shared_ptr<IfcPPEntity> entity;
-				readSingleStepLine( step_line, entity );
-
-				if( !entity )
-				{
-					continue;
-				}
-				target_entity_vec.push_back( entity );
-			}
-			catch( UnknownEntityException& )
-			{
-				if( unkown_entities.find( unknown_keyword ) == unkown_entities.end() )
-				{
-					unkown_entities.insert( unknown_keyword );
-					err_unknown_entity << "unknown IFC entity: " << unknown_keyword << std::endl;
-				}
-			}
-		}
-
-		progress = 0.2 + 0.1*(double)i/num_lines;
-		if( progress - last_progress > 0.03 )
-		{
-			progressCallback( progress );
-			last_progress = progress;
-		}
+#ifdef IFCPP_OPENMP
 	}
 #endif
-
+	
 	if( err_unknown_entity.tellp() > 0 )
 	{
 		throw UnknownEntityException( err_unknown_entity.str() );
@@ -565,18 +521,20 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 	// set progress
 	double progress = 0.3;
 	progressCallback( progress );
-
-#ifdef IFCPP_OPENMP
 	double last_progress = 0.3;
 	const std::map<int,shared_ptr<IfcPPEntity> >* map_ptr = &map_entities;
 	const std::vector<shared_ptr<IfcPPEntity> >* vec_entities_ptr = &vec_entities;
 
+#ifdef IFCPP_OPENMP
 #pragma omp parallel firstprivate(num_objects) shared(map_ptr,vec_entities_ptr)
+#endif
 	{
 		const std::map<int,shared_ptr<IfcPPEntity> > &map_loc = *map_ptr;
 		std::stringstream thread_err;
 
+#ifdef IFCPP_OPENMP
 #pragma omp for schedule(dynamic, 100)
+#endif
 		for( int i=0; i<num_objects; ++i )
 		{
 			shared_ptr<IfcPPEntity> entity = vec_entities_ptr->at(i);
@@ -585,7 +543,7 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 			tokenizeEntityArguments( argument_str, arguments );
 
 #ifndef SET_ENTIY_ARGUMENT_STRING
-		entity->m_entity_argument_str = "";
+			entity->m_entity_argument_str = "";
 #endif
 			// character decoding:
 			decodeArgumentStrings( arguments );
@@ -605,18 +563,24 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 			}
 			catch( std::exception& e )
 			{
+#ifdef IFCPP_OPENMP
 #pragma omp critical
+#endif
 				err << "#" << entity->getId() << "=" << typeid(*entity).name() << ": " << e.what();
 			}
 			catch( std::exception* e )
 			{
+#ifdef IFCPP_OPENMP
 #pragma omp critical
+#endif
 				err << "#" << entity->getId() << "=" << typeid(*entity).name() << ": " << e->what();
 			}
 			catch(...)
 			{
+#ifdef IFCPP_OPENMP
 #pragma omp critical
 				err << "#" << entity->getId() << "=" << typeid(*entity).name() << " readStepData: error occurred" << std::endl;
+#endif
 			}
 
 			if( i%10 == 0 )
@@ -624,7 +588,9 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 				progress = 0.3 + 0.6*(double)i/num_objects;
 				if( progress - last_progress > 0.03 )
 				{
+#ifdef IFCPP_OPENMP
 					if( omp_get_thread_num() == 0 )
+#endif
 					{
 						progressCallback( progress );
 						last_progress = progress;
@@ -633,58 +599,7 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 			}
 		}
 	}
-
-#else // IFCPP_OPENMP
-
-	std::vector<shared_ptr<IfcPPEntity> >::const_iterator it_entity_vec = vec_entities.begin();
-	int i=0;
-	for( ; it_entity_vec!=vec_entities.end(); ++it_entity_vec )
-	{
-		shared_ptr<IfcPPEntity> entity = (*it_entity_vec);
-#ifdef _DEBUG
-		int entitiy_id = entity->getId();
-#endif
-		std::string& argument_str = entity->m_entity_argument_str;
-		std::vector<std::string> arguments;
-		tokenizeEntityArguments( argument_str, arguments );
-
-		// character decoding:
-		decodeArgumentStrings( arguments );
 	
-		if( m_model->getIfcSchemaVersion() != IfcPPModel::IFC4 )
-		{
-			if( m_model->getIfcSchemaVersion() != IfcPPModel::IFC_VERSION_UNDEFINED && m_model->getIfcSchemaVersion() != IfcPPModel::IFC_VERSION_UNKNOWN )
-			{
-				IfcPPEntityEnum entity_enum = entity->m_entity_enum;
-				applyBackwardCompatibility( m_model, entity_enum, arguments );
-			}
-		}
-
-		try
-		{
-			entity->readStepArguments( arguments, map_entities );
-		}
-		catch( std::exception& e )
-		{
-			err << "#" << entity->getId() << "=" << typeid(*entity).name() << ": " << e.what();
-		}
-		catch( std::exception* e )
-		{
-			err << "#" << entity->getId() << "=" << typeid(*entity).name() << ": " << e->what();
-		}
-
-#ifndef SET_ENTIY_ARGUMENT_STRING
-		entity->m_entity_argument_str = "";
-#endif
-		if( i%100 == 0 )
-		{
-			progress = 0.3 + 0.6*(double)i/num_objects;
-			progressCallback( progress );
-		}
-		++i;
-	}
-#endif // IFCPP_OPENMP
-
 	if( err.tellp() > 0 )
 	{
 		throw IfcPPException( err.str() );
@@ -810,35 +725,8 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 	{
 		throw IfcPPException( "Unsupported IFC version", __func__ );
 	}
-	if( version <= IfcPPModel::IFC2X )
-	{
 
-	}
-
-	if( version <= IfcPPModel::IFC2X2 )
-	{
-		switch( type_enum )
-		{
-		case IFCCOLOURRGB:
-			//#315= IFCCOLOURRGB($,0.65882353,0.6627451,0.61960784);
-			if( args.size() == 3 )
-			{
-				args.insert( args.begin(), "$" );
-			}
-			break;
-		
-		case IFCPROPERTYSINGLEVALUE:
-			while( args.size() < 4 ){	args.push_back( "$" );	}
-			break;
-		case IFCPROJECT:
-			while( args.size() < 9 ){	args.push_back( "$" );	}
-			break;
-		default:
-			break;
-		}
-	}
-
-	if( version <= IfcPPModel::IFC2X3 )
+	if( version < IfcPPModel::IFC4 )
 	{
 		switch( type_enum )
 		{
@@ -855,6 +743,12 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 			break;
 		case IFCCLASSIFICATIONREFERENCE:
 			while( args.size() < 6 ){	args.push_back( "$" );	}
+			break;
+		case IFCCOLOURRGB:
+			if( args.size() == 3 ) //#315= IFCCOLOURRGB($,0.65882353,0.6627451,0.61960784);
+			{
+				args.insert( args.begin(), "$" );
+			}
 			break;
 		case IFCCOLUMN:
 			while( args.size() < 9 ){	args.push_back( "$" );	}
@@ -926,6 +820,9 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 		case IFCMATERIALLAYERSETUSAGE:
 			while( args.size() < 5 ) {	args.push_back( "$" );	}
 			break;
+		case IFCMATERIALPROFILESETUSAGE:
+			while( args.size() < 3 ) {	args.push_back( "$" );	}
+			break;
 		case IFCMECHANICALFASTENER:
 			while( args.size() < 11 ) {	args.push_back( "$" );	}
 			break;
@@ -946,8 +843,14 @@ void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityE
 		case IFCPLATE:
 			while( args.size() < 9 ) {	args.push_back( "$" );	}
 			break;
+		case IFCPROJECT:
+			while( args.size() < 9 ){	args.push_back( "$" );	}
+			break;
 		case IFCPROPERTYBOUNDEDVALUE:
 			while( args.size() < 6 ) {	args.push_back( "$" );	}
+			break;
+		case IFCPROPERTYSINGLEVALUE:
+			while( args.size() < 4 ){	args.push_back( "$" );	}
 			break;
 
 			// Q

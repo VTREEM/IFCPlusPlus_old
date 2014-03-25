@@ -19,7 +19,6 @@
 #include <ifcppgeometry/ReaderWriterIFC.h>
 
 #include "IfcPlusPlusSystem.h"
-#include "SubGroupIntersectionVisitor.h"
 #include "ViewController.h"
 #include "ViewerUtil.h"
 #include "Orbit3DManipulator.h"
@@ -417,7 +416,7 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 #endif
 	//picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_ONE_PER_DRAWABLE );
 	picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
-	SubGroupIntersectionVisitor iv( picker.get() );
+	osgUtil::IntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
 
 	osg::Group* root_node = NULL;
@@ -436,7 +435,8 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 	}
 
 	//osg::Group* root_node = m_system->getViewController()->getRootNode();
-	iv.apply( *cam, root_node );
+	iv.apply( *cam );
+	//iv.apply( root_node );
 
 	if( picker->containsIntersections() )
 	{
@@ -496,11 +496,11 @@ bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea,
 #endif
 	//picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_ONE_PER_DRAWABLE );
 	picker->setIntersectionLimit( osgUtil::Intersector::LIMIT_NEAREST );
-	SubGroupIntersectionVisitor iv( picker.get() );
+	osgUtil::IntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
 	view->getScene();
 	osg::Group* model_node = m_system->getViewController()->getModelNode();
-	iv.apply( *cam, model_node );
+	iv.apply( *cam );//, model_node );
 
 	bool intersection_geometry_found = false;
 	if( picker->containsIntersections() )

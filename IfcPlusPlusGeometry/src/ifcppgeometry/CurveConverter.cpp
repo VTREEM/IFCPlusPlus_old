@@ -574,16 +574,27 @@ void CurveConverter::convertIfcCartesianPoint( const shared_ptr<IfcCartesianPoin
 	{
 		// round to 0.1 mm
 		// TODO: round only when digits are noise
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
-		double z = int(coords1[2]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+		double x = round(coords1[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+		double y = round(coords1[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+		double z = round(coords1[2]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+		double x = coords1[0]->m_value*length_factor;
+		double y = coords1[1]->m_value*length_factor;
+		double z = coords1[2]->m_value*length_factor;
+#endif
 		point = carve::geom::VECTOR( x, y, z );
 	}
 	else if( coords1.size() > 1 )
 	{
 		// round to 0.1 mm
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+		double x = round(coords1[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+		double y = round(coords1[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+		double x = coords1[0]->m_value*length_factor;
+		double y = coords1[1]->m_value*length_factor;
+#endif
 		point = carve::geom::VECTOR( x, y, 0.0 );
 	}
 }
@@ -594,16 +605,27 @@ void CurveConverter::convertIfcCartesianPoint( const shared_ptr<IfcCartesianPoin
 	if( coords1.size() > 2 )
 	{
 		// round to 0.1 mm
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
-		double z = int(coords1[2]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+		double x = round(coords1[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+		double y = round(coords1[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+		double z = round(coords1[2]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+		double x = coords1[0]->m_value*length_factor;
+		double y = coords1[1]->m_value*length_factor;
+		double z = coords1[2]->m_value*length_factor;
+#endif
 		point = carve::geom::VECTOR( x, y, z );
 	}
 	else if( coords1.size() > 1 )
 	{
 		// round to 0.1 mm
-		double x = int(coords1[0]->m_value*length_factor*100000)*0.00001;
-		double y = int(coords1[1]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+		double x = round(coords1[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+		double y = round(coords1[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+		double x = coords1[0]->m_value*length_factor;
+		double y = coords1[1]->m_value*length_factor;
+#endif
 		point = carve::geom::VECTOR( x, y, 0.0 );
 	}
 }
@@ -614,21 +636,32 @@ void CurveConverter::convertIfcCartesianPointVector( const std::vector<shared_pt
 	const unsigned int num_points = points.size();
 	for( unsigned int i_point=0; i_point < num_points; ++i_point )
 	{
-		std::vector<shared_ptr<IfcLengthMeasure> >& coords = points[i_point]->m_Coordinates;
+		const std::vector<shared_ptr<IfcLengthMeasure> >& coords = points[i_point]->m_Coordinates;
 
 		if( coords.size() > 2  )
 		{
 			// round to 0.1 mm
-			double x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			double y = int(coords[1]->m_value*length_factor*100000)*0.00001;
-			double z = int(coords[2]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+			double x = round(coords[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			double y = round(coords[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			double z = round(coords[2]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+			double x = coords[0]->m_value*length_factor;
+			double y = coords[1]->m_value*length_factor;
+			double z = coords[2]->m_value*length_factor;
+#endif
 			loop.push_back( carve::geom::VECTOR( x, y, z ) );
 		}
 		else if( coords.size() > 1  )
 		{
 			// round to 0.1 mm
-			double x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			double y = int(coords[1]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+			double x = round(coords[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			double y = round(coords[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+			double x = coords[0]->m_value*length_factor;
+			double y = coords[1]->m_value*length_factor;
+#endif
 			loop.push_back( carve::geom::VECTOR( x, y, 0.0 ) );
 		}
 		else
@@ -654,14 +687,25 @@ void CurveConverter::convertIfcCartesianPointVectorSkipDuplicates( const std::ve
 
 		if( coords.size() > 2 )
 		{
-			x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			y = int(coords[1]->m_value*length_factor*100000)*0.00001;
-			z = int(coords[2]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+			x = round(coords[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			y = round(coords[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			z = round(coords[2]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+			x = coords[0]->m_value*length_factor;
+			y = coords[1]->m_value*length_factor;
+			z = coords[2]->m_value*length_factor;
+#endif
 		}
 		else if( coords.size() > 1 )
 		{
-			x = int(coords[0]->m_value*length_factor*100000)*0.00001;
-			y = int(coords[1]->m_value*length_factor*100000)*0.00001;
+#ifdef ROUND_IFC_COORDINATES
+			x = round(coords[0]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			y = round(coords[1]->m_value*length_factor*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+			x = coords[0]->m_value*length_factor;
+			y = coords[1]->m_value*length_factor;
+#endif
 		}
 
 		carve::geom::vector<3>  vertex( carve::geom::VECTOR( x, y, z ) );

@@ -31,6 +31,7 @@ public:
 	~ProfileCache();
 
 	shared_ptr<ProfileConverter> getProfileConverter( shared_ptr<IfcProfileDef>& ifc_profile );
+	void clearProfileCache();
 
 protected:
 	shared_ptr<GeometrySettings>				m_geom_settings;

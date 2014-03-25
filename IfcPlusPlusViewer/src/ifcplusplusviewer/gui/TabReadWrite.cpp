@@ -127,6 +127,7 @@ TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidge
 	}
 	
 	m_combo_recent_files = new QComboBox();
+	m_combo_recent_files->setMaxVisibleItems( 40 );
 	connect( m_combo_recent_files, SIGNAL(currentIndexChanged(int)),	this,	SLOT( slotRecentFilesIndexChanged(int) ) );
 
 	m_btn_load = new QPushButton( "Load" );

@@ -315,38 +315,34 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 				{
 					carve::geom::vector<3> v = pos*loop_points[point_i];
 
-					vert_it = existing_vertices_coords.find( v.x );
-					if( vert_it == existing_vertices_coords.end() )
-					{
-						existing_vertices_coords[v.x] = std::map<double, std::map<double, int> >();
-						vert_it = existing_vertices_coords.find( v.x );
-					}
+#ifdef ROUND_IFC_COORDINATES
+					const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+					const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+					const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+					const double vertex_x = v.x;
+					const double vertex_y = v.y;
+					const double vertex_z = v.z;
+#endif
+					//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
+					vert_it = existing_vertices_coords.insert( std::make_pair( vertex_x, std::map<double, std::map<double, int> >() ) ).first;
+					std::map<double, std::map<double, int> >& map_y_index = vert_it->second;
 
-					std::map<double, std::map<double, int> >& map_y_index = (*vert_it).second;
+					it_find_y =	map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first;
+					std::map<double, int>& map_z_index = it_find_y->second;
 
-					it_find_y = map_y_index.find( v.y );
-					if( it_find_y == map_y_index.end() )
-					{
-						map_y_index[v.y] = std::map<double, int>();
-						it_find_y = map_y_index.find( v.y );
-					}
-
-					std::map<double, int>& map_z_index = (*it_find_y).second;
-
-					it_find_z = map_z_index.find( v.z );
+					it_find_z = map_z_index.find( vertex_z );
 					if( it_find_z != map_z_index.end() )
 					{
 						// vertex already exists in polygon. remember its index for triangles
-						int vertex_index = (*it_find_z).second;
-						
+						int vertex_index = it_find_z->second;
 						map_merged_idx[point_i] = vertex_index;
 						triangle_indexes.push_back( vertex_index );
 						continue;
 					}
 					
-					poly_data->addVertex( v );
-					int vertex_id = poly_data->getVertexCount()-1;
-					map_z_index[v.z] = vertex_id;
+					int vertex_id = poly_data->addVertex( v );
+					map_z_index[vertex_z] = vertex_id;
 					map_merged_idx[point_i] = vertex_id;
 					triangle_indexes.push_back( vertex_id );
 				}
@@ -496,66 +492,39 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 		}
 
 		// now insert points to polygon, avoiding points with same coordinates
-		
 		for( size_t i = 0; i != merged.size(); ++i )
 		{
 			const carve::geom::vector<3>& v = merged_3d[i];
 			
-			vert_it = existing_vertices_coords.find( v.x );
-			if( vert_it == existing_vertices_coords.end() )
-			{
-				existing_vertices_coords[v.x] = std::map<double, std::map<double, int> >();
-				vert_it = existing_vertices_coords.find( v.x );
-			}
+#ifdef ROUND_IFC_COORDINATES
+			const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+			const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+			const double vertex_x = v.x;
+			const double vertex_y = v.y;
+			const double vertex_z = v.z;
+#endif
 
-			std::map<double, std::map<double, int> >& map_y_index = (*vert_it).second;
+			//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
+			vert_it = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double, std::map<double, int> >() ) ).first;
+			std::map<double, std::map<double, int> >& map_y_index = vert_it->second;
 
-			it_find_y = map_y_index.find( v.y );
-			if( it_find_y == map_y_index.end() )
-			{
-				map_y_index[v.y] = std::map<double, int>();
-				it_find_y = map_y_index.find( v.y );
-			}
+			it_find_y = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first;
+			std::map<double, int>& map_z_index = it_find_y->second;
 
-			std::map<double, int>& map_z_index = (*it_find_y).second;
-
-			it_find_z = map_z_index.find( v.z );
+			it_find_z = map_z_index.find( vertex_z );
 			if( it_find_z != map_z_index.end() )
 			{
 				// vertex already exists in polygon. remember its index for triangles
-				int vertex_index = (*it_find_z).second;
-						
+				int vertex_index = it_find_z->second;
 				map_merged_idx[i] = vertex_index;
-				//triangle_indexes.push_back( vertex_index );
 				continue;
 			}
 					
-			poly_data->addVertex( v );
-			int vertex_id = poly_data->getVertexCount()-1;
-			map_z_index[v.z] = vertex_id;
-			//vert_idx[v.x] = shared_ptr<VertexContainer>( new VertexContainer( v.y, v.z, vertex_id ) ); // TODO: check if rounded value of x y z is better
+			int vertex_id = poly_data->addVertex( v );
+			map_z_index[vertex_z] = vertex_id;
 			map_merged_idx[i] = vertex_id;
-			/*
-			vert_it = vert_idx.find(v.x);
-			if( vert_it != vert_idx.end() )
-			{
-				const shared_ptr<VertexContainer>& vertex_container = (*vert_it).second;
-				if( v.y == vertex_container->y )
-				{
-					if( v.z == vertex_container->z )
-					{
-						// vertex already exists in polygon. remember its index for triangles
-						map_merged_idx[i] = vertex_container->index;
-						continue;
-					}
-				}
-			}
-			
-			poly_data->addVertex(v);
-			int vertex_id = poly_data->getVertexCount()-1;
-			vert_idx[v.x] = shared_ptr<VertexContainer>( new VertexContainer( v.y, v.z, vertex_id ) );
-			map_merged_idx[i] = vertex_id;
-			*/
 		}
 		for( size_t i = 0; i != triangulated.size(); ++i )
 		{
