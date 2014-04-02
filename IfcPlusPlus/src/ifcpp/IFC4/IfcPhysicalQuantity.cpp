@@ -24,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPhysicalQuantity 
-IfcPhysicalQuantity::IfcPhysicalQuantity() { m_entity_enum = IFCPHYSICALQUANTITY; }
-IfcPhysicalQuantity::IfcPhysicalQuantity( int id ) { m_id = id; m_entity_enum = IFCPHYSICALQUANTITY; }
+IfcPhysicalQuantity::IfcPhysicalQuantity() {}
+IfcPhysicalQuantity::IfcPhysicalQuantity( int id ) { m_id = id; }
 IfcPhysicalQuantity::~IfcPhysicalQuantity() {}
 
 // method setEntity takes over all attributes from another instance of the class

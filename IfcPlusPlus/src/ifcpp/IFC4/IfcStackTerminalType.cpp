@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStackTerminalType 
-IfcStackTerminalType::IfcStackTerminalType() { m_entity_enum = IFCSTACKTERMINALTYPE; }
-IfcStackTerminalType::IfcStackTerminalType( int id ) { m_id = id; m_entity_enum = IFCSTACKTERMINALTYPE; }
+IfcStackTerminalType::IfcStackTerminalType() {}
+IfcStackTerminalType::IfcStackTerminalType( int id ) { m_id = id; }
 IfcStackTerminalType::~IfcStackTerminalType() {}
 
 // method setEntity takes over all attributes from another instance of the class

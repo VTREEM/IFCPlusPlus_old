@@ -26,8 +26,8 @@
 #include "include/IfcTimePeriod.h"
 
 // ENTITY IfcRecurrencePattern 
-IfcRecurrencePattern::IfcRecurrencePattern() { m_entity_enum = IFCRECURRENCEPATTERN; }
-IfcRecurrencePattern::IfcRecurrencePattern( int id ) { m_id = id; m_entity_enum = IFCRECURRENCEPATTERN; }
+IfcRecurrencePattern::IfcRecurrencePattern() {}
+IfcRecurrencePattern::IfcRecurrencePattern( int id ) { m_id = id; }
 IfcRecurrencePattern::~IfcRecurrencePattern() {}
 
 // method setEntity takes over all attributes from another instance of the class

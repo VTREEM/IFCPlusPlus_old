@@ -21,8 +21,8 @@
 #include "include/IfcStructuralLoadOrResult.h"
 
 // ENTITY IfcStructuralLoadOrResult 
-IfcStructuralLoadOrResult::IfcStructuralLoadOrResult() { m_entity_enum = IFCSTRUCTURALLOADORRESULT; }
-IfcStructuralLoadOrResult::IfcStructuralLoadOrResult( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADORRESULT; }
+IfcStructuralLoadOrResult::IfcStructuralLoadOrResult() {}
+IfcStructuralLoadOrResult::IfcStructuralLoadOrResult( int id ) { m_id = id; }
 IfcStructuralLoadOrResult::~IfcStructuralLoadOrResult() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcConstructionMaterialResource 
-IfcConstructionMaterialResource::IfcConstructionMaterialResource() { m_entity_enum = IFCCONSTRUCTIONMATERIALRESOURCE; }
-IfcConstructionMaterialResource::IfcConstructionMaterialResource( int id ) { m_id = id; m_entity_enum = IFCCONSTRUCTIONMATERIALRESOURCE; }
+IfcConstructionMaterialResource::IfcConstructionMaterialResource() {}
+IfcConstructionMaterialResource::IfcConstructionMaterialResource( int id ) { m_id = id; }
 IfcConstructionMaterialResource::~IfcConstructionMaterialResource() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcShearModulusMeasure = REAL;
-class IfcShearModulusMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcShearModulusMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcShearModulusMeasure();

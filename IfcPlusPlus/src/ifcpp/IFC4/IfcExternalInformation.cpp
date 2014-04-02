@@ -20,8 +20,8 @@
 #include "include/IfcExternalInformation.h"
 
 // ENTITY IfcExternalInformation 
-IfcExternalInformation::IfcExternalInformation() { m_entity_enum = IFCEXTERNALINFORMATION; }
-IfcExternalInformation::IfcExternalInformation( int id ) { m_id = id; m_entity_enum = IFCEXTERNALINFORMATION; }
+IfcExternalInformation::IfcExternalInformation() {}
+IfcExternalInformation::IfcExternalInformation( int id ) { m_id = id; }
 IfcExternalInformation::~IfcExternalInformation() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -36,7 +36,7 @@ shared_ptr<IfcVolumetricFlowRateMeasure> IfcVolumetricFlowRateMeasure::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcVolumetricFlowRateMeasure>(); }
-	shared_ptr<IfcVolumetricFlowRateMeasure> type_object( new IfcVolumetricFlowRateMeasure() );
+	auto type_object = std::make_shared<IfcVolumetricFlowRateMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

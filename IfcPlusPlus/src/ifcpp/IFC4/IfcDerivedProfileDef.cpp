@@ -26,8 +26,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcDerivedProfileDef 
-IfcDerivedProfileDef::IfcDerivedProfileDef() { m_entity_enum = IFCDERIVEDPROFILEDEF; }
-IfcDerivedProfileDef::IfcDerivedProfileDef( int id ) { m_id = id; m_entity_enum = IFCDERIVEDPROFILEDEF; }
+IfcDerivedProfileDef::IfcDerivedProfileDef() {}
+IfcDerivedProfileDef::IfcDerivedProfileDef( int id ) { m_id = id; }
 IfcDerivedProfileDef::~IfcDerivedProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

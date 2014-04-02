@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelDefinesByTemplate 
-IfcRelDefinesByTemplate::IfcRelDefinesByTemplate() { m_entity_enum = IFCRELDEFINESBYTEMPLATE; }
-IfcRelDefinesByTemplate::IfcRelDefinesByTemplate( int id ) { m_id = id; m_entity_enum = IFCRELDEFINESBYTEMPLATE; }
+IfcRelDefinesByTemplate::IfcRelDefinesByTemplate() {}
+IfcRelDefinesByTemplate::IfcRelDefinesByTemplate( int id ) { m_id = id; }
 IfcRelDefinesByTemplate::~IfcRelDefinesByTemplate() {}
 
 // method setEntity takes over all attributes from another instance of the class

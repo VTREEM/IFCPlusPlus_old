@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBuildingElementProxyTypeEnum = ENUMERATION OF	(COMPLEX	,ELEMENT	,PARTIAL	,PROVISIONFORVOID	,USERDEFINED	,NOTDEFINED);
-class IfcBuildingElementProxyTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcBuildingElementProxyTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcBuildingElementProxyTypeEnumEnum

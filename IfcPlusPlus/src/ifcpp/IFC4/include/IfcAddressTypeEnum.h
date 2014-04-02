@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAddressTypeEnum = ENUMERATION OF	(OFFICE	,SITE	,HOME	,DISTRIBUTIONPOINT	,USERDEFINED);
-class IfcAddressTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAddressTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAddressTypeEnumEnum

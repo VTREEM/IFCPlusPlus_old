@@ -40,7 +40,7 @@ shared_ptr<IfcReinforcingBarSurfaceEnum> IfcReinforcingBarSurfaceEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcReinforcingBarSurfaceEnum>(); }
-	shared_ptr<IfcReinforcingBarSurfaceEnum> type_object( new IfcReinforcingBarSurfaceEnum() );
+	auto type_object = std::make_shared<IfcReinforcingBarSurfaceEnum>();
 	if( _stricmp( arg.c_str(), ".PLAIN." ) == 0 )
 	{
 		type_object->m_enum = IfcReinforcingBarSurfaceEnum::ENUM_PLAIN;

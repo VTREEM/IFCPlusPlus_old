@@ -23,8 +23,8 @@
 #include "include/IfcTranslationalStiffnessSelect.h"
 
 // ENTITY IfcBoundaryNodeCondition 
-IfcBoundaryNodeCondition::IfcBoundaryNodeCondition() { m_entity_enum = IFCBOUNDARYNODECONDITION; }
-IfcBoundaryNodeCondition::IfcBoundaryNodeCondition( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYNODECONDITION; }
+IfcBoundaryNodeCondition::IfcBoundaryNodeCondition() {}
+IfcBoundaryNodeCondition::IfcBoundaryNodeCondition( int id ) { m_id = id; }
 IfcBoundaryNodeCondition::~IfcBoundaryNodeCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class

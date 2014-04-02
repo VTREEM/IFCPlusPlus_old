@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcChangeActionEnum = ENUMERATION OF	(NOCHANGE	,MODIFIED	,ADDED	,DELETED	,NOTDEFINED);
-class IfcChangeActionEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcChangeActionEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcChangeActionEnumEnum

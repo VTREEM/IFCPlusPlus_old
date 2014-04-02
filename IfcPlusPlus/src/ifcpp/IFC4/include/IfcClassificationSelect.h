@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcClassificationSelect = SELECT	(IfcClassification	,IfcClassificationReference);
-class IfcClassificationSelect : public IfcPPAbstractSelect
+class IfcClassificationSelect : virtual public IfcPPObject
 {
 public:
 	IfcClassificationSelect();
 	~IfcClassificationSelect();
 	virtual const char* classname() const { return "IfcClassificationSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcClassificationSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

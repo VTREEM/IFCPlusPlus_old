@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProtectiveDeviceTypeEnum = ENUMERATION OF	(CIRCUITBREAKER	,EARTHLEAKAGECIRCUITBREAKER	,EARTHINGSWITCH	,FUSEDISCONNECTOR	,RESIDUALCURRENTCIRCUITBREAKER	,RESIDUALCURRENTSWITCH	,VARISTOR	,USERDEFINED	,NOTDEFINED);
-class IfcProtectiveDeviceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcProtectiveDeviceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcProtectiveDeviceTypeEnumEnum

@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPolyline 
-IfcPolyline::IfcPolyline() { m_entity_enum = IFCPOLYLINE; }
-IfcPolyline::IfcPolyline( int id ) { m_id = id; m_entity_enum = IFCPOLYLINE; }
+IfcPolyline::IfcPolyline() {}
+IfcPolyline::IfcPolyline( int id ) { m_id = id; }
 IfcPolyline::~IfcPolyline() {}
 
 // method setEntity takes over all attributes from another instance of the class

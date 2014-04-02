@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPlacement 
-IfcPlacement::IfcPlacement() { m_entity_enum = IFCPLACEMENT; }
-IfcPlacement::IfcPlacement( int id ) { m_id = id; m_entity_enum = IFCPLACEMENT; }
+IfcPlacement::IfcPlacement() {}
+IfcPlacement::IfcPlacement( int id ) { m_id = id; }
 IfcPlacement::~IfcPlacement() {}
 
 // method setEntity takes over all attributes from another instance of the class

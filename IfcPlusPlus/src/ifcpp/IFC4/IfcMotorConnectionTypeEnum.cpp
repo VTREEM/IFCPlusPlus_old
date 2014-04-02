@@ -52,7 +52,7 @@ shared_ptr<IfcMotorConnectionTypeEnum> IfcMotorConnectionTypeEnum::createObjectF
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMotorConnectionTypeEnum>(); }
-	shared_ptr<IfcMotorConnectionTypeEnum> type_object( new IfcMotorConnectionTypeEnum() );
+	auto type_object = std::make_shared<IfcMotorConnectionTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BELTDRIVE." ) == 0 )
 	{
 		type_object->m_enum = IfcMotorConnectionTypeEnum::ENUM_BELTDRIVE;

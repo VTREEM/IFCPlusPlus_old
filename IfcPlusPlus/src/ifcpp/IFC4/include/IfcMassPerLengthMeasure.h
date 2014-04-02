@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMassPerLengthMeasure = REAL;
-class IfcMassPerLengthMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMassPerLengthMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcMassPerLengthMeasure();

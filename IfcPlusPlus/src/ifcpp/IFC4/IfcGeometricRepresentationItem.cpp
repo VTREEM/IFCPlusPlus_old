@@ -22,8 +22,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcGeometricRepresentationItem 
-IfcGeometricRepresentationItem::IfcGeometricRepresentationItem() { m_entity_enum = IFCGEOMETRICREPRESENTATIONITEM; }
-IfcGeometricRepresentationItem::IfcGeometricRepresentationItem( int id ) { m_id = id; m_entity_enum = IFCGEOMETRICREPRESENTATIONITEM; }
+IfcGeometricRepresentationItem::IfcGeometricRepresentationItem() {}
+IfcGeometricRepresentationItem::IfcGeometricRepresentationItem( int id ) { m_id = id; }
 IfcGeometricRepresentationItem::~IfcGeometricRepresentationItem() {}
 
 // method setEntity takes over all attributes from another instance of the class

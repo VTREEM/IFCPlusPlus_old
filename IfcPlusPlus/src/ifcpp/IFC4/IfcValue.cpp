@@ -176,7 +176,7 @@ shared_ptr<IfcValue> IfcValue::createObjectFromStepData( const std::string& arg,
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcValue::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcValue::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcValue>();

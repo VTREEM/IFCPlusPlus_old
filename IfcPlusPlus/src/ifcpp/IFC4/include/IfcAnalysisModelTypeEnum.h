@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAnalysisModelTypeEnum = ENUMERATION OF	(IN_PLANE_LOADING_2D	,OUT_PLANE_LOADING_2D	,LOADING_3D	,USERDEFINED	,NOTDEFINED);
-class IfcAnalysisModelTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAnalysisModelTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAnalysisModelTypeEnumEnum

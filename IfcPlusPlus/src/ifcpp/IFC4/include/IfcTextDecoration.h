@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTextDecoration = STRING;
-class IfcTextDecoration : public IfcPPType
+class IfcTextDecoration : public IfcPPObject
 {
 public:
 	IfcTextDecoration();

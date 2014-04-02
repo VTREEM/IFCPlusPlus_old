@@ -64,7 +64,7 @@ shared_ptr<IfcBuildingSystemTypeEnum> IfcBuildingSystemTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBuildingSystemTypeEnum>(); }
-	shared_ptr<IfcBuildingSystemTypeEnum> type_object( new IfcBuildingSystemTypeEnum() );
+	auto type_object = std::make_shared<IfcBuildingSystemTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FENESTRATION." ) == 0 )
 	{
 		type_object->m_enum = IfcBuildingSystemTypeEnum::ENUM_FENESTRATION;

@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRailingType 
-IfcRailingType::IfcRailingType() { m_entity_enum = IFCRAILINGTYPE; }
-IfcRailingType::IfcRailingType( int id ) { m_id = id; m_entity_enum = IFCRAILINGTYPE; }
+IfcRailingType::IfcRailingType() {}
+IfcRailingType::IfcRailingType( int id ) { m_id = id; }
 IfcRailingType::~IfcRailingType() {}
 
 // method setEntity takes over all attributes from another instance of the class

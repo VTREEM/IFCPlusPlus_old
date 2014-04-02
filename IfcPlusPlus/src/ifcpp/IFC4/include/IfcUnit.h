@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcUnit = SELECT	(IfcDerivedUnit	,IfcMonetaryUnit	,IfcNamedUnit);
-class IfcUnit : public IfcPPAbstractSelect
+class IfcUnit : virtual public IfcPPObject
 {
 public:
 	IfcUnit();
 	~IfcUnit();
 	virtual const char* classname() const { return "IfcUnit"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcUnit> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

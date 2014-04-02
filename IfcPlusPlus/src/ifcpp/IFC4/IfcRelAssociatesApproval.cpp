@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelAssociatesApproval 
-IfcRelAssociatesApproval::IfcRelAssociatesApproval() { m_entity_enum = IFCRELASSOCIATESAPPROVAL; }
-IfcRelAssociatesApproval::IfcRelAssociatesApproval( int id ) { m_id = id; m_entity_enum = IFCRELASSOCIATESAPPROVAL; }
+IfcRelAssociatesApproval::IfcRelAssociatesApproval() {}
+IfcRelAssociatesApproval::IfcRelAssociatesApproval( int id ) { m_id = id; }
 IfcRelAssociatesApproval::~IfcRelAssociatesApproval() {}
 
 // method setEntity takes over all attributes from another instance of the class

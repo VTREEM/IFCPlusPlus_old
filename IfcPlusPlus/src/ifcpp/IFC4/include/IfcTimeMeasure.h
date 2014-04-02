@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcTimeMeasure = REAL;
-class IfcTimeMeasure : public IfcMeasureValue, public IfcPPType
+class IfcTimeMeasure : public IfcMeasureValue
 {
 public:
 	IfcTimeMeasure();

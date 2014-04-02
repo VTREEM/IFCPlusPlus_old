@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDirectionSenseEnum = ENUMERATION OF	(POSITIVE	,NEGATIVE);
-class IfcDirectionSenseEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDirectionSenseEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDirectionSenseEnumEnum

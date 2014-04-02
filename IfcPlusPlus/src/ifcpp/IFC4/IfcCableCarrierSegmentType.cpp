@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCableCarrierSegmentType 
-IfcCableCarrierSegmentType::IfcCableCarrierSegmentType() { m_entity_enum = IFCCABLECARRIERSEGMENTTYPE; }
-IfcCableCarrierSegmentType::IfcCableCarrierSegmentType( int id ) { m_id = id; m_entity_enum = IFCCABLECARRIERSEGMENTTYPE; }
+IfcCableCarrierSegmentType::IfcCableCarrierSegmentType() {}
+IfcCableCarrierSegmentType::IfcCableCarrierSegmentType( int id ) { m_id = id; }
 IfcCableCarrierSegmentType::~IfcCableCarrierSegmentType() {}
 
 // method setEntity takes over all attributes from another instance of the class

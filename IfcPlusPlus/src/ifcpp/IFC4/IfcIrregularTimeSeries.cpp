@@ -28,8 +28,8 @@
 #include "include/IfcUnit.h"
 
 // ENTITY IfcIrregularTimeSeries 
-IfcIrregularTimeSeries::IfcIrregularTimeSeries() { m_entity_enum = IFCIRREGULARTIMESERIES; }
-IfcIrregularTimeSeries::IfcIrregularTimeSeries( int id ) { m_id = id; m_entity_enum = IFCIRREGULARTIMESERIES; }
+IfcIrregularTimeSeries::IfcIrregularTimeSeries() {}
+IfcIrregularTimeSeries::IfcIrregularTimeSeries( int id ) { m_id = id; }
 IfcIrregularTimeSeries::~IfcIrregularTimeSeries() {}
 
 // method setEntity takes over all attributes from another instance of the class

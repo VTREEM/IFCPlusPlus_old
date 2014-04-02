@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcElectricDistributionBoardType 
-IfcElectricDistributionBoardType::IfcElectricDistributionBoardType() { m_entity_enum = IFCELECTRICDISTRIBUTIONBOARDTYPE; }
-IfcElectricDistributionBoardType::IfcElectricDistributionBoardType( int id ) { m_id = id; m_entity_enum = IFCELECTRICDISTRIBUTIONBOARDTYPE; }
+IfcElectricDistributionBoardType::IfcElectricDistributionBoardType() {}
+IfcElectricDistributionBoardType::IfcElectricDistributionBoardType( int id ) { m_id = id; }
 IfcElectricDistributionBoardType::~IfcElectricDistributionBoardType() {}
 
 // method setEntity takes over all attributes from another instance of the class

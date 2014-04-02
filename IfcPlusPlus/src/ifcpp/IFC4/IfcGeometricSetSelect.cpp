@@ -65,7 +65,7 @@ shared_ptr<IfcGeometricSetSelect> IfcGeometricSetSelect::createObjectFromStepDat
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcGeometricSetSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcGeometricSetSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcGeometricSetSelect>();

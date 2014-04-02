@@ -27,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAppliedValue 
-IfcAppliedValue::IfcAppliedValue() { m_entity_enum = IFCAPPLIEDVALUE; }
-IfcAppliedValue::IfcAppliedValue( int id ) { m_id = id; m_entity_enum = IFCAPPLIEDVALUE; }
+IfcAppliedValue::IfcAppliedValue() {}
+IfcAppliedValue::IfcAppliedValue( int id ) { m_id = id; }
 IfcAppliedValue::~IfcAppliedValue() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -23,8 +23,8 @@
 #include "include/IfcTorqueMeasure.h"
 
 // ENTITY IfcStructuralLoadSingleForce 
-IfcStructuralLoadSingleForce::IfcStructuralLoadSingleForce() { m_entity_enum = IFCSTRUCTURALLOADSINGLEFORCE; }
-IfcStructuralLoadSingleForce::IfcStructuralLoadSingleForce( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADSINGLEFORCE; }
+IfcStructuralLoadSingleForce::IfcStructuralLoadSingleForce() {}
+IfcStructuralLoadSingleForce::IfcStructuralLoadSingleForce( int id ) { m_id = id; }
 IfcStructuralLoadSingleForce::~IfcStructuralLoadSingleForce() {}
 
 // method setEntity takes over all attributes from another instance of the class

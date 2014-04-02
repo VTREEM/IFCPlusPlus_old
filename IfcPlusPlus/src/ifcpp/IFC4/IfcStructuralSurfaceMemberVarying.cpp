@@ -39,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralSurfaceMemberVarying 
-IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying() { m_entity_enum = IFCSTRUCTURALSURFACEMEMBERVARYING; }
-IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALSURFACEMEMBERVARYING; }
+IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying() {}
+IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying( int id ) { m_id = id; }
 IfcStructuralSurfaceMemberVarying::~IfcStructuralSurfaceMemberVarying() {}
 
 // method setEntity takes over all attributes from another instance of the class

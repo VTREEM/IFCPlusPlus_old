@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDistributionCircuit 
-IfcDistributionCircuit::IfcDistributionCircuit() { m_entity_enum = IFCDISTRIBUTIONCIRCUIT; }
-IfcDistributionCircuit::IfcDistributionCircuit( int id ) { m_id = id; m_entity_enum = IFCDISTRIBUTIONCIRCUIT; }
+IfcDistributionCircuit::IfcDistributionCircuit() {}
+IfcDistributionCircuit::IfcDistributionCircuit( int id ) { m_id = id; }
 IfcDistributionCircuit::~IfcDistributionCircuit() {}
 
 // method setEntity takes over all attributes from another instance of the class

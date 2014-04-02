@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAxis2Placement = SELECT	(IfcAxis2Placement2D	,IfcAxis2Placement3D);
-class IfcAxis2Placement : public IfcPPAbstractSelect
+class IfcAxis2Placement : virtual public IfcPPObject
 {
 public:
 	IfcAxis2Placement();
 	~IfcAxis2Placement();
 	virtual const char* classname() const { return "IfcAxis2Placement"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcAxis2Placement> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

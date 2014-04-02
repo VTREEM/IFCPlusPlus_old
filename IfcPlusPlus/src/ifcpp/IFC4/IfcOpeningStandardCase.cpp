@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcOpeningStandardCase 
-IfcOpeningStandardCase::IfcOpeningStandardCase() { m_entity_enum = IFCOPENINGSTANDARDCASE; }
-IfcOpeningStandardCase::IfcOpeningStandardCase( int id ) { m_id = id; m_entity_enum = IFCOPENINGSTANDARDCASE; }
+IfcOpeningStandardCase::IfcOpeningStandardCase() {}
+IfcOpeningStandardCase::IfcOpeningStandardCase( int id ) { m_id = id; }
 IfcOpeningStandardCase::~IfcOpeningStandardCase() {}
 
 // method setEntity takes over all attributes from another instance of the class

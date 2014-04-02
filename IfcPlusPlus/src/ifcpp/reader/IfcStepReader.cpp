@@ -19,10 +19,8 @@
 #include <algorithm>
 #include <locale.h>
 #include <time.h>
-#ifdef IFCPP_OPENMP
-#include <omp.h>
-#endif
 
+#include "ifcpp/model/IfcPPOpenMP.h"
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPObject.h"
 #include "ifcpp/model/IfcPPException.h"
@@ -37,7 +35,7 @@ static std::map<std::string,IfcPPTypeEnum> map_string2type_enum(initializers_Ifc
 
 void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
-shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
+shared_ptr<IfcPPObject> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
 inline void findEndOfString( char*& stream_pos );
 
@@ -579,8 +577,9 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 			{
 #ifdef IFCPP_OPENMP
 #pragma omp critical
-				err << "#" << entity->getId() << "=" << typeid(*entity).name() << " readStepData: error occurred" << std::endl;
 #endif
+				err << "#" << entity->getId() << "=" << typeid(*entity).name() << " readStepData: error occurred" << std::endl;
+
 			}
 
 			if( i%10 == 0 )

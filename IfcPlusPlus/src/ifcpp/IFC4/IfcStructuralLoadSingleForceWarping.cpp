@@ -24,8 +24,8 @@
 #include "include/IfcWarpingMomentMeasure.h"
 
 // ENTITY IfcStructuralLoadSingleForceWarping 
-IfcStructuralLoadSingleForceWarping::IfcStructuralLoadSingleForceWarping() { m_entity_enum = IFCSTRUCTURALLOADSINGLEFORCEWARPING; }
-IfcStructuralLoadSingleForceWarping::IfcStructuralLoadSingleForceWarping( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADSINGLEFORCEWARPING; }
+IfcStructuralLoadSingleForceWarping::IfcStructuralLoadSingleForceWarping() {}
+IfcStructuralLoadSingleForceWarping::IfcStructuralLoadSingleForceWarping( int id ) { m_id = id; }
 IfcStructuralLoadSingleForceWarping::~IfcStructuralLoadSingleForceWarping() {}
 
 // method setEntity takes over all attributes from another instance of the class

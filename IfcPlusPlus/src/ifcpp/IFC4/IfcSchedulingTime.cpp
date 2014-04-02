@@ -22,8 +22,8 @@
 #include "include/IfcSchedulingTime.h"
 
 // ENTITY IfcSchedulingTime 
-IfcSchedulingTime::IfcSchedulingTime() { m_entity_enum = IFCSCHEDULINGTIME; }
-IfcSchedulingTime::IfcSchedulingTime( int id ) { m_id = id; m_entity_enum = IFCSCHEDULINGTIME; }
+IfcSchedulingTime::IfcSchedulingTime() {}
+IfcSchedulingTime::IfcSchedulingTime( int id ) { m_id = id; }
 IfcSchedulingTime::~IfcSchedulingTime() {}
 
 // method setEntity takes over all attributes from another instance of the class

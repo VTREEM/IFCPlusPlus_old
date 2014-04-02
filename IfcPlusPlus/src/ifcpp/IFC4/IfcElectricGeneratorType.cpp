@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcElectricGeneratorType 
-IfcElectricGeneratorType::IfcElectricGeneratorType() { m_entity_enum = IFCELECTRICGENERATORTYPE; }
-IfcElectricGeneratorType::IfcElectricGeneratorType( int id ) { m_id = id; m_entity_enum = IFCELECTRICGENERATORTYPE; }
+IfcElectricGeneratorType::IfcElectricGeneratorType() {}
+IfcElectricGeneratorType::IfcElectricGeneratorType( int id ) { m_id = id; }
 IfcElectricGeneratorType::~IfcElectricGeneratorType() {}
 
 // method setEntity takes over all attributes from another instance of the class

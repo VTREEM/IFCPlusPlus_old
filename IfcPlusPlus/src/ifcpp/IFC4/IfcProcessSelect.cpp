@@ -65,7 +65,7 @@ shared_ptr<IfcProcessSelect> IfcProcessSelect::createObjectFromStepData( const s
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcProcessSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcProcessSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcProcessSelect>();

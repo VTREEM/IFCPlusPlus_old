@@ -49,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDoorStandardCase 
-IfcDoorStandardCase::IfcDoorStandardCase() { m_entity_enum = IFCDOORSTANDARDCASE; }
-IfcDoorStandardCase::IfcDoorStandardCase( int id ) { m_id = id; m_entity_enum = IFCDOORSTANDARDCASE; }
+IfcDoorStandardCase::IfcDoorStandardCase() {}
+IfcDoorStandardCase::IfcDoorStandardCase( int id ) { m_id = id; }
 IfcDoorStandardCase::~IfcDoorStandardCase() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcQuantityArea 
-IfcQuantityArea::IfcQuantityArea() { m_entity_enum = IFCQUANTITYAREA; }
-IfcQuantityArea::IfcQuantityArea( int id ) { m_id = id; m_entity_enum = IFCQUANTITYAREA; }
+IfcQuantityArea::IfcQuantityArea() {}
+IfcQuantityArea::IfcQuantityArea( int id ) { m_id = id; }
 IfcQuantityArea::~IfcQuantityArea() {}
 
 // method setEntity takes over all attributes from another instance of the class

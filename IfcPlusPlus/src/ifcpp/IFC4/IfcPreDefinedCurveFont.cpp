@@ -21,8 +21,8 @@
 #include "include/IfcPreDefinedCurveFont.h"
 
 // ENTITY IfcPreDefinedCurveFont 
-IfcPreDefinedCurveFont::IfcPreDefinedCurveFont() { m_entity_enum = IFCPREDEFINEDCURVEFONT; }
-IfcPreDefinedCurveFont::IfcPreDefinedCurveFont( int id ) { m_id = id; m_entity_enum = IFCPREDEFINEDCURVEFONT; }
+IfcPreDefinedCurveFont::IfcPreDefinedCurveFont() {}
+IfcPreDefinedCurveFont::IfcPreDefinedCurveFont( int id ) { m_id = id; }
 IfcPreDefinedCurveFont::~IfcPreDefinedCurveFont() {}
 
 // method setEntity takes over all attributes from another instance of the class

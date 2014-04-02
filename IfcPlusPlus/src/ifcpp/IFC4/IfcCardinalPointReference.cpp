@@ -35,7 +35,7 @@ shared_ptr<IfcCardinalPointReference> IfcCardinalPointReference::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCardinalPointReference>(); }
-	shared_ptr<IfcCardinalPointReference> type_object( new IfcCardinalPointReference() );
+	auto type_object = std::make_shared<IfcCardinalPointReference>();
 	//supertype as attribute: int m_value
 	type_object->m_value = atoi( arg.c_str() );
 	return type_object;

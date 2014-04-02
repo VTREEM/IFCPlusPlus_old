@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcGloballyUniqueId = STRING(22) FIXED;
-class IfcGloballyUniqueId : public IfcPPType
+class IfcGloballyUniqueId : public IfcPPObject
 {
 public:
 	IfcGloballyUniqueId();

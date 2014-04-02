@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcShadingDeviceType 
-IfcShadingDeviceType::IfcShadingDeviceType() { m_entity_enum = IFCSHADINGDEVICETYPE; }
-IfcShadingDeviceType::IfcShadingDeviceType( int id ) { m_id = id; m_entity_enum = IFCSHADINGDEVICETYPE; }
+IfcShadingDeviceType::IfcShadingDeviceType() {}
+IfcShadingDeviceType::IfcShadingDeviceType( int id ) { m_id = id; }
 IfcShadingDeviceType::~IfcShadingDeviceType() {}
 
 // method setEntity takes over all attributes from another instance of the class

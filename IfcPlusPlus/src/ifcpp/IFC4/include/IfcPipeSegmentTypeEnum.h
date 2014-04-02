@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPipeSegmentTypeEnum = ENUMERATION OF	(CULVERT	,FLEXIBLESEGMENT	,RIGIDSEGMENT	,GUTTER	,SPOOL	,USERDEFINED	,NOTDEFINED);
-class IfcPipeSegmentTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPipeSegmentTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPipeSegmentTypeEnumEnum

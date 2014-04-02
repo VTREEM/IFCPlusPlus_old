@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcConic 
-IfcConic::IfcConic() { m_entity_enum = IFCCONIC; }
-IfcConic::IfcConic( int id ) { m_id = id; m_entity_enum = IFCCONIC; }
+IfcConic::IfcConic() {}
+IfcConic::IfcConic( int id ) { m_id = id; }
 IfcConic::~IfcConic() {}
 
 // method setEntity takes over all attributes from another instance of the class

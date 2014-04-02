@@ -21,8 +21,8 @@
 #include "include/IfcTextStyleForDefinedFont.h"
 
 // ENTITY IfcTextStyleForDefinedFont 
-IfcTextStyleForDefinedFont::IfcTextStyleForDefinedFont() { m_entity_enum = IFCTEXTSTYLEFORDEFINEDFONT; }
-IfcTextStyleForDefinedFont::IfcTextStyleForDefinedFont( int id ) { m_id = id; m_entity_enum = IFCTEXTSTYLEFORDEFINEDFONT; }
+IfcTextStyleForDefinedFont::IfcTextStyleForDefinedFont() {}
+IfcTextStyleForDefinedFont::IfcTextStyleForDefinedFont( int id ) { m_id = id; }
 IfcTextStyleForDefinedFont::~IfcTextStyleForDefinedFont() {}
 
 // method setEntity takes over all attributes from another instance of the class

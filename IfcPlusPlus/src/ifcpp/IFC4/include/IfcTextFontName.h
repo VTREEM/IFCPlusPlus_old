@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTextFontName = STRING;
-class IfcTextFontName : public IfcPPType
+class IfcTextFontName : public IfcPPObject
 {
 public:
 	IfcTextFontName();

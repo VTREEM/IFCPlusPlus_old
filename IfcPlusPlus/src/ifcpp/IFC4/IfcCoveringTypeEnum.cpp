@@ -80,7 +80,7 @@ shared_ptr<IfcCoveringTypeEnum> IfcCoveringTypeEnum::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCoveringTypeEnum>(); }
-	shared_ptr<IfcCoveringTypeEnum> type_object( new IfcCoveringTypeEnum() );
+	auto type_object = std::make_shared<IfcCoveringTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CEILING." ) == 0 )
 	{
 		type_object->m_enum = IfcCoveringTypeEnum::ENUM_CEILING;

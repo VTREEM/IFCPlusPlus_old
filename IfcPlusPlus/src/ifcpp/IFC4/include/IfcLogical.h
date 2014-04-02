@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcLogical = LOGICAL;
-class IfcLogical : public IfcSimpleValue, public IfcPPType
+class IfcLogical : public IfcSimpleValue
 {
 public:
 	IfcLogical();

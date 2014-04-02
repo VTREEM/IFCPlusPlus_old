@@ -22,8 +22,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcDirection 
-IfcDirection::IfcDirection() { m_entity_enum = IFCDIRECTION; }
-IfcDirection::IfcDirection( int id ) { m_id = id; m_entity_enum = IFCDIRECTION; }
+IfcDirection::IfcDirection() {}
+IfcDirection::IfcDirection( int id ) { m_id = id; }
 IfcDirection::~IfcDirection() {}
 
 // method setEntity takes over all attributes from another instance of the class

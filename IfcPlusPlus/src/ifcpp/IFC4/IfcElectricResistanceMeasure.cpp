@@ -36,7 +36,7 @@ shared_ptr<IfcElectricResistanceMeasure> IfcElectricResistanceMeasure::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricResistanceMeasure>(); }
-	shared_ptr<IfcElectricResistanceMeasure> type_object( new IfcElectricResistanceMeasure() );
+	auto type_object = std::make_shared<IfcElectricResistanceMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

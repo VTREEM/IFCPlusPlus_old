@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcReinforcingBarSurfaceEnum = ENUMERATION OF	(PLAIN	,TEXTURED);
-class IfcReinforcingBarSurfaceEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcReinforcingBarSurfaceEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcReinforcingBarSurfaceEnumEnum

@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPath 
-IfcPath::IfcPath() { m_entity_enum = IFCPATH; }
-IfcPath::IfcPath( int id ) { m_id = id; m_entity_enum = IFCPATH; }
+IfcPath::IfcPath() {}
+IfcPath::IfcPath( int id ) { m_id = id; }
 IfcPath::~IfcPath() {}
 
 // method setEntity takes over all attributes from another instance of the class

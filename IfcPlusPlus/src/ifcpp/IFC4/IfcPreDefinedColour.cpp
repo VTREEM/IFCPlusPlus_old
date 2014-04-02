@@ -21,8 +21,8 @@
 #include "include/IfcPreDefinedColour.h"
 
 // ENTITY IfcPreDefinedColour 
-IfcPreDefinedColour::IfcPreDefinedColour() { m_entity_enum = IFCPREDEFINEDCOLOUR; }
-IfcPreDefinedColour::IfcPreDefinedColour( int id ) { m_id = id; m_entity_enum = IFCPREDEFINEDCOLOUR; }
+IfcPreDefinedColour::IfcPreDefinedColour() {}
+IfcPreDefinedColour::IfcPreDefinedColour( int id ) { m_id = id; }
 IfcPreDefinedColour::~IfcPreDefinedColour() {}
 
 // method setEntity takes over all attributes from another instance of the class

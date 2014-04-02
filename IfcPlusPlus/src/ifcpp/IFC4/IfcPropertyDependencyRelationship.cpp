@@ -23,8 +23,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPropertyDependencyRelationship 
-IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship() { m_entity_enum = IFCPROPERTYDEPENDENCYRELATIONSHIP; }
-IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship( int id ) { m_id = id; m_entity_enum = IFCPROPERTYDEPENDENCYRELATIONSHIP; }
+IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship() {}
+IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship( int id ) { m_id = id; }
 IfcPropertyDependencyRelationship::~IfcPropertyDependencyRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

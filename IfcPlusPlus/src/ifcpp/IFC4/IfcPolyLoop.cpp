@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPolyLoop 
-IfcPolyLoop::IfcPolyLoop() { m_entity_enum = IFCPOLYLOOP; }
-IfcPolyLoop::IfcPolyLoop( int id ) { m_id = id; m_entity_enum = IFCPOLYLOOP; }
+IfcPolyLoop::IfcPolyLoop() {}
+IfcPolyLoop::IfcPolyLoop( int id ) { m_id = id; }
 IfcPolyLoop::~IfcPolyLoop() {}
 
 // method setEntity takes over all attributes from another instance of the class

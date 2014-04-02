@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcAnnotationFillArea 
-IfcAnnotationFillArea::IfcAnnotationFillArea() { m_entity_enum = IFCANNOTATIONFILLAREA; }
-IfcAnnotationFillArea::IfcAnnotationFillArea( int id ) { m_id = id; m_entity_enum = IFCANNOTATIONFILLAREA; }
+IfcAnnotationFillArea::IfcAnnotationFillArea() {}
+IfcAnnotationFillArea::IfcAnnotationFillArea( int id ) { m_id = id; }
 IfcAnnotationFillArea::~IfcAnnotationFillArea() {}
 
 // method setEntity takes over all attributes from another instance of the class

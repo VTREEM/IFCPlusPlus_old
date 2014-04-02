@@ -36,7 +36,7 @@ shared_ptr<IfcInductanceMeasure> IfcInductanceMeasure::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcInductanceMeasure>(); }
-	shared_ptr<IfcInductanceMeasure> type_object( new IfcInductanceMeasure() );
+	auto type_object = std::make_shared<IfcInductanceMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

@@ -33,8 +33,8 @@
 #include "include/IfcWindowPanelPositionEnum.h"
 
 // ENTITY IfcPermeableCoveringProperties 
-IfcPermeableCoveringProperties::IfcPermeableCoveringProperties() { m_entity_enum = IFCPERMEABLECOVERINGPROPERTIES; }
-IfcPermeableCoveringProperties::IfcPermeableCoveringProperties( int id ) { m_id = id; m_entity_enum = IFCPERMEABLECOVERINGPROPERTIES; }
+IfcPermeableCoveringProperties::IfcPermeableCoveringProperties() {}
+IfcPermeableCoveringProperties::IfcPermeableCoveringProperties( int id ) { m_id = id; }
 IfcPermeableCoveringProperties::~IfcPermeableCoveringProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

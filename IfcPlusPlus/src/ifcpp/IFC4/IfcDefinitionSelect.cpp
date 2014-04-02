@@ -65,7 +65,7 @@ shared_ptr<IfcDefinitionSelect> IfcDefinitionSelect::createObjectFromStepData( c
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcDefinitionSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcDefinitionSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcDefinitionSelect>();

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBuildingSystemTypeEnum = ENUMERATION OF	(FENESTRATION	,FOUNDATION	,LOADBEARING	,OUTERSHELL	,SHADING	,TRANSPORT	,USERDEFINED	,NOTDEFINED);
-class IfcBuildingSystemTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcBuildingSystemTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcBuildingSystemTypeEnumEnum

@@ -68,7 +68,7 @@ shared_ptr<IfcFurnitureTypeEnum> IfcFurnitureTypeEnum::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFurnitureTypeEnum>(); }
-	shared_ptr<IfcFurnitureTypeEnum> type_object( new IfcFurnitureTypeEnum() );
+	auto type_object = std::make_shared<IfcFurnitureTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CHAIR." ) == 0 )
 	{
 		type_object->m_enum = IfcFurnitureTypeEnum::ENUM_CHAIR;

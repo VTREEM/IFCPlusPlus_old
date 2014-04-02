@@ -21,8 +21,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcDraughtingPreDefinedCurveFont 
-IfcDraughtingPreDefinedCurveFont::IfcDraughtingPreDefinedCurveFont() { m_entity_enum = IFCDRAUGHTINGPREDEFINEDCURVEFONT; }
-IfcDraughtingPreDefinedCurveFont::IfcDraughtingPreDefinedCurveFont( int id ) { m_id = id; m_entity_enum = IFCDRAUGHTINGPREDEFINEDCURVEFONT; }
+IfcDraughtingPreDefinedCurveFont::IfcDraughtingPreDefinedCurveFont() {}
+IfcDraughtingPreDefinedCurveFont::IfcDraughtingPreDefinedCurveFont( int id ) { m_id = id; }
 IfcDraughtingPreDefinedCurveFont::~IfcDraughtingPreDefinedCurveFont() {}
 
 // method setEntity takes over all attributes from another instance of the class

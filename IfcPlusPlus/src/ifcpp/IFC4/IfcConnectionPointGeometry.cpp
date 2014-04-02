@@ -21,8 +21,8 @@
 #include "include/IfcPointOrVertexPoint.h"
 
 // ENTITY IfcConnectionPointGeometry 
-IfcConnectionPointGeometry::IfcConnectionPointGeometry() { m_entity_enum = IFCCONNECTIONPOINTGEOMETRY; }
-IfcConnectionPointGeometry::IfcConnectionPointGeometry( int id ) { m_id = id; m_entity_enum = IFCCONNECTIONPOINTGEOMETRY; }
+IfcConnectionPointGeometry::IfcConnectionPointGeometry() {}
+IfcConnectionPointGeometry::IfcConnectionPointGeometry( int id ) { m_id = id; }
 IfcConnectionPointGeometry::~IfcConnectionPointGeometry() {}
 
 // method setEntity takes over all attributes from another instance of the class

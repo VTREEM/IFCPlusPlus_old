@@ -25,8 +25,8 @@
 #include "include/IfcTextureCoordinate.h"
 
 // ENTITY IfcPixelTexture 
-IfcPixelTexture::IfcPixelTexture() { m_entity_enum = IFCPIXELTEXTURE; }
-IfcPixelTexture::IfcPixelTexture( int id ) { m_id = id; m_entity_enum = IFCPIXELTEXTURE; }
+IfcPixelTexture::IfcPixelTexture() {}
+IfcPixelTexture::IfcPixelTexture( int id ) { m_id = id; }
 IfcPixelTexture::~IfcPixelTexture() {}
 
 // method setEntity takes over all attributes from another instance of the class

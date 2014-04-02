@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDistributionChamberElement 
-IfcDistributionChamberElement::IfcDistributionChamberElement() { m_entity_enum = IFCDISTRIBUTIONCHAMBERELEMENT; }
-IfcDistributionChamberElement::IfcDistributionChamberElement( int id ) { m_id = id; m_entity_enum = IFCDISTRIBUTIONCHAMBERELEMENT; }
+IfcDistributionChamberElement::IfcDistributionChamberElement() {}
+IfcDistributionChamberElement::IfcDistributionChamberElement( int id ) { m_id = id; }
 IfcDistributionChamberElement::~IfcDistributionChamberElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcElectricDistributionBoardTypeEnum = ENUMERATION OF	(CONSUMERUNIT	,DISTRIBUTIONBOARD	,MOTORCONTROLCENTRE	,SWITCHBOARD	,USERDEFINED	,NOTDEFINED);
-class IfcElectricDistributionBoardTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcElectricDistributionBoardTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcElectricDistributionBoardTypeEnumEnum

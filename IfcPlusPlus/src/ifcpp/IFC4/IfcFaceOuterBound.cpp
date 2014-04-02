@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcFaceOuterBound 
-IfcFaceOuterBound::IfcFaceOuterBound() { m_entity_enum = IFCFACEOUTERBOUND; }
-IfcFaceOuterBound::IfcFaceOuterBound( int id ) { m_id = id; m_entity_enum = IFCFACEOUTERBOUND; }
+IfcFaceOuterBound::IfcFaceOuterBound() {}
+IfcFaceOuterBound::IfcFaceOuterBound( int id ) { m_id = id; }
 IfcFaceOuterBound::~IfcFaceOuterBound() {}
 
 // method setEntity takes over all attributes from another instance of the class

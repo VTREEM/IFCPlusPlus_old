@@ -24,8 +24,8 @@
 #include "include/IfcVector.h"
 
 // ENTITY IfcLine 
-IfcLine::IfcLine() { m_entity_enum = IFCLINE; }
-IfcLine::IfcLine( int id ) { m_id = id; m_entity_enum = IFCLINE; }
+IfcLine::IfcLine() {}
+IfcLine::IfcLine( int id ) { m_id = id; }
 IfcLine::~IfcLine() {}
 
 // method setEntity takes over all attributes from another instance of the class

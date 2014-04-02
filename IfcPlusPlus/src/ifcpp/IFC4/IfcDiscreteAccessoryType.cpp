@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDiscreteAccessoryType 
-IfcDiscreteAccessoryType::IfcDiscreteAccessoryType() { m_entity_enum = IFCDISCRETEACCESSORYTYPE; }
-IfcDiscreteAccessoryType::IfcDiscreteAccessoryType( int id ) { m_id = id; m_entity_enum = IFCDISCRETEACCESSORYTYPE; }
+IfcDiscreteAccessoryType::IfcDiscreteAccessoryType() {}
+IfcDiscreteAccessoryType::IfcDiscreteAccessoryType( int id ) { m_id = id; }
 IfcDiscreteAccessoryType::~IfcDiscreteAccessoryType() {}
 
 // method setEntity takes over all attributes from another instance of the class

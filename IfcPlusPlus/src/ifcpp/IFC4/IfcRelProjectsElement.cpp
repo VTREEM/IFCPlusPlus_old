@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelProjectsElement 
-IfcRelProjectsElement::IfcRelProjectsElement() { m_entity_enum = IFCRELPROJECTSELEMENT; }
-IfcRelProjectsElement::IfcRelProjectsElement( int id ) { m_id = id; m_entity_enum = IFCRELPROJECTSELEMENT; }
+IfcRelProjectsElement::IfcRelProjectsElement() {}
+IfcRelProjectsElement::IfcRelProjectsElement( int id ) { m_id = id; }
 IfcRelProjectsElement::~IfcRelProjectsElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

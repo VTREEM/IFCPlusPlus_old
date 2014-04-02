@@ -56,7 +56,7 @@ shared_ptr<IfcAnalysisTheoryTypeEnum> IfcAnalysisTheoryTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAnalysisTheoryTypeEnum>(); }
-	shared_ptr<IfcAnalysisTheoryTypeEnum> type_object( new IfcAnalysisTheoryTypeEnum() );
+	auto type_object = std::make_shared<IfcAnalysisTheoryTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FIRST_ORDER_THEORY." ) == 0 )
 	{
 		type_object->m_enum = IfcAnalysisTheoryTypeEnum::ENUM_FIRST_ORDER_THEORY;

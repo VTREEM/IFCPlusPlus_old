@@ -39,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralLoadGroup 
-IfcStructuralLoadGroup::IfcStructuralLoadGroup() { m_entity_enum = IFCSTRUCTURALLOADGROUP; }
-IfcStructuralLoadGroup::IfcStructuralLoadGroup( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADGROUP; }
+IfcStructuralLoadGroup::IfcStructuralLoadGroup() {}
+IfcStructuralLoadGroup::IfcStructuralLoadGroup( int id ) { m_id = id; }
 IfcStructuralLoadGroup::~IfcStructuralLoadGroup() {}
 
 // method setEntity takes over all attributes from another instance of the class

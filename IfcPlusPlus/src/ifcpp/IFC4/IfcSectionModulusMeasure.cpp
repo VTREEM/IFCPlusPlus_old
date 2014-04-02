@@ -36,7 +36,7 @@ shared_ptr<IfcSectionModulusMeasure> IfcSectionModulusMeasure::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSectionModulusMeasure>(); }
-	shared_ptr<IfcSectionModulusMeasure> type_object( new IfcSectionModulusMeasure() );
+	auto type_object = std::make_shared<IfcSectionModulusMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcRailingTypeEnum = ENUMERATION OF	(HANDRAIL	,GUARDRAIL	,BALUSTRADE	,USERDEFINED	,NOTDEFINED);
-class IfcRailingTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcRailingTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcRailingTypeEnumEnum

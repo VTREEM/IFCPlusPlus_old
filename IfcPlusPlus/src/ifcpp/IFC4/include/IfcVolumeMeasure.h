@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcVolumeMeasure = REAL;
-class IfcVolumeMeasure : public IfcMeasureValue, public IfcPPType
+class IfcVolumeMeasure : public IfcMeasureValue
 {
 public:
 	IfcVolumeMeasure();

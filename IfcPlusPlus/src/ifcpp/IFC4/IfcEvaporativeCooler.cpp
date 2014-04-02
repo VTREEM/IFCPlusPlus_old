@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcEvaporativeCooler 
-IfcEvaporativeCooler::IfcEvaporativeCooler() { m_entity_enum = IFCEVAPORATIVECOOLER; }
-IfcEvaporativeCooler::IfcEvaporativeCooler( int id ) { m_id = id; m_entity_enum = IFCEVAPORATIVECOOLER; }
+IfcEvaporativeCooler::IfcEvaporativeCooler() {}
+IfcEvaporativeCooler::IfcEvaporativeCooler( int id ) { m_id = id; }
 IfcEvaporativeCooler::~IfcEvaporativeCooler() {}
 
 // method setEntity takes over all attributes from another instance of the class

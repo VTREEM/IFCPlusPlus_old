@@ -60,7 +60,7 @@ shared_ptr<IfcControllerTypeEnum> IfcControllerTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcControllerTypeEnum>(); }
-	shared_ptr<IfcControllerTypeEnum> type_object( new IfcControllerTypeEnum() );
+	auto type_object = std::make_shared<IfcControllerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FLOATING." ) == 0 )
 	{
 		type_object->m_enum = IfcControllerTypeEnum::ENUM_FLOATING;

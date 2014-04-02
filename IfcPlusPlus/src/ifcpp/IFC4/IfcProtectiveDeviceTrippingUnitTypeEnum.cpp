@@ -56,7 +56,7 @@ shared_ptr<IfcProtectiveDeviceTrippingUnitTypeEnum> IfcProtectiveDeviceTrippingU
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcProtectiveDeviceTrippingUnitTypeEnum>(); }
-	shared_ptr<IfcProtectiveDeviceTrippingUnitTypeEnum> type_object( new IfcProtectiveDeviceTrippingUnitTypeEnum() );
+	auto type_object = std::make_shared<IfcProtectiveDeviceTrippingUnitTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ELECTRONIC." ) == 0 )
 	{
 		type_object->m_enum = IfcProtectiveDeviceTrippingUnitTypeEnum::ENUM_ELECTRONIC;

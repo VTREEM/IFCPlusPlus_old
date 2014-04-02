@@ -51,8 +51,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcTendon 
-IfcTendon::IfcTendon() { m_entity_enum = IFCTENDON; }
-IfcTendon::IfcTendon( int id ) { m_id = id; m_entity_enum = IFCTENDON; }
+IfcTendon::IfcTendon() {}
+IfcTendon::IfcTendon( int id ) { m_id = id; }
 IfcTendon::~IfcTendon() {}
 
 // method setEntity takes over all attributes from another instance of the class

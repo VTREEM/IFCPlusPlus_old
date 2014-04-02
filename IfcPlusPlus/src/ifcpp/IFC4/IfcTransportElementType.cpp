@@ -35,8 +35,8 @@
 #include "include/IfcTransportElementTypeEnum.h"
 
 // ENTITY IfcTransportElementType 
-IfcTransportElementType::IfcTransportElementType() { m_entity_enum = IFCTRANSPORTELEMENTTYPE; }
-IfcTransportElementType::IfcTransportElementType( int id ) { m_id = id; m_entity_enum = IFCTRANSPORTELEMENTTYPE; }
+IfcTransportElementType::IfcTransportElementType() {}
+IfcTransportElementType::IfcTransportElementType( int id ) { m_id = id; }
 IfcTransportElementType::~IfcTransportElementType() {}
 
 // method setEntity takes over all attributes from another instance of the class

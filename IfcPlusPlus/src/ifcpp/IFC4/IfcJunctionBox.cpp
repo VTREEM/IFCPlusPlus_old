@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcJunctionBox 
-IfcJunctionBox::IfcJunctionBox() { m_entity_enum = IFCJUNCTIONBOX; }
-IfcJunctionBox::IfcJunctionBox( int id ) { m_id = id; m_entity_enum = IFCJUNCTIONBOX; }
+IfcJunctionBox::IfcJunctionBox() {}
+IfcJunctionBox::IfcJunctionBox( int id ) { m_id = id; }
 IfcJunctionBox::~IfcJunctionBox() {}
 
 // method setEntity takes over all attributes from another instance of the class

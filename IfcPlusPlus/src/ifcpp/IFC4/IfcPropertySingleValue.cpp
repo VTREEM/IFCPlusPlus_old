@@ -28,8 +28,8 @@
 #include "include/IfcValue.h"
 
 // ENTITY IfcPropertySingleValue 
-IfcPropertySingleValue::IfcPropertySingleValue() { m_entity_enum = IFCPROPERTYSINGLEVALUE; }
-IfcPropertySingleValue::IfcPropertySingleValue( int id ) { m_id = id; m_entity_enum = IFCPROPERTYSINGLEVALUE; }
+IfcPropertySingleValue::IfcPropertySingleValue() {}
+IfcPropertySingleValue::IfcPropertySingleValue( int id ) { m_id = id; }
 IfcPropertySingleValue::~IfcPropertySingleValue() {}
 
 // method setEntity takes over all attributes from another instance of the class

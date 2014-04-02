@@ -48,8 +48,8 @@
 #include "include/IfcTransformerTypeEnum.h"
 
 // ENTITY IfcTransformer 
-IfcTransformer::IfcTransformer() { m_entity_enum = IFCTRANSFORMER; }
-IfcTransformer::IfcTransformer( int id ) { m_id = id; m_entity_enum = IFCTRANSFORMER; }
+IfcTransformer::IfcTransformer() {}
+IfcTransformer::IfcTransformer( int id ) { m_id = id; }
 IfcTransformer::~IfcTransformer() {}
 
 // method setEntity takes over all attributes from another instance of the class

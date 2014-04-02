@@ -36,7 +36,7 @@ shared_ptr<IfcLuminousIntensityDistributionMeasure> IfcLuminousIntensityDistribu
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLuminousIntensityDistributionMeasure>(); }
-	shared_ptr<IfcLuminousIntensityDistributionMeasure> type_object( new IfcLuminousIntensityDistributionMeasure() );
+	auto type_object = std::make_shared<IfcLuminousIntensityDistributionMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

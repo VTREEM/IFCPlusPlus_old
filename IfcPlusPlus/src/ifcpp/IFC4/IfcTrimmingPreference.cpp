@@ -44,7 +44,7 @@ shared_ptr<IfcTrimmingPreference> IfcTrimmingPreference::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTrimmingPreference>(); }
-	shared_ptr<IfcTrimmingPreference> type_object( new IfcTrimmingPreference() );
+	auto type_object = std::make_shared<IfcTrimmingPreference>();
 	if( _stricmp( arg.c_str(), ".CARTESIAN." ) == 0 )
 	{
 		type_object->m_enum = IfcTrimmingPreference::ENUM_CARTESIAN;

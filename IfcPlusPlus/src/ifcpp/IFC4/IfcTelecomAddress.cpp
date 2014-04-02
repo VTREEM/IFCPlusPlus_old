@@ -26,8 +26,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcTelecomAddress 
-IfcTelecomAddress::IfcTelecomAddress() { m_entity_enum = IFCTELECOMADDRESS; }
-IfcTelecomAddress::IfcTelecomAddress( int id ) { m_id = id; m_entity_enum = IFCTELECOMADDRESS; }
+IfcTelecomAddress::IfcTelecomAddress() {}
+IfcTelecomAddress::IfcTelecomAddress( int id ) { m_id = id; }
 IfcTelecomAddress::~IfcTelecomAddress() {}
 
 // method setEntity takes over all attributes from another instance of the class

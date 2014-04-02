@@ -72,6 +72,12 @@ SolidModelConverter::~SolidModelConverter()
 // ENTITY IfcSolidModel ABSTRACT SUPERTYPE OF(ONEOF(IfcCsgSolid, IfcManifoldSolidBrep, IfcSweptAreaSolid, IfcSweptDiskSolid))
 void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>& solid_model, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
+	if( pos != carve::math::Matrix::IDENT() )
+	{
+		// TODO: check to remove pos parameter
+		int wait=0;
+	}
+
 	shared_ptr<IfcSweptAreaSolid> swept_area_solid = dynamic_pointer_cast<IfcSweptAreaSolid>(solid_model);
 	if( swept_area_solid )
 	{
@@ -822,6 +828,11 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 
 void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanResult>& bool_result, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
+	if( pos != carve::math::Matrix::IDENT() )
+	{
+		int wait=0;
+	}
+
 	const int boolean_result_id = bool_result->getId();
 	shared_ptr<IfcBooleanClippingResult> boolean_clipping_result = dynamic_pointer_cast<IfcBooleanClippingResult>(bool_result);
 	if( boolean_clipping_result )
@@ -1435,7 +1446,7 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 
 				if( base_surface_points.size() != 4 )
 				{
-					std::cout << "RepresentationConverter::convertIfcBooleanOperand: invalid IfcHalfSpaceSolid.BaseSurface" << std::endl;
+					std::cout << __FUNC__ << ": invalid IfcHalfSpaceSolid.BaseSurface" << std::endl;
 					return;
 				}
 				// If the agreement flag is TRUE, then the subset is the one the normal points away from
@@ -1517,6 +1528,10 @@ void retriangulateMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 {
 	//carve::poly::Polyhedron* poly = carve::polyhedronFromMesh(meshset, -1);
 	//carve::mesh::MeshSet<3>* meshset_new = carve::meshFromPolyhedron(poly, -1);
+	if( !meshset )
+	{
+		return;
+	}
 
 	int num_vertices1 = meshset->vertex_storage.size();
 	shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
@@ -1611,6 +1626,8 @@ void retriangulateMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 				++i_vert;
 			} while( edge != face->edge );
 
+			// TODO: merge coplanar faces and re-triangulate
+
 			for( size_t i = 0; i != triangulated.size(); ++i )
 			{
 				carve::triangulate::tri_idx triangle = triangulated[i];
@@ -1645,7 +1662,7 @@ void retriangulateMeshSet( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 		}
 	}
 
-	meshset = NULL;
+	meshset = nullptr;
 	meshset = shared_ptr<carve::mesh::MeshSet<3> >( poly_data->createMesh(carve::input::opts()) );
 
 	double volume_check2 = 0;
@@ -1702,11 +1719,29 @@ void SolidModelConverter::simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& me
 	//	triang.processOutputFace( vec_faces, face_orig, false );
 	//}
 	
+	if( !meshset )
+	{
+		return;
+	}
+
 	bool rebuild = true;
 	int num_vertices = meshset->vertex_storage.size();
 	if( rebuild && num_vertices > 8 )
 	{
 		retriangulateMeshSet( meshset );
+	}
+}
+
+void applyPosition( carve::mesh::MeshSet<3>* meshset, const carve::math::Matrix& pos )
+{
+	for (size_t i = 0; i < meshset->vertex_storage.size(); ++i )
+	{
+		carve::geom::vector<3>& point = meshset->vertex_storage[i].v;
+		point = pos*point;
+	}
+	for (size_t i = 0; i < meshset->meshes.size(); ++i)
+	{
+		meshset->meshes[i]->recalc();
 	}
 }
 
@@ -1718,6 +1753,52 @@ bool SolidModelConverter::computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh:
 	{
 		bool meshset1_ok = ConverterOSG::checkMeshSet( op1, err, entity1 );
 		bool meshset2_ok = ConverterOSG::checkMeshSet( op2, err, entity2 );
+
+		// check if meshset aabb is far away from origin. if so, move to origin, compute, move back
+		carve::geom::vector<3> translate_avoid_large_numbers;
+		carve::geom::aabb<3>& aabb_op1 = op1->getAABB();
+		if( aabb_op1.pos.length2() > 10000 )
+		{
+			carve::geom::aabb<3>& aabb_op2 = op2->getAABB();
+
+			if( aabb_op2.pos.length2() > 10000 )
+			{
+				carve::geom::vector<3> aabb_op1_direction( aabb_op1.pos );
+				aabb_op1_direction.normalize();
+
+				carve::geom::vector<3> aabb_op2_direction( aabb_op2.pos );
+				aabb_op2_direction.normalize();
+
+				double cos_angle = dot( aabb_op1_direction, aabb_op2_direction );
+				if( cos_angle > -0.5 )
+				{
+					// if close to -1, the bboxes are in opposite direction, not useful to translate
+					// if close to 1, the bboxes are somewhere in the same direction, good to translate
+
+					// check extent
+					if( aabb_op1.extent.length2() < 1000 && aabb_op2.extent.length2() < 1000 )
+					{
+						if( aabb_op1.pos.length2() > aabb_op2.pos.length2() )
+						{
+							// TODO: take biggest |x|, biggest |y|, biggest |z|
+							translate_avoid_large_numbers = carve::geom::VECTOR( aabb_op1.pos.x, aabb_op1.pos.y, aabb_op1.pos.z );
+						}
+						else
+						{
+							translate_avoid_large_numbers = carve::geom::VECTOR( aabb_op2.pos.x, aabb_op2.pos.y, aabb_op2.pos.z );
+						}
+					}
+				}
+			}
+		}
+
+
+		if( translate_avoid_large_numbers.length2() > 1000.0 )
+		{
+			carve::math::Matrix mat_trans = carve::math::Matrix::TRANS( -translate_avoid_large_numbers );
+			applyPosition( op1, mat_trans );
+			applyPosition( op2, mat_trans );
+		}
 
 		if( meshset1_ok && meshset2_ok )
 		{
@@ -1737,6 +1818,14 @@ bool SolidModelConverter::computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh:
 				std::cout << "csg.compute result nok ok." << std::endl;
 #endif
 			}
+		}
+
+		if( translate_avoid_large_numbers.length2() > 1000.0 )
+		{
+			carve::math::Matrix mat_trans = carve::math::Matrix::TRANS( translate_avoid_large_numbers );
+			applyPosition( result.get(), mat_trans );
+			applyPosition( op1, mat_trans );
+			applyPosition( op2, mat_trans );
 		}
 	}
 	catch( carve::exception& ce )

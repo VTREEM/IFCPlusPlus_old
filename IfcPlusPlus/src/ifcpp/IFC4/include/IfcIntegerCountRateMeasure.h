@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcIntegerCountRateMeasure = INTEGER;
-class IfcIntegerCountRateMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcIntegerCountRateMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcIntegerCountRateMeasure();

@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcAmountOfSubstanceMeasure = REAL;
-class IfcAmountOfSubstanceMeasure : public IfcMeasureValue, public IfcPPType
+class IfcAmountOfSubstanceMeasure : public IfcMeasureValue
 {
 public:
 	IfcAmountOfSubstanceMeasure();

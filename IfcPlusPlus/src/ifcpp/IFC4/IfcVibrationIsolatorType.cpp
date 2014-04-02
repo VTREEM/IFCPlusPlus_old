@@ -35,8 +35,8 @@
 #include "include/IfcVibrationIsolatorTypeEnum.h"
 
 // ENTITY IfcVibrationIsolatorType 
-IfcVibrationIsolatorType::IfcVibrationIsolatorType() { m_entity_enum = IFCVIBRATIONISOLATORTYPE; }
-IfcVibrationIsolatorType::IfcVibrationIsolatorType( int id ) { m_id = id; m_entity_enum = IFCVIBRATIONISOLATORTYPE; }
+IfcVibrationIsolatorType::IfcVibrationIsolatorType() {}
+IfcVibrationIsolatorType::IfcVibrationIsolatorType( int id ) { m_id = id; }
 IfcVibrationIsolatorType::~IfcVibrationIsolatorType() {}
 
 // method setEntity takes over all attributes from another instance of the class

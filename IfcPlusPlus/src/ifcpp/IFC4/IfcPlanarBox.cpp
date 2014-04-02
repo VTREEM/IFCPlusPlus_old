@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPlanarBox 
-IfcPlanarBox::IfcPlanarBox() { m_entity_enum = IFCPLANARBOX; }
-IfcPlanarBox::IfcPlanarBox( int id ) { m_id = id; m_entity_enum = IFCPLANARBOX; }
+IfcPlanarBox::IfcPlanarBox() {}
+IfcPlanarBox::IfcPlanarBox( int id ) { m_id = id; }
 IfcPlanarBox::~IfcPlanarBox() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -27,8 +27,8 @@
 #include "include/IfcShapeModel.h"
 
 // ENTITY IfcShapeModel 
-IfcShapeModel::IfcShapeModel() { m_entity_enum = IFCSHAPEMODEL; }
-IfcShapeModel::IfcShapeModel( int id ) { m_id = id; m_entity_enum = IFCSHAPEMODEL; }
+IfcShapeModel::IfcShapeModel() {}
+IfcShapeModel::IfcShapeModel( int id ) { m_id = id; }
 IfcShapeModel::~IfcShapeModel() {}
 
 // method setEntity takes over all attributes from another instance of the class

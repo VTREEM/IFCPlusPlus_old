@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStateEnum = ENUMERATION OF	(READWRITE	,READONLY	,LOCKED	,READWRITELOCKED	,READONLYLOCKED);
-class IfcStateEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcStateEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcStateEnumEnum

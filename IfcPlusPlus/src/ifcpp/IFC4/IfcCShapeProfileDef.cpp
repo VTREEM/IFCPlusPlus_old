@@ -27,8 +27,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcCShapeProfileDef 
-IfcCShapeProfileDef::IfcCShapeProfileDef() { m_entity_enum = IFCCSHAPEPROFILEDEF; }
-IfcCShapeProfileDef::IfcCShapeProfileDef( int id ) { m_id = id; m_entity_enum = IFCCSHAPEPROFILEDEF; }
+IfcCShapeProfileDef::IfcCShapeProfileDef() {}
+IfcCShapeProfileDef::IfcCShapeProfileDef( int id ) { m_id = id; }
 IfcCShapeProfileDef::~IfcCShapeProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

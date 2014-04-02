@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcLampTypeEnum = ENUMERATION OF	(COMPACTFLUORESCENT	,FLUORESCENT	,HALOGEN	,HIGHPRESSUREMERCURY	,HIGHPRESSURESODIUM	,LED	,METALHALIDE	,OLED	,TUNGSTENFILAMENT	,USERDEFINED	,NOTDEFINED);
-class IfcLampTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcLampTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcLampTypeEnumEnum

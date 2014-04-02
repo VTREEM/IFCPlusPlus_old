@@ -24,8 +24,8 @@
 #include "include/IfcShapeAspect.h"
 
 // ENTITY IfcRepresentationMap 
-IfcRepresentationMap::IfcRepresentationMap() { m_entity_enum = IFCREPRESENTATIONMAP; }
-IfcRepresentationMap::IfcRepresentationMap( int id ) { m_id = id; m_entity_enum = IFCREPRESENTATIONMAP; }
+IfcRepresentationMap::IfcRepresentationMap() {}
+IfcRepresentationMap::IfcRepresentationMap( int id ) { m_id = id; }
 IfcRepresentationMap::~IfcRepresentationMap() {}
 
 // method setEntity takes over all attributes from another instance of the class

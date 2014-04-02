@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcOpeningElementTypeEnum = ENUMERATION OF	(OPENING	,RECESS	,USERDEFINED	,NOTDEFINED);
-class IfcOpeningElementTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcOpeningElementTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcOpeningElementTypeEnumEnum

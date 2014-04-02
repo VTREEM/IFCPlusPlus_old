@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSpaceTypeEnum = ENUMERATION OF	(SPACE	,PARKING	,GFA	,INTERNAL	,EXTERNAL	,USERDEFINED	,NOTDEFINED);
-class IfcSpaceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSpaceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSpaceTypeEnumEnum

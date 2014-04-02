@@ -40,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralCurveAction 
-IfcStructuralCurveAction::IfcStructuralCurveAction() { m_entity_enum = IFCSTRUCTURALCURVEACTION; }
-IfcStructuralCurveAction::IfcStructuralCurveAction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALCURVEACTION; }
+IfcStructuralCurveAction::IfcStructuralCurveAction() {}
+IfcStructuralCurveAction::IfcStructuralCurveAction( int id ) { m_id = id; }
 IfcStructuralCurveAction::~IfcStructuralCurveAction() {}
 
 // method setEntity takes over all attributes from another instance of the class

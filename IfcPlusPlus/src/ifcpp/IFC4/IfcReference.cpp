@@ -22,8 +22,8 @@
 #include "include/IfcReference.h"
 
 // ENTITY IfcReference 
-IfcReference::IfcReference() { m_entity_enum = IFCREFERENCE; }
-IfcReference::IfcReference( int id ) { m_id = id; m_entity_enum = IFCREFERENCE; }
+IfcReference::IfcReference() {}
+IfcReference::IfcReference( int id ) { m_id = id; }
 IfcReference::~IfcReference() {}
 
 // method setEntity takes over all attributes from another instance of the class

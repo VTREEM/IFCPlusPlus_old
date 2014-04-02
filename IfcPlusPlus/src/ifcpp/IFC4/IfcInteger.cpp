@@ -36,7 +36,7 @@ shared_ptr<IfcInteger> IfcInteger::createObjectFromStepData( const std::string& 
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcInteger>(); }
-	shared_ptr<IfcInteger> type_object( new IfcInteger() );
+	auto type_object = std::make_shared<IfcInteger>();
 	//supertype as attribute: int m_value
 	type_object->m_value = atoi( arg.c_str() );
 	return type_object;

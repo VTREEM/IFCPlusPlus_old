@@ -22,8 +22,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcFillAreaStyle 
-IfcFillAreaStyle::IfcFillAreaStyle() { m_entity_enum = IFCFILLAREASTYLE; }
-IfcFillAreaStyle::IfcFillAreaStyle( int id ) { m_id = id; m_entity_enum = IFCFILLAREASTYLE; }
+IfcFillAreaStyle::IfcFillAreaStyle() {}
+IfcFillAreaStyle::IfcFillAreaStyle( int id ) { m_id = id; }
 IfcFillAreaStyle::~IfcFillAreaStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

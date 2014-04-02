@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcOccupantTypeEnum = ENUMERATION OF	(ASSIGNEE	,ASSIGNOR	,LESSEE	,LESSOR	,LETTINGAGENT	,OWNER	,TENANT	,USERDEFINED	,NOTDEFINED);
-class IfcOccupantTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcOccupantTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcOccupantTypeEnumEnum

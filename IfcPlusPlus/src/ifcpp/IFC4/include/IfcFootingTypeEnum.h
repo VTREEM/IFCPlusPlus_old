@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFootingTypeEnum = ENUMERATION OF	(CAISSON_FOUNDATION	,FOOTING_BEAM	,PAD_FOOTING	,PILE_CAP	,STRIP_FOOTING	,USERDEFINED	,NOTDEFINED);
-class IfcFootingTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFootingTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFootingTypeEnumEnum

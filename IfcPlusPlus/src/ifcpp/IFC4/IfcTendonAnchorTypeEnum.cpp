@@ -52,7 +52,7 @@ shared_ptr<IfcTendonAnchorTypeEnum> IfcTendonAnchorTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTendonAnchorTypeEnum>(); }
-	shared_ptr<IfcTendonAnchorTypeEnum> type_object( new IfcTendonAnchorTypeEnum() );
+	auto type_object = std::make_shared<IfcTendonAnchorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".COUPLER." ) == 0 )
 	{
 		type_object->m_enum = IfcTendonAnchorTypeEnum::ENUM_COUPLER;

@@ -23,8 +23,8 @@
 #include "include/IfcTableRow.h"
 
 // ENTITY IfcTable 
-IfcTable::IfcTable() { m_entity_enum = IFCTABLE; }
-IfcTable::IfcTable( int id ) { m_id = id; m_entity_enum = IFCTABLE; }
+IfcTable::IfcTable() {}
+IfcTable::IfcTable( int id ) { m_id = id; }
 IfcTable::~IfcTable() {}
 
 // method setEntity takes over all attributes from another instance of the class

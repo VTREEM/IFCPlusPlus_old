@@ -373,7 +373,7 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 
 	clock_t time_diff = clock() - millisecs;
 	int num_entities = m_system->getIfcModel()->getMapIfcObjects().size();
-	slotTxtOut( tr("File loaded: ") + QString::number(num_entities) + " entities in " + QString::number( int(time_diff*0.1)*0.01 ) + " sec."  );
+	slotTxtOut( tr("File loaded: ") + QString::number(num_entities) + " entities in " + QString::number( round(time_diff*0.1)*0.01 ) + " sec."  );
 
 	m_system->notifyModelLoadingDone();
 

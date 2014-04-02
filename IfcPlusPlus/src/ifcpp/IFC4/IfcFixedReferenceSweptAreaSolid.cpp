@@ -27,8 +27,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcFixedReferenceSweptAreaSolid 
-IfcFixedReferenceSweptAreaSolid::IfcFixedReferenceSweptAreaSolid() { m_entity_enum = IFCFIXEDREFERENCESWEPTAREASOLID; }
-IfcFixedReferenceSweptAreaSolid::IfcFixedReferenceSweptAreaSolid( int id ) { m_id = id; m_entity_enum = IFCFIXEDREFERENCESWEPTAREASOLID; }
+IfcFixedReferenceSweptAreaSolid::IfcFixedReferenceSweptAreaSolid() {}
+IfcFixedReferenceSweptAreaSolid::IfcFixedReferenceSweptAreaSolid( int id ) { m_id = id; }
 IfcFixedReferenceSweptAreaSolid::~IfcFixedReferenceSweptAreaSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBoundingBox 
-IfcBoundingBox::IfcBoundingBox() { m_entity_enum = IFCBOUNDINGBOX; }
-IfcBoundingBox::IfcBoundingBox( int id ) { m_id = id; m_entity_enum = IFCBOUNDINGBOX; }
+IfcBoundingBox::IfcBoundingBox() {}
+IfcBoundingBox::IfcBoundingBox( int id ) { m_id = id; }
 IfcBoundingBox::~IfcBoundingBox() {}
 
 // method setEntity takes over all attributes from another instance of the class

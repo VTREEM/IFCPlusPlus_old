@@ -32,8 +32,8 @@
 #include "include/IfcUnitAssignment.h"
 
 // ENTITY IfcContext 
-IfcContext::IfcContext() { m_entity_enum = IFCCONTEXT; }
-IfcContext::IfcContext( int id ) { m_id = id; m_entity_enum = IFCCONTEXT; }
+IfcContext::IfcContext() {}
+IfcContext::IfcContext( int id ) { m_id = id; }
 IfcContext::~IfcContext() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -40,7 +40,7 @@ shared_ptr<IfcBurnerTypeEnum> IfcBurnerTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBurnerTypeEnum>(); }
-	shared_ptr<IfcBurnerTypeEnum> type_object( new IfcBurnerTypeEnum() );
+	auto type_object = std::make_shared<IfcBurnerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".USERDEFINED." ) == 0 )
 	{
 		type_object->m_enum = IfcBurnerTypeEnum::ENUM_USERDEFINED;

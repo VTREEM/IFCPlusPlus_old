@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPermeableCoveringOperationEnum = ENUMERATION OF	(GRILL	,LOUVER	,SCREEN	,USERDEFINED	,NOTDEFINED);
-class IfcPermeableCoveringOperationEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPermeableCoveringOperationEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPermeableCoveringOperationEnumEnum

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcChimneyTypeEnum = ENUMERATION OF	(USERDEFINED	,NOTDEFINED);
-class IfcChimneyTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcChimneyTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcChimneyTypeEnumEnum

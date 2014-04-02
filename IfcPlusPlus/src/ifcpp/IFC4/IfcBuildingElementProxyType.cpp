@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBuildingElementProxyType 
-IfcBuildingElementProxyType::IfcBuildingElementProxyType() { m_entity_enum = IFCBUILDINGELEMENTPROXYTYPE; }
-IfcBuildingElementProxyType::IfcBuildingElementProxyType( int id ) { m_id = id; m_entity_enum = IFCBUILDINGELEMENTPROXYTYPE; }
+IfcBuildingElementProxyType::IfcBuildingElementProxyType() {}
+IfcBuildingElementProxyType::IfcBuildingElementProxyType( int id ) { m_id = id; }
 IfcBuildingElementProxyType::~IfcBuildingElementProxyType() {}
 
 // method setEntity takes over all attributes from another instance of the class

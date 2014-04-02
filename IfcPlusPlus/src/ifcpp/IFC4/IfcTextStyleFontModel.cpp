@@ -26,8 +26,8 @@
 #include "include/IfcTextStyleFontModel.h"
 
 // ENTITY IfcTextStyleFontModel 
-IfcTextStyleFontModel::IfcTextStyleFontModel() { m_entity_enum = IFCTEXTSTYLEFONTMODEL; }
-IfcTextStyleFontModel::IfcTextStyleFontModel( int id ) { m_id = id; m_entity_enum = IFCTEXTSTYLEFONTMODEL; }
+IfcTextStyleFontModel::IfcTextStyleFontModel() {}
+IfcTextStyleFontModel::IfcTextStyleFontModel( int id ) { m_id = id; }
 IfcTextStyleFontModel::~IfcTextStyleFontModel() {}
 
 // method setEntity takes over all attributes from another instance of the class

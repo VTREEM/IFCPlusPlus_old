@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProjectionElementTypeEnum = ENUMERATION OF	(USERDEFINED	,NOTDEFINED);
-class IfcProjectionElementTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcProjectionElementTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcProjectionElementTypeEnumEnum

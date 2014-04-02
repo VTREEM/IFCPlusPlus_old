@@ -35,6 +35,7 @@ public:
 	//std::vector<shared_ptr<carve::mesh::MeshSet<3> > >	meshsets_open;
 	std::vector<osg::ref_ptr<osg::StateSet> >				statesets;
 	void createMeshSetsFromClosedPolyhedrons();
+	void applyPosition( carve::math::Matrix& mat );
 };
 
 struct PlacementData
@@ -48,6 +49,8 @@ class ShapeInputData
 public:
 	ShapeInputData() { added_to_storey = false; }
 	~ShapeInputData() {}
+
+	void addInputData( shared_ptr<ShapeInputData>& other );
 
 	shared_ptr<IfcProduct> ifc_product;
 	shared_ptr<IfcRepresentation> representation;

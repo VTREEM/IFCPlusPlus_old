@@ -24,8 +24,8 @@
 #include "include/IfcSweptSurface.h"
 
 // ENTITY IfcSweptSurface 
-IfcSweptSurface::IfcSweptSurface() { m_entity_enum = IFCSWEPTSURFACE; }
-IfcSweptSurface::IfcSweptSurface( int id ) { m_id = id; m_entity_enum = IFCSWEPTSURFACE; }
+IfcSweptSurface::IfcSweptSurface() {}
+IfcSweptSurface::IfcSweptSurface( int id ) { m_id = id; }
 IfcSweptSurface::~IfcSweptSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -36,7 +36,7 @@ shared_ptr<IfcSpecularExponent> IfcSpecularExponent::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSpecularExponent>(); }
-	shared_ptr<IfcSpecularExponent> type_object( new IfcSpecularExponent() );
+	auto type_object = std::make_shared<IfcSpecularExponent>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcRampFlightTypeEnum = ENUMERATION OF	(STRAIGHT	,SPIRAL	,USERDEFINED	,NOTDEFINED);
-class IfcRampFlightTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcRampFlightTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcRampFlightTypeEnumEnum

@@ -36,8 +36,8 @@
 #include "include/IfcWindowStyleOperationEnum.h"
 
 // ENTITY IfcWindowStyle 
-IfcWindowStyle::IfcWindowStyle() { m_entity_enum = IFCWINDOWSTYLE; }
-IfcWindowStyle::IfcWindowStyle( int id ) { m_id = id; m_entity_enum = IFCWINDOWSTYLE; }
+IfcWindowStyle::IfcWindowStyle() {}
+IfcWindowStyle::IfcWindowStyle( int id ) { m_id = id; }
 IfcWindowStyle::~IfcWindowStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProjectionElement 
-IfcProjectionElement::IfcProjectionElement() { m_entity_enum = IFCPROJECTIONELEMENT; }
-IfcProjectionElement::IfcProjectionElement( int id ) { m_id = id; m_entity_enum = IFCPROJECTIONELEMENT; }
+IfcProjectionElement::IfcProjectionElement() {}
+IfcProjectionElement::IfcProjectionElement( int id ) { m_id = id; }
 IfcProjectionElement::~IfcProjectionElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

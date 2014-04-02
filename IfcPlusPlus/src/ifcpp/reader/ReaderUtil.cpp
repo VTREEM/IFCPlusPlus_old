@@ -52,7 +52,7 @@ static wchar_t Hex4Wchar(unsigned char h1, unsigned char h2, unsigned char h3, u
 }
 
 
-shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
+shared_ptr<IfcPPObject> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
 
 void checkOpeningClosingParenthesis( const char* ch_check )
@@ -976,10 +976,10 @@ void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& re
 	IfcPPTypeEnum type_enum = findTypeEnumForString( keyword );
 	if( type_enum != IfcPPTypeEnum::IFC_TYPE_UNDEFINED )
 	{
-		shared_ptr<IfcPPType> type_instance = createIfcPPType( type_enum, inline_arg, map_entities );
+		shared_ptr<IfcPPObject> type_instance = createIfcPPType( type_enum, inline_arg, map_entities );
 		if( type_instance )
 		{
-			type_instance->m_type_enum = type_enum;
+			//type_instance->m_type_enum = type_enum;
 			result = type_instance;
 			return;
 		}

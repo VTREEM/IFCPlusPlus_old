@@ -24,8 +24,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcExternallyDefinedSurfaceStyle 
-IfcExternallyDefinedSurfaceStyle::IfcExternallyDefinedSurfaceStyle() { m_entity_enum = IFCEXTERNALLYDEFINEDSURFACESTYLE; }
-IfcExternallyDefinedSurfaceStyle::IfcExternallyDefinedSurfaceStyle( int id ) { m_id = id; m_entity_enum = IFCEXTERNALLYDEFINEDSURFACESTYLE; }
+IfcExternallyDefinedSurfaceStyle::IfcExternallyDefinedSurfaceStyle() {}
+IfcExternallyDefinedSurfaceStyle::IfcExternallyDefinedSurfaceStyle( int id ) { m_id = id; }
 IfcExternallyDefinedSurfaceStyle::~IfcExternallyDefinedSurfaceStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

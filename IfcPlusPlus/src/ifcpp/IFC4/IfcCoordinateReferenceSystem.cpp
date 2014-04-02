@@ -23,8 +23,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCoordinateReferenceSystem 
-IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem() { m_entity_enum = IFCCOORDINATEREFERENCESYSTEM; }
-IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem( int id ) { m_id = id; m_entity_enum = IFCCOORDINATEREFERENCESYSTEM; }
+IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem() {}
+IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem( int id ) { m_id = id; }
 IfcCoordinateReferenceSystem::~IfcCoordinateReferenceSystem() {}
 
 // method setEntity takes over all attributes from another instance of the class

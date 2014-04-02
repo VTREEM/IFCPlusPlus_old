@@ -28,8 +28,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcClassificationReference 
-IfcClassificationReference::IfcClassificationReference() { m_entity_enum = IFCCLASSIFICATIONREFERENCE; }
-IfcClassificationReference::IfcClassificationReference( int id ) { m_id = id; m_entity_enum = IFCCLASSIFICATIONREFERENCE; }
+IfcClassificationReference::IfcClassificationReference() {}
+IfcClassificationReference::IfcClassificationReference( int id ) { m_id = id; }
 IfcClassificationReference::~IfcClassificationReference() {}
 
 // method setEntity takes over all attributes from another instance of the class

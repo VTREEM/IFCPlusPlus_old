@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDistributionChamberElementTypeEnum = ENUMERATION OF	(FORMEDDUCT	,INSPECTIONCHAMBER	,INSPECTIONPIT	,MANHOLE	,METERCHAMBER	,SUMP	,TRENCH	,VALVECHAMBER	,USERDEFINED	,NOTDEFINED);
-class IfcDistributionChamberElementTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDistributionChamberElementTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDistributionChamberElementTypeEnumEnum

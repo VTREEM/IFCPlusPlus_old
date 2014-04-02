@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPlanarExtent 
-IfcPlanarExtent::IfcPlanarExtent() { m_entity_enum = IFCPLANAREXTENT; }
-IfcPlanarExtent::IfcPlanarExtent( int id ) { m_id = id; m_entity_enum = IFCPLANAREXTENT; }
+IfcPlanarExtent::IfcPlanarExtent() {}
+IfcPlanarExtent::IfcPlanarExtent( int id ) { m_id = id; }
 IfcPlanarExtent::~IfcPlanarExtent() {}
 
 // method setEntity takes over all attributes from another instance of the class

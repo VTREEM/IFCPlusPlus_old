@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPermit 
-IfcPermit::IfcPermit() { m_entity_enum = IFCPERMIT; }
-IfcPermit::IfcPermit( int id ) { m_id = id; m_entity_enum = IFCPERMIT; }
+IfcPermit::IfcPermit() {}
+IfcPermit::IfcPermit( int id ) { m_id = id; }
 IfcPermit::~IfcPermit() {}
 
 // method setEntity takes over all attributes from another instance of the class

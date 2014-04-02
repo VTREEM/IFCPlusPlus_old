@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcTank 
-IfcTank::IfcTank() { m_entity_enum = IFCTANK; }
-IfcTank::IfcTank( int id ) { m_id = id; m_entity_enum = IFCTANK; }
+IfcTank::IfcTank() {}
+IfcTank::IfcTank( int id ) { m_id = id; }
 IfcTank::~IfcTank() {}
 
 // method setEntity takes over all attributes from another instance of the class

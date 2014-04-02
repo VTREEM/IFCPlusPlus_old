@@ -24,8 +24,8 @@
 #include "include/IfcVertex.h"
 
 // ENTITY IfcEdgeCurve 
-IfcEdgeCurve::IfcEdgeCurve() { m_entity_enum = IFCEDGECURVE; }
-IfcEdgeCurve::IfcEdgeCurve( int id ) { m_id = id; m_entity_enum = IFCEDGECURVE; }
+IfcEdgeCurve::IfcEdgeCurve() {}
+IfcEdgeCurve::IfcEdgeCurve( int id ) { m_id = id; }
 IfcEdgeCurve::~IfcEdgeCurve() {}
 
 // method setEntity takes over all attributes from another instance of the class

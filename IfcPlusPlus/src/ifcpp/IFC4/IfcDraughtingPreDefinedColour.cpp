@@ -21,8 +21,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcDraughtingPreDefinedColour 
-IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour() { m_entity_enum = IFCDRAUGHTINGPREDEFINEDCOLOUR; }
-IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour( int id ) { m_id = id; m_entity_enum = IFCDRAUGHTINGPREDEFINEDCOLOUR; }
+IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour() {}
+IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour( int id ) { m_id = id; }
 IfcDraughtingPreDefinedColour::~IfcDraughtingPreDefinedColour() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralConnection 
-IfcStructuralConnection::IfcStructuralConnection() { m_entity_enum = IFCSTRUCTURALCONNECTION; }
-IfcStructuralConnection::IfcStructuralConnection( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALCONNECTION; }
+IfcStructuralConnection::IfcStructuralConnection() {}
+IfcStructuralConnection::IfcStructuralConnection( int id ) { m_id = id; }
 IfcStructuralConnection::~IfcStructuralConnection() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcQuantityLength 
-IfcQuantityLength::IfcQuantityLength() { m_entity_enum = IFCQUANTITYLENGTH; }
-IfcQuantityLength::IfcQuantityLength( int id ) { m_id = id; m_entity_enum = IFCQUANTITYLENGTH; }
+IfcQuantityLength::IfcQuantityLength() {}
+IfcQuantityLength::IfcQuantityLength( int id ) { m_id = id; }
 IfcQuantityLength::~IfcQuantityLength() {}
 
 // method setEntity takes over all attributes from another instance of the class

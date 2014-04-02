@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcRotationalMassMeasure = REAL;
-class IfcRotationalMassMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcRotationalMassMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcRotationalMassMeasure();

@@ -25,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelAggregates 
-IfcRelAggregates::IfcRelAggregates() { m_entity_enum = IFCRELAGGREGATES; }
-IfcRelAggregates::IfcRelAggregates( int id ) { m_id = id; m_entity_enum = IFCRELAGGREGATES; }
+IfcRelAggregates::IfcRelAggregates() {}
+IfcRelAggregates::IfcRelAggregates( int id ) { m_id = id; }
 IfcRelAggregates::~IfcRelAggregates() {}
 
 // method setEntity takes over all attributes from another instance of the class

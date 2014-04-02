@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFlowFittingType 
-IfcFlowFittingType::IfcFlowFittingType() { m_entity_enum = IFCFLOWFITTINGTYPE; }
-IfcFlowFittingType::IfcFlowFittingType( int id ) { m_id = id; m_entity_enum = IFCFLOWFITTINGTYPE; }
+IfcFlowFittingType::IfcFlowFittingType() {}
+IfcFlowFittingType::IfcFlowFittingType( int id ) { m_id = id; }
 IfcFlowFittingType::~IfcFlowFittingType() {}
 
 // method setEntity takes over all attributes from another instance of the class

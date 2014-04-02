@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcQuantityCount 
-IfcQuantityCount::IfcQuantityCount() { m_entity_enum = IFCQUANTITYCOUNT; }
-IfcQuantityCount::IfcQuantityCount( int id ) { m_id = id; m_entity_enum = IFCQUANTITYCOUNT; }
+IfcQuantityCount::IfcQuantityCount() {}
+IfcQuantityCount::IfcQuantityCount( int id ) { m_id = id; }
 IfcQuantityCount::~IfcQuantityCount() {}
 
 // method setEntity takes over all attributes from another instance of the class

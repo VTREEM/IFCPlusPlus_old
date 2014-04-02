@@ -24,8 +24,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcExternallyDefinedHatchStyle 
-IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle() { m_entity_enum = IFCEXTERNALLYDEFINEDHATCHSTYLE; }
-IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle( int id ) { m_id = id; m_entity_enum = IFCEXTERNALLYDEFINEDHATCHSTYLE; }
+IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle() {}
+IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle( int id ) { m_id = id; }
 IfcExternallyDefinedHatchStyle::~IfcExternallyDefinedHatchStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

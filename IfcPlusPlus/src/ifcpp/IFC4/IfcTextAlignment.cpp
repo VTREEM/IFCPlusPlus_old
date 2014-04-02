@@ -35,7 +35,7 @@ shared_ptr<IfcTextAlignment> IfcTextAlignment::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextAlignment>(); }
-	shared_ptr<IfcTextAlignment> type_object( new IfcTextAlignment() );
+	auto type_object = std::make_shared<IfcTextAlignment>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

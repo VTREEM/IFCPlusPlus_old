@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProcedureType 
-IfcProcedureType::IfcProcedureType() { m_entity_enum = IFCPROCEDURETYPE; }
-IfcProcedureType::IfcProcedureType( int id ) { m_id = id; m_entity_enum = IFCPROCEDURETYPE; }
+IfcProcedureType::IfcProcedureType() {}
+IfcProcedureType::IfcProcedureType( int id ) { m_id = id; }
 IfcProcedureType::~IfcProcedureType() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMoistureDiffusivityMeasure = REAL;
-class IfcMoistureDiffusivityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMoistureDiffusivityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcMoistureDiffusivityMeasure();

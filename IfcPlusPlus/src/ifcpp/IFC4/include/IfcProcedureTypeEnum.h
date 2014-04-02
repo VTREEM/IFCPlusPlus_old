@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProcedureTypeEnum = ENUMERATION OF	(ADVICE_CAUTION	,ADVICE_NOTE	,ADVICE_WARNING	,CALIBRATION	,DIAGNOSTIC	,SHUTDOWN	,STARTUP	,USERDEFINED	,NOTDEFINED);
-class IfcProcedureTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcProcedureTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcProcedureTypeEnumEnum

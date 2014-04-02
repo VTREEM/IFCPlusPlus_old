@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcQuantityWeight 
-IfcQuantityWeight::IfcQuantityWeight() { m_entity_enum = IFCQUANTITYWEIGHT; }
-IfcQuantityWeight::IfcQuantityWeight( int id ) { m_id = id; m_entity_enum = IFCQUANTITYWEIGHT; }
+IfcQuantityWeight::IfcQuantityWeight() {}
+IfcQuantityWeight::IfcQuantityWeight( int id ) { m_id = id; }
 IfcQuantityWeight::~IfcQuantityWeight() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBeamTypeEnum = ENUMERATION OF	(BEAM	,JOIST	,HOLLOWCORE	,LINTEL	,SPANDREL	,T_BEAM	,USERDEFINED	,NOTDEFINED);
-class IfcBeamTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcBeamTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcBeamTypeEnumEnum

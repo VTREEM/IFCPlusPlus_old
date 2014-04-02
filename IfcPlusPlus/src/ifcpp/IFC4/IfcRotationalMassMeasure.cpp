@@ -36,7 +36,7 @@ shared_ptr<IfcRotationalMassMeasure> IfcRotationalMassMeasure::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRotationalMassMeasure>(); }
-	shared_ptr<IfcRotationalMassMeasure> type_object( new IfcRotationalMassMeasure() );
+	auto type_object = std::make_shared<IfcRotationalMassMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

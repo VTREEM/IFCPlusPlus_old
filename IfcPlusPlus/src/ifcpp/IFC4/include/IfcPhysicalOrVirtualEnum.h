@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPhysicalOrVirtualEnum = ENUMERATION OF	(PHYSICAL	,VIRTUAL	,NOTDEFINED);
-class IfcPhysicalOrVirtualEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPhysicalOrVirtualEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPhysicalOrVirtualEnumEnum

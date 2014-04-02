@@ -36,7 +36,7 @@ shared_ptr<IfcMassPerLengthMeasure> IfcMassPerLengthMeasure::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMassPerLengthMeasure>(); }
-	shared_ptr<IfcMassPerLengthMeasure> type_object( new IfcMassPerLengthMeasure() );
+	auto type_object = std::make_shared<IfcMassPerLengthMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

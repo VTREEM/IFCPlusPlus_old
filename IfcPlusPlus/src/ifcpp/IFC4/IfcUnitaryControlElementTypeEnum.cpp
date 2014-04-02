@@ -72,7 +72,7 @@ shared_ptr<IfcUnitaryControlElementTypeEnum> IfcUnitaryControlElementTypeEnum::c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcUnitaryControlElementTypeEnum>(); }
-	shared_ptr<IfcUnitaryControlElementTypeEnum> type_object( new IfcUnitaryControlElementTypeEnum() );
+	auto type_object = std::make_shared<IfcUnitaryControlElementTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ALARMPANEL." ) == 0 )
 	{
 		type_object->m_enum = IfcUnitaryControlElementTypeEnum::ENUM_ALARMPANEL;

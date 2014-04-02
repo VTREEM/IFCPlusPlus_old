@@ -39,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralCurveConnection 
-IfcStructuralCurveConnection::IfcStructuralCurveConnection() { m_entity_enum = IFCSTRUCTURALCURVECONNECTION; }
-IfcStructuralCurveConnection::IfcStructuralCurveConnection( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALCURVECONNECTION; }
+IfcStructuralCurveConnection::IfcStructuralCurveConnection() {}
+IfcStructuralCurveConnection::IfcStructuralCurveConnection( int id ) { m_id = id; }
 IfcStructuralCurveConnection::~IfcStructuralCurveConnection() {}
 
 // method setEntity takes over all attributes from another instance of the class

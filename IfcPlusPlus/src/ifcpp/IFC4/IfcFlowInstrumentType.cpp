@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFlowInstrumentType 
-IfcFlowInstrumentType::IfcFlowInstrumentType() { m_entity_enum = IFCFLOWINSTRUMENTTYPE; }
-IfcFlowInstrumentType::IfcFlowInstrumentType( int id ) { m_id = id; m_entity_enum = IFCFLOWINSTRUMENTTYPE; }
+IfcFlowInstrumentType::IfcFlowInstrumentType() {}
+IfcFlowInstrumentType::IfcFlowInstrumentType( int id ) { m_id = id; }
 IfcFlowInstrumentType::~IfcFlowInstrumentType() {}
 
 // method setEntity takes over all attributes from another instance of the class

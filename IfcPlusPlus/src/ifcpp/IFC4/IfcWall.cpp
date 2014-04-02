@@ -47,8 +47,8 @@
 #include "include/IfcWallTypeEnum.h"
 
 // ENTITY IfcWall 
-IfcWall::IfcWall() { m_entity_enum = IFCWALL; }
-IfcWall::IfcWall( int id ) { m_id = id; m_entity_enum = IFCWALL; }
+IfcWall::IfcWall() {}
+IfcWall::IfcWall( int id ) { m_id = id; }
 IfcWall::~IfcWall() {}
 
 // method setEntity takes over all attributes from another instance of the class

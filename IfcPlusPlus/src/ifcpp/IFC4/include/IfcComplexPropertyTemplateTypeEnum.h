@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcComplexPropertyTemplateTypeEnum = ENUMERATION OF	(P_COMPLEX	,Q_COMPLEX);
-class IfcComplexPropertyTemplateTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcComplexPropertyTemplateTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcComplexPropertyTemplateTypeEnumEnum

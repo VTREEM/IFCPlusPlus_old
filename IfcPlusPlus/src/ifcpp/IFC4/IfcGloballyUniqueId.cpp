@@ -35,7 +35,7 @@ shared_ptr<IfcGloballyUniqueId> IfcGloballyUniqueId::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcGloballyUniqueId>(); }
-	shared_ptr<IfcGloballyUniqueId> type_object( new IfcGloballyUniqueId() );
+	auto type_object = std::make_shared<IfcGloballyUniqueId>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

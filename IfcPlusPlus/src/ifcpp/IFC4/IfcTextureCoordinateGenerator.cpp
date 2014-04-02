@@ -23,8 +23,8 @@
 #include "include/IfcTextureCoordinateGenerator.h"
 
 // ENTITY IfcTextureCoordinateGenerator 
-IfcTextureCoordinateGenerator::IfcTextureCoordinateGenerator() { m_entity_enum = IFCTEXTURECOORDINATEGENERATOR; }
-IfcTextureCoordinateGenerator::IfcTextureCoordinateGenerator( int id ) { m_id = id; m_entity_enum = IFCTEXTURECOORDINATEGENERATOR; }
+IfcTextureCoordinateGenerator::IfcTextureCoordinateGenerator() {}
+IfcTextureCoordinateGenerator::IfcTextureCoordinateGenerator( int id ) { m_id = id; }
 IfcTextureCoordinateGenerator::~IfcTextureCoordinateGenerator() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -24,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcResourceConstraintRelationship 
-IfcResourceConstraintRelationship::IfcResourceConstraintRelationship() { m_entity_enum = IFCRESOURCECONSTRAINTRELATIONSHIP; }
-IfcResourceConstraintRelationship::IfcResourceConstraintRelationship( int id ) { m_id = id; m_entity_enum = IFCRESOURCECONSTRAINTRELATIONSHIP; }
+IfcResourceConstraintRelationship::IfcResourceConstraintRelationship() {}
+IfcResourceConstraintRelationship::IfcResourceConstraintRelationship( int id ) { m_id = id; }
 IfcResourceConstraintRelationship::~IfcResourceConstraintRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

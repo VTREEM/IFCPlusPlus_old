@@ -22,8 +22,8 @@
 #include "include/IfcStructuralLoadPlanarForce.h"
 
 // ENTITY IfcStructuralLoadPlanarForce 
-IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce() { m_entity_enum = IFCSTRUCTURALLOADPLANARFORCE; }
-IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADPLANARFORCE; }
+IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce() {}
+IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce( int id ) { m_id = id; }
 IfcStructuralLoadPlanarForce::~IfcStructuralLoadPlanarForce() {}
 
 // method setEntity takes over all attributes from another instance of the class

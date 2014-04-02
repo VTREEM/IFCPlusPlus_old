@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcControllerTypeEnum = ENUMERATION OF	(FLOATING	,PROGRAMMABLE	,PROPORTIONAL	,MULTIPOSITION	,TWOPOSITION	,USERDEFINED	,NOTDEFINED);
-class IfcControllerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcControllerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcControllerTypeEnumEnum

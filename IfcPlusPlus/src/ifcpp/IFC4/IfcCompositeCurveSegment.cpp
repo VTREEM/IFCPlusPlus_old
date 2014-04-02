@@ -25,8 +25,8 @@
 #include "include/IfcTransitionCode.h"
 
 // ENTITY IfcCompositeCurveSegment 
-IfcCompositeCurveSegment::IfcCompositeCurveSegment() { m_entity_enum = IFCCOMPOSITECURVESEGMENT; }
-IfcCompositeCurveSegment::IfcCompositeCurveSegment( int id ) { m_id = id; m_entity_enum = IFCCOMPOSITECURVESEGMENT; }
+IfcCompositeCurveSegment::IfcCompositeCurveSegment() {}
+IfcCompositeCurveSegment::IfcCompositeCurveSegment( int id ) { m_id = id; }
 IfcCompositeCurveSegment::~IfcCompositeCurveSegment() {}
 
 // method setEntity takes over all attributes from another instance of the class

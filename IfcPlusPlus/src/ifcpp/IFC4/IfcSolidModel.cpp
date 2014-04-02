@@ -22,8 +22,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcSolidModel 
-IfcSolidModel::IfcSolidModel() { m_entity_enum = IFCSOLIDMODEL; }
-IfcSolidModel::IfcSolidModel( int id ) { m_id = id; m_entity_enum = IFCSOLIDMODEL; }
+IfcSolidModel::IfcSolidModel() {}
+IfcSolidModel::IfcSolidModel( int id ) { m_id = id; }
 IfcSolidModel::~IfcSolidModel() {}
 
 // method setEntity takes over all attributes from another instance of the class

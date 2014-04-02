@@ -38,7 +38,7 @@ shared_ptr<IfcRatioMeasure> IfcRatioMeasure::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRatioMeasure>(); }
-	shared_ptr<IfcRatioMeasure> type_object( new IfcRatioMeasure() );
+	auto type_object = std::make_shared<IfcRatioMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

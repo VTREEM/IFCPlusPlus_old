@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPileType 
-IfcPileType::IfcPileType() { m_entity_enum = IFCPILETYPE; }
-IfcPileType::IfcPileType( int id ) { m_id = id; m_entity_enum = IFCPILETYPE; }
+IfcPileType::IfcPileType() {}
+IfcPileType::IfcPileType( int id ) { m_id = id; }
 IfcPileType::~IfcPileType() {}
 
 // method setEntity takes over all attributes from another instance of the class

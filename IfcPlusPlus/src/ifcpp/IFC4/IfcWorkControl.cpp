@@ -37,8 +37,8 @@
 #include "include/IfcWorkControl.h"
 
 // ENTITY IfcWorkControl 
-IfcWorkControl::IfcWorkControl() { m_entity_enum = IFCWORKCONTROL; }
-IfcWorkControl::IfcWorkControl( int id ) { m_id = id; m_entity_enum = IFCWORKCONTROL; }
+IfcWorkControl::IfcWorkControl() {}
+IfcWorkControl::IfcWorkControl( int id ) { m_id = id; }
 IfcWorkControl::~IfcWorkControl() {}
 
 // method setEntity takes over all attributes from another instance of the class

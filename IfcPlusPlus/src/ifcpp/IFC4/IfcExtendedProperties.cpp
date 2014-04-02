@@ -24,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcExtendedProperties 
-IfcExtendedProperties::IfcExtendedProperties() { m_entity_enum = IFCEXTENDEDPROPERTIES; }
-IfcExtendedProperties::IfcExtendedProperties( int id ) { m_id = id; m_entity_enum = IFCEXTENDEDPROPERTIES; }
+IfcExtendedProperties::IfcExtendedProperties() {}
+IfcExtendedProperties::IfcExtendedProperties( int id ) { m_id = id; }
 IfcExtendedProperties::~IfcExtendedProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

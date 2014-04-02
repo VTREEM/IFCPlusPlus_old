@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMedicalDeviceType 
-IfcMedicalDeviceType::IfcMedicalDeviceType() { m_entity_enum = IFCMEDICALDEVICETYPE; }
-IfcMedicalDeviceType::IfcMedicalDeviceType( int id ) { m_id = id; m_entity_enum = IFCMEDICALDEVICETYPE; }
+IfcMedicalDeviceType::IfcMedicalDeviceType() {}
+IfcMedicalDeviceType::IfcMedicalDeviceType( int id ) { m_id = id; }
 IfcMedicalDeviceType::~IfcMedicalDeviceType() {}
 
 // method setEntity takes over all attributes from another instance of the class

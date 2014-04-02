@@ -33,8 +33,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcDoorLiningProperties 
-IfcDoorLiningProperties::IfcDoorLiningProperties() { m_entity_enum = IFCDOORLININGPROPERTIES; }
-IfcDoorLiningProperties::IfcDoorLiningProperties( int id ) { m_id = id; m_entity_enum = IFCDOORLININGPROPERTIES; }
+IfcDoorLiningProperties::IfcDoorLiningProperties() {}
+IfcDoorLiningProperties::IfcDoorLiningProperties( int id ) { m_id = id; }
 IfcDoorLiningProperties::~IfcDoorLiningProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

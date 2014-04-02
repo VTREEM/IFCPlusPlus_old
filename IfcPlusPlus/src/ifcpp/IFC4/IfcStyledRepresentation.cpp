@@ -26,8 +26,8 @@
 #include "include/IfcStyledRepresentation.h"
 
 // ENTITY IfcStyledRepresentation 
-IfcStyledRepresentation::IfcStyledRepresentation() { m_entity_enum = IFCSTYLEDREPRESENTATION; }
-IfcStyledRepresentation::IfcStyledRepresentation( int id ) { m_id = id; m_entity_enum = IFCSTYLEDREPRESENTATION; }
+IfcStyledRepresentation::IfcStyledRepresentation() {}
+IfcStyledRepresentation::IfcStyledRepresentation( int id ) { m_id = id; }
 IfcStyledRepresentation::~IfcStyledRepresentation() {}
 
 // method setEntity takes over all attributes from another instance of the class

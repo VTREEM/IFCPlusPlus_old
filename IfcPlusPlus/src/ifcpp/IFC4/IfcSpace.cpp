@@ -43,8 +43,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSpace 
-IfcSpace::IfcSpace() { m_entity_enum = IFCSPACE; }
-IfcSpace::IfcSpace( int id ) { m_id = id; m_entity_enum = IFCSPACE; }
+IfcSpace::IfcSpace() {}
+IfcSpace::IfcSpace( int id ) { m_id = id; }
 IfcSpace::~IfcSpace() {}
 
 // method setEntity takes over all attributes from another instance of the class

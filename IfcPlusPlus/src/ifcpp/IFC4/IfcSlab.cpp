@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSlab 
-IfcSlab::IfcSlab() { m_entity_enum = IFCSLAB; }
-IfcSlab::IfcSlab( int id ) { m_id = id; m_entity_enum = IFCSLAB; }
+IfcSlab::IfcSlab() {}
+IfcSlab::IfcSlab( int id ) { m_id = id; }
 IfcSlab::~IfcSlab() {}
 
 // method setEntity takes over all attributes from another instance of the class

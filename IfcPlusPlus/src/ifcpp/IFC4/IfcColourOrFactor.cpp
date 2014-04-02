@@ -66,7 +66,7 @@ shared_ptr<IfcColourOrFactor> IfcColourOrFactor::createObjectFromStepData( const
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcColourOrFactor::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcColourOrFactor::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcColourOrFactor>();

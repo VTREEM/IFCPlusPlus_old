@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAlarmTypeEnum = ENUMERATION OF	(BELL	,BREAKGLASSBUTTON	,LIGHT	,MANUALPULLBOX	,SIREN	,WHISTLE	,USERDEFINED	,NOTDEFINED);
-class IfcAlarmTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAlarmTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAlarmTypeEnumEnum

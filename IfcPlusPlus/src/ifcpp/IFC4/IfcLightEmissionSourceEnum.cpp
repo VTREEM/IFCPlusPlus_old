@@ -76,7 +76,7 @@ shared_ptr<IfcLightEmissionSourceEnum> IfcLightEmissionSourceEnum::createObjectF
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLightEmissionSourceEnum>(); }
-	shared_ptr<IfcLightEmissionSourceEnum> type_object( new IfcLightEmissionSourceEnum() );
+	auto type_object = std::make_shared<IfcLightEmissionSourceEnum>();
 	if( _stricmp( arg.c_str(), ".COMPACTFLUORESCENT." ) == 0 )
 	{
 		type_object->m_enum = IfcLightEmissionSourceEnum::ENUM_COMPACTFLUORESCENT;

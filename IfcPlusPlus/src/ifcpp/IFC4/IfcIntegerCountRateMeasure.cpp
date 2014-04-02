@@ -36,7 +36,7 @@ shared_ptr<IfcIntegerCountRateMeasure> IfcIntegerCountRateMeasure::createObjectF
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcIntegerCountRateMeasure>(); }
-	shared_ptr<IfcIntegerCountRateMeasure> type_object( new IfcIntegerCountRateMeasure() );
+	auto type_object = std::make_shared<IfcIntegerCountRateMeasure>();
 	//supertype as attribute: int m_value
 	type_object->m_value = atoi( arg.c_str() );
 	return type_object;

@@ -45,8 +45,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcReinforcingElement 
-IfcReinforcingElement::IfcReinforcingElement() { m_entity_enum = IFCREINFORCINGELEMENT; }
-IfcReinforcingElement::IfcReinforcingElement( int id ) { m_id = id; m_entity_enum = IFCREINFORCINGELEMENT; }
+IfcReinforcingElement::IfcReinforcingElement() {}
+IfcReinforcingElement::IfcReinforcingElement( int id ) { m_id = id; }
 IfcReinforcingElement::~IfcReinforcingElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

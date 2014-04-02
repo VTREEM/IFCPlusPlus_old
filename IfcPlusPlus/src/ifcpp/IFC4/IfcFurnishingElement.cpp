@@ -45,8 +45,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFurnishingElement 
-IfcFurnishingElement::IfcFurnishingElement() { m_entity_enum = IFCFURNISHINGELEMENT; }
-IfcFurnishingElement::IfcFurnishingElement( int id ) { m_id = id; m_entity_enum = IFCFURNISHINGELEMENT; }
+IfcFurnishingElement::IfcFurnishingElement() {}
+IfcFurnishingElement::IfcFurnishingElement( int id ) { m_id = id; }
 IfcFurnishingElement::~IfcFurnishingElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

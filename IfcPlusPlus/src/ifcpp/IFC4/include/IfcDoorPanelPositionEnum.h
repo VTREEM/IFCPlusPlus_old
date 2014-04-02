@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDoorPanelPositionEnum = ENUMERATION OF	(LEFT	,MIDDLE	,RIGHT	,NOTDEFINED);
-class IfcDoorPanelPositionEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDoorPanelPositionEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDoorPanelPositionEnumEnum

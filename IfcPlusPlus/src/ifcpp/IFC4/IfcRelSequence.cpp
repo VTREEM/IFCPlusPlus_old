@@ -27,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelSequence 
-IfcRelSequence::IfcRelSequence() { m_entity_enum = IFCRELSEQUENCE; }
-IfcRelSequence::IfcRelSequence( int id ) { m_id = id; m_entity_enum = IFCRELSEQUENCE; }
+IfcRelSequence::IfcRelSequence() {}
+IfcRelSequence::IfcRelSequence( int id ) { m_id = id; }
 IfcRelSequence::~IfcRelSequence() {}
 
 // method setEntity takes over all attributes from another instance of the class

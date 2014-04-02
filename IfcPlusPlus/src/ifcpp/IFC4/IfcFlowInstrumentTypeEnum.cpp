@@ -72,7 +72,7 @@ shared_ptr<IfcFlowInstrumentTypeEnum> IfcFlowInstrumentTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFlowInstrumentTypeEnum>(); }
-	shared_ptr<IfcFlowInstrumentTypeEnum> type_object( new IfcFlowInstrumentTypeEnum() );
+	auto type_object = std::make_shared<IfcFlowInstrumentTypeEnum>();
 	if( _stricmp( arg.c_str(), ".PRESSUREGAUGE." ) == 0 )
 	{
 		type_object->m_enum = IfcFlowInstrumentTypeEnum::ENUM_PRESSUREGAUGE;

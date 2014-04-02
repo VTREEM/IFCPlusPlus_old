@@ -24,8 +24,8 @@
 #include "include/IfcUnitEnum.h"
 
 // ENTITY IfcContextDependentUnit 
-IfcContextDependentUnit::IfcContextDependentUnit() { m_entity_enum = IFCCONTEXTDEPENDENTUNIT; }
-IfcContextDependentUnit::IfcContextDependentUnit( int id ) { m_id = id; m_entity_enum = IFCCONTEXTDEPENDENTUNIT; }
+IfcContextDependentUnit::IfcContextDependentUnit() {}
+IfcContextDependentUnit::IfcContextDependentUnit( int id ) { m_id = id; }
 IfcContextDependentUnit::~IfcContextDependentUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class

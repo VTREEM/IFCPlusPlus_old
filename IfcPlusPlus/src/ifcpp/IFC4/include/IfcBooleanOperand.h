@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBooleanOperand = SELECT	(IfcBooleanResult	,IfcCsgPrimitive3D	,IfcHalfSpaceSolid	,IfcSolidModel);
-class IfcBooleanOperand : public IfcPPAbstractSelect
+class IfcBooleanOperand : virtual public IfcPPObject
 {
 public:
 	IfcBooleanOperand();
 	~IfcBooleanOperand();
 	virtual const char* classname() const { return "IfcBooleanOperand"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcBooleanOperand> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

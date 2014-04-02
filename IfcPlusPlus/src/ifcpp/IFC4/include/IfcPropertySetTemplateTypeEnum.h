@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPropertySetTemplateTypeEnum = ENUMERATION OF	(PSET_TYPEDRIVENONLY	,PSET_TYPEDRIVENOVERRIDE	,PSET_OCCURRENCEDRIVEN	,PSET_PERFORMANCEDRIVEN	,QTO_TYPEDRIVENONLY	,QTO_TYPEDRIVENOVERRIDE	,QTO_OCCURRENCEDRIVEN	,NOTDEFINED);
-class IfcPropertySetTemplateTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPropertySetTemplateTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPropertySetTemplateTypeEnumEnum

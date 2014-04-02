@@ -25,8 +25,8 @@
 #include "include/IfcTextPath.h"
 
 // ENTITY IfcTextLiteral 
-IfcTextLiteral::IfcTextLiteral() { m_entity_enum = IFCTEXTLITERAL; }
-IfcTextLiteral::IfcTextLiteral( int id ) { m_id = id; m_entity_enum = IFCTEXTLITERAL; }
+IfcTextLiteral::IfcTextLiteral() {}
+IfcTextLiteral::IfcTextLiteral( int id ) { m_id = id; }
 IfcTextLiteral::~IfcTextLiteral() {}
 
 // method setEntity takes over all attributes from another instance of the class

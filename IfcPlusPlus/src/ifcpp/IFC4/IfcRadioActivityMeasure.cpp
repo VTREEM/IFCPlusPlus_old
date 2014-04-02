@@ -36,7 +36,7 @@ shared_ptr<IfcRadioActivityMeasure> IfcRadioActivityMeasure::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRadioActivityMeasure>(); }
-	shared_ptr<IfcRadioActivityMeasure> type_object( new IfcRadioActivityMeasure() );
+	auto type_object = std::make_shared<IfcRadioActivityMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

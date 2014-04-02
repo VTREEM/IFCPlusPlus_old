@@ -26,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcExtrudedAreaSolid 
-IfcExtrudedAreaSolid::IfcExtrudedAreaSolid() { m_entity_enum = IFCEXTRUDEDAREASOLID; }
-IfcExtrudedAreaSolid::IfcExtrudedAreaSolid( int id ) { m_id = id; m_entity_enum = IFCEXTRUDEDAREASOLID; }
+IfcExtrudedAreaSolid::IfcExtrudedAreaSolid() {}
+IfcExtrudedAreaSolid::IfcExtrudedAreaSolid( int id ) { m_id = id; }
 IfcExtrudedAreaSolid::~IfcExtrudedAreaSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

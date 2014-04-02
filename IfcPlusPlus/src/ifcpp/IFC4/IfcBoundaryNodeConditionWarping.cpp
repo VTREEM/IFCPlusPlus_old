@@ -24,8 +24,8 @@
 #include "include/IfcWarpingStiffnessSelect.h"
 
 // ENTITY IfcBoundaryNodeConditionWarping 
-IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping() { m_entity_enum = IFCBOUNDARYNODECONDITIONWARPING; }
-IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYNODECONDITIONWARPING; }
+IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping() {}
+IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping( int id ) { m_id = id; }
 IfcBoundaryNodeConditionWarping::~IfcBoundaryNodeConditionWarping() {}
 
 // method setEntity takes over all attributes from another instance of the class

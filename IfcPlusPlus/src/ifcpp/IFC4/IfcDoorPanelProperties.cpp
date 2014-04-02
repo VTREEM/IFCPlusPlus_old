@@ -34,8 +34,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcDoorPanelProperties 
-IfcDoorPanelProperties::IfcDoorPanelProperties() { m_entity_enum = IFCDOORPANELPROPERTIES; }
-IfcDoorPanelProperties::IfcDoorPanelProperties( int id ) { m_id = id; m_entity_enum = IFCDOORPANELPROPERTIES; }
+IfcDoorPanelProperties::IfcDoorPanelProperties() {}
+IfcDoorPanelProperties::IfcDoorPanelProperties( int id ) { m_id = id; }
 IfcDoorPanelProperties::~IfcDoorPanelProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -22,8 +22,8 @@
 #include "include/IfcThermodynamicTemperatureMeasure.h"
 
 // ENTITY IfcStructuralLoadTemperature 
-IfcStructuralLoadTemperature::IfcStructuralLoadTemperature() { m_entity_enum = IFCSTRUCTURALLOADTEMPERATURE; }
-IfcStructuralLoadTemperature::IfcStructuralLoadTemperature( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADTEMPERATURE; }
+IfcStructuralLoadTemperature::IfcStructuralLoadTemperature() {}
+IfcStructuralLoadTemperature::IfcStructuralLoadTemperature( int id ) { m_id = id; }
 IfcStructuralLoadTemperature::~IfcStructuralLoadTemperature() {}
 
 // method setEntity takes over all attributes from another instance of the class

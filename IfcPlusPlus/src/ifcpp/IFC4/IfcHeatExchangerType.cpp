@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcHeatExchangerType 
-IfcHeatExchangerType::IfcHeatExchangerType() { m_entity_enum = IFCHEATEXCHANGERTYPE; }
-IfcHeatExchangerType::IfcHeatExchangerType( int id ) { m_id = id; m_entity_enum = IFCHEATEXCHANGERTYPE; }
+IfcHeatExchangerType::IfcHeatExchangerType() {}
+IfcHeatExchangerType::IfcHeatExchangerType( int id ) { m_id = id; }
 IfcHeatExchangerType::~IfcHeatExchangerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

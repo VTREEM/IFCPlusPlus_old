@@ -37,7 +37,7 @@ shared_ptr<IfcWarpingMomentMeasure> IfcWarpingMomentMeasure::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWarpingMomentMeasure>(); }
-	shared_ptr<IfcWarpingMomentMeasure> type_object( new IfcWarpingMomentMeasure() );
+	auto type_object = std::make_shared<IfcWarpingMomentMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

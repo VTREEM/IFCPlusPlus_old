@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcPowerMeasure = REAL;
-class IfcPowerMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcPowerMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcPowerMeasure();

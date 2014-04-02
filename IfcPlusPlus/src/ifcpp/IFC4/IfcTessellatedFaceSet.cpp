@@ -26,8 +26,8 @@
 #include "include/IfcTessellatedFaceSet.h"
 
 // ENTITY IfcTessellatedFaceSet 
-IfcTessellatedFaceSet::IfcTessellatedFaceSet() { m_entity_enum = IFCTESSELLATEDFACESET; }
-IfcTessellatedFaceSet::IfcTessellatedFaceSet( int id ) { m_id = id; m_entity_enum = IFCTESSELLATEDFACESET; }
+IfcTessellatedFaceSet::IfcTessellatedFaceSet() {}
+IfcTessellatedFaceSet::IfcTessellatedFaceSet( int id ) { m_id = id; }
 IfcTessellatedFaceSet::~IfcTessellatedFaceSet() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -35,7 +35,7 @@ shared_ptr<IfcTextDecoration> IfcTextDecoration::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextDecoration>(); }
-	shared_ptr<IfcTextDecoration> type_object( new IfcTextDecoration() );
+	auto type_object = std::make_shared<IfcTextDecoration>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

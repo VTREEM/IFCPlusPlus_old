@@ -23,8 +23,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcHalfSpaceSolid 
-IfcHalfSpaceSolid::IfcHalfSpaceSolid() { m_entity_enum = IFCHALFSPACESOLID; }
-IfcHalfSpaceSolid::IfcHalfSpaceSolid( int id ) { m_id = id; m_entity_enum = IFCHALFSPACESOLID; }
+IfcHalfSpaceSolid::IfcHalfSpaceSolid() {}
+IfcHalfSpaceSolid::IfcHalfSpaceSolid( int id ) { m_id = id; }
 IfcHalfSpaceSolid::~IfcHalfSpaceSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

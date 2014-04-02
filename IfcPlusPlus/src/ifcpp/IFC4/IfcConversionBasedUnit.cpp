@@ -25,8 +25,8 @@
 #include "include/IfcUnitEnum.h"
 
 // ENTITY IfcConversionBasedUnit 
-IfcConversionBasedUnit::IfcConversionBasedUnit() { m_entity_enum = IFCCONVERSIONBASEDUNIT; }
-IfcConversionBasedUnit::IfcConversionBasedUnit( int id ) { m_id = id; m_entity_enum = IFCCONVERSIONBASEDUNIT; }
+IfcConversionBasedUnit::IfcConversionBasedUnit() {}
+IfcConversionBasedUnit::IfcConversionBasedUnit( int id ) { m_id = id; }
 IfcConversionBasedUnit::~IfcConversionBasedUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class

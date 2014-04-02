@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCompressorType 
-IfcCompressorType::IfcCompressorType() { m_entity_enum = IFCCOMPRESSORTYPE; }
-IfcCompressorType::IfcCompressorType( int id ) { m_id = id; m_entity_enum = IFCCOMPRESSORTYPE; }
+IfcCompressorType::IfcCompressorType() {}
+IfcCompressorType::IfcCompressorType( int id ) { m_id = id; }
 IfcCompressorType::~IfcCompressorType() {}
 
 // method setEntity takes over all attributes from another instance of the class

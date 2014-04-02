@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProtectiveDeviceTrippingUnitTypeEnum = ENUMERATION OF	(ELECTRONIC	,ELECTROMAGNETIC	,RESIDUALCURRENT	,THERMAL	,USERDEFINED	,NOTDEFINED);
-class IfcProtectiveDeviceTrippingUnitTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcProtectiveDeviceTrippingUnitTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcProtectiveDeviceTrippingUnitTypeEnumEnum

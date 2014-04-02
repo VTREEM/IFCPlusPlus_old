@@ -24,8 +24,8 @@
 #include "include/IfcSizeSelect.h"
 
 // ENTITY IfcCurveStyle 
-IfcCurveStyle::IfcCurveStyle() { m_entity_enum = IFCCURVESTYLE; }
-IfcCurveStyle::IfcCurveStyle( int id ) { m_id = id; m_entity_enum = IFCCURVESTYLE; }
+IfcCurveStyle::IfcCurveStyle() {}
+IfcCurveStyle::IfcCurveStyle( int id ) { m_id = id; }
 IfcCurveStyle::~IfcCurveStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

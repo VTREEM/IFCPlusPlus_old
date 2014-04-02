@@ -25,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcOffsetCurve3D 
-IfcOffsetCurve3D::IfcOffsetCurve3D() { m_entity_enum = IFCOFFSETCURVE3D; }
-IfcOffsetCurve3D::IfcOffsetCurve3D( int id ) { m_id = id; m_entity_enum = IFCOFFSETCURVE3D; }
+IfcOffsetCurve3D::IfcOffsetCurve3D() {}
+IfcOffsetCurve3D::IfcOffsetCurve3D( int id ) { m_id = id; }
 IfcOffsetCurve3D::~IfcOffsetCurve3D() {}
 
 // method setEntity takes over all attributes from another instance of the class

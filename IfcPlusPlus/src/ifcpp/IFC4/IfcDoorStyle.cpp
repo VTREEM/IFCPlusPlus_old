@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDoorStyle 
-IfcDoorStyle::IfcDoorStyle() { m_entity_enum = IFCDOORSTYLE; }
-IfcDoorStyle::IfcDoorStyle( int id ) { m_id = id; m_entity_enum = IFCDOORSTYLE; }
+IfcDoorStyle::IfcDoorStyle() {}
+IfcDoorStyle::IfcDoorStyle( int id ) { m_id = id; }
 IfcDoorStyle::~IfcDoorStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

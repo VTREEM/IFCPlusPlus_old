@@ -52,7 +52,7 @@ shared_ptr<IfcConstraintEnum> IfcConstraintEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcConstraintEnum>(); }
-	shared_ptr<IfcConstraintEnum> type_object( new IfcConstraintEnum() );
+	auto type_object = std::make_shared<IfcConstraintEnum>();
 	if( _stricmp( arg.c_str(), ".HARD." ) == 0 )
 	{
 		type_object->m_enum = IfcConstraintEnum::ENUM_HARD;

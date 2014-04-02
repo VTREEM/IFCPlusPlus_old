@@ -25,8 +25,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcImageTexture 
-IfcImageTexture::IfcImageTexture() { m_entity_enum = IFCIMAGETEXTURE; }
-IfcImageTexture::IfcImageTexture( int id ) { m_id = id; m_entity_enum = IFCIMAGETEXTURE; }
+IfcImageTexture::IfcImageTexture() {}
+IfcImageTexture::IfcImageTexture( int id ) { m_id = id; }
 IfcImageTexture::~IfcImageTexture() {}
 
 // method setEntity takes over all attributes from another instance of the class

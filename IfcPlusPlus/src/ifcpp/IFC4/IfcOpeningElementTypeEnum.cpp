@@ -48,7 +48,7 @@ shared_ptr<IfcOpeningElementTypeEnum> IfcOpeningElementTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcOpeningElementTypeEnum>(); }
-	shared_ptr<IfcOpeningElementTypeEnum> type_object( new IfcOpeningElementTypeEnum() );
+	auto type_object = std::make_shared<IfcOpeningElementTypeEnum>();
 	if( _stricmp( arg.c_str(), ".OPENING." ) == 0 )
 	{
 		type_object->m_enum = IfcOpeningElementTypeEnum::ENUM_OPENING;

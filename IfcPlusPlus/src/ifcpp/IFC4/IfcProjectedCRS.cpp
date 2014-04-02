@@ -24,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProjectedCRS 
-IfcProjectedCRS::IfcProjectedCRS() { m_entity_enum = IFCPROJECTEDCRS; }
-IfcProjectedCRS::IfcProjectedCRS( int id ) { m_id = id; m_entity_enum = IFCPROJECTEDCRS; }
+IfcProjectedCRS::IfcProjectedCRS() {}
+IfcProjectedCRS::IfcProjectedCRS( int id ) { m_id = id; }
 IfcProjectedCRS::~IfcProjectedCRS() {}
 
 // method setEntity takes over all attributes from another instance of the class

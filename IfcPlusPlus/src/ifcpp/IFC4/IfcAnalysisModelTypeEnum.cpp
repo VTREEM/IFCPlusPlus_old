@@ -52,7 +52,7 @@ shared_ptr<IfcAnalysisModelTypeEnum> IfcAnalysisModelTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAnalysisModelTypeEnum>(); }
-	shared_ptr<IfcAnalysisModelTypeEnum> type_object( new IfcAnalysisModelTypeEnum() );
+	auto type_object = std::make_shared<IfcAnalysisModelTypeEnum>();
 	if( _stricmp( arg.c_str(), ".IN_PLANE_LOADING_2D." ) == 0 )
 	{
 		type_object->m_enum = IfcAnalysisModelTypeEnum::ENUM_IN_PLANE_LOADING_2D;

@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPerformanceHistory 
-IfcPerformanceHistory::IfcPerformanceHistory() { m_entity_enum = IFCPERFORMANCEHISTORY; }
-IfcPerformanceHistory::IfcPerformanceHistory( int id ) { m_id = id; m_entity_enum = IFCPERFORMANCEHISTORY; }
+IfcPerformanceHistory::IfcPerformanceHistory() {}
+IfcPerformanceHistory::IfcPerformanceHistory( int id ) { m_id = id; }
 IfcPerformanceHistory::~IfcPerformanceHistory() {}
 
 // method setEntity takes over all attributes from another instance of the class

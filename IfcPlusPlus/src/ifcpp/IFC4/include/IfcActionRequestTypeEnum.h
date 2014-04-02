@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcActionRequestTypeEnum = ENUMERATION OF	(EMAIL	,FAX	,PHONE	,POST	,VERBAL	,USERDEFINED	,NOTDEFINED);
-class IfcActionRequestTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcActionRequestTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcActionRequestTypeEnumEnum

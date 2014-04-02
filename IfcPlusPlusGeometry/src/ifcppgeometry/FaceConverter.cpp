@@ -349,7 +349,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 
 				if( triangle_indexes.size() != 3 )
 				{
-					std::cout << "convertIfcFaceList: triangle_indexes.size() != 3" << std::endl;
+					std::cout << __FUNC__ << ": triangle_indexes.size() != 3" << std::endl;
 					continue;
 				}
 
@@ -427,7 +427,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 
 			if( path_loop.size() < 3 )
 			{
-				//std::cout << "FaceConverter::convertIfcFaceList: #" << face_id <<  "=IfcFace: path_loop.size() < 3" << std::endl;
+				//std::cout << __FUNC__ << ": #" << face_id <<  "=IfcFace: path_loop.size() < 3" << std::endl;
 				continue;
 			}
 
@@ -437,7 +437,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 
 		if( face_loops_2d.size() == 0 )
 		{
-			//std::cout << "FaceConverter::convertIfcFaceList: #" << face_id << "=IfcFace: face_loops_2d.size() == 0" << std::endl;
+			//std::cout << __FUNC__ << ": #" << face_id << "=IfcFace: face_loops_2d.size() == 0" << std::endl;
 			continue;
 		}
 
@@ -487,7 +487,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 		}
 		catch(...)
 		{
-			err << "convertIfcFaceList: #" << face_id << "=IfcFace: carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
+			err << __FUNC__ << ": #" << face_id << "=IfcFace: carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
 			continue;
 		}
 

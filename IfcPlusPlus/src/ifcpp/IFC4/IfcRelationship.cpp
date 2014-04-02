@@ -24,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelationship 
-IfcRelationship::IfcRelationship() { m_entity_enum = IFCRELATIONSHIP; }
-IfcRelationship::IfcRelationship( int id ) { m_id = id; m_entity_enum = IFCRELATIONSHIP; }
+IfcRelationship::IfcRelationship() {}
+IfcRelationship::IfcRelationship( int id ) { m_id = id; }
 IfcRelationship::~IfcRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

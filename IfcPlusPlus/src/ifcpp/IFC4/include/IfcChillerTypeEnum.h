@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcChillerTypeEnum = ENUMERATION OF	(AIRCOOLED	,WATERCOOLED	,HEATRECOVERY	,USERDEFINED	,NOTDEFINED);
-class IfcChillerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcChillerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcChillerTypeEnumEnum

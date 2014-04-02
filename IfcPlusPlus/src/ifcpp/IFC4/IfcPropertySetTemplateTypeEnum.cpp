@@ -64,7 +64,7 @@ shared_ptr<IfcPropertySetTemplateTypeEnum> IfcPropertySetTemplateTypeEnum::creat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPropertySetTemplateTypeEnum>(); }
-	shared_ptr<IfcPropertySetTemplateTypeEnum> type_object( new IfcPropertySetTemplateTypeEnum() );
+	auto type_object = std::make_shared<IfcPropertySetTemplateTypeEnum>();
 	if( _stricmp( arg.c_str(), ".PSET_TYPEDRIVENONLY." ) == 0 )
 	{
 		type_object->m_enum = IfcPropertySetTemplateTypeEnum::ENUM_PSET_TYPEDRIVENONLY;

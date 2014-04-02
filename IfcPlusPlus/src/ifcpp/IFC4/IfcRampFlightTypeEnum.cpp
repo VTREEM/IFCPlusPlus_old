@@ -48,7 +48,7 @@ shared_ptr<IfcRampFlightTypeEnum> IfcRampFlightTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRampFlightTypeEnum>(); }
-	shared_ptr<IfcRampFlightTypeEnum> type_object( new IfcRampFlightTypeEnum() );
+	auto type_object = std::make_shared<IfcRampFlightTypeEnum>();
 	if( _stricmp( arg.c_str(), ".STRAIGHT." ) == 0 )
 	{
 		type_object->m_enum = IfcRampFlightTypeEnum::ENUM_STRAIGHT;

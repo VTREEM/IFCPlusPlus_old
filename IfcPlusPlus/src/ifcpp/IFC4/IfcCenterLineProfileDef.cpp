@@ -26,8 +26,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcCenterLineProfileDef 
-IfcCenterLineProfileDef::IfcCenterLineProfileDef() { m_entity_enum = IFCCENTERLINEPROFILEDEF; }
-IfcCenterLineProfileDef::IfcCenterLineProfileDef( int id ) { m_id = id; m_entity_enum = IFCCENTERLINEPROFILEDEF; }
+IfcCenterLineProfileDef::IfcCenterLineProfileDef() {}
+IfcCenterLineProfileDef::IfcCenterLineProfileDef( int id ) { m_id = id; }
 IfcCenterLineProfileDef::~IfcCenterLineProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

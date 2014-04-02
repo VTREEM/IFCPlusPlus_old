@@ -37,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcTask 
-IfcTask::IfcTask() { m_entity_enum = IFCTASK; }
-IfcTask::IfcTask( int id ) { m_id = id; m_entity_enum = IFCTASK; }
+IfcTask::IfcTask() {}
+IfcTask::IfcTask( int id ) { m_id = id; }
 IfcTask::~IfcTask() {}
 
 // method setEntity takes over all attributes from another instance of the class

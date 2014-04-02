@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCircle 
-IfcCircle::IfcCircle() { m_entity_enum = IFCCIRCLE; }
-IfcCircle::IfcCircle( int id ) { m_id = id; m_entity_enum = IFCCIRCLE; }
+IfcCircle::IfcCircle() {}
+IfcCircle::IfcCircle( int id ) { m_id = id; }
 IfcCircle::~IfcCircle() {}
 
 // method setEntity takes over all attributes from another instance of the class

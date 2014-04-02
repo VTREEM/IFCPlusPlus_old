@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSensor 
-IfcSensor::IfcSensor() { m_entity_enum = IFCSENSOR; }
-IfcSensor::IfcSensor( int id ) { m_id = id; m_entity_enum = IFCSENSOR; }
+IfcSensor::IfcSensor() {}
+IfcSensor::IfcSensor( int id ) { m_id = id; }
 IfcSensor::~IfcSensor() {}
 
 // method setEntity takes over all attributes from another instance of the class

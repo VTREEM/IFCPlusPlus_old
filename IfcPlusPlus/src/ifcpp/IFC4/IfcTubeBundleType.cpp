@@ -35,8 +35,8 @@
 #include "include/IfcTubeBundleTypeEnum.h"
 
 // ENTITY IfcTubeBundleType 
-IfcTubeBundleType::IfcTubeBundleType() { m_entity_enum = IFCTUBEBUNDLETYPE; }
-IfcTubeBundleType::IfcTubeBundleType( int id ) { m_id = id; m_entity_enum = IFCTUBEBUNDLETYPE; }
+IfcTubeBundleType::IfcTubeBundleType() {}
+IfcTubeBundleType::IfcTubeBundleType( int id ) { m_id = id; }
 IfcTubeBundleType::~IfcTubeBundleType() {}
 
 // method setEntity takes over all attributes from another instance of the class

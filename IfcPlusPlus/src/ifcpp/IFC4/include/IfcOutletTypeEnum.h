@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcOutletTypeEnum = ENUMERATION OF	(AUDIOVISUALOUTLET	,COMMUNICATIONSOUTLET	,POWEROUTLET	,DATAOUTLET	,TELEPHONEOUTLET	,USERDEFINED	,NOTDEFINED);
-class IfcOutletTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcOutletTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcOutletTypeEnumEnum

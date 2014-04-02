@@ -175,7 +175,7 @@ shared_ptr<IfcMetricValueSelect> IfcMetricValueSelect::createObjectFromStepData(
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcMetricValueSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcMetricValueSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcMetricValueSelect>();

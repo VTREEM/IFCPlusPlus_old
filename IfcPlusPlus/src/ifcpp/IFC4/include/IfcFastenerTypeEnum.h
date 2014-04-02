@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFastenerTypeEnum = ENUMERATION OF	(GLUE	,MORTAR	,WELD	,USERDEFINED	,NOTDEFINED);
-class IfcFastenerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFastenerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFastenerTypeEnumEnum

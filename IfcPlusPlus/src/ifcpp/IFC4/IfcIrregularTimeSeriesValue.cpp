@@ -22,8 +22,8 @@
 #include "include/IfcValue.h"
 
 // ENTITY IfcIrregularTimeSeriesValue 
-IfcIrregularTimeSeriesValue::IfcIrregularTimeSeriesValue() { m_entity_enum = IFCIRREGULARTIMESERIESVALUE; }
-IfcIrregularTimeSeriesValue::IfcIrregularTimeSeriesValue( int id ) { m_id = id; m_entity_enum = IFCIRREGULARTIMESERIESVALUE; }
+IfcIrregularTimeSeriesValue::IfcIrregularTimeSeriesValue() {}
+IfcIrregularTimeSeriesValue::IfcIrregularTimeSeriesValue( int id ) { m_id = id; }
 IfcIrregularTimeSeriesValue::~IfcIrregularTimeSeriesValue() {}
 
 // method setEntity takes over all attributes from another instance of the class

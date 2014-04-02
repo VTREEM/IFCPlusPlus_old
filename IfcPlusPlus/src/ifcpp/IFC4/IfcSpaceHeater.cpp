@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSpaceHeater 
-IfcSpaceHeater::IfcSpaceHeater() { m_entity_enum = IFCSPACEHEATER; }
-IfcSpaceHeater::IfcSpaceHeater( int id ) { m_id = id; m_entity_enum = IFCSPACEHEATER; }
+IfcSpaceHeater::IfcSpaceHeater() {}
+IfcSpaceHeater::IfcSpaceHeater( int id ) { m_id = id; }
 IfcSpaceHeater::~IfcSpaceHeater() {}
 
 // method setEntity takes over all attributes from another instance of the class

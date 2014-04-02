@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStructuralActivityAssignmentSelect = SELECT	(IfcElement	,IfcStructuralItem);
-class IfcStructuralActivityAssignmentSelect : public IfcPPAbstractSelect
+class IfcStructuralActivityAssignmentSelect : virtual public IfcPPObject
 {
 public:
 	IfcStructuralActivityAssignmentSelect();
 	~IfcStructuralActivityAssignmentSelect();
 	virtual const char* classname() const { return "IfcStructuralActivityAssignmentSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcStructuralActivityAssignmentSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

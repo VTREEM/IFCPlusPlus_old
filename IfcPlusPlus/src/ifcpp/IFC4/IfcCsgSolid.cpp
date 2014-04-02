@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCsgSolid 
-IfcCsgSolid::IfcCsgSolid() { m_entity_enum = IFCCSGSOLID; }
-IfcCsgSolid::IfcCsgSolid( int id ) { m_id = id; m_entity_enum = IFCCSGSOLID; }
+IfcCsgSolid::IfcCsgSolid() {}
+IfcCsgSolid::IfcCsgSolid( int id ) { m_id = id; }
 IfcCsgSolid::~IfcCsgSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

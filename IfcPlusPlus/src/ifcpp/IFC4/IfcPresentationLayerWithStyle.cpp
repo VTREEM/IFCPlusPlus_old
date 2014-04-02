@@ -25,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPresentationLayerWithStyle 
-IfcPresentationLayerWithStyle::IfcPresentationLayerWithStyle() { m_entity_enum = IFCPRESENTATIONLAYERWITHSTYLE; }
-IfcPresentationLayerWithStyle::IfcPresentationLayerWithStyle( int id ) { m_id = id; m_entity_enum = IFCPRESENTATIONLAYERWITHSTYLE; }
+IfcPresentationLayerWithStyle::IfcPresentationLayerWithStyle() {}
+IfcPresentationLayerWithStyle::IfcPresentationLayerWithStyle( int id ) { m_id = id; }
 IfcPresentationLayerWithStyle::~IfcPresentationLayerWithStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

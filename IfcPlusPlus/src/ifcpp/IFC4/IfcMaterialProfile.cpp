@@ -29,8 +29,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMaterialProfile 
-IfcMaterialProfile::IfcMaterialProfile() { m_entity_enum = IFCMATERIALPROFILE; }
-IfcMaterialProfile::IfcMaterialProfile( int id ) { m_id = id; m_entity_enum = IFCMATERIALPROFILE; }
+IfcMaterialProfile::IfcMaterialProfile() {}
+IfcMaterialProfile::IfcMaterialProfile( int id ) { m_id = id; }
 IfcMaterialProfile::~IfcMaterialProfile() {}
 
 // method setEntity takes over all attributes from another instance of the class

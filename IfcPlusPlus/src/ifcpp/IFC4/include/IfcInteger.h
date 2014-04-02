@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcInteger = INTEGER;
-class IfcInteger : public IfcSimpleValue, public IfcPPType
+class IfcInteger : public IfcSimpleValue
 {
 public:
 	IfcInteger();

@@ -272,12 +272,12 @@ osg::StateSet* StylesConverter::convertIfcSurfaceStyle( shared_ptr<IfcSurfaceSty
 			emissiveColor._v[3] = transparency;
 			
 			osg::ref_ptr<osg::Material> mat = new osg::Material();
-			mat->setAmbient( osg::Material::FRONT_AND_BACK, ambientColor );
-			mat->setDiffuse( osg::Material::FRONT_AND_BACK, diffuseColor );
-			mat->setSpecular( osg::Material::FRONT_AND_BACK, specularColor );
-			mat->setShininess( osg::Material::FRONT_AND_BACK, shininess );
+			mat->setAmbient( osg::Material::FRONT, ambientColor );
+			mat->setDiffuse( osg::Material::FRONT, diffuseColor );
+			mat->setSpecular( osg::Material::FRONT, specularColor );
+			mat->setShininess( osg::Material::FRONT, shininess );
 			mat->setColorMode( osg::Material::SPECULAR );
-			mat->setEmission( osg::Material::FRONT_AND_BACK, emissiveColor );
+			mat->setEmission( osg::Material::FRONT, emissiveColor );
 
 			if( stateset == NULL )
 			{
@@ -288,14 +288,14 @@ osg::StateSet* StylesConverter::convertIfcSurfaceStyle( shared_ptr<IfcSurfaceSty
 			
 			if( set_transparent )
 			{
-				mat->setTransparency( osg::Material::FRONT_AND_BACK, transparency );	
+				mat->setTransparency( osg::Material::FRONT, transparency );	
 				stateset->setMode( GL_BLEND, osg::StateAttribute::ON );
 				stateset->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
 			}
 			else
 			{
 				// blending is disabled in this case, so set transparency in case blending is enabled at the root node
-				mat->setTransparency( osg::Material::FRONT_AND_BACK, 0.7f );
+				mat->setTransparency( osg::Material::FRONT, 0.7f );
 			}
 			continue;
 		}
@@ -450,11 +450,11 @@ osg::StateSet* StylesConverter::convertIfcComplexPropertyColor( shared_ptr<IfcCo
 
 				osg::Vec4f color( r, g, b, 1.f );
 				osg::ref_ptr<osg::Material> mat = new osg::Material();
-				mat->setAmbient( osg::Material::FRONT_AND_BACK, color );
-				mat->setDiffuse( osg::Material::FRONT_AND_BACK, color );
-				mat->setSpecular( osg::Material::FRONT_AND_BACK, color );
-				mat->setShininess( osg::Material::FRONT_AND_BACK, 35.f );
-				mat->setTransparency( osg::Material::FRONT_AND_BACK, 0.7f );
+				mat->setAmbient( osg::Material::FRONT, color );
+				mat->setDiffuse( osg::Material::FRONT, color );
+				mat->setSpecular( osg::Material::FRONT, color );
+				mat->setShininess( osg::Material::FRONT, 35.f );
+				mat->setTransparency( osg::Material::FRONT, 0.7f );
 				mat->setColorMode( osg::Material::SPECULAR );
 
 				osg::ref_ptr<osg::StateSet> stateset = new osg::StateSet();
@@ -593,12 +593,12 @@ osg::StateSet* StylesConverter::convertIfcCurveStyle( shared_ptr<IfcCurveStyle> 
 		emissiveColor._v[3] = transparency;
 
 		osg::ref_ptr<osg::Material> mat = new osg::Material();
-		mat->setAmbient( osg::Material::FRONT_AND_BACK, ambientColor );
-		mat->setDiffuse( osg::Material::FRONT_AND_BACK, diffuseColor );
-		mat->setSpecular( osg::Material::FRONT_AND_BACK, specularColor );
-		mat->setShininess( osg::Material::FRONT_AND_BACK, shininess );
+		mat->setAmbient( osg::Material::FRONT, ambientColor );
+		mat->setDiffuse( osg::Material::FRONT, diffuseColor );
+		mat->setSpecular( osg::Material::FRONT, specularColor );
+		mat->setShininess( osg::Material::FRONT, shininess );
 		mat->setColorMode( osg::Material::SPECULAR );
-		mat->setEmission( osg::Material::FRONT_AND_BACK, emissiveColor );
+		mat->setEmission( osg::Material::FRONT, emissiveColor );
 
 		stateset = new osg::StateSet();
 		m_map_ifc_styles[style_id] = stateset;
@@ -607,14 +607,14 @@ osg::StateSet* StylesConverter::convertIfcCurveStyle( shared_ptr<IfcCurveStyle> 
 
 		if( set_transparent )
 		{
-			mat->setTransparency( osg::Material::FRONT_AND_BACK, transparency );	
+			mat->setTransparency( osg::Material::FRONT, transparency );	
 			stateset->setMode( GL_BLEND, osg::StateAttribute::ON );
 			stateset->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
 		}
 		else
 		{
 			// blending is disabled in this case, so set transparency in case blending is enabled at the root node
-			mat->setTransparency( osg::Material::FRONT_AND_BACK, 0.7f );
+			mat->setTransparency( osg::Material::FRONT, 0.7f );
 		}
 	}
 	return stateset;

@@ -23,8 +23,8 @@
 #include "include/IfcOrganization.h"
 
 // ENTITY IfcApplication 
-IfcApplication::IfcApplication() { m_entity_enum = IFCAPPLICATION; }
-IfcApplication::IfcApplication( int id ) { m_id = id; m_entity_enum = IFCAPPLICATION; }
+IfcApplication::IfcApplication() {}
+IfcApplication::IfcApplication( int id ) { m_id = id; }
 IfcApplication::~IfcApplication() {}
 
 // method setEntity takes over all attributes from another instance of the class

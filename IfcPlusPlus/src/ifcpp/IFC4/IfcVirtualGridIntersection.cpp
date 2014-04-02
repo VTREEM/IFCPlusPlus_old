@@ -22,8 +22,8 @@
 #include "include/IfcVirtualGridIntersection.h"
 
 // ENTITY IfcVirtualGridIntersection 
-IfcVirtualGridIntersection::IfcVirtualGridIntersection() { m_entity_enum = IFCVIRTUALGRIDINTERSECTION; }
-IfcVirtualGridIntersection::IfcVirtualGridIntersection( int id ) { m_id = id; m_entity_enum = IFCVIRTUALGRIDINTERSECTION; }
+IfcVirtualGridIntersection::IfcVirtualGridIntersection() {}
+IfcVirtualGridIntersection::IfcVirtualGridIntersection( int id ) { m_id = id; }
 IfcVirtualGridIntersection::~IfcVirtualGridIntersection() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -37,7 +37,7 @@ shared_ptr<IfcModulusOfSubgradeReactionMeasure> IfcModulusOfSubgradeReactionMeas
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcModulusOfSubgradeReactionMeasure>(); }
-	shared_ptr<IfcModulusOfSubgradeReactionMeasure> type_object( new IfcModulusOfSubgradeReactionMeasure() );
+	auto type_object = std::make_shared<IfcModulusOfSubgradeReactionMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

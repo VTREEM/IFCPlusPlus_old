@@ -25,8 +25,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcArbitraryOpenProfileDef 
-IfcArbitraryOpenProfileDef::IfcArbitraryOpenProfileDef() { m_entity_enum = IFCARBITRARYOPENPROFILEDEF; }
-IfcArbitraryOpenProfileDef::IfcArbitraryOpenProfileDef( int id ) { m_id = id; m_entity_enum = IFCARBITRARYOPENPROFILEDEF; }
+IfcArbitraryOpenProfileDef::IfcArbitraryOpenProfileDef() {}
+IfcArbitraryOpenProfileDef::IfcArbitraryOpenProfileDef( int id ) { m_id = id; }
 IfcArbitraryOpenProfileDef::~IfcArbitraryOpenProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

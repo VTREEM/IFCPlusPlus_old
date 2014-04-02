@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFan 
-IfcFan::IfcFan() { m_entity_enum = IFCFAN; }
-IfcFan::IfcFan( int id ) { m_id = id; m_entity_enum = IFCFAN; }
+IfcFan::IfcFan() {}
+IfcFan::IfcFan( int id ) { m_id = id; }
 IfcFan::~IfcFan() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDuctSegmentType 
-IfcDuctSegmentType::IfcDuctSegmentType() { m_entity_enum = IFCDUCTSEGMENTTYPE; }
-IfcDuctSegmentType::IfcDuctSegmentType( int id ) { m_id = id; m_entity_enum = IFCDUCTSEGMENTTYPE; }
+IfcDuctSegmentType::IfcDuctSegmentType() {}
+IfcDuctSegmentType::IfcDuctSegmentType( int id ) { m_id = id; }
 IfcDuctSegmentType::~IfcDuctSegmentType() {}
 
 // method setEntity takes over all attributes from another instance of the class

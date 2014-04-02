@@ -24,8 +24,8 @@
 #include "include/IfcRelAssociatesMaterial.h"
 
 // ENTITY IfcMaterialProfileSetUsage 
-IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage() { m_entity_enum = IFCMATERIALPROFILESETUSAGE; }
-IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage( int id ) { m_id = id; m_entity_enum = IFCMATERIALPROFILESETUSAGE; }
+IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage() {}
+IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage( int id ) { m_id = id; }
 IfcMaterialProfileSetUsage::~IfcMaterialProfileSetUsage() {}
 
 // method setEntity takes over all attributes from another instance of the class

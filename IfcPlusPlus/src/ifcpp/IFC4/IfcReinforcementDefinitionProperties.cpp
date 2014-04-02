@@ -30,8 +30,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcReinforcementDefinitionProperties 
-IfcReinforcementDefinitionProperties::IfcReinforcementDefinitionProperties() { m_entity_enum = IFCREINFORCEMENTDEFINITIONPROPERTIES; }
-IfcReinforcementDefinitionProperties::IfcReinforcementDefinitionProperties( int id ) { m_id = id; m_entity_enum = IFCREINFORCEMENTDEFINITIONPROPERTIES; }
+IfcReinforcementDefinitionProperties::IfcReinforcementDefinitionProperties() {}
+IfcReinforcementDefinitionProperties::IfcReinforcementDefinitionProperties( int id ) { m_id = id; }
 IfcReinforcementDefinitionProperties::~IfcReinforcementDefinitionProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

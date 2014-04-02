@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSIPrefix = ENUMERATION OF	(EXA	,PETA	,TERA	,GIGA	,MEGA	,KILO	,HECTO	,DECA	,DECI	,CENTI	,MILLI	,MICRO	,NANO	,PICO	,FEMTO	,ATTO);
-class IfcSIPrefix : public IfcPPAbstractEnum, public IfcPPType
+class IfcSIPrefix : virtual public IfcPPObject
 {
 public:
 	enum IfcSIPrefixEnum

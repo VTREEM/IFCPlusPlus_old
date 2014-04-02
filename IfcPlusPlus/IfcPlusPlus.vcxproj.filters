@@ -3608,5 +3608,11 @@
     <ClInclude Include="src\ifcpp\IfcPPTypeMap.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\ifcpp\model\IfcPPOpenMP.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ifcpp\model\IfcPPAttributeObject.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

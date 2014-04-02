@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPlate 
-IfcPlate::IfcPlate() { m_entity_enum = IFCPLATE; }
-IfcPlate::IfcPlate( int id ) { m_id = id; m_entity_enum = IFCPLATE; }
+IfcPlate::IfcPlate() {}
+IfcPlate::IfcPlate( int id ) { m_id = id; }
 IfcPlate::~IfcPlate() {}
 
 // method setEntity takes over all attributes from another instance of the class

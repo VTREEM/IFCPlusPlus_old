@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcConstraintEnum = ENUMERATION OF	(HARD	,SOFT	,ADVISORY	,USERDEFINED	,NOTDEFINED);
-class IfcConstraintEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcConstraintEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcConstraintEnumEnum

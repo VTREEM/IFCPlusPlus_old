@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDistributionPortTypeEnum = ENUMERATION OF	(CABLE	,CABLECARRIER	,DUCT	,PIPE	,USERDEFINED	,NOTDEFINED);
-class IfcDistributionPortTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDistributionPortTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDistributionPortTypeEnumEnum

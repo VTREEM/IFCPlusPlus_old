@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcNumericMeasure = NUMBER;
-class IfcNumericMeasure : public IfcMeasureValue, public IfcPPType
+class IfcNumericMeasure : public IfcMeasureValue
 {
 public:
 	IfcNumericMeasure();

@@ -65,7 +65,7 @@ shared_ptr<IfcCoordinateReferenceSystemSelect> IfcCoordinateReferenceSystemSelec
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcCoordinateReferenceSystemSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcCoordinateReferenceSystemSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcCoordinateReferenceSystemSelect>();

@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPlane 
-IfcPlane::IfcPlane() { m_entity_enum = IFCPLANE; }
-IfcPlane::IfcPlane( int id ) { m_id = id; m_entity_enum = IFCPLANE; }
+IfcPlane::IfcPlane() {}
+IfcPlane::IfcPlane( int id ) { m_id = id; }
 IfcPlane::~IfcPlane() {}
 
 // method setEntity takes over all attributes from another instance of the class

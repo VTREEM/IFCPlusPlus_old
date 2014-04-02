@@ -48,8 +48,8 @@
 #include "include/IfcWasteTerminalTypeEnum.h"
 
 // ENTITY IfcWasteTerminal 
-IfcWasteTerminal::IfcWasteTerminal() { m_entity_enum = IFCWASTETERMINAL; }
-IfcWasteTerminal::IfcWasteTerminal( int id ) { m_id = id; m_entity_enum = IFCWASTETERMINAL; }
+IfcWasteTerminal::IfcWasteTerminal() {}
+IfcWasteTerminal::IfcWasteTerminal( int id ) { m_id = id; }
 IfcWasteTerminal::~IfcWasteTerminal() {}
 
 // method setEntity takes over all attributes from another instance of the class

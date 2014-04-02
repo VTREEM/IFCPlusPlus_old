@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDayInWeekNumber = INTEGER;
-class IfcDayInWeekNumber : public IfcPPType
+class IfcDayInWeekNumber : public IfcPPObject
 {
 public:
 	IfcDayInWeekNumber();

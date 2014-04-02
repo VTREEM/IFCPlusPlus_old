@@ -27,8 +27,8 @@
 #include "include/IfcReinforcingBarSurfaceEnum.h"
 
 // ENTITY IfcReinforcementBarProperties 
-IfcReinforcementBarProperties::IfcReinforcementBarProperties() { m_entity_enum = IFCREINFORCEMENTBARPROPERTIES; }
-IfcReinforcementBarProperties::IfcReinforcementBarProperties( int id ) { m_id = id; m_entity_enum = IFCREINFORCEMENTBARPROPERTIES; }
+IfcReinforcementBarProperties::IfcReinforcementBarProperties() {}
+IfcReinforcementBarProperties::IfcReinforcementBarProperties( int id ) { m_id = id; }
 IfcReinforcementBarProperties::~IfcReinforcementBarProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

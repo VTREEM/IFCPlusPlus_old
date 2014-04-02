@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcActionRequest 
-IfcActionRequest::IfcActionRequest() { m_entity_enum = IFCACTIONREQUEST; }
-IfcActionRequest::IfcActionRequest( int id ) { m_id = id; m_entity_enum = IFCACTIONREQUEST; }
+IfcActionRequest::IfcActionRequest() {}
+IfcActionRequest::IfcActionRequest( int id ) { m_id = id; }
 IfcActionRequest::~IfcActionRequest() {}
 
 // method setEntity takes over all attributes from another instance of the class

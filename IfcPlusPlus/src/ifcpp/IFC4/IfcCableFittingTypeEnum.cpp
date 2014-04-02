@@ -60,7 +60,7 @@ shared_ptr<IfcCableFittingTypeEnum> IfcCableFittingTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCableFittingTypeEnum>(); }
-	shared_ptr<IfcCableFittingTypeEnum> type_object( new IfcCableFittingTypeEnum() );
+	auto type_object = std::make_shared<IfcCableFittingTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONNECTOR." ) == 0 )
 	{
 		type_object->m_enum = IfcCableFittingTypeEnum::ENUM_CONNECTOR;

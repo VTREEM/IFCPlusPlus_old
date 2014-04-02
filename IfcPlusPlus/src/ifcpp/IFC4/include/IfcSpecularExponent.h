@@ -21,7 +21,7 @@
 #include "IfcSpecularHighlightSelect.h"
 
 // TYPE IfcSpecularExponent = REAL;
-class IfcSpecularExponent : public IfcSpecularHighlightSelect, public IfcPPType
+class IfcSpecularExponent : public IfcSpecularHighlightSelect
 {
 public:
 	IfcSpecularExponent();

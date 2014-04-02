@@ -21,8 +21,8 @@
 #include "include/IfcMaterialList.h"
 
 // ENTITY IfcMaterialList 
-IfcMaterialList::IfcMaterialList() { m_entity_enum = IFCMATERIALLIST; }
-IfcMaterialList::IfcMaterialList( int id ) { m_id = id; m_entity_enum = IFCMATERIALLIST; }
+IfcMaterialList::IfcMaterialList() {}
+IfcMaterialList::IfcMaterialList( int id ) { m_id = id; }
 IfcMaterialList::~IfcMaterialList() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcJunctionBoxType 
-IfcJunctionBoxType::IfcJunctionBoxType() { m_entity_enum = IFCJUNCTIONBOXTYPE; }
-IfcJunctionBoxType::IfcJunctionBoxType( int id ) { m_id = id; m_entity_enum = IFCJUNCTIONBOXTYPE; }
+IfcJunctionBoxType::IfcJunctionBoxType() {}
+IfcJunctionBoxType::IfcJunctionBoxType( int id ) { m_id = id; }
 IfcJunctionBoxType::~IfcJunctionBoxType() {}
 
 // method setEntity takes over all attributes from another instance of the class

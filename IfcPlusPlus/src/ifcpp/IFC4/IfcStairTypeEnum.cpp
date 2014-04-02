@@ -96,7 +96,7 @@ shared_ptr<IfcStairTypeEnum> IfcStairTypeEnum::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStairTypeEnum>(); }
-	shared_ptr<IfcStairTypeEnum> type_object( new IfcStairTypeEnum() );
+	auto type_object = std::make_shared<IfcStairTypeEnum>();
 	if( _stricmp( arg.c_str(), ".STRAIGHT_RUN_STAIR." ) == 0 )
 	{
 		type_object->m_enum = IfcStairTypeEnum::ENUM_STRAIGHT_RUN_STAIR;

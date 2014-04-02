@@ -76,7 +76,7 @@ shared_ptr<IfcAirToAirHeatRecoveryTypeEnum> IfcAirToAirHeatRecoveryTypeEnum::cre
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAirToAirHeatRecoveryTypeEnum>(); }
-	shared_ptr<IfcAirToAirHeatRecoveryTypeEnum> type_object( new IfcAirToAirHeatRecoveryTypeEnum() );
+	auto type_object = std::make_shared<IfcAirToAirHeatRecoveryTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FIXEDPLATECOUNTERFLOWEXCHANGER." ) == 0 )
 	{
 		type_object->m_enum = IfcAirToAirHeatRecoveryTypeEnum::ENUM_FIXEDPLATECOUNTERFLOWEXCHANGER;

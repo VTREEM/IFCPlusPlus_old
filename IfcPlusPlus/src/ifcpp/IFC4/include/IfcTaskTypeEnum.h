@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTaskTypeEnum = ENUMERATION OF	(ATTENDANCE	,CONSTRUCTION	,DEMOLITION	,DISMANTLE	,DISPOSAL	,INSTALLATION	,LOGISTIC	,MAINTENANCE	,MOVE	,OPERATION	,REMOVAL	,RENOVATION	,USERDEFINED	,NOTDEFINED);
-class IfcTaskTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTaskTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTaskTypeEnumEnum

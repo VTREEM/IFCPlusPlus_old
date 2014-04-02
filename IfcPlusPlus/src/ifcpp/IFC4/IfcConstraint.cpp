@@ -27,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcConstraint 
-IfcConstraint::IfcConstraint() { m_entity_enum = IFCCONSTRAINT; }
-IfcConstraint::IfcConstraint( int id ) { m_id = id; m_entity_enum = IFCCONSTRAINT; }
+IfcConstraint::IfcConstraint() {}
+IfcConstraint::IfcConstraint( int id ) { m_id = id; }
 IfcConstraint::~IfcConstraint() {}
 
 // method setEntity takes over all attributes from another instance of the class

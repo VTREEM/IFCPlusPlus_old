@@ -48,8 +48,8 @@
 #include "include/IfcUnitaryEquipmentTypeEnum.h"
 
 // ENTITY IfcUnitaryEquipment 
-IfcUnitaryEquipment::IfcUnitaryEquipment() { m_entity_enum = IFCUNITARYEQUIPMENT; }
-IfcUnitaryEquipment::IfcUnitaryEquipment( int id ) { m_id = id; m_entity_enum = IFCUNITARYEQUIPMENT; }
+IfcUnitaryEquipment::IfcUnitaryEquipment() {}
+IfcUnitaryEquipment::IfcUnitaryEquipment( int id ) { m_id = id; }
 IfcUnitaryEquipment::~IfcUnitaryEquipment() {}
 
 // method setEntity takes over all attributes from another instance of the class

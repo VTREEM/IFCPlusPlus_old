@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPointOnCurve 
-IfcPointOnCurve::IfcPointOnCurve() { m_entity_enum = IFCPOINTONCURVE; }
-IfcPointOnCurve::IfcPointOnCurve( int id ) { m_id = id; m_entity_enum = IFCPOINTONCURVE; }
+IfcPointOnCurve::IfcPointOnCurve() {}
+IfcPointOnCurve::IfcPointOnCurve( int id ) { m_id = id; }
 IfcPointOnCurve::~IfcPointOnCurve() {}
 
 // method setEntity takes over all attributes from another instance of the class

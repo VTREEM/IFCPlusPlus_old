@@ -24,8 +24,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcCurveBoundedSurface 
-IfcCurveBoundedSurface::IfcCurveBoundedSurface() { m_entity_enum = IFCCURVEBOUNDEDSURFACE; }
-IfcCurveBoundedSurface::IfcCurveBoundedSurface( int id ) { m_id = id; m_entity_enum = IFCCURVEBOUNDEDSURFACE; }
+IfcCurveBoundedSurface::IfcCurveBoundedSurface() {}
+IfcCurveBoundedSurface::IfcCurveBoundedSurface( int id ) { m_id = id; }
 IfcCurveBoundedSurface::~IfcCurveBoundedSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

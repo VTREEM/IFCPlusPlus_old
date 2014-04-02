@@ -21,8 +21,8 @@
 #include "include/IfcMonetaryUnit.h"
 
 // ENTITY IfcMonetaryUnit 
-IfcMonetaryUnit::IfcMonetaryUnit() { m_entity_enum = IFCMONETARYUNIT; }
-IfcMonetaryUnit::IfcMonetaryUnit( int id ) { m_id = id; m_entity_enum = IFCMONETARYUNIT; }
+IfcMonetaryUnit::IfcMonetaryUnit() {}
+IfcMonetaryUnit::IfcMonetaryUnit( int id ) { m_id = id; }
 IfcMonetaryUnit::~IfcMonetaryUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class

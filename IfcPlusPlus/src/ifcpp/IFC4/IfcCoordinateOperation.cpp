@@ -22,8 +22,8 @@
 #include "include/IfcCoordinateReferenceSystemSelect.h"
 
 // ENTITY IfcCoordinateOperation 
-IfcCoordinateOperation::IfcCoordinateOperation() { m_entity_enum = IFCCOORDINATEOPERATION; }
-IfcCoordinateOperation::IfcCoordinateOperation( int id ) { m_id = id; m_entity_enum = IFCCOORDINATEOPERATION; }
+IfcCoordinateOperation::IfcCoordinateOperation() {}
+IfcCoordinateOperation::IfcCoordinateOperation( int id ) { m_id = id; }
 IfcCoordinateOperation::~IfcCoordinateOperation() {}
 
 // method setEntity takes over all attributes from another instance of the class

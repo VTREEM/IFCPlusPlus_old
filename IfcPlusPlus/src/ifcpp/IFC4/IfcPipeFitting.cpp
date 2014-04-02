@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPipeFitting 
-IfcPipeFitting::IfcPipeFitting() { m_entity_enum = IFCPIPEFITTING; }
-IfcPipeFitting::IfcPipeFitting( int id ) { m_id = id; m_entity_enum = IFCPIPEFITTING; }
+IfcPipeFitting::IfcPipeFitting() {}
+IfcPipeFitting::IfcPipeFitting( int id ) { m_id = id; }
 IfcPipeFitting::~IfcPipeFitting() {}
 
 // method setEntity takes over all attributes from another instance of the class

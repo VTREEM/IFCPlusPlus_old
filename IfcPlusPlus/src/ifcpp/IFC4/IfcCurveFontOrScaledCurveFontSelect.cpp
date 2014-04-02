@@ -66,7 +66,7 @@ shared_ptr<IfcCurveFontOrScaledCurveFontSelect> IfcCurveFontOrScaledCurveFontSel
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcCurveFontOrScaledCurveFontSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcCurveFontOrScaledCurveFontSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcCurveFontOrScaledCurveFontSelect>();

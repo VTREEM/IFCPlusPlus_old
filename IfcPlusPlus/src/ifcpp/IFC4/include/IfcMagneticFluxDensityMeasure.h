@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMagneticFluxDensityMeasure = REAL;
-class IfcMagneticFluxDensityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMagneticFluxDensityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcMagneticFluxDensityMeasure();

@@ -29,8 +29,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcComplexPropertyTemplate 
-IfcComplexPropertyTemplate::IfcComplexPropertyTemplate() { m_entity_enum = IFCCOMPLEXPROPERTYTEMPLATE; }
-IfcComplexPropertyTemplate::IfcComplexPropertyTemplate( int id ) { m_id = id; m_entity_enum = IFCCOMPLEXPROPERTYTEMPLATE; }
+IfcComplexPropertyTemplate::IfcComplexPropertyTemplate() {}
+IfcComplexPropertyTemplate::IfcComplexPropertyTemplate( int id ) { m_id = id; }
 IfcComplexPropertyTemplate::~IfcComplexPropertyTemplate() {}
 
 // method setEntity takes over all attributes from another instance of the class

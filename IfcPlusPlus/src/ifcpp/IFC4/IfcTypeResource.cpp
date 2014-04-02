@@ -33,8 +33,8 @@
 #include "include/IfcTypeResource.h"
 
 // ENTITY IfcTypeResource 
-IfcTypeResource::IfcTypeResource() { m_entity_enum = IFCTYPERESOURCE; }
-IfcTypeResource::IfcTypeResource( int id ) { m_id = id; m_entity_enum = IFCTYPERESOURCE; }
+IfcTypeResource::IfcTypeResource() {}
+IfcTypeResource::IfcTypeResource( int id ) { m_id = id; }
 IfcTypeResource::~IfcTypeResource() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -23,8 +23,8 @@
 #include "include/IfcSurfaceStyleElementSelect.h"
 
 // ENTITY IfcSurfaceStyle 
-IfcSurfaceStyle::IfcSurfaceStyle() { m_entity_enum = IFCSURFACESTYLE; }
-IfcSurfaceStyle::IfcSurfaceStyle( int id ) { m_id = id; m_entity_enum = IFCSURFACESTYLE; }
+IfcSurfaceStyle::IfcSurfaceStyle() {}
+IfcSurfaceStyle::IfcSurfaceStyle( int id ) { m_id = id; }
 IfcSurfaceStyle::~IfcSurfaceStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class

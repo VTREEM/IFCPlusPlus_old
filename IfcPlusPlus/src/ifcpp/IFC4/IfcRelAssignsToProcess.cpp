@@ -30,8 +30,8 @@
 #include "include/IfcTypeProcess.h"
 
 // ENTITY IfcRelAssignsToProcess 
-IfcRelAssignsToProcess::IfcRelAssignsToProcess() { m_entity_enum = IFCRELASSIGNSTOPROCESS; }
-IfcRelAssignsToProcess::IfcRelAssignsToProcess( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTOPROCESS; }
+IfcRelAssignsToProcess::IfcRelAssignsToProcess() {}
+IfcRelAssignsToProcess::IfcRelAssignsToProcess( int id ) { m_id = id; }
 IfcRelAssignsToProcess::~IfcRelAssignsToProcess() {}
 
 // method setEntity takes over all attributes from another instance of the class

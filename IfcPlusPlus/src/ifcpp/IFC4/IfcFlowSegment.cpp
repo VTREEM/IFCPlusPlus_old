@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFlowSegment 
-IfcFlowSegment::IfcFlowSegment() { m_entity_enum = IFCFLOWSEGMENT; }
-IfcFlowSegment::IfcFlowSegment( int id ) { m_id = id; m_entity_enum = IFCFLOWSEGMENT; }
+IfcFlowSegment::IfcFlowSegment() {}
+IfcFlowSegment::IfcFlowSegment( int id ) { m_id = id; }
 IfcFlowSegment::~IfcFlowSegment() {}
 
 // method setEntity takes over all attributes from another instance of the class

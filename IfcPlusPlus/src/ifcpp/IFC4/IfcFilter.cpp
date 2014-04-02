@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFilter 
-IfcFilter::IfcFilter() { m_entity_enum = IFCFILTER; }
-IfcFilter::IfcFilter( int id ) { m_id = id; m_entity_enum = IFCFILTER; }
+IfcFilter::IfcFilter() {}
+IfcFilter::IfcFilter( int id ) { m_id = id; }
 IfcFilter::~IfcFilter() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStyleAssignmentSelect = SELECT	(IfcPresentationStyle	,IfcPresentationStyleAssignment);
-class IfcStyleAssignmentSelect : public IfcPPAbstractSelect
+class IfcStyleAssignmentSelect : virtual public IfcPPObject
 {
 public:
 	IfcStyleAssignmentSelect();
 	~IfcStyleAssignmentSelect();
 	virtual const char* classname() const { return "IfcStyleAssignmentSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcStyleAssignmentSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

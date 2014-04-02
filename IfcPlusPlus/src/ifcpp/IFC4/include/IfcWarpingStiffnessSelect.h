@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcWarpingStiffnessSelect = SELECT	(IfcBoolean	,IfcWarpingMomentMeasure);
-class IfcWarpingStiffnessSelect : public IfcPPAbstractSelect
+class IfcWarpingStiffnessSelect : virtual public IfcPPObject
 {
 public:
 	IfcWarpingStiffnessSelect();
 	~IfcWarpingStiffnessSelect();
 	virtual const char* classname() const { return "IfcWarpingStiffnessSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcWarpingStiffnessSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

@@ -21,7 +21,7 @@
 #include "IfcSpecularHighlightSelect.h"
 
 // TYPE IfcSpecularRoughness = REAL;
-class IfcSpecularRoughness : public IfcSpecularHighlightSelect, public IfcPPType
+class IfcSpecularRoughness : public IfcSpecularHighlightSelect
 {
 public:
 	IfcSpecularRoughness();

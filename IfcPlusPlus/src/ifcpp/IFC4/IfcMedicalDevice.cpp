@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMedicalDevice 
-IfcMedicalDevice::IfcMedicalDevice() { m_entity_enum = IFCMEDICALDEVICE; }
-IfcMedicalDevice::IfcMedicalDevice( int id ) { m_id = id; m_entity_enum = IFCMEDICALDEVICE; }
+IfcMedicalDevice::IfcMedicalDevice() {}
+IfcMedicalDevice::IfcMedicalDevice( int id ) { m_id = id; }
 IfcMedicalDevice::~IfcMedicalDevice() {}
 
 // method setEntity takes over all attributes from another instance of the class

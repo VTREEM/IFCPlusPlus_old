@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcRampTypeEnum = ENUMERATION OF	(STRAIGHT_RUN_RAMP	,TWO_STRAIGHT_RUN_RAMP	,QUARTER_TURN_RAMP	,TWO_QUARTER_TURN_RAMP	,HALF_TURN_RAMP	,SPIRAL_RAMP	,USERDEFINED	,NOTDEFINED);
-class IfcRampTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcRampTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcRampTypeEnumEnum

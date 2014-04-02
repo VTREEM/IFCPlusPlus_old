@@ -33,8 +33,8 @@
 #include "include/IfcWindowPanelProperties.h"
 
 // ENTITY IfcWindowPanelProperties 
-IfcWindowPanelProperties::IfcWindowPanelProperties() { m_entity_enum = IFCWINDOWPANELPROPERTIES; }
-IfcWindowPanelProperties::IfcWindowPanelProperties( int id ) { m_id = id; m_entity_enum = IFCWINDOWPANELPROPERTIES; }
+IfcWindowPanelProperties::IfcWindowPanelProperties() {}
+IfcWindowPanelProperties::IfcWindowPanelProperties( int id ) { m_id = id; }
 IfcWindowPanelProperties::~IfcWindowPanelProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

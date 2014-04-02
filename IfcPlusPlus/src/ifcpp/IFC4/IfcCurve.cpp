@@ -22,8 +22,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCurve 
-IfcCurve::IfcCurve() { m_entity_enum = IFCCURVE; }
-IfcCurve::IfcCurve( int id ) { m_id = id; m_entity_enum = IFCCURVE; }
+IfcCurve::IfcCurve() {}
+IfcCurve::IfcCurve( int id ) { m_id = id; }
 IfcCurve::~IfcCurve() {}
 
 // method setEntity takes over all attributes from another instance of the class

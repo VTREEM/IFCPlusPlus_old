@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBooleanOperator = ENUMERATION OF	(UNION	,INTERSECTION	,DIFFERENCE);
-class IfcBooleanOperator : public IfcPPAbstractEnum, public IfcPPType
+class IfcBooleanOperator : virtual public IfcPPObject
 {
 public:
 	enum IfcBooleanOperatorEnum

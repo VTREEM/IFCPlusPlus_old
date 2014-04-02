@@ -60,7 +60,7 @@ shared_ptr<IfcOutletTypeEnum> IfcOutletTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcOutletTypeEnum>(); }
-	shared_ptr<IfcOutletTypeEnum> type_object( new IfcOutletTypeEnum() );
+	auto type_object = std::make_shared<IfcOutletTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AUDIOVISUALOUTLET." ) == 0 )
 	{
 		type_object->m_enum = IfcOutletTypeEnum::ENUM_AUDIOVISUALOUTLET;

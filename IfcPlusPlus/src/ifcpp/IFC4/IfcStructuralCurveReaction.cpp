@@ -39,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralCurveReaction 
-IfcStructuralCurveReaction::IfcStructuralCurveReaction() { m_entity_enum = IFCSTRUCTURALCURVEREACTION; }
-IfcStructuralCurveReaction::IfcStructuralCurveReaction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALCURVEREACTION; }
+IfcStructuralCurveReaction::IfcStructuralCurveReaction() {}
+IfcStructuralCurveReaction::IfcStructuralCurveReaction( int id ) { m_id = id; }
 IfcStructuralCurveReaction::~IfcStructuralCurveReaction() {}
 
 // method setEntity takes over all attributes from another instance of the class

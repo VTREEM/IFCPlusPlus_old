@@ -137,7 +137,7 @@ shared_ptr<IfcDerivedMeasureValue> IfcDerivedMeasureValue::createObjectFromStepD
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcDerivedMeasureValue::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcDerivedMeasureValue::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcDerivedMeasureValue>();

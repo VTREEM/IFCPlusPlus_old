@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCondenserType 
-IfcCondenserType::IfcCondenserType() { m_entity_enum = IFCCONDENSERTYPE; }
-IfcCondenserType::IfcCondenserType( int id ) { m_id = id; m_entity_enum = IFCCONDENSERTYPE; }
+IfcCondenserType::IfcCondenserType() {}
+IfcCondenserType::IfcCondenserType( int id ) { m_id = id; }
 IfcCondenserType::~IfcCondenserType() {}
 
 // method setEntity takes over all attributes from another instance of the class

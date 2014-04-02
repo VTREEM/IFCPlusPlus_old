@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBoilerType 
-IfcBoilerType::IfcBoilerType() { m_entity_enum = IFCBOILERTYPE; }
-IfcBoilerType::IfcBoilerType( int id ) { m_id = id; m_entity_enum = IFCBOILERTYPE; }
+IfcBoilerType::IfcBoilerType() {}
+IfcBoilerType::IfcBoilerType( int id ) { m_id = id; }
 IfcBoilerType::~IfcBoilerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

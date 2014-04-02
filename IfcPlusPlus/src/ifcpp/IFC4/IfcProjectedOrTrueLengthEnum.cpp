@@ -40,7 +40,7 @@ shared_ptr<IfcProjectedOrTrueLengthEnum> IfcProjectedOrTrueLengthEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcProjectedOrTrueLengthEnum>(); }
-	shared_ptr<IfcProjectedOrTrueLengthEnum> type_object( new IfcProjectedOrTrueLengthEnum() );
+	auto type_object = std::make_shared<IfcProjectedOrTrueLengthEnum>();
 	if( _stricmp( arg.c_str(), ".PROJECTED_LENGTH." ) == 0 )
 	{
 		type_object->m_enum = IfcProjectedOrTrueLengthEnum::ENUM_PROJECTED_LENGTH;

@@ -20,8 +20,8 @@
 #include "include/IfcPresentationItem.h"
 
 // ENTITY IfcPresentationItem 
-IfcPresentationItem::IfcPresentationItem() { m_entity_enum = IFCPRESENTATIONITEM; }
-IfcPresentationItem::IfcPresentationItem( int id ) { m_id = id; m_entity_enum = IFCPRESENTATIONITEM; }
+IfcPresentationItem::IfcPresentationItem() {}
+IfcPresentationItem::IfcPresentationItem( int id ) { m_id = id; }
 IfcPresentationItem::~IfcPresentationItem() {}
 
 // method setEntity takes over all attributes from another instance of the class

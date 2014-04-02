@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcRightCircularCone 
-IfcRightCircularCone::IfcRightCircularCone() { m_entity_enum = IFCRIGHTCIRCULARCONE; }
-IfcRightCircularCone::IfcRightCircularCone( int id ) { m_id = id; m_entity_enum = IFCRIGHTCIRCULARCONE; }
+IfcRightCircularCone::IfcRightCircularCone() {}
+IfcRightCircularCone::IfcRightCircularCone( int id ) { m_id = id; }
 IfcRightCircularCone::~IfcRightCircularCone() {}
 
 // method setEntity takes over all attributes from another instance of the class

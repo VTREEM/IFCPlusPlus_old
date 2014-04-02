@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcMemberTypeEnum = ENUMERATION OF	(BRACE	,CHORD	,COLLAR	,MEMBER	,MULLION	,PLATE	,POST	,PURLIN	,RAFTER	,STRINGER	,STRUT	,STUD	,USERDEFINED	,NOTDEFINED);
-class IfcMemberTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcMemberTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcMemberTypeEnumEnum

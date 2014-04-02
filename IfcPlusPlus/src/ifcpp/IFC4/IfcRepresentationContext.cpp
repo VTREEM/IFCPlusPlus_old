@@ -22,8 +22,8 @@
 #include "include/IfcRepresentationContext.h"
 
 // ENTITY IfcRepresentationContext 
-IfcRepresentationContext::IfcRepresentationContext() { m_entity_enum = IFCREPRESENTATIONCONTEXT; }
-IfcRepresentationContext::IfcRepresentationContext( int id ) { m_id = id; m_entity_enum = IFCREPRESENTATIONCONTEXT; }
+IfcRepresentationContext::IfcRepresentationContext() {}
+IfcRepresentationContext::IfcRepresentationContext( int id ) { m_id = id; }
 IfcRepresentationContext::~IfcRepresentationContext() {}
 
 // method setEntity takes over all attributes from another instance of the class

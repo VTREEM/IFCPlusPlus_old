@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCoolingTowerType 
-IfcCoolingTowerType::IfcCoolingTowerType() { m_entity_enum = IFCCOOLINGTOWERTYPE; }
-IfcCoolingTowerType::IfcCoolingTowerType( int id ) { m_id = id; m_entity_enum = IFCCOOLINGTOWERTYPE; }
+IfcCoolingTowerType::IfcCoolingTowerType() {}
+IfcCoolingTowerType::IfcCoolingTowerType( int id ) { m_id = id; }
 IfcCoolingTowerType::~IfcCoolingTowerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

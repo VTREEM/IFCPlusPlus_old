@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCompositeCurveOnSurface 
-IfcCompositeCurveOnSurface::IfcCompositeCurveOnSurface() { m_entity_enum = IFCCOMPOSITECURVEONSURFACE; }
-IfcCompositeCurveOnSurface::IfcCompositeCurveOnSurface( int id ) { m_id = id; m_entity_enum = IFCCOMPOSITECURVEONSURFACE; }
+IfcCompositeCurveOnSurface::IfcCompositeCurveOnSurface() {}
+IfcCompositeCurveOnSurface::IfcCompositeCurveOnSurface( int id ) { m_id = id; }
 IfcCompositeCurveOnSurface::~IfcCompositeCurveOnSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

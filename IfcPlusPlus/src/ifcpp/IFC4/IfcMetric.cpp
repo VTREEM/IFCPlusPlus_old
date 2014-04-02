@@ -30,8 +30,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMetric 
-IfcMetric::IfcMetric() { m_entity_enum = IFCMETRIC; }
-IfcMetric::IfcMetric( int id ) { m_id = id; m_entity_enum = IFCMETRIC; }
+IfcMetric::IfcMetric() {}
+IfcMetric::IfcMetric( int id ) { m_id = id; }
 IfcMetric::~IfcMetric() {}
 
 // method setEntity takes over all attributes from another instance of the class

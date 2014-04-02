@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRoofType 
-IfcRoofType::IfcRoofType() { m_entity_enum = IFCROOFTYPE; }
-IfcRoofType::IfcRoofType( int id ) { m_id = id; m_entity_enum = IFCROOFTYPE; }
+IfcRoofType::IfcRoofType() {}
+IfcRoofType::IfcRoofType( int id ) { m_id = id; }
 IfcRoofType::~IfcRoofType() {}
 
 // method setEntity takes over all attributes from another instance of the class

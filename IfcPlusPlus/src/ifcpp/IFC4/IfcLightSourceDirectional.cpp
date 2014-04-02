@@ -26,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcLightSourceDirectional 
-IfcLightSourceDirectional::IfcLightSourceDirectional() { m_entity_enum = IFCLIGHTSOURCEDIRECTIONAL; }
-IfcLightSourceDirectional::IfcLightSourceDirectional( int id ) { m_id = id; m_entity_enum = IFCLIGHTSOURCEDIRECTIONAL; }
+IfcLightSourceDirectional::IfcLightSourceDirectional() {}
+IfcLightSourceDirectional::IfcLightSourceDirectional( int id ) { m_id = id; }
 IfcLightSourceDirectional::~IfcLightSourceDirectional() {}
 
 // method setEntity takes over all attributes from another instance of the class

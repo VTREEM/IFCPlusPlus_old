@@ -26,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcRationalBSplineCurveWithKnots 
-IfcRationalBSplineCurveWithKnots::IfcRationalBSplineCurveWithKnots() { m_entity_enum = IFCRATIONALBSPLINECURVEWITHKNOTS; }
-IfcRationalBSplineCurveWithKnots::IfcRationalBSplineCurveWithKnots( int id ) { m_id = id; m_entity_enum = IFCRATIONALBSPLINECURVEWITHKNOTS; }
+IfcRationalBSplineCurveWithKnots::IfcRationalBSplineCurveWithKnots() {}
+IfcRationalBSplineCurveWithKnots::IfcRationalBSplineCurveWithKnots( int id ) { m_id = id; }
 IfcRationalBSplineCurveWithKnots::~IfcRationalBSplineCurveWithKnots() {}
 
 // method setEntity takes over all attributes from another instance of the class

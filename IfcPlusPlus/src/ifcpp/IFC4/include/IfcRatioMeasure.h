@@ -23,7 +23,7 @@
 #include "IfcTimeOrRatioSelect.h"
 
 // TYPE IfcRatioMeasure = REAL;
-class IfcRatioMeasure : public IfcMeasureValue, public IfcSizeSelect, public IfcTimeOrRatioSelect, public IfcPPType
+class IfcRatioMeasure : public IfcMeasureValue, public IfcSizeSelect, public IfcTimeOrRatioSelect
 {
 public:
 	IfcRatioMeasure();

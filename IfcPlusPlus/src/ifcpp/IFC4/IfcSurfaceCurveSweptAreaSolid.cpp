@@ -27,8 +27,8 @@
 #include "include/IfcSurfaceCurveSweptAreaSolid.h"
 
 // ENTITY IfcSurfaceCurveSweptAreaSolid 
-IfcSurfaceCurveSweptAreaSolid::IfcSurfaceCurveSweptAreaSolid() { m_entity_enum = IFCSURFACECURVESWEPTAREASOLID; }
-IfcSurfaceCurveSweptAreaSolid::IfcSurfaceCurveSweptAreaSolid( int id ) { m_id = id; m_entity_enum = IFCSURFACECURVESWEPTAREASOLID; }
+IfcSurfaceCurveSweptAreaSolid::IfcSurfaceCurveSweptAreaSolid() {}
+IfcSurfaceCurveSweptAreaSolid::IfcSurfaceCurveSweptAreaSolid( int id ) { m_id = id; }
 IfcSurfaceCurveSweptAreaSolid::~IfcSurfaceCurveSweptAreaSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

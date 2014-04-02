@@ -1461,9 +1461,11 @@
     <ClInclude Include="src\ifcpp\IfcPPTypeEnums.h" />
     <ClInclude Include="src\ifcpp\IfcPPTypeMap.h" />
     <ClInclude Include="src\ifcpp\IfcPPTypes.h" />
+    <ClInclude Include="src\ifcpp\model\IfcPPAttributeObject.h" />
     <ClInclude Include="src\ifcpp\model\IfcPPException.h" />
     <ClInclude Include="src\ifcpp\model\IfcPPModel.h" />
     <ClInclude Include="src\ifcpp\model\IfcPPObject.h" />
+    <ClInclude Include="src\ifcpp\model\IfcPPOpenMP.h" />
     <ClInclude Include="src\ifcpp\model\IfcPPUtil.h" />
     <ClInclude Include="src\ifcpp\model\shared_ptr.h" />
     <ClInclude Include="src\ifcpp\model\StatusObservable.h" />

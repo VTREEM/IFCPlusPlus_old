@@ -48,7 +48,7 @@ shared_ptr<IfcSolarDeviceTypeEnum> IfcSolarDeviceTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSolarDeviceTypeEnum>(); }
-	shared_ptr<IfcSolarDeviceTypeEnum> type_object( new IfcSolarDeviceTypeEnum() );
+	auto type_object = std::make_shared<IfcSolarDeviceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".SOLARCOLLECTOR." ) == 0 )
 	{
 		type_object->m_enum = IfcSolarDeviceTypeEnum::ENUM_SOLARCOLLECTOR;

@@ -20,8 +20,8 @@
 #include "include/IfcDimensionalExponents.h"
 
 // ENTITY IfcDimensionalExponents 
-IfcDimensionalExponents::IfcDimensionalExponents() { m_entity_enum = IFCDIMENSIONALEXPONENTS; }
-IfcDimensionalExponents::IfcDimensionalExponents( int id ) { m_id = id; m_entity_enum = IFCDIMENSIONALEXPONENTS; }
+IfcDimensionalExponents::IfcDimensionalExponents() {}
+IfcDimensionalExponents::IfcDimensionalExponents( int id ) { m_id = id; }
 IfcDimensionalExponents::~IfcDimensionalExponents() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -316,8 +316,8 @@ void IfcPPModel::clearIfcModel()
 	}
 	m_map_entities.clear();
 
-	m_ifc_project = NULL;
-	m_geom_context_3d = NULL;
+	m_ifc_project = nullptr;
+	m_geom_context_3d = nullptr;
 	m_ifc_schema_version = IFC_VERSION_UNKNOWN;
 	m_IFC_FILE_SCHEMA = "";
 	m_IFC_FILE_NAME = "";
@@ -378,8 +378,8 @@ void IfcPPModel::updateCache()
 
 void IfcPPModel::clearCache()
 {
-	m_ifc_project = NULL;
-	m_geom_context_3d = NULL;
+	m_ifc_project = nullptr;
+	m_geom_context_3d = nullptr;
 }
 
 void IfcPPModel::resolveInverseAttributes()

@@ -65,7 +65,7 @@ shared_ptr<IfcSurfaceOrFaceSurface> IfcSurfaceOrFaceSurface::createObjectFromSte
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSurfaceOrFaceSurface::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcSurfaceOrFaceSurface::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcSurfaceOrFaceSurface>();

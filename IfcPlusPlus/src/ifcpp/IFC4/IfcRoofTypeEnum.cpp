@@ -92,7 +92,7 @@ shared_ptr<IfcRoofTypeEnum> IfcRoofTypeEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRoofTypeEnum>(); }
-	shared_ptr<IfcRoofTypeEnum> type_object( new IfcRoofTypeEnum() );
+	auto type_object = std::make_shared<IfcRoofTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FLAT_ROOF." ) == 0 )
 	{
 		type_object->m_enum = IfcRoofTypeEnum::ENUM_FLAT_ROOF;

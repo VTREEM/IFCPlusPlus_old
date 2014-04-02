@@ -65,7 +65,7 @@ shared_ptr<IfcSolidOrShell> IfcSolidOrShell::createObjectFromStepData( const std
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSolidOrShell::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcSolidOrShell::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcSolidOrShell>();

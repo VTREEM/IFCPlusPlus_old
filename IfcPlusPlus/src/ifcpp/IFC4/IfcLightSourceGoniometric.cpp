@@ -30,8 +30,8 @@
 #include "include/IfcThermodynamicTemperatureMeasure.h"
 
 // ENTITY IfcLightSourceGoniometric 
-IfcLightSourceGoniometric::IfcLightSourceGoniometric() { m_entity_enum = IFCLIGHTSOURCEGONIOMETRIC; }
-IfcLightSourceGoniometric::IfcLightSourceGoniometric( int id ) { m_id = id; m_entity_enum = IFCLIGHTSOURCEGONIOMETRIC; }
+IfcLightSourceGoniometric::IfcLightSourceGoniometric() {}
+IfcLightSourceGoniometric::IfcLightSourceGoniometric( int id ) { m_id = id; }
 IfcLightSourceGoniometric::~IfcLightSourceGoniometric() {}
 
 // method setEntity takes over all attributes from another instance of the class

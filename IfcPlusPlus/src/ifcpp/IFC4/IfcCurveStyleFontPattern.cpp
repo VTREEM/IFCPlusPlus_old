@@ -22,8 +22,8 @@
 #include "include/IfcPositiveLengthMeasure.h"
 
 // ENTITY IfcCurveStyleFontPattern 
-IfcCurveStyleFontPattern::IfcCurveStyleFontPattern() { m_entity_enum = IFCCURVESTYLEFONTPATTERN; }
-IfcCurveStyleFontPattern::IfcCurveStyleFontPattern( int id ) { m_id = id; m_entity_enum = IFCCURVESTYLEFONTPATTERN; }
+IfcCurveStyleFontPattern::IfcCurveStyleFontPattern() {}
+IfcCurveStyleFontPattern::IfcCurveStyleFontPattern( int id ) { m_id = id; }
 IfcCurveStyleFontPattern::~IfcCurveStyleFontPattern() {}
 
 // method setEntity takes over all attributes from another instance of the class

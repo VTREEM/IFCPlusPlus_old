@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcInterceptor 
-IfcInterceptor::IfcInterceptor() { m_entity_enum = IFCINTERCEPTOR; }
-IfcInterceptor::IfcInterceptor( int id ) { m_id = id; m_entity_enum = IFCINTERCEPTOR; }
+IfcInterceptor::IfcInterceptor() {}
+IfcInterceptor::IfcInterceptor( int id ) { m_id = id; }
 IfcInterceptor::~IfcInterceptor() {}
 
 // method setEntity takes over all attributes from another instance of the class

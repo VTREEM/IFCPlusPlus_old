@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSensorType 
-IfcSensorType::IfcSensorType() { m_entity_enum = IFCSENSORTYPE; }
-IfcSensorType::IfcSensorType( int id ) { m_id = id; m_entity_enum = IFCSENSORTYPE; }
+IfcSensorType::IfcSensorType() {}
+IfcSensorType::IfcSensorType( int id ) { m_id = id; }
 IfcSensorType::~IfcSensorType() {}
 
 // method setEntity takes over all attributes from another instance of the class

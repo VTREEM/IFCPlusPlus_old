@@ -52,7 +52,7 @@ shared_ptr<IfcWorkCalendarTypeEnum> IfcWorkCalendarTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWorkCalendarTypeEnum>(); }
-	shared_ptr<IfcWorkCalendarTypeEnum> type_object( new IfcWorkCalendarTypeEnum() );
+	auto type_object = std::make_shared<IfcWorkCalendarTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FIRSTSHIFT." ) == 0 )
 	{
 		type_object->m_enum = IfcWorkCalendarTypeEnum::ENUM_FIRSTSHIFT;

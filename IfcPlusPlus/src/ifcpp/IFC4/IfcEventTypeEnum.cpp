@@ -52,7 +52,7 @@ shared_ptr<IfcEventTypeEnum> IfcEventTypeEnum::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcEventTypeEnum>(); }
-	shared_ptr<IfcEventTypeEnum> type_object( new IfcEventTypeEnum() );
+	auto type_object = std::make_shared<IfcEventTypeEnum>();
 	if( _stricmp( arg.c_str(), ".STARTEVENT." ) == 0 )
 	{
 		type_object->m_enum = IfcEventTypeEnum::ENUM_STARTEVENT;

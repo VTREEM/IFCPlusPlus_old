@@ -22,8 +22,8 @@
 #include "include/IfcValue.h"
 
 // ENTITY IfcMeasureWithUnit 
-IfcMeasureWithUnit::IfcMeasureWithUnit() { m_entity_enum = IFCMEASUREWITHUNIT; }
-IfcMeasureWithUnit::IfcMeasureWithUnit( int id ) { m_id = id; m_entity_enum = IFCMEASUREWITHUNIT; }
+IfcMeasureWithUnit::IfcMeasureWithUnit() {}
+IfcMeasureWithUnit::IfcMeasureWithUnit( int id ) { m_id = id; }
 IfcMeasureWithUnit::~IfcMeasureWithUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class

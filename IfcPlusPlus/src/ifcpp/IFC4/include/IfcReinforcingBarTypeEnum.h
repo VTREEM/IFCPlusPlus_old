@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcReinforcingBarTypeEnum = ENUMERATION OF	(ANCHORING	,EDGE	,LIGATURE	,MAIN	,PUNCHING	,RING	,SHEAR	,STUD	,USERDEFINED	,NOTDEFINED);
-class IfcReinforcingBarTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcReinforcingBarTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcReinforcingBarTypeEnumEnum

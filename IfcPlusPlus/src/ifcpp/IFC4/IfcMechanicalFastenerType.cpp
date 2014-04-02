@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMechanicalFastenerType 
-IfcMechanicalFastenerType::IfcMechanicalFastenerType() { m_entity_enum = IFCMECHANICALFASTENERTYPE; }
-IfcMechanicalFastenerType::IfcMechanicalFastenerType( int id ) { m_id = id; m_entity_enum = IFCMECHANICALFASTENERTYPE; }
+IfcMechanicalFastenerType::IfcMechanicalFastenerType() {}
+IfcMechanicalFastenerType::IfcMechanicalFastenerType( int id ) { m_id = id; }
 IfcMechanicalFastenerType::~IfcMechanicalFastenerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

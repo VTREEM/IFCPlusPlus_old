@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPump 
-IfcPump::IfcPump() { m_entity_enum = IFCPUMP; }
-IfcPump::IfcPump( int id ) { m_id = id; m_entity_enum = IFCPUMP; }
+IfcPump::IfcPump() {}
+IfcPump::IfcPump( int id ) { m_id = id; }
 IfcPump::~IfcPump() {}
 
 // method setEntity takes over all attributes from another instance of the class

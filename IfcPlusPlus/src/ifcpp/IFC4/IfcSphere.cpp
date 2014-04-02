@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcSphere 
-IfcSphere::IfcSphere() { m_entity_enum = IFCSPHERE; }
-IfcSphere::IfcSphere( int id ) { m_id = id; m_entity_enum = IFCSPHERE; }
+IfcSphere::IfcSphere() {}
+IfcSphere::IfcSphere( int id ) { m_id = id; }
 IfcSphere::~IfcSphere() {}
 
 // method setEntity takes over all attributes from another instance of the class

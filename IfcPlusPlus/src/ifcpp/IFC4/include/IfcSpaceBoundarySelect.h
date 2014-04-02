@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSpaceBoundarySelect = SELECT	(IfcExternalSpatialElement	,IfcSpace);
-class IfcSpaceBoundarySelect : public IfcPPAbstractSelect
+class IfcSpaceBoundarySelect : virtual public IfcPPObject
 {
 public:
 	IfcSpaceBoundarySelect();
 	~IfcSpaceBoundarySelect();
 	virtual const char* classname() const { return "IfcSpaceBoundarySelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcSpaceBoundarySelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

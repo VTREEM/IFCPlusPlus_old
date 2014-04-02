@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDuctSegment 
-IfcDuctSegment::IfcDuctSegment() { m_entity_enum = IFCDUCTSEGMENT; }
-IfcDuctSegment::IfcDuctSegment( int id ) { m_id = id; m_entity_enum = IFCDUCTSEGMENT; }
+IfcDuctSegment::IfcDuctSegment() {}
+IfcDuctSegment::IfcDuctSegment( int id ) { m_id = id; }
 IfcDuctSegment::~IfcDuctSegment() {}
 
 // method setEntity takes over all attributes from another instance of the class

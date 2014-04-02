@@ -27,8 +27,8 @@
 #include "include/IfcTaskTimeRecurring.h"
 
 // ENTITY IfcTaskTimeRecurring 
-IfcTaskTimeRecurring::IfcTaskTimeRecurring() { m_entity_enum = IFCTASKTIMERECURRING; }
-IfcTaskTimeRecurring::IfcTaskTimeRecurring( int id ) { m_id = id; m_entity_enum = IFCTASKTIMERECURRING; }
+IfcTaskTimeRecurring::IfcTaskTimeRecurring() {}
+IfcTaskTimeRecurring::IfcTaskTimeRecurring( int id ) { m_id = id; }
 IfcTaskTimeRecurring::~IfcTaskTimeRecurring() {}
 
 // method setEntity takes over all attributes from another instance of the class

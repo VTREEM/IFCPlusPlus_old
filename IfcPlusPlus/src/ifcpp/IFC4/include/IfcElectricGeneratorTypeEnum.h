@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcElectricGeneratorTypeEnum = ENUMERATION OF	(CHP	,ENGINEGENERATOR	,STANDALONE	,USERDEFINED	,NOTDEFINED);
-class IfcElectricGeneratorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcElectricGeneratorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcElectricGeneratorTypeEnumEnum

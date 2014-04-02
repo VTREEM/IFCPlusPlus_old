@@ -44,7 +44,7 @@ shared_ptr<IfcTaskDurationEnum> IfcTaskDurationEnum::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTaskDurationEnum>(); }
-	shared_ptr<IfcTaskDurationEnum> type_object( new IfcTaskDurationEnum() );
+	auto type_object = std::make_shared<IfcTaskDurationEnum>();
 	if( _stricmp( arg.c_str(), ".ELAPSEDTIME." ) == 0 )
 	{
 		type_object->m_enum = IfcTaskDurationEnum::ENUM_ELAPSEDTIME;

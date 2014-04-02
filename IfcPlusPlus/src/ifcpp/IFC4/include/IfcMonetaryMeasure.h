@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMonetaryMeasure = REAL;
-class IfcMonetaryMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMonetaryMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcMonetaryMeasure();

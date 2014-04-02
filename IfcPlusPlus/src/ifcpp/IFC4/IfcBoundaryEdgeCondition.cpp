@@ -23,8 +23,8 @@
 #include "include/IfcModulusOfTranslationalSubgradeReactionSelect.h"
 
 // ENTITY IfcBoundaryEdgeCondition 
-IfcBoundaryEdgeCondition::IfcBoundaryEdgeCondition() { m_entity_enum = IFCBOUNDARYEDGECONDITION; }
-IfcBoundaryEdgeCondition::IfcBoundaryEdgeCondition( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYEDGECONDITION; }
+IfcBoundaryEdgeCondition::IfcBoundaryEdgeCondition() {}
+IfcBoundaryEdgeCondition::IfcBoundaryEdgeCondition( int id ) { m_id = id; }
 IfcBoundaryEdgeCondition::~IfcBoundaryEdgeCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -56,7 +56,7 @@ shared_ptr<IfcSlabTypeEnum> IfcSlabTypeEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSlabTypeEnum>(); }
-	shared_ptr<IfcSlabTypeEnum> type_object( new IfcSlabTypeEnum() );
+	auto type_object = std::make_shared<IfcSlabTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FLOOR." ) == 0 )
 	{
 		type_object->m_enum = IfcSlabTypeEnum::ENUM_FLOOR;

@@ -23,8 +23,8 @@
 #include "include/IfcPositiveRatioMeasure.h"
 
 // ENTITY IfcCurveStyleFontAndScaling 
-IfcCurveStyleFontAndScaling::IfcCurveStyleFontAndScaling() { m_entity_enum = IFCCURVESTYLEFONTANDSCALING; }
-IfcCurveStyleFontAndScaling::IfcCurveStyleFontAndScaling( int id ) { m_id = id; m_entity_enum = IFCCURVESTYLEFONTANDSCALING; }
+IfcCurveStyleFontAndScaling::IfcCurveStyleFontAndScaling() {}
+IfcCurveStyleFontAndScaling::IfcCurveStyleFontAndScaling( int id ) { m_id = id; }
 IfcCurveStyleFontAndScaling::~IfcCurveStyleFontAndScaling() {}
 
 // method setEntity takes over all attributes from another instance of the class

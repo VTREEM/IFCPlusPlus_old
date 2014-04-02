@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcLabel = STRING(255);
-class IfcLabel : public IfcSimpleValue, public IfcPPType
+class IfcLabel : public IfcSimpleValue
 {
 public:
 	IfcLabel();

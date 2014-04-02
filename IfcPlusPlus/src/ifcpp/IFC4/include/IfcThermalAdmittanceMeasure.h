@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcThermalAdmittanceMeasure = REAL;
-class IfcThermalAdmittanceMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcThermalAdmittanceMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcThermalAdmittanceMeasure();

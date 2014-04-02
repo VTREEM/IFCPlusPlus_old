@@ -22,7 +22,7 @@
 #include "IfcTrimmingSelect.h"
 
 // TYPE IfcParameterValue = REAL;
-class IfcParameterValue : public IfcMeasureValue, public IfcTrimmingSelect, public IfcPPType
+class IfcParameterValue : public IfcMeasureValue, public IfcTrimmingSelect
 {
 public:
 	IfcParameterValue();

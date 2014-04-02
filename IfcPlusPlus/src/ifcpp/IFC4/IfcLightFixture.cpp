@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcLightFixture 
-IfcLightFixture::IfcLightFixture() { m_entity_enum = IFCLIGHTFIXTURE; }
-IfcLightFixture::IfcLightFixture( int id ) { m_id = id; m_entity_enum = IFCLIGHTFIXTURE; }
+IfcLightFixture::IfcLightFixture() {}
+IfcLightFixture::IfcLightFixture( int id ) { m_id = id; }
 IfcLightFixture::~IfcLightFixture() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -24,8 +24,8 @@
 #include "include/IfcRelAssociatesMaterial.h"
 
 // ENTITY IfcMaterialProfileSetUsageTapering 
-IfcMaterialProfileSetUsageTapering::IfcMaterialProfileSetUsageTapering() { m_entity_enum = IFCMATERIALPROFILESETUSAGETAPERING; }
-IfcMaterialProfileSetUsageTapering::IfcMaterialProfileSetUsageTapering( int id ) { m_id = id; m_entity_enum = IFCMATERIALPROFILESETUSAGETAPERING; }
+IfcMaterialProfileSetUsageTapering::IfcMaterialProfileSetUsageTapering() {}
+IfcMaterialProfileSetUsageTapering::IfcMaterialProfileSetUsageTapering( int id ) { m_id = id; }
 IfcMaterialProfileSetUsageTapering::~IfcMaterialProfileSetUsageTapering() {}
 
 // method setEntity takes over all attributes from another instance of the class

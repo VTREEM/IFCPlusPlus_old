@@ -30,10 +30,11 @@ class IfcPPObject
 {
 public:
 	virtual const char* classname() const { return "IfcPPObject"; }
-	virtual void getStepData( std::stringstream& ) {};
 };
 
-class IfcPPEntity : public IfcPPObject
+
+// ENTITY
+class IfcPPEntity : virtual public IfcPPObject
 {
 protected:
 	int m_id;
@@ -52,32 +53,4 @@ public:
 	void setId( int id );
 	std::string m_entity_argument_str;
 	IfcPPEntityEnum m_entity_enum;
-};
-
-//// class to derive IFC TYPEs from
-class IfcPPType : public IfcPPObject
-{
-public:	
-	IfcPPType();
-	~IfcPPType();
-	virtual const char* classname() const { return "IfcPPType"; }
-	virtual void getStepData( std::stringstream& ) {};
-	virtual void readStepArgument( const std::string& arg );
-	IfcPPTypeEnum m_type_enum;
-};
-
-
-//// pure abstract class to derive IFC TYPEs from
-class IfcPPAbstractSelect
-{
-public:
-	virtual const char* classname() const { return "IfcPPAbstractSelect"; }
-	virtual void getStepData( std::stringstream& ) {};
-};
-
-class IfcPPAbstractEnum
-{
-public:
-	virtual const char* classname() const { return "IfcPPAbstractEnum"; }
-	virtual void getStepData( std::stringstream& ) {};
 };

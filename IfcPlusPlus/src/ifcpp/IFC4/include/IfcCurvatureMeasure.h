@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcCurvatureMeasure = REAL;
-class IfcCurvatureMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcCurvatureMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcCurvatureMeasure();

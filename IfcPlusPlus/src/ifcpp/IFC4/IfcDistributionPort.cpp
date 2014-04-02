@@ -40,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDistributionPort 
-IfcDistributionPort::IfcDistributionPort() { m_entity_enum = IFCDISTRIBUTIONPORT; }
-IfcDistributionPort::IfcDistributionPort( int id ) { m_id = id; m_entity_enum = IFCDISTRIBUTIONPORT; }
+IfcDistributionPort::IfcDistributionPort() {}
+IfcDistributionPort::IfcDistributionPort( int id ) { m_id = id; }
 IfcDistributionPort::~IfcDistributionPort() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPileTypeEnum = ENUMERATION OF	(BORED	,DRIVEN	,JETGROUTING	,COHESION	,FRICTION	,SUPPORT	,USERDEFINED	,NOTDEFINED);
-class IfcPileTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPileTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPileTypeEnumEnum

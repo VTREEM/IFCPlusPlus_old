@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBurnerType 
-IfcBurnerType::IfcBurnerType() { m_entity_enum = IFCBURNERTYPE; }
-IfcBurnerType::IfcBurnerType( int id ) { m_id = id; m_entity_enum = IFCBURNERTYPE; }
+IfcBurnerType::IfcBurnerType() {}
+IfcBurnerType::IfcBurnerType( int id ) { m_id = id; }
 IfcBurnerType::~IfcBurnerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -22,8 +22,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBoundedSurface 
-IfcBoundedSurface::IfcBoundedSurface() { m_entity_enum = IFCBOUNDEDSURFACE; }
-IfcBoundedSurface::IfcBoundedSurface( int id ) { m_id = id; m_entity_enum = IFCBOUNDEDSURFACE; }
+IfcBoundedSurface::IfcBoundedSurface() {}
+IfcBoundedSurface::IfcBoundedSurface( int id ) { m_id = id; }
 IfcBoundedSurface::~IfcBoundedSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

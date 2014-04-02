@@ -60,7 +60,7 @@ shared_ptr<IfcFireSuppressionTerminalTypeEnum> IfcFireSuppressionTerminalTypeEnu
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFireSuppressionTerminalTypeEnum>(); }
-	shared_ptr<IfcFireSuppressionTerminalTypeEnum> type_object( new IfcFireSuppressionTerminalTypeEnum() );
+	auto type_object = std::make_shared<IfcFireSuppressionTerminalTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BREECHINGINLET." ) == 0 )
 	{
 		type_object->m_enum = IfcFireSuppressionTerminalTypeEnum::ENUM_BREECHINGINLET;

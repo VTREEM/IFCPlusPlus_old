@@ -36,7 +36,7 @@ shared_ptr<IfcTimeMeasure> IfcTimeMeasure::createObjectFromStepData( const std::
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTimeMeasure>(); }
-	shared_ptr<IfcTimeMeasure> type_object( new IfcTimeMeasure() );
+	auto type_object = std::make_shared<IfcTimeMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

@@ -52,7 +52,7 @@ shared_ptr<IfcFastenerTypeEnum> IfcFastenerTypeEnum::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFastenerTypeEnum>(); }
-	shared_ptr<IfcFastenerTypeEnum> type_object( new IfcFastenerTypeEnum() );
+	auto type_object = std::make_shared<IfcFastenerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".GLUE." ) == 0 )
 	{
 		type_object->m_enum = IfcFastenerTypeEnum::ENUM_GLUE;

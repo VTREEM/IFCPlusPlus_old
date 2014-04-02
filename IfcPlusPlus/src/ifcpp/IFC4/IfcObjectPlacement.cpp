@@ -22,8 +22,8 @@
 #include "include/IfcProduct.h"
 
 // ENTITY IfcObjectPlacement 
-IfcObjectPlacement::IfcObjectPlacement() { m_entity_enum = IFCOBJECTPLACEMENT; }
-IfcObjectPlacement::IfcObjectPlacement( int id ) { m_id = id; m_entity_enum = IFCOBJECTPLACEMENT; }
+IfcObjectPlacement::IfcObjectPlacement() {}
+IfcObjectPlacement::IfcObjectPlacement( int id ) { m_id = id; }
 IfcObjectPlacement::~IfcObjectPlacement() {}
 
 // method setEntity takes over all attributes from another instance of the class

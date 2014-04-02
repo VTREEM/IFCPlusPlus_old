@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDoorTypeEnum = ENUMERATION OF	(DOOR	,GATE	,TRAPDOOR	,USERDEFINED	,NOTDEFINED);
-class IfcDoorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDoorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDoorTypeEnumEnum

@@ -22,8 +22,8 @@
 #include "include/IfcSlippageConnectionCondition.h"
 
 // ENTITY IfcSlippageConnectionCondition 
-IfcSlippageConnectionCondition::IfcSlippageConnectionCondition() { m_entity_enum = IFCSLIPPAGECONNECTIONCONDITION; }
-IfcSlippageConnectionCondition::IfcSlippageConnectionCondition( int id ) { m_id = id; m_entity_enum = IFCSLIPPAGECONNECTIONCONDITION; }
+IfcSlippageConnectionCondition::IfcSlippageConnectionCondition() {}
+IfcSlippageConnectionCondition::IfcSlippageConnectionCondition( int id ) { m_id = id; }
 IfcSlippageConnectionCondition::~IfcSlippageConnectionCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class

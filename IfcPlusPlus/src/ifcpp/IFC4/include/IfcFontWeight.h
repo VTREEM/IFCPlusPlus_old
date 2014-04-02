@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFontWeight = STRING;
-class IfcFontWeight : public IfcPPType
+class IfcFontWeight : public IfcPPObject
 {
 public:
 	IfcFontWeight();

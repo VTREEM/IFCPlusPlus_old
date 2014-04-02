@@ -24,8 +24,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcExternalReference 
-IfcExternalReference::IfcExternalReference() { m_entity_enum = IFCEXTERNALREFERENCE; }
-IfcExternalReference::IfcExternalReference( int id ) { m_id = id; m_entity_enum = IFCEXTERNALREFERENCE; }
+IfcExternalReference::IfcExternalReference() {}
+IfcExternalReference::IfcExternalReference( int id ) { m_id = id; }
 IfcExternalReference::~IfcExternalReference() {}
 
 // method setEntity takes over all attributes from another instance of the class

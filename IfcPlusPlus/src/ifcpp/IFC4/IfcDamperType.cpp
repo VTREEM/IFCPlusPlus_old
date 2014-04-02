@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDamperType 
-IfcDamperType::IfcDamperType() { m_entity_enum = IFCDAMPERTYPE; }
-IfcDamperType::IfcDamperType( int id ) { m_id = id; m_entity_enum = IFCDAMPERTYPE; }
+IfcDamperType::IfcDamperType() {}
+IfcDamperType::IfcDamperType( int id ) { m_id = id; }
 IfcDamperType::~IfcDamperType() {}
 
 // method setEntity takes over all attributes from another instance of the class

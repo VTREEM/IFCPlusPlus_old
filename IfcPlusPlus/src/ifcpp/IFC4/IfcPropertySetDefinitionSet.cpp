@@ -35,7 +35,7 @@ shared_ptr<IfcPropertySetDefinitionSet> IfcPropertySetDefinitionSet::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPropertySetDefinitionSet>(); }
-	shared_ptr<IfcPropertySetDefinitionSet> type_object( new IfcPropertySetDefinitionSet() );
+	auto type_object = std::make_shared<IfcPropertySetDefinitionSet>();
 	readEntityReferenceList(  arg, type_object->m_vec, map );
 	return type_object;
 }

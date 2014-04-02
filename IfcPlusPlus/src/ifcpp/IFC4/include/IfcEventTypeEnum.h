@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcEventTypeEnum = ENUMERATION OF	(STARTEVENT	,ENDEVENT	,INTERMEDIATEEVENT	,USERDEFINED	,NOTDEFINED);
-class IfcEventTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcEventTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcEventTypeEnumEnum

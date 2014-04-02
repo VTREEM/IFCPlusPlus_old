@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFootingType 
-IfcFootingType::IfcFootingType() { m_entity_enum = IFCFOOTINGTYPE; }
-IfcFootingType::IfcFootingType( int id ) { m_id = id; m_entity_enum = IFCFOOTINGTYPE; }
+IfcFootingType::IfcFootingType() {}
+IfcFootingType::IfcFootingType( int id ) { m_id = id; }
 IfcFootingType::~IfcFootingType() {}
 
 // method setEntity takes over all attributes from another instance of the class

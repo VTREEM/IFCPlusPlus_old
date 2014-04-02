@@ -18,8 +18,9 @@
 #include "ifcpp/IfcPPTypeEnums.h"
 #include "ifcpp/model/IfcPPException.h"
 
-shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
+shared_ptr<IfcPPObject> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
+	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPPObject>(); }
 	switch( type_enum )
 	{
 		case IFCABSORBEDDOSEMEASURE:return IfcAbsorbedDoseMeasure::createObjectFromStepData( arg );

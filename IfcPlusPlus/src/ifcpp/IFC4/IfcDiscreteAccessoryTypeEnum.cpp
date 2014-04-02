@@ -52,7 +52,7 @@ shared_ptr<IfcDiscreteAccessoryTypeEnum> IfcDiscreteAccessoryTypeEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDiscreteAccessoryTypeEnum>(); }
-	shared_ptr<IfcDiscreteAccessoryTypeEnum> type_object( new IfcDiscreteAccessoryTypeEnum() );
+	auto type_object = std::make_shared<IfcDiscreteAccessoryTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ANCHORPLATE." ) == 0 )
 	{
 		type_object->m_enum = IfcDiscreteAccessoryTypeEnum::ENUM_ANCHORPLATE;

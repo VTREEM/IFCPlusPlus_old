@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBeamStandardCase 
-IfcBeamStandardCase::IfcBeamStandardCase() { m_entity_enum = IFCBEAMSTANDARDCASE; }
-IfcBeamStandardCase::IfcBeamStandardCase( int id ) { m_id = id; m_entity_enum = IFCBEAMSTANDARDCASE; }
+IfcBeamStandardCase::IfcBeamStandardCase() {}
+IfcBeamStandardCase::IfcBeamStandardCase( int id ) { m_id = id; }
 IfcBeamStandardCase::~IfcBeamStandardCase() {}
 
 // method setEntity takes over all attributes from another instance of the class

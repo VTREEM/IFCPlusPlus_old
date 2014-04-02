@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcElectricMotorTypeEnum = ENUMERATION OF	(DC	,INDUCTION	,POLYPHASE	,RELUCTANCESYNCHRONOUS	,SYNCHRONOUS	,USERDEFINED	,NOTDEFINED);
-class IfcElectricMotorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcElectricMotorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcElectricMotorTypeEnumEnum

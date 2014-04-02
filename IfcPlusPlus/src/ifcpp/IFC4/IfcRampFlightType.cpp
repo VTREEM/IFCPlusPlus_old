@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRampFlightType 
-IfcRampFlightType::IfcRampFlightType() { m_entity_enum = IFCRAMPFLIGHTTYPE; }
-IfcRampFlightType::IfcRampFlightType( int id ) { m_id = id; m_entity_enum = IFCRAMPFLIGHTTYPE; }
+IfcRampFlightType::IfcRampFlightType() {}
+IfcRampFlightType::IfcRampFlightType( int id ) { m_id = id; }
 IfcRampFlightType::~IfcRampFlightType() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSanitaryTerminalTypeEnum = ENUMERATION OF	(BATH	,BIDET	,CISTERN	,SHOWER	,SINK	,SANITARYFOUNTAIN	,TOILETPAN	,URINAL	,WASHHANDBASIN	,WCSEAT	,USERDEFINED	,NOTDEFINED);
-class IfcSanitaryTerminalTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSanitaryTerminalTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSanitaryTerminalTypeEnumEnum

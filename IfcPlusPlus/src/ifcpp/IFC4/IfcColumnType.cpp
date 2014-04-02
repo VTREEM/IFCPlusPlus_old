@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcColumnType 
-IfcColumnType::IfcColumnType() { m_entity_enum = IFCCOLUMNTYPE; }
-IfcColumnType::IfcColumnType( int id ) { m_id = id; m_entity_enum = IFCCOLUMNTYPE; }
+IfcColumnType::IfcColumnType() {}
+IfcColumnType::IfcColumnType( int id ) { m_id = id; }
 IfcColumnType::~IfcColumnType() {}
 
 // method setEntity takes over all attributes from another instance of the class

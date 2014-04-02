@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMassFlowRateMeasure = REAL;
-class IfcMassFlowRateMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMassFlowRateMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcMassFlowRateMeasure();

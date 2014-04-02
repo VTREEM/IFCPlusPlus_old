@@ -23,8 +23,8 @@
 #include "include/IfcTextureVertex.h"
 
 // ENTITY IfcTextureMap 
-IfcTextureMap::IfcTextureMap() { m_entity_enum = IFCTEXTUREMAP; }
-IfcTextureMap::IfcTextureMap( int id ) { m_id = id; m_entity_enum = IFCTEXTUREMAP; }
+IfcTextureMap::IfcTextureMap() {}
+IfcTextureMap::IfcTextureMap( int id ) { m_id = id; }
 IfcTextureMap::~IfcTextureMap() {}
 
 // method setEntity takes over all attributes from another instance of the class

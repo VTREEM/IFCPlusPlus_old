@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAirTerminalTypeEnum = ENUMERATION OF	(DIFFUSER	,GRILLE	,LOUVRE	,REGISTER	,USERDEFINED	,NOTDEFINED);
-class IfcAirTerminalTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAirTerminalTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAirTerminalTypeEnumEnum

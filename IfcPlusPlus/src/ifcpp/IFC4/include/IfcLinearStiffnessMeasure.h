@@ -22,7 +22,7 @@
 #include "IfcTranslationalStiffnessSelect.h"
 
 // TYPE IfcLinearStiffnessMeasure = REAL;
-class IfcLinearStiffnessMeasure : public IfcDerivedMeasureValue, public IfcTranslationalStiffnessSelect, public IfcPPType
+class IfcLinearStiffnessMeasure : public IfcDerivedMeasureValue, public IfcTranslationalStiffnessSelect
 {
 public:
 	IfcLinearStiffnessMeasure();

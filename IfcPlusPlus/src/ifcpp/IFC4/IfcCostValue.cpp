@@ -28,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCostValue 
-IfcCostValue::IfcCostValue() { m_entity_enum = IFCCOSTVALUE; }
-IfcCostValue::IfcCostValue( int id ) { m_id = id; m_entity_enum = IFCCOSTVALUE; }
+IfcCostValue::IfcCostValue() {}
+IfcCostValue::IfcCostValue( int id ) { m_id = id; }
 IfcCostValue::~IfcCostValue() {}
 
 // method setEntity takes over all attributes from another instance of the class

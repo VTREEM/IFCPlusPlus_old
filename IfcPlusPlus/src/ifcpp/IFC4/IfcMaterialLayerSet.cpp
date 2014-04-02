@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMaterialLayerSet 
-IfcMaterialLayerSet::IfcMaterialLayerSet() { m_entity_enum = IFCMATERIALLAYERSET; }
-IfcMaterialLayerSet::IfcMaterialLayerSet( int id ) { m_id = id; m_entity_enum = IFCMATERIALLAYERSET; }
+IfcMaterialLayerSet::IfcMaterialLayerSet() {}
+IfcMaterialLayerSet::IfcMaterialLayerSet( int id ) { m_id = id; }
 IfcMaterialLayerSet::~IfcMaterialLayerSet() {}
 
 // method setEntity takes over all attributes from another instance of the class

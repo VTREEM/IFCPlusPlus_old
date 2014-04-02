@@ -36,7 +36,7 @@ shared_ptr<IfcKinematicViscosityMeasure> IfcKinematicViscosityMeasure::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcKinematicViscosityMeasure>(); }
-	shared_ptr<IfcKinematicViscosityMeasure> type_object( new IfcKinematicViscosityMeasure() );
+	auto type_object = std::make_shared<IfcKinematicViscosityMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

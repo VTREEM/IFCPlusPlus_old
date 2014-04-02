@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelServicesBuildings 
-IfcRelServicesBuildings::IfcRelServicesBuildings() { m_entity_enum = IFCRELSERVICESBUILDINGS; }
-IfcRelServicesBuildings::IfcRelServicesBuildings( int id ) { m_id = id; m_entity_enum = IFCRELSERVICESBUILDINGS; }
+IfcRelServicesBuildings::IfcRelServicesBuildings() {}
+IfcRelServicesBuildings::IfcRelServicesBuildings( int id ) { m_id = id; }
 IfcRelServicesBuildings::~IfcRelServicesBuildings() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -29,8 +29,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelContainedInSpatialStructure 
-IfcRelContainedInSpatialStructure::IfcRelContainedInSpatialStructure() { m_entity_enum = IFCRELCONTAINEDINSPATIALSTRUCTURE; }
-IfcRelContainedInSpatialStructure::IfcRelContainedInSpatialStructure( int id ) { m_id = id; m_entity_enum = IFCRELCONTAINEDINSPATIALSTRUCTURE; }
+IfcRelContainedInSpatialStructure::IfcRelContainedInSpatialStructure() {}
+IfcRelContainedInSpatialStructure::IfcRelContainedInSpatialStructure( int id ) { m_id = id; }
 IfcRelContainedInSpatialStructure::~IfcRelContainedInSpatialStructure() {}
 
 // method setEntity takes over all attributes from another instance of the class

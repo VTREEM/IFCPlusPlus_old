@@ -29,8 +29,8 @@
 #include "include/IfcTypeResource.h"
 
 // ENTITY IfcRelAssignsToResource 
-IfcRelAssignsToResource::IfcRelAssignsToResource() { m_entity_enum = IFCRELASSIGNSTORESOURCE; }
-IfcRelAssignsToResource::IfcRelAssignsToResource( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTORESOURCE; }
+IfcRelAssignsToResource::IfcRelAssignsToResource() {}
+IfcRelAssignsToResource::IfcRelAssignsToResource( int id ) { m_id = id; }
 IfcRelAssignsToResource::~IfcRelAssignsToResource() {}
 
 // method setEntity takes over all attributes from another instance of the class

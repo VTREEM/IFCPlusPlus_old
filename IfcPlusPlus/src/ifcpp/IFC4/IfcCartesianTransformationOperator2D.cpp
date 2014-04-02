@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCartesianTransformationOperator2D 
-IfcCartesianTransformationOperator2D::IfcCartesianTransformationOperator2D() { m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR2D; }
-IfcCartesianTransformationOperator2D::IfcCartesianTransformationOperator2D( int id ) { m_id = id; m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR2D; }
+IfcCartesianTransformationOperator2D::IfcCartesianTransformationOperator2D() {}
+IfcCartesianTransformationOperator2D::IfcCartesianTransformationOperator2D( int id ) { m_id = id; }
 IfcCartesianTransformationOperator2D::~IfcCartesianTransformationOperator2D() {}
 
 // method setEntity takes over all attributes from another instance of the class

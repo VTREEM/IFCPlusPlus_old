@@ -34,8 +34,8 @@
 #include "include/IfcZone.h"
 
 // ENTITY IfcZone 
-IfcZone::IfcZone() { m_entity_enum = IFCZONE; }
-IfcZone::IfcZone( int id ) { m_id = id; m_entity_enum = IFCZONE; }
+IfcZone::IfcZone() {}
+IfcZone::IfcZone( int id ) { m_id = id; }
 IfcZone::~IfcZone() {}
 
 // method setEntity takes over all attributes from another instance of the class

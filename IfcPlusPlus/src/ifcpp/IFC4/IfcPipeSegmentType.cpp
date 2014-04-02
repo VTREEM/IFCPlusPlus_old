@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPipeSegmentType 
-IfcPipeSegmentType::IfcPipeSegmentType() { m_entity_enum = IFCPIPESEGMENTTYPE; }
-IfcPipeSegmentType::IfcPipeSegmentType( int id ) { m_id = id; m_entity_enum = IFCPIPESEGMENTTYPE; }
+IfcPipeSegmentType::IfcPipeSegmentType() {}
+IfcPipeSegmentType::IfcPipeSegmentType( int id ) { m_id = id; }
 IfcPipeSegmentType::~IfcPipeSegmentType() {}
 
 // method setEntity takes over all attributes from another instance of the class

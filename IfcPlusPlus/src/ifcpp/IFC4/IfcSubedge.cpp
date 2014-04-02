@@ -24,8 +24,8 @@
 #include "include/IfcVertex.h"
 
 // ENTITY IfcSubedge 
-IfcSubedge::IfcSubedge() { m_entity_enum = IFCSUBEDGE; }
-IfcSubedge::IfcSubedge( int id ) { m_id = id; m_entity_enum = IFCSUBEDGE; }
+IfcSubedge::IfcSubedge() {}
+IfcSubedge::IfcSubedge( int id ) { m_id = id; }
 IfcSubedge::~IfcSubedge() {}
 
 // method setEntity takes over all attributes from another instance of the class

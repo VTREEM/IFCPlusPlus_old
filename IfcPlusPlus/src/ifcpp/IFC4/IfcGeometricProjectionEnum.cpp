@@ -68,7 +68,7 @@ shared_ptr<IfcGeometricProjectionEnum> IfcGeometricProjectionEnum::createObjectF
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcGeometricProjectionEnum>(); }
-	shared_ptr<IfcGeometricProjectionEnum> type_object( new IfcGeometricProjectionEnum() );
+	auto type_object = std::make_shared<IfcGeometricProjectionEnum>();
 	if( _stricmp( arg.c_str(), ".GRAPH_VIEW." ) == 0 )
 	{
 		type_object->m_enum = IfcGeometricProjectionEnum::ENUM_GRAPH_VIEW;

@@ -21,8 +21,8 @@
 #include "include/IfcStructuralConnectionCondition.h"
 
 // ENTITY IfcStructuralConnectionCondition 
-IfcStructuralConnectionCondition::IfcStructuralConnectionCondition() { m_entity_enum = IFCSTRUCTURALCONNECTIONCONDITION; }
-IfcStructuralConnectionCondition::IfcStructuralConnectionCondition( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALCONNECTIONCONDITION; }
+IfcStructuralConnectionCondition::IfcStructuralConnectionCondition() {}
+IfcStructuralConnectionCondition::IfcStructuralConnectionCondition( int id ) { m_id = id; }
 IfcStructuralConnectionCondition::~IfcStructuralConnectionCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class

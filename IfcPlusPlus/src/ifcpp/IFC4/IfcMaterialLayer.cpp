@@ -30,8 +30,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMaterialLayer 
-IfcMaterialLayer::IfcMaterialLayer() { m_entity_enum = IFCMATERIALLAYER; }
-IfcMaterialLayer::IfcMaterialLayer( int id ) { m_id = id; m_entity_enum = IFCMATERIALLAYER; }
+IfcMaterialLayer::IfcMaterialLayer() {}
+IfcMaterialLayer::IfcMaterialLayer( int id ) { m_id = id; }
 IfcMaterialLayer::~IfcMaterialLayer() {}
 
 // method setEntity takes over all attributes from another instance of the class

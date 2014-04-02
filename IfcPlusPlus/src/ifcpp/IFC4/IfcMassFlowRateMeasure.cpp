@@ -36,7 +36,7 @@ shared_ptr<IfcMassFlowRateMeasure> IfcMassFlowRateMeasure::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMassFlowRateMeasure>(); }
-	shared_ptr<IfcMassFlowRateMeasure> type_object( new IfcMassFlowRateMeasure() );
+	auto type_object = std::make_shared<IfcMassFlowRateMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

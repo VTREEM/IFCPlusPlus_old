@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDuctSilencerType 
-IfcDuctSilencerType::IfcDuctSilencerType() { m_entity_enum = IFCDUCTSILENCERTYPE; }
-IfcDuctSilencerType::IfcDuctSilencerType( int id ) { m_id = id; m_entity_enum = IFCDUCTSILENCERTYPE; }
+IfcDuctSilencerType::IfcDuctSilencerType() {}
+IfcDuctSilencerType::IfcDuctSilencerType( int id ) { m_id = id; }
 IfcDuctSilencerType::~IfcDuctSilencerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

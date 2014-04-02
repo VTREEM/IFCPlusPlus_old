@@ -22,8 +22,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcCurveStyleFont 
-IfcCurveStyleFont::IfcCurveStyleFont() { m_entity_enum = IFCCURVESTYLEFONT; }
-IfcCurveStyleFont::IfcCurveStyleFont( int id ) { m_id = id; m_entity_enum = IFCCURVESTYLEFONT; }
+IfcCurveStyleFont::IfcCurveStyleFont() {}
+IfcCurveStyleFont::IfcCurveStyleFont( int id ) { m_id = id; }
 IfcCurveStyleFont::~IfcCurveStyleFont() {}
 
 // method setEntity takes over all attributes from another instance of the class

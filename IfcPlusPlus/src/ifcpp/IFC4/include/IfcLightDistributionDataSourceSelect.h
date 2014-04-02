@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcLightDistributionDataSourceSelect = SELECT	(IfcExternalReference	,IfcLightIntensityDistribution);
-class IfcLightDistributionDataSourceSelect : public IfcPPAbstractSelect
+class IfcLightDistributionDataSourceSelect : virtual public IfcPPObject
 {
 public:
 	IfcLightDistributionDataSourceSelect();
 	~IfcLightDistributionDataSourceSelect();
 	virtual const char* classname() const { return "IfcLightDistributionDataSourceSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcLightDistributionDataSourceSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

@@ -20,10 +20,6 @@
 ProfileCache::ProfileCache( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> uc )
 	: m_geom_settings(geom_settings), m_unit_converter(uc)
 {
-
-#ifdef IFCPP_OPENMP
-	omp_init_lock(&m_writelock_profile_cache);
-#endif
 }
 
 ProfileCache::~ProfileCache()
@@ -47,13 +43,11 @@ shared_ptr<ProfileConverter> ProfileCache::getProfileConverter( shared_ptr<IfcPr
 
 	shared_ptr<ProfileConverter> profile_converter = shared_ptr<ProfileConverter>( new ProfileConverter( m_geom_settings, m_unit_converter ) );
 	profile_converter->computeProfile( ifc_profile );
+
 #ifdef IFCPP_OPENMP
-	omp_set_lock(&m_writelock_profile_cache);
-	m_profile_cache[profile_id] = profile_converter;
-	omp_unset_lock(&m_writelock_profile_cache);
-#else
-	m_profile_cache[profile_id] = profile_converter;
+	ScopedLock lock( m_writelock_profile_cache );
 #endif
+	m_profile_cache[profile_id] = profile_converter;
 		
 	return profile_converter;
 }

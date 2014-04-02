@@ -23,8 +23,8 @@
 #include "include/IfcStructuralLoadSingleDisplacement.h"
 
 // ENTITY IfcStructuralLoadSingleDisplacement 
-IfcStructuralLoadSingleDisplacement::IfcStructuralLoadSingleDisplacement() { m_entity_enum = IFCSTRUCTURALLOADSINGLEDISPLACEMENT; }
-IfcStructuralLoadSingleDisplacement::IfcStructuralLoadSingleDisplacement( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADSINGLEDISPLACEMENT; }
+IfcStructuralLoadSingleDisplacement::IfcStructuralLoadSingleDisplacement() {}
+IfcStructuralLoadSingleDisplacement::IfcStructuralLoadSingleDisplacement( int id ) { m_id = id; }
 IfcStructuralLoadSingleDisplacement::~IfcStructuralLoadSingleDisplacement() {}
 
 // method setEntity takes over all attributes from another instance of the class

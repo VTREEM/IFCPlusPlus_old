@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPile 
-IfcPile::IfcPile() { m_entity_enum = IFCPILE; }
-IfcPile::IfcPile( int id ) { m_id = id; m_entity_enum = IFCPILE; }
+IfcPile::IfcPile() {}
+IfcPile::IfcPile( int id ) { m_id = id; }
 IfcPile::~IfcPile() {}
 
 // method setEntity takes over all attributes from another instance of the class

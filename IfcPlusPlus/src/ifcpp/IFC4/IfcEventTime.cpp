@@ -23,8 +23,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcEventTime 
-IfcEventTime::IfcEventTime() { m_entity_enum = IFCEVENTTIME; }
-IfcEventTime::IfcEventTime( int id ) { m_id = id; m_entity_enum = IFCEVENTTIME; }
+IfcEventTime::IfcEventTime() {}
+IfcEventTime::IfcEventTime( int id ) { m_id = id; }
 IfcEventTime::~IfcEventTime() {}
 
 // method setEntity takes over all attributes from another instance of the class

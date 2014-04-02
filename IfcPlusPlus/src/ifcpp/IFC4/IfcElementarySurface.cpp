@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcElementarySurface 
-IfcElementarySurface::IfcElementarySurface() { m_entity_enum = IFCELEMENTARYSURFACE; }
-IfcElementarySurface::IfcElementarySurface( int id ) { m_id = id; m_entity_enum = IFCELEMENTARYSURFACE; }
+IfcElementarySurface::IfcElementarySurface() {}
+IfcElementarySurface::IfcElementarySurface( int id ) { m_id = id; }
 IfcElementarySurface::~IfcElementarySurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

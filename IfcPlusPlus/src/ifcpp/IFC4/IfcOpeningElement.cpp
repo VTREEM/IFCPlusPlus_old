@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcOpeningElement 
-IfcOpeningElement::IfcOpeningElement() { m_entity_enum = IFCOPENINGELEMENT; }
-IfcOpeningElement::IfcOpeningElement( int id ) { m_id = id; m_entity_enum = IFCOPENINGELEMENT; }
+IfcOpeningElement::IfcOpeningElement() {}
+IfcOpeningElement::IfcOpeningElement( int id ) { m_id = id; }
 IfcOpeningElement::~IfcOpeningElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

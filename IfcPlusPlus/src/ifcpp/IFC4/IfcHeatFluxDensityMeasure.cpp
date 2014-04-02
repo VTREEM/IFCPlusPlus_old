@@ -36,7 +36,7 @@ shared_ptr<IfcHeatFluxDensityMeasure> IfcHeatFluxDensityMeasure::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcHeatFluxDensityMeasure>(); }
-	shared_ptr<IfcHeatFluxDensityMeasure> type_object( new IfcHeatFluxDensityMeasure() );
+	auto type_object = std::make_shared<IfcHeatFluxDensityMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

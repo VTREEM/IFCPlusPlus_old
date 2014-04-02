@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcThermalExpansionCoefficientMeasure = REAL;
-class IfcThermalExpansionCoefficientMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcThermalExpansionCoefficientMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcThermalExpansionCoefficientMeasure();

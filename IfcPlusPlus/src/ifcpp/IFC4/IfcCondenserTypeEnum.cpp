@@ -68,7 +68,7 @@ shared_ptr<IfcCondenserTypeEnum> IfcCondenserTypeEnum::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCondenserTypeEnum>(); }
-	shared_ptr<IfcCondenserTypeEnum> type_object( new IfcCondenserTypeEnum() );
+	auto type_object = std::make_shared<IfcCondenserTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AIRCOOLED." ) == 0 )
 	{
 		type_object->m_enum = IfcCondenserTypeEnum::ENUM_AIRCOOLED;

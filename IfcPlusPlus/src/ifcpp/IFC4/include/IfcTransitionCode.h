@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTransitionCode = ENUMERATION OF	(DISCONTINUOUS	,CONTINUOUS	,CONTSAMEGRADIENT	,CONTSAMEGRADIENTSAMECURVATURE);
-class IfcTransitionCode : public IfcPPAbstractEnum, public IfcPPType
+class IfcTransitionCode : virtual public IfcPPObject
 {
 public:
 	enum IfcTransitionCodeEnum

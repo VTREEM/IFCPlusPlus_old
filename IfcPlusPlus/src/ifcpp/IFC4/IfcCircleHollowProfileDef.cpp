@@ -26,8 +26,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcCircleHollowProfileDef 
-IfcCircleHollowProfileDef::IfcCircleHollowProfileDef() { m_entity_enum = IFCCIRCLEHOLLOWPROFILEDEF; }
-IfcCircleHollowProfileDef::IfcCircleHollowProfileDef( int id ) { m_id = id; m_entity_enum = IFCCIRCLEHOLLOWPROFILEDEF; }
+IfcCircleHollowProfileDef::IfcCircleHollowProfileDef() {}
+IfcCircleHollowProfileDef::IfcCircleHollowProfileDef( int id ) { m_id = id; }
 IfcCircleHollowProfileDef::~IfcCircleHollowProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

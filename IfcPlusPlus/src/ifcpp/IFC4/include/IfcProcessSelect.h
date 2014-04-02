@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProcessSelect = SELECT	(IfcProcess	,IfcTypeProcess);
-class IfcProcessSelect : public IfcPPAbstractSelect
+class IfcProcessSelect : virtual public IfcPPObject
 {
 public:
 	IfcProcessSelect();
 	~IfcProcessSelect();
 	virtual const char* classname() const { return "IfcProcessSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcProcessSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

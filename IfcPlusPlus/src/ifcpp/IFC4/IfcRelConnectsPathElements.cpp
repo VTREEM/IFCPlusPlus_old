@@ -27,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsPathElements 
-IfcRelConnectsPathElements::IfcRelConnectsPathElements() { m_entity_enum = IFCRELCONNECTSPATHELEMENTS; }
-IfcRelConnectsPathElements::IfcRelConnectsPathElements( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSPATHELEMENTS; }
+IfcRelConnectsPathElements::IfcRelConnectsPathElements() {}
+IfcRelConnectsPathElements::IfcRelConnectsPathElements( int id ) { m_id = id; }
 IfcRelConnectsPathElements::~IfcRelConnectsPathElements() {}
 
 // method setEntity takes over all attributes from another instance of the class

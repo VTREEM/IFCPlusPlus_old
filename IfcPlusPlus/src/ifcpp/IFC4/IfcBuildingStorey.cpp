@@ -40,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBuildingStorey 
-IfcBuildingStorey::IfcBuildingStorey() { m_entity_enum = IFCBUILDINGSTOREY; }
-IfcBuildingStorey::IfcBuildingStorey( int id ) { m_id = id; m_entity_enum = IFCBUILDINGSTOREY; }
+IfcBuildingStorey::IfcBuildingStorey() {}
+IfcBuildingStorey::IfcBuildingStorey( int id ) { m_id = id; }
 IfcBuildingStorey::~IfcBuildingStorey() {}
 
 // method setEntity takes over all attributes from another instance of the class

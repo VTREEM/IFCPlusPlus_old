@@ -24,8 +24,8 @@
 #include "include/IfcVector.h"
 
 // ENTITY IfcFillAreaStyleTiles 
-IfcFillAreaStyleTiles::IfcFillAreaStyleTiles() { m_entity_enum = IFCFILLAREASTYLETILES; }
-IfcFillAreaStyleTiles::IfcFillAreaStyleTiles( int id ) { m_id = id; m_entity_enum = IFCFILLAREASTYLETILES; }
+IfcFillAreaStyleTiles::IfcFillAreaStyleTiles() {}
+IfcFillAreaStyleTiles::IfcFillAreaStyleTiles( int id ) { m_id = id; }
 IfcFillAreaStyleTiles::~IfcFillAreaStyleTiles() {}
 
 // method setEntity takes over all attributes from another instance of the class

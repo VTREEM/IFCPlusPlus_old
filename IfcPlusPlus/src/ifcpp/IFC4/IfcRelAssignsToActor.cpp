@@ -28,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelAssignsToActor 
-IfcRelAssignsToActor::IfcRelAssignsToActor() { m_entity_enum = IFCRELASSIGNSTOACTOR; }
-IfcRelAssignsToActor::IfcRelAssignsToActor( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTOACTOR; }
+IfcRelAssignsToActor::IfcRelAssignsToActor() {}
+IfcRelAssignsToActor::IfcRelAssignsToActor( int id ) { m_id = id; }
 IfcRelAssignsToActor::~IfcRelAssignsToActor() {}
 
 // method setEntity takes over all attributes from another instance of the class

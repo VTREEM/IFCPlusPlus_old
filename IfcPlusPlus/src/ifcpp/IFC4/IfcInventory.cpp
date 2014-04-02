@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcInventory 
-IfcInventory::IfcInventory() { m_entity_enum = IFCINVENTORY; }
-IfcInventory::IfcInventory( int id ) { m_id = id; m_entity_enum = IFCINVENTORY; }
+IfcInventory::IfcInventory() {}
+IfcInventory::IfcInventory( int id ) { m_id = id; }
 IfcInventory::~IfcInventory() {}
 
 // method setEntity takes over all attributes from another instance of the class

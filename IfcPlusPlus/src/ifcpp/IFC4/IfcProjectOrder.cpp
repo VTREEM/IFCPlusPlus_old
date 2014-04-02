@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProjectOrder 
-IfcProjectOrder::IfcProjectOrder() { m_entity_enum = IFCPROJECTORDER; }
-IfcProjectOrder::IfcProjectOrder( int id ) { m_id = id; m_entity_enum = IFCPROJECTORDER; }
+IfcProjectOrder::IfcProjectOrder() {}
+IfcProjectOrder::IfcProjectOrder( int id ) { m_id = id; }
 IfcProjectOrder::~IfcProjectOrder() {}
 
 // method setEntity takes over all attributes from another instance of the class

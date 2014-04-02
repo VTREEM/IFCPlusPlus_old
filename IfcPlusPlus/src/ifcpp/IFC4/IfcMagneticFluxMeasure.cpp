@@ -36,7 +36,7 @@ shared_ptr<IfcMagneticFluxMeasure> IfcMagneticFluxMeasure::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMagneticFluxMeasure>(); }
-	shared_ptr<IfcMagneticFluxMeasure> type_object( new IfcMagneticFluxMeasure() );
+	auto type_object = std::make_shared<IfcMagneticFluxMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

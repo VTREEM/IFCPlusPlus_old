@@ -67,7 +67,7 @@ shared_ptr<IfcSpecularHighlightSelect> IfcSpecularHighlightSelect::createObjectF
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSpecularHighlightSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcSpecularHighlightSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcSpecularHighlightSelect>();

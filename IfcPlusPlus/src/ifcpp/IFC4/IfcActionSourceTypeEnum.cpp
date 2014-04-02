@@ -140,7 +140,7 @@ shared_ptr<IfcActionSourceTypeEnum> IfcActionSourceTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcActionSourceTypeEnum>(); }
-	shared_ptr<IfcActionSourceTypeEnum> type_object( new IfcActionSourceTypeEnum() );
+	auto type_object = std::make_shared<IfcActionSourceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DEAD_LOAD_G." ) == 0 )
 	{
 		type_object->m_enum = IfcActionSourceTypeEnum::ENUM_DEAD_LOAD_G;

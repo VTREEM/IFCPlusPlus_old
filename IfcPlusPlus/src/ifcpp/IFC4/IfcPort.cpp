@@ -37,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPort 
-IfcPort::IfcPort() { m_entity_enum = IFCPORT; }
-IfcPort::IfcPort( int id ) { m_id = id; m_entity_enum = IFCPORT; }
+IfcPort::IfcPort() {}
+IfcPort::IfcPort( int id ) { m_id = id; }
 IfcPort::~IfcPort() {}
 
 // method setEntity takes over all attributes from another instance of the class

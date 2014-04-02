@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcConstructionEquipmentResourceType 
-IfcConstructionEquipmentResourceType::IfcConstructionEquipmentResourceType() { m_entity_enum = IFCCONSTRUCTIONEQUIPMENTRESOURCETYPE; }
-IfcConstructionEquipmentResourceType::IfcConstructionEquipmentResourceType( int id ) { m_id = id; m_entity_enum = IFCCONSTRUCTIONEQUIPMENTRESOURCETYPE; }
+IfcConstructionEquipmentResourceType::IfcConstructionEquipmentResourceType() {}
+IfcConstructionEquipmentResourceType::IfcConstructionEquipmentResourceType( int id ) { m_id = id; }
 IfcConstructionEquipmentResourceType::~IfcConstructionEquipmentResourceType() {}
 
 // method setEntity takes over all attributes from another instance of the class

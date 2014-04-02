@@ -38,8 +38,8 @@
 #include "include/IfcWorkScheduleTypeEnum.h"
 
 // ENTITY IfcWorkSchedule 
-IfcWorkSchedule::IfcWorkSchedule() { m_entity_enum = IFCWORKSCHEDULE; }
-IfcWorkSchedule::IfcWorkSchedule( int id ) { m_id = id; m_entity_enum = IFCWORKSCHEDULE; }
+IfcWorkSchedule::IfcWorkSchedule() {}
+IfcWorkSchedule::IfcWorkSchedule( int id ) { m_id = id; }
 IfcWorkSchedule::~IfcWorkSchedule() {}
 
 // method setEntity takes over all attributes from another instance of the class

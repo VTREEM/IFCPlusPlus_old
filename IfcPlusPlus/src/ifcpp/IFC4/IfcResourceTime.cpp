@@ -25,8 +25,8 @@
 #include "include/IfcResourceTime.h"
 
 // ENTITY IfcResourceTime 
-IfcResourceTime::IfcResourceTime() { m_entity_enum = IFCRESOURCETIME; }
-IfcResourceTime::IfcResourceTime( int id ) { m_id = id; m_entity_enum = IFCRESOURCETIME; }
+IfcResourceTime::IfcResourceTime() {}
+IfcResourceTime::IfcResourceTime( int id ) { m_id = id; }
 IfcResourceTime::~IfcResourceTime() {}
 
 // method setEntity takes over all attributes from another instance of the class

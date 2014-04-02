@@ -71,7 +71,7 @@ shared_ptr<IfcSizeSelect> IfcSizeSelect::createObjectFromStepData( const std::st
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSizeSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcSizeSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcSizeSelect>();

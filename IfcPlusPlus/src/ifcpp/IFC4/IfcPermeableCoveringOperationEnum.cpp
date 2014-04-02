@@ -52,7 +52,7 @@ shared_ptr<IfcPermeableCoveringOperationEnum> IfcPermeableCoveringOperationEnum:
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPermeableCoveringOperationEnum>(); }
-	shared_ptr<IfcPermeableCoveringOperationEnum> type_object( new IfcPermeableCoveringOperationEnum() );
+	auto type_object = std::make_shared<IfcPermeableCoveringOperationEnum>();
 	if( _stricmp( arg.c_str(), ".GRILL." ) == 0 )
 	{
 		type_object->m_enum = IfcPermeableCoveringOperationEnum::ENUM_GRILL;

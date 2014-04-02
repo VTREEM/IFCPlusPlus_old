@@ -52,7 +52,7 @@ shared_ptr<IfcStructuralSurfaceMemberTypeEnum> IfcStructuralSurfaceMemberTypeEnu
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStructuralSurfaceMemberTypeEnum>(); }
-	shared_ptr<IfcStructuralSurfaceMemberTypeEnum> type_object( new IfcStructuralSurfaceMemberTypeEnum() );
+	auto type_object = std::make_shared<IfcStructuralSurfaceMemberTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BENDING_ELEMENT." ) == 0 )
 	{
 		type_object->m_enum = IfcStructuralSurfaceMemberTypeEnum::ENUM_BENDING_ELEMENT;

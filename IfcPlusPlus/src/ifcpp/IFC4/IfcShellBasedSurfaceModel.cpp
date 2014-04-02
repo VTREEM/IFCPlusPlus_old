@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcShellBasedSurfaceModel 
-IfcShellBasedSurfaceModel::IfcShellBasedSurfaceModel() { m_entity_enum = IFCSHELLBASEDSURFACEMODEL; }
-IfcShellBasedSurfaceModel::IfcShellBasedSurfaceModel( int id ) { m_id = id; m_entity_enum = IFCSHELLBASEDSURFACEMODEL; }
+IfcShellBasedSurfaceModel::IfcShellBasedSurfaceModel() {}
+IfcShellBasedSurfaceModel::IfcShellBasedSurfaceModel( int id ) { m_id = id; }
 IfcShellBasedSurfaceModel::~IfcShellBasedSurfaceModel() {}
 
 // method setEntity takes over all attributes from another instance of the class

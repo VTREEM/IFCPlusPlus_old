@@ -22,7 +22,7 @@
 #include "IfcWarpingStiffnessSelect.h"
 
 // TYPE IfcWarpingMomentMeasure = REAL;
-class IfcWarpingMomentMeasure : public IfcDerivedMeasureValue, public IfcWarpingStiffnessSelect, public IfcPPType
+class IfcWarpingMomentMeasure : public IfcDerivedMeasureValue, public IfcWarpingStiffnessSelect
 {
 public:
 	IfcWarpingMomentMeasure();

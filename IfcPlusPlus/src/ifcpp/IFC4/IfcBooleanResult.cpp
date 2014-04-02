@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBooleanResult 
-IfcBooleanResult::IfcBooleanResult() { m_entity_enum = IFCBOOLEANRESULT; }
-IfcBooleanResult::IfcBooleanResult( int id ) { m_id = id; m_entity_enum = IFCBOOLEANRESULT; }
+IfcBooleanResult::IfcBooleanResult() {}
+IfcBooleanResult::IfcBooleanResult( int id ) { m_id = id; }
 IfcBooleanResult::~IfcBooleanResult() {}
 
 // method setEntity takes over all attributes from another instance of the class

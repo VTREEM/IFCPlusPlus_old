@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCommunicationsAppliance 
-IfcCommunicationsAppliance::IfcCommunicationsAppliance() { m_entity_enum = IFCCOMMUNICATIONSAPPLIANCE; }
-IfcCommunicationsAppliance::IfcCommunicationsAppliance( int id ) { m_id = id; m_entity_enum = IFCCOMMUNICATIONSAPPLIANCE; }
+IfcCommunicationsAppliance::IfcCommunicationsAppliance() {}
+IfcCommunicationsAppliance::IfcCommunicationsAppliance( int id ) { m_id = id; }
 IfcCommunicationsAppliance::~IfcCommunicationsAppliance() {}
 
 // method setEntity takes over all attributes from another instance of the class

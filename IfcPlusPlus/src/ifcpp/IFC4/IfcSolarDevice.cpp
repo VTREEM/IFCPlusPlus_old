@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSolarDevice 
-IfcSolarDevice::IfcSolarDevice() { m_entity_enum = IFCSOLARDEVICE; }
-IfcSolarDevice::IfcSolarDevice( int id ) { m_id = id; m_entity_enum = IFCSOLARDEVICE; }
+IfcSolarDevice::IfcSolarDevice() {}
+IfcSolarDevice::IfcSolarDevice( int id ) { m_id = id; }
 IfcSolarDevice::~IfcSolarDevice() {}
 
 // method setEntity takes over all attributes from another instance of the class

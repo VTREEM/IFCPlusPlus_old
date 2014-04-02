@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcHumidifier 
-IfcHumidifier::IfcHumidifier() { m_entity_enum = IFCHUMIDIFIER; }
-IfcHumidifier::IfcHumidifier( int id ) { m_id = id; m_entity_enum = IFCHUMIDIFIER; }
+IfcHumidifier::IfcHumidifier() {}
+IfcHumidifier::IfcHumidifier( int id ) { m_id = id; }
 IfcHumidifier::~IfcHumidifier() {}
 
 // method setEntity takes over all attributes from another instance of the class

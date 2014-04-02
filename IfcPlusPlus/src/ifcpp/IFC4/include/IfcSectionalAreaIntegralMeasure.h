@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcSectionalAreaIntegralMeasure = REAL;
-class IfcSectionalAreaIntegralMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcSectionalAreaIntegralMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcSectionalAreaIntegralMeasure();

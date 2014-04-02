@@ -21,8 +21,8 @@
 #include "include/IfcPreDefinedItem.h"
 
 // ENTITY IfcPreDefinedItem 
-IfcPreDefinedItem::IfcPreDefinedItem() { m_entity_enum = IFCPREDEFINEDITEM; }
-IfcPreDefinedItem::IfcPreDefinedItem( int id ) { m_id = id; m_entity_enum = IFCPREDEFINEDITEM; }
+IfcPreDefinedItem::IfcPreDefinedItem() {}
+IfcPreDefinedItem::IfcPreDefinedItem( int id ) { m_id = id; }
 IfcPreDefinedItem::~IfcPreDefinedItem() {}
 
 // method setEntity takes over all attributes from another instance of the class

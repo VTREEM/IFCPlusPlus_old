@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCoil 
-IfcCoil::IfcCoil() { m_entity_enum = IFCCOIL; }
-IfcCoil::IfcCoil( int id ) { m_id = id; m_entity_enum = IFCCOIL; }
+IfcCoil::IfcCoil() {}
+IfcCoil::IfcCoil( int id ) { m_id = id; }
 IfcCoil::~IfcCoil() {}
 
 // method setEntity takes over all attributes from another instance of the class

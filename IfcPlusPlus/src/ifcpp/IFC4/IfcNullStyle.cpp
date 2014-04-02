@@ -37,7 +37,7 @@ shared_ptr<IfcNullStyle> IfcNullStyle::createObjectFromStepData( const std::stri
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcNullStyle>(); }
-	shared_ptr<IfcNullStyle> type_object( new IfcNullStyle() );
+	auto type_object = std::make_shared<IfcNullStyle>();
 	if( _stricmp( arg.c_str(), ".ENUM_NULL." ) == 0 )
 	{
 		type_object->m_enum = IfcNullStyle::ENUM_ENUM_NULL;

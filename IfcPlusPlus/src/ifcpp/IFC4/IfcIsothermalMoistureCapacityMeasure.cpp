@@ -36,7 +36,7 @@ shared_ptr<IfcIsothermalMoistureCapacityMeasure> IfcIsothermalMoistureCapacityMe
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcIsothermalMoistureCapacityMeasure>(); }
-	shared_ptr<IfcIsothermalMoistureCapacityMeasure> type_object( new IfcIsothermalMoistureCapacityMeasure() );
+	auto type_object = std::make_shared<IfcIsothermalMoistureCapacityMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

@@ -65,7 +65,7 @@ shared_ptr<IfcMaterialSelect> IfcMaterialSelect::createObjectFromStepData( const
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcMaterialSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcMaterialSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcMaterialSelect>();

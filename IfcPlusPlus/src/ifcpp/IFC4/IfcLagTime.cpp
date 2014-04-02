@@ -24,8 +24,8 @@
 #include "include/IfcTimeOrRatioSelect.h"
 
 // ENTITY IfcLagTime 
-IfcLagTime::IfcLagTime() { m_entity_enum = IFCLAGTIME; }
-IfcLagTime::IfcLagTime( int id ) { m_id = id; m_entity_enum = IFCLAGTIME; }
+IfcLagTime::IfcLagTime() {}
+IfcLagTime::IfcLagTime( int id ) { m_id = id; }
 IfcLagTime::~IfcLagTime() {}
 
 // method setEntity takes over all attributes from another instance of the class

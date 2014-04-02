@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAirTerminalBoxTypeEnum = ENUMERATION OF	(CONSTANTFLOW	,VARIABLEFLOWPRESSUREDEPENDANT	,VARIABLEFLOWPRESSUREINDEPENDANT	,USERDEFINED	,NOTDEFINED);
-class IfcAirTerminalBoxTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAirTerminalBoxTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAirTerminalBoxTypeEnumEnum

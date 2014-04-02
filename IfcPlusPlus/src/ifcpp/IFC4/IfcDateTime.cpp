@@ -36,7 +36,7 @@ shared_ptr<IfcDateTime> IfcDateTime::createObjectFromStepData( const std::string
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDateTime>(); }
-	shared_ptr<IfcDateTime> type_object( new IfcDateTime() );
+	auto type_object = std::make_shared<IfcDateTime>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

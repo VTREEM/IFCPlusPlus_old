@@ -29,8 +29,8 @@
 #include "include/IfcTypeProduct.h"
 
 // ENTITY IfcRelAssignsToProduct 
-IfcRelAssignsToProduct::IfcRelAssignsToProduct() { m_entity_enum = IFCRELASSIGNSTOPRODUCT; }
-IfcRelAssignsToProduct::IfcRelAssignsToProduct( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTOPRODUCT; }
+IfcRelAssignsToProduct::IfcRelAssignsToProduct() {}
+IfcRelAssignsToProduct::IfcRelAssignsToProduct( int id ) { m_id = id; }
 IfcRelAssignsToProduct::~IfcRelAssignsToProduct() {}
 
 // method setEntity takes over all attributes from another instance of the class

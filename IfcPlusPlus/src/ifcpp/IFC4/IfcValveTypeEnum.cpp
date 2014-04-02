@@ -124,7 +124,7 @@ shared_ptr<IfcValveTypeEnum> IfcValveTypeEnum::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcValveTypeEnum>(); }
-	shared_ptr<IfcValveTypeEnum> type_object( new IfcValveTypeEnum() );
+	auto type_object = std::make_shared<IfcValveTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AIRRELEASE." ) == 0 )
 	{
 		type_object->m_enum = IfcValveTypeEnum::ENUM_AIRRELEASE;

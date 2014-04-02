@@ -48,7 +48,7 @@ shared_ptr<IfcVibrationIsolatorTypeEnum> IfcVibrationIsolatorTypeEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcVibrationIsolatorTypeEnum>(); }
-	shared_ptr<IfcVibrationIsolatorTypeEnum> type_object( new IfcVibrationIsolatorTypeEnum() );
+	auto type_object = std::make_shared<IfcVibrationIsolatorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".COMPRESSION." ) == 0 )
 	{
 		type_object->m_enum = IfcVibrationIsolatorTypeEnum::ENUM_COMPRESSION;

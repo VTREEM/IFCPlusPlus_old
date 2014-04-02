@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFastener 
-IfcFastener::IfcFastener() { m_entity_enum = IFCFASTENER; }
-IfcFastener::IfcFastener( int id ) { m_id = id; m_entity_enum = IFCFASTENER; }
+IfcFastener::IfcFastener() {}
+IfcFastener::IfcFastener( int id ) { m_id = id; }
 IfcFastener::~IfcFastener() {}
 
 // method setEntity takes over all attributes from another instance of the class

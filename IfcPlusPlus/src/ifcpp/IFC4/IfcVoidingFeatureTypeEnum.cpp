@@ -64,7 +64,7 @@ shared_ptr<IfcVoidingFeatureTypeEnum> IfcVoidingFeatureTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcVoidingFeatureTypeEnum>(); }
-	shared_ptr<IfcVoidingFeatureTypeEnum> type_object( new IfcVoidingFeatureTypeEnum() );
+	auto type_object = std::make_shared<IfcVoidingFeatureTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CUTOUT." ) == 0 )
 	{
 		type_object->m_enum = IfcVoidingFeatureTypeEnum::ENUM_CUTOUT;

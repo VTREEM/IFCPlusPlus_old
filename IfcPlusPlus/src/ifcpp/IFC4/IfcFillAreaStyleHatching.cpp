@@ -26,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcFillAreaStyleHatching 
-IfcFillAreaStyleHatching::IfcFillAreaStyleHatching() { m_entity_enum = IFCFILLAREASTYLEHATCHING; }
-IfcFillAreaStyleHatching::IfcFillAreaStyleHatching( int id ) { m_id = id; m_entity_enum = IFCFILLAREASTYLEHATCHING; }
+IfcFillAreaStyleHatching::IfcFillAreaStyleHatching() {}
+IfcFillAreaStyleHatching::IfcFillAreaStyleHatching( int id ) { m_id = id; }
 IfcFillAreaStyleHatching::~IfcFillAreaStyleHatching() {}
 
 // method setEntity takes over all attributes from another instance of the class

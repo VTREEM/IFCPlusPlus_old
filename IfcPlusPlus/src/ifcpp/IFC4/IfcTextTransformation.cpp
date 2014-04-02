@@ -35,7 +35,7 @@ shared_ptr<IfcTextTransformation> IfcTextTransformation::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextTransformation>(); }
-	shared_ptr<IfcTextTransformation> type_object( new IfcTextTransformation() );
+	auto type_object = std::make_shared<IfcTextTransformation>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

@@ -24,8 +24,8 @@
 #include "include/IfcWorkTime.h"
 
 // ENTITY IfcWorkTime 
-IfcWorkTime::IfcWorkTime() { m_entity_enum = IFCWORKTIME; }
-IfcWorkTime::IfcWorkTime( int id ) { m_id = id; m_entity_enum = IFCWORKTIME; }
+IfcWorkTime::IfcWorkTime() {}
+IfcWorkTime::IfcWorkTime( int id ) { m_id = id; }
 IfcWorkTime::~IfcWorkTime() {}
 
 // method setEntity takes over all attributes from another instance of the class

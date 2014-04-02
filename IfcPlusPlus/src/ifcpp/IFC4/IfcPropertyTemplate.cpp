@@ -28,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPropertyTemplate 
-IfcPropertyTemplate::IfcPropertyTemplate() { m_entity_enum = IFCPROPERTYTEMPLATE; }
-IfcPropertyTemplate::IfcPropertyTemplate( int id ) { m_id = id; m_entity_enum = IFCPROPERTYTEMPLATE; }
+IfcPropertyTemplate::IfcPropertyTemplate() {}
+IfcPropertyTemplate::IfcPropertyTemplate( int id ) { m_id = id; }
 IfcPropertyTemplate::~IfcPropertyTemplate() {}
 
 // method setEntity takes over all attributes from another instance of the class

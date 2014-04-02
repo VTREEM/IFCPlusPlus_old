@@ -36,7 +36,7 @@ shared_ptr<IfcModulusOfElasticityMeasure> IfcModulusOfElasticityMeasure::createO
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcModulusOfElasticityMeasure>(); }
-	shared_ptr<IfcModulusOfElasticityMeasure> type_object( new IfcModulusOfElasticityMeasure() );
+	auto type_object = std::make_shared<IfcModulusOfElasticityMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

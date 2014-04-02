@@ -56,7 +56,7 @@ shared_ptr<IfcFlowMeterTypeEnum> IfcFlowMeterTypeEnum::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFlowMeterTypeEnum>(); }
-	shared_ptr<IfcFlowMeterTypeEnum> type_object( new IfcFlowMeterTypeEnum() );
+	auto type_object = std::make_shared<IfcFlowMeterTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ENERGYMETER." ) == 0 )
 	{
 		type_object->m_enum = IfcFlowMeterTypeEnum::ENUM_ENERGYMETER;

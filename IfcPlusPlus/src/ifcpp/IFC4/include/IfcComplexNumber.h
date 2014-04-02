@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcComplexNumber = ARRAY [1:2] OF REAL;
-class IfcComplexNumber : public IfcMeasureValue, public IfcPPType
+class IfcComplexNumber : public IfcMeasureValue
 {
 public:
 	IfcComplexNumber();

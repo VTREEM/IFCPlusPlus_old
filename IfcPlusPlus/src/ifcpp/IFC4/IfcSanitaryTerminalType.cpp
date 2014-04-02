@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSanitaryTerminalType 
-IfcSanitaryTerminalType::IfcSanitaryTerminalType() { m_entity_enum = IFCSANITARYTERMINALTYPE; }
-IfcSanitaryTerminalType::IfcSanitaryTerminalType( int id ) { m_id = id; m_entity_enum = IFCSANITARYTERMINALTYPE; }
+IfcSanitaryTerminalType::IfcSanitaryTerminalType() {}
+IfcSanitaryTerminalType::IfcSanitaryTerminalType( int id ) { m_id = id; }
 IfcSanitaryTerminalType::~IfcSanitaryTerminalType() {}
 
 // method setEntity takes over all attributes from another instance of the class

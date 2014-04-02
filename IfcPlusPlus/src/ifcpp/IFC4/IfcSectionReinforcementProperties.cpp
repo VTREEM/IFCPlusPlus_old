@@ -25,8 +25,8 @@
 #include "include/IfcSectionReinforcementProperties.h"
 
 // ENTITY IfcSectionReinforcementProperties 
-IfcSectionReinforcementProperties::IfcSectionReinforcementProperties() { m_entity_enum = IFCSECTIONREINFORCEMENTPROPERTIES; }
-IfcSectionReinforcementProperties::IfcSectionReinforcementProperties( int id ) { m_id = id; m_entity_enum = IFCSECTIONREINFORCEMENTPROPERTIES; }
+IfcSectionReinforcementProperties::IfcSectionReinforcementProperties() {}
+IfcSectionReinforcementProperties::IfcSectionReinforcementProperties( int id ) { m_id = id; }
 IfcSectionReinforcementProperties::~IfcSectionReinforcementProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -39,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralCurveMemberVarying 
-IfcStructuralCurveMemberVarying::IfcStructuralCurveMemberVarying() { m_entity_enum = IFCSTRUCTURALCURVEMEMBERVARYING; }
-IfcStructuralCurveMemberVarying::IfcStructuralCurveMemberVarying( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALCURVEMEMBERVARYING; }
+IfcStructuralCurveMemberVarying::IfcStructuralCurveMemberVarying() {}
+IfcStructuralCurveMemberVarying::IfcStructuralCurveMemberVarying( int id ) { m_id = id; }
 IfcStructuralCurveMemberVarying::~IfcStructuralCurveMemberVarying() {}
 
 // method setEntity takes over all attributes from another instance of the class

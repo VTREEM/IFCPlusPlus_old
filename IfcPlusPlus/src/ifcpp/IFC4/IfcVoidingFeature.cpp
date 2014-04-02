@@ -46,8 +46,8 @@
 #include "include/IfcVoidingFeatureTypeEnum.h"
 
 // ENTITY IfcVoidingFeature 
-IfcVoidingFeature::IfcVoidingFeature() { m_entity_enum = IFCVOIDINGFEATURE; }
-IfcVoidingFeature::IfcVoidingFeature( int id ) { m_id = id; m_entity_enum = IFCVOIDINGFEATURE; }
+IfcVoidingFeature::IfcVoidingFeature() {}
+IfcVoidingFeature::IfcVoidingFeature( int id ) { m_id = id; }
 IfcVoidingFeature::~IfcVoidingFeature() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTransportElementTypeEnum = ENUMERATION OF	(ELEVATOR	,ESCALATOR	,MOVINGWALKWAY	,CRANEWAY	,LIFTINGGEAR	,USERDEFINED	,NOTDEFINED);
-class IfcTransportElementTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTransportElementTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTransportElementTypeEnumEnum

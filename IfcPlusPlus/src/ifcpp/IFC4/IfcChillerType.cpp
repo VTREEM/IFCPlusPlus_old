@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcChillerType 
-IfcChillerType::IfcChillerType() { m_entity_enum = IFCCHILLERTYPE; }
-IfcChillerType::IfcChillerType( int id ) { m_id = id; m_entity_enum = IFCCHILLERTYPE; }
+IfcChillerType::IfcChillerType() {}
+IfcChillerType::IfcChillerType( int id ) { m_id = id; }
 IfcChillerType::~IfcChillerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

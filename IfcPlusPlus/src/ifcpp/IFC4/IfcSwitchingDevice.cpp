@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSwitchingDevice 
-IfcSwitchingDevice::IfcSwitchingDevice() { m_entity_enum = IFCSWITCHINGDEVICE; }
-IfcSwitchingDevice::IfcSwitchingDevice( int id ) { m_id = id; m_entity_enum = IFCSWITCHINGDEVICE; }
+IfcSwitchingDevice::IfcSwitchingDevice() {}
+IfcSwitchingDevice::IfcSwitchingDevice( int id ) { m_id = id; }
 IfcSwitchingDevice::~IfcSwitchingDevice() {}
 
 // method setEntity takes over all attributes from another instance of the class

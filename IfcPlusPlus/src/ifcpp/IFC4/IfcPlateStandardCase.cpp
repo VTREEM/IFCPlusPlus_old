@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPlateStandardCase 
-IfcPlateStandardCase::IfcPlateStandardCase() { m_entity_enum = IFCPLATESTANDARDCASE; }
-IfcPlateStandardCase::IfcPlateStandardCase( int id ) { m_id = id; m_entity_enum = IFCPLATESTANDARDCASE; }
+IfcPlateStandardCase::IfcPlateStandardCase() {}
+IfcPlateStandardCase::IfcPlateStandardCase( int id ) { m_id = id; }
 IfcPlateStandardCase::~IfcPlateStandardCase() {}
 
 // method setEntity takes over all attributes from another instance of the class

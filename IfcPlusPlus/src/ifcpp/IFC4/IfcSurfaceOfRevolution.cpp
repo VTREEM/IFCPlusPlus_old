@@ -25,8 +25,8 @@
 #include "include/IfcSurfaceOfRevolution.h"
 
 // ENTITY IfcSurfaceOfRevolution 
-IfcSurfaceOfRevolution::IfcSurfaceOfRevolution() { m_entity_enum = IFCSURFACEOFREVOLUTION; }
-IfcSurfaceOfRevolution::IfcSurfaceOfRevolution( int id ) { m_id = id; m_entity_enum = IFCSURFACEOFREVOLUTION; }
+IfcSurfaceOfRevolution::IfcSurfaceOfRevolution() {}
+IfcSurfaceOfRevolution::IfcSurfaceOfRevolution( int id ) { m_id = id; }
 IfcSurfaceOfRevolution::~IfcSurfaceOfRevolution() {}
 
 // method setEntity takes over all attributes from another instance of the class

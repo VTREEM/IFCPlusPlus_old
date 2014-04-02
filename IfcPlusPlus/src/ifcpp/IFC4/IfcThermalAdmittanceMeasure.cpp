@@ -36,7 +36,7 @@ shared_ptr<IfcThermalAdmittanceMeasure> IfcThermalAdmittanceMeasure::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcThermalAdmittanceMeasure>(); }
-	shared_ptr<IfcThermalAdmittanceMeasure> type_object( new IfcThermalAdmittanceMeasure() );
+	auto type_object = std::make_shared<IfcThermalAdmittanceMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

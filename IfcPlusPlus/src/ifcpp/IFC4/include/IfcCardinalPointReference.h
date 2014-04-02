@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCardinalPointReference = INTEGER;
-class IfcCardinalPointReference : public IfcPPType
+class IfcCardinalPointReference : public IfcPPObject
 {
 public:
 	IfcCardinalPointReference();

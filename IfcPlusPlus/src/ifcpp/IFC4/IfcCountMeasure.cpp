@@ -36,7 +36,7 @@ shared_ptr<IfcCountMeasure> IfcCountMeasure::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCountMeasure>(); }
-	shared_ptr<IfcCountMeasure> type_object( new IfcCountMeasure() );
+	auto type_object = std::make_shared<IfcCountMeasure>();
 	//supertype as attribute: int m_value
 	type_object->m_value = atoi( arg.c_str() );
 	return type_object;

@@ -21,8 +21,8 @@
 #include "include/IfcSurfaceTexture.h"
 
 // ENTITY IfcSurfaceStyleWithTextures 
-IfcSurfaceStyleWithTextures::IfcSurfaceStyleWithTextures() { m_entity_enum = IFCSURFACESTYLEWITHTEXTURES; }
-IfcSurfaceStyleWithTextures::IfcSurfaceStyleWithTextures( int id ) { m_id = id; m_entity_enum = IFCSURFACESTYLEWITHTEXTURES; }
+IfcSurfaceStyleWithTextures::IfcSurfaceStyleWithTextures() {}
+IfcSurfaceStyleWithTextures::IfcSurfaceStyleWithTextures( int id ) { m_id = id; }
 IfcSurfaceStyleWithTextures::~IfcSurfaceStyleWithTextures() {}
 
 // method setEntity takes over all attributes from another instance of the class

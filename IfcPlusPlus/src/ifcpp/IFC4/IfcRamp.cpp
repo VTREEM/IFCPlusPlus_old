@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRamp 
-IfcRamp::IfcRamp() { m_entity_enum = IFCRAMP; }
-IfcRamp::IfcRamp( int id ) { m_id = id; m_entity_enum = IFCRAMP; }
+IfcRamp::IfcRamp() {}
+IfcRamp::IfcRamp( int id ) { m_id = id; }
 IfcRamp::~IfcRamp() {}
 
 // method setEntity takes over all attributes from another instance of the class

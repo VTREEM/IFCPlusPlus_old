@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcEvent 
-IfcEvent::IfcEvent() { m_entity_enum = IFCEVENT; }
-IfcEvent::IfcEvent( int id ) { m_id = id; m_entity_enum = IFCEVENT; }
+IfcEvent::IfcEvent() {}
+IfcEvent::IfcEvent( int id ) { m_id = id; }
 IfcEvent::~IfcEvent() {}
 
 // method setEntity takes over all attributes from another instance of the class

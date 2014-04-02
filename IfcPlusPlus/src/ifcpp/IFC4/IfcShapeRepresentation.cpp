@@ -27,8 +27,8 @@
 #include "include/IfcShapeRepresentation.h"
 
 // ENTITY IfcShapeRepresentation 
-IfcShapeRepresentation::IfcShapeRepresentation() { m_entity_enum = IFCSHAPEREPRESENTATION; }
-IfcShapeRepresentation::IfcShapeRepresentation( int id ) { m_id = id; m_entity_enum = IFCSHAPEREPRESENTATION; }
+IfcShapeRepresentation::IfcShapeRepresentation() {}
+IfcShapeRepresentation::IfcShapeRepresentation( int id ) { m_id = id; }
 IfcShapeRepresentation::~IfcShapeRepresentation() {}
 
 // method setEntity takes over all attributes from another instance of the class

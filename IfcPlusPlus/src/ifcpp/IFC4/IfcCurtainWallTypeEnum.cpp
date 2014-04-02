@@ -40,7 +40,7 @@ shared_ptr<IfcCurtainWallTypeEnum> IfcCurtainWallTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCurtainWallTypeEnum>(); }
-	shared_ptr<IfcCurtainWallTypeEnum> type_object( new IfcCurtainWallTypeEnum() );
+	auto type_object = std::make_shared<IfcCurtainWallTypeEnum>();
 	if( _stricmp( arg.c_str(), ".USERDEFINED." ) == 0 )
 	{
 		type_object->m_enum = IfcCurtainWallTypeEnum::ENUM_USERDEFINED;

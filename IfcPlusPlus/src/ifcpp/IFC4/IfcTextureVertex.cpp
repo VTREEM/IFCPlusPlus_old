@@ -21,8 +21,8 @@
 #include "include/IfcTextureVertex.h"
 
 // ENTITY IfcTextureVertex 
-IfcTextureVertex::IfcTextureVertex() { m_entity_enum = IFCTEXTUREVERTEX; }
-IfcTextureVertex::IfcTextureVertex( int id ) { m_id = id; m_entity_enum = IFCTEXTUREVERTEX; }
+IfcTextureVertex::IfcTextureVertex() {}
+IfcTextureVertex::IfcTextureVertex( int id ) { m_id = id; }
 IfcTextureVertex::~IfcTextureVertex() {}
 
 // method setEntity takes over all attributes from another instance of the class

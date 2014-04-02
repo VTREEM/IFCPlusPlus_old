@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTextAlignment = STRING;
-class IfcTextAlignment : public IfcPPType
+class IfcTextAlignment : public IfcPPObject
 {
 public:
 	IfcTextAlignment();

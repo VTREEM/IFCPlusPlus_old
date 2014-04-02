@@ -27,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsStructuralActivity 
-IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity() { m_entity_enum = IFCRELCONNECTSSTRUCTURALACTIVITY; }
-IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSSTRUCTURALACTIVITY; }
+IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity() {}
+IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity( int id ) { m_id = id; }
 IfcRelConnectsStructuralActivity::~IfcRelConnectsStructuralActivity() {}
 
 // method setEntity takes over all attributes from another instance of the class

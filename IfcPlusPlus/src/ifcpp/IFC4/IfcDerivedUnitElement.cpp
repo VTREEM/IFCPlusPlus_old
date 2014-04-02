@@ -21,8 +21,8 @@
 #include "include/IfcNamedUnit.h"
 
 // ENTITY IfcDerivedUnitElement 
-IfcDerivedUnitElement::IfcDerivedUnitElement() { m_entity_enum = IFCDERIVEDUNITELEMENT; }
-IfcDerivedUnitElement::IfcDerivedUnitElement( int id ) { m_id = id; m_entity_enum = IFCDERIVEDUNITELEMENT; }
+IfcDerivedUnitElement::IfcDerivedUnitElement() {}
+IfcDerivedUnitElement::IfcDerivedUnitElement( int id ) { m_id = id; }
 IfcDerivedUnitElement::~IfcDerivedUnitElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

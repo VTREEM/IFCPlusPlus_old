@@ -45,8 +45,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcElement 
-IfcElement::IfcElement() { m_entity_enum = IFCELEMENT; }
-IfcElement::IfcElement( int id ) { m_id = id; m_entity_enum = IFCELEMENT; }
+IfcElement::IfcElement() {}
+IfcElement::IfcElement( int id ) { m_id = id; }
 IfcElement::~IfcElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

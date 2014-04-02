@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFurniture 
-IfcFurniture::IfcFurniture() { m_entity_enum = IFCFURNITURE; }
-IfcFurniture::IfcFurniture( int id ) { m_id = id; m_entity_enum = IFCFURNITURE; }
+IfcFurniture::IfcFurniture() {}
+IfcFurniture::IfcFurniture( int id ) { m_id = id; }
 IfcFurniture::~IfcFurniture() {}
 
 // method setEntity takes over all attributes from another instance of the class

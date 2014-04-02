@@ -21,8 +21,8 @@
 #include "include/IfcUnitAssignment.h"
 
 // ENTITY IfcUnitAssignment 
-IfcUnitAssignment::IfcUnitAssignment() { m_entity_enum = IFCUNITASSIGNMENT; }
-IfcUnitAssignment::IfcUnitAssignment( int id ) { m_id = id; m_entity_enum = IFCUNITASSIGNMENT; }
+IfcUnitAssignment::IfcUnitAssignment() {}
+IfcUnitAssignment::IfcUnitAssignment( int id ) { m_id = id; }
 IfcUnitAssignment::~IfcUnitAssignment() {}
 
 // method setEntity takes over all attributes from another instance of the class

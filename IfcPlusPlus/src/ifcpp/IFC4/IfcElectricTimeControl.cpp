@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcElectricTimeControl 
-IfcElectricTimeControl::IfcElectricTimeControl() { m_entity_enum = IFCELECTRICTIMECONTROL; }
-IfcElectricTimeControl::IfcElectricTimeControl( int id ) { m_id = id; m_entity_enum = IFCELECTRICTIMECONTROL; }
+IfcElectricTimeControl::IfcElectricTimeControl() {}
+IfcElectricTimeControl::IfcElectricTimeControl( int id ) { m_id = id; }
 IfcElectricTimeControl::~IfcElectricTimeControl() {}
 
 // method setEntity takes over all attributes from another instance of the class

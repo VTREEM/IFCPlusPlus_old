@@ -12,19 +12,9 @@
 */
 
 #include "IfcPPException.h"
+#include "ifcpp/writer/WriterUtil.h"
 #include "IfcPPObject.h"
 
-// TYPE
-IfcPPType::IfcPPType()
-{
-}
-IfcPPType::~IfcPPType()
-{
-}
-void IfcPPType::readStepArgument( const std::string& arg )
-{
-	throw IfcPPException("IfcPPType::readStepArgument(), this method should be overwritten");
-}
 
 // ENTITY
 IfcPPEntity::IfcPPEntity() : m_id(-1)

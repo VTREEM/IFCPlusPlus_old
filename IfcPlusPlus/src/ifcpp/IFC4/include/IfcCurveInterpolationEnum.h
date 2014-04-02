@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCurveInterpolationEnum = ENUMERATION OF	(LINEAR	,LOG_LINEAR	,LOG_LOG	,NOTDEFINED);
-class IfcCurveInterpolationEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCurveInterpolationEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCurveInterpolationEnumEnum

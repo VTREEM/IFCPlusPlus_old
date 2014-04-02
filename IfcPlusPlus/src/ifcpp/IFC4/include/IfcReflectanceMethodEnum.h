@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcReflectanceMethodEnum = ENUMERATION OF	(BLINN	,FLAT	,GLASS	,MATT	,METAL	,MIRROR	,PHONG	,PLASTIC	,STRAUSS	,NOTDEFINED);
-class IfcReflectanceMethodEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcReflectanceMethodEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcReflectanceMethodEnumEnum

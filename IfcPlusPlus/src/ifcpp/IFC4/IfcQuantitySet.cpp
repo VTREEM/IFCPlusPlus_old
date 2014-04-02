@@ -29,8 +29,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcQuantitySet 
-IfcQuantitySet::IfcQuantitySet() { m_entity_enum = IFCQUANTITYSET; }
-IfcQuantitySet::IfcQuantitySet( int id ) { m_id = id; m_entity_enum = IFCQUANTITYSET; }
+IfcQuantitySet::IfcQuantitySet() {}
+IfcQuantitySet::IfcQuantitySet( int id ) { m_id = id; }
 IfcQuantitySet::~IfcQuantitySet() {}
 
 // method setEntity takes over all attributes from another instance of the class

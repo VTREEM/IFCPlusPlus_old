@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcInternalOrExternalEnum = ENUMERATION OF	(INTERNAL	,EXTERNAL	,EXTERNAL_EARTH	,EXTERNAL_WATER	,EXTERNAL_FIRE	,NOTDEFINED);
-class IfcInternalOrExternalEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcInternalOrExternalEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcInternalOrExternalEnumEnum

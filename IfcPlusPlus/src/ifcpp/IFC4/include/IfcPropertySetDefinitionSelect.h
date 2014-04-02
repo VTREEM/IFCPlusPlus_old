@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPropertySetDefinitionSelect = SELECT	(IfcPropertySetDefinition	,IfcPropertySetDefinitionSet);
-class IfcPropertySetDefinitionSelect : public IfcPPAbstractSelect
+class IfcPropertySetDefinitionSelect : virtual public IfcPPObject
 {
 public:
 	IfcPropertySetDefinitionSelect();
 	~IfcPropertySetDefinitionSelect();
 	virtual const char* classname() const { return "IfcPropertySetDefinitionSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcPropertySetDefinitionSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

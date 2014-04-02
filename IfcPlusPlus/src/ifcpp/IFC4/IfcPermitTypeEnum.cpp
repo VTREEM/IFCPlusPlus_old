@@ -52,7 +52,7 @@ shared_ptr<IfcPermitTypeEnum> IfcPermitTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPermitTypeEnum>(); }
-	shared_ptr<IfcPermitTypeEnum> type_object( new IfcPermitTypeEnum() );
+	auto type_object = std::make_shared<IfcPermitTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ACCESS." ) == 0 )
 	{
 		type_object->m_enum = IfcPermitTypeEnum::ENUM_ACCESS;

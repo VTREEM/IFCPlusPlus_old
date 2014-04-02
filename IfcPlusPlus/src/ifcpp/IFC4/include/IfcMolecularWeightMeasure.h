@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMolecularWeightMeasure = REAL;
-class IfcMolecularWeightMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMolecularWeightMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcMolecularWeightMeasure();

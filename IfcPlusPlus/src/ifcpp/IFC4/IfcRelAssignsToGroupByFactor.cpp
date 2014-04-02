@@ -28,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelAssignsToGroupByFactor 
-IfcRelAssignsToGroupByFactor::IfcRelAssignsToGroupByFactor() { m_entity_enum = IFCRELASSIGNSTOGROUPBYFACTOR; }
-IfcRelAssignsToGroupByFactor::IfcRelAssignsToGroupByFactor( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTOGROUPBYFACTOR; }
+IfcRelAssignsToGroupByFactor::IfcRelAssignsToGroupByFactor() {}
+IfcRelAssignsToGroupByFactor::IfcRelAssignsToGroupByFactor( int id ) { m_id = id; }
 IfcRelAssignsToGroupByFactor::~IfcRelAssignsToGroupByFactor() {}
 
 // method setEntity takes over all attributes from another instance of the class

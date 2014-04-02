@@ -21,8 +21,8 @@
 #include "include/IfcNormalisedRatioMeasure.h"
 
 // ENTITY IfcColourRgbList 
-IfcColourRgbList::IfcColourRgbList() { m_entity_enum = IFCCOLOURRGBLIST; }
-IfcColourRgbList::IfcColourRgbList( int id ) { m_id = id; m_entity_enum = IFCCOLOURRGBLIST; }
+IfcColourRgbList::IfcColourRgbList() {}
+IfcColourRgbList::IfcColourRgbList( int id ) { m_id = id; }
 IfcColourRgbList::~IfcColourRgbList() {}
 
 // method setEntity takes over all attributes from another instance of the class

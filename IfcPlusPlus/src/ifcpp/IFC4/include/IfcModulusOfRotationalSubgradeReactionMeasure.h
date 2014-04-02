@@ -22,7 +22,7 @@
 #include "IfcModulusOfRotationalSubgradeReactionSelect.h"
 
 // TYPE IfcModulusOfRotationalSubgradeReactionMeasure = REAL;
-class IfcModulusOfRotationalSubgradeReactionMeasure : public IfcDerivedMeasureValue, public IfcModulusOfRotationalSubgradeReactionSelect, public IfcPPType
+class IfcModulusOfRotationalSubgradeReactionMeasure : public IfcDerivedMeasureValue, public IfcModulusOfRotationalSubgradeReactionSelect
 {
 public:
 	IfcModulusOfRotationalSubgradeReactionMeasure();

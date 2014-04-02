@@ -21,8 +21,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcColourSpecification 
-IfcColourSpecification::IfcColourSpecification() { m_entity_enum = IFCCOLOURSPECIFICATION; }
-IfcColourSpecification::IfcColourSpecification( int id ) { m_id = id; m_entity_enum = IFCCOLOURSPECIFICATION; }
+IfcColourSpecification::IfcColourSpecification() {}
+IfcColourSpecification::IfcColourSpecification( int id ) { m_id = id; }
 IfcColourSpecification::~IfcColourSpecification() {}
 
 // method setEntity takes over all attributes from another instance of the class

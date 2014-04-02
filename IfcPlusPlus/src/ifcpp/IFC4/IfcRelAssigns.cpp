@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelAssigns 
-IfcRelAssigns::IfcRelAssigns() { m_entity_enum = IFCRELASSIGNS; }
-IfcRelAssigns::IfcRelAssigns( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNS; }
+IfcRelAssigns::IfcRelAssigns() {}
+IfcRelAssigns::IfcRelAssigns( int id ) { m_id = id; }
 IfcRelAssigns::~IfcRelAssigns() {}
 
 // method setEntity takes over all attributes from another instance of the class

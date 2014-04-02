@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBoiler 
-IfcBoiler::IfcBoiler() { m_entity_enum = IFCBOILER; }
-IfcBoiler::IfcBoiler( int id ) { m_id = id; m_entity_enum = IFCBOILER; }
+IfcBoiler::IfcBoiler() {}
+IfcBoiler::IfcBoiler( int id ) { m_id = id; }
 IfcBoiler::~IfcBoiler() {}
 
 // method setEntity takes over all attributes from another instance of the class

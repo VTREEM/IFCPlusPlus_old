@@ -32,8 +32,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcTypeObject 
-IfcTypeObject::IfcTypeObject() { m_entity_enum = IFCTYPEOBJECT; }
-IfcTypeObject::IfcTypeObject( int id ) { m_id = id; m_entity_enum = IFCTYPEOBJECT; }
+IfcTypeObject::IfcTypeObject() {}
+IfcTypeObject::IfcTypeObject( int id ) { m_id = id; }
 IfcTypeObject::~IfcTypeObject() {}
 
 // method setEntity takes over all attributes from another instance of the class

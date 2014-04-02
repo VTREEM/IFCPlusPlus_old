@@ -24,8 +24,8 @@
 #include "include/IfcVertex.h"
 
 // ENTITY IfcOrientedEdge 
-IfcOrientedEdge::IfcOrientedEdge() { m_entity_enum = IFCORIENTEDEDGE; }
-IfcOrientedEdge::IfcOrientedEdge( int id ) { m_id = id; m_entity_enum = IFCORIENTEDEDGE; }
+IfcOrientedEdge::IfcOrientedEdge() {}
+IfcOrientedEdge::IfcOrientedEdge( int id ) { m_id = id; }
 IfcOrientedEdge::~IfcOrientedEdge() {}
 
 // method setEntity takes over all attributes from another instance of the class

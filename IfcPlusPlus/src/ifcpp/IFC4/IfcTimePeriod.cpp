@@ -21,8 +21,8 @@
 #include "include/IfcTimePeriod.h"
 
 // ENTITY IfcTimePeriod 
-IfcTimePeriod::IfcTimePeriod() { m_entity_enum = IFCTIMEPERIOD; }
-IfcTimePeriod::IfcTimePeriod( int id ) { m_id = id; m_entity_enum = IFCTIMEPERIOD; }
+IfcTimePeriod::IfcTimePeriod() {}
+IfcTimePeriod::IfcTimePeriod( int id ) { m_id = id; }
 IfcTimePeriod::~IfcTimePeriod() {}
 
 // method setEntity takes over all attributes from another instance of the class

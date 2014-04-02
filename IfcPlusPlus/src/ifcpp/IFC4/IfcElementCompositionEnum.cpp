@@ -44,7 +44,7 @@ shared_ptr<IfcElementCompositionEnum> IfcElementCompositionEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElementCompositionEnum>(); }
-	shared_ptr<IfcElementCompositionEnum> type_object( new IfcElementCompositionEnum() );
+	auto type_object = std::make_shared<IfcElementCompositionEnum>();
 	if( _stricmp( arg.c_str(), ".COMPLEX." ) == 0 )
 	{
 		type_object->m_enum = IfcElementCompositionEnum::ENUM_COMPLEX;

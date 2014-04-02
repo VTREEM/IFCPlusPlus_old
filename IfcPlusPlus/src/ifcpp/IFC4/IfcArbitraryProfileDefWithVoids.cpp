@@ -25,8 +25,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcArbitraryProfileDefWithVoids 
-IfcArbitraryProfileDefWithVoids::IfcArbitraryProfileDefWithVoids() { m_entity_enum = IFCARBITRARYPROFILEDEFWITHVOIDS; }
-IfcArbitraryProfileDefWithVoids::IfcArbitraryProfileDefWithVoids( int id ) { m_id = id; m_entity_enum = IFCARBITRARYPROFILEDEFWITHVOIDS; }
+IfcArbitraryProfileDefWithVoids::IfcArbitraryProfileDefWithVoids() {}
+IfcArbitraryProfileDefWithVoids::IfcArbitraryProfileDefWithVoids( int id ) { m_id = id; }
 IfcArbitraryProfileDefWithVoids::~IfcArbitraryProfileDefWithVoids() {}
 
 // method setEntity takes over all attributes from another instance of the class

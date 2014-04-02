@@ -37,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcConstructionResource 
-IfcConstructionResource::IfcConstructionResource() { m_entity_enum = IFCCONSTRUCTIONRESOURCE; }
-IfcConstructionResource::IfcConstructionResource( int id ) { m_id = id; m_entity_enum = IFCCONSTRUCTIONRESOURCE; }
+IfcConstructionResource::IfcConstructionResource() {}
+IfcConstructionResource::IfcConstructionResource( int id ) { m_id = id; }
 IfcConstructionResource::~IfcConstructionResource() {}
 
 // method setEntity takes over all attributes from another instance of the class

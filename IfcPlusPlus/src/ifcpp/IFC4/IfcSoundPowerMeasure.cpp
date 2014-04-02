@@ -36,7 +36,7 @@ shared_ptr<IfcSoundPowerMeasure> IfcSoundPowerMeasure::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSoundPowerMeasure>(); }
-	shared_ptr<IfcSoundPowerMeasure> type_object( new IfcSoundPowerMeasure() );
+	auto type_object = std::make_shared<IfcSoundPowerMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

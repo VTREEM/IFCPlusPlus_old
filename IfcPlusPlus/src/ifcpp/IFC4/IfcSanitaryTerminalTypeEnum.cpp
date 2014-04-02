@@ -80,7 +80,7 @@ shared_ptr<IfcSanitaryTerminalTypeEnum> IfcSanitaryTerminalTypeEnum::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSanitaryTerminalTypeEnum>(); }
-	shared_ptr<IfcSanitaryTerminalTypeEnum> type_object( new IfcSanitaryTerminalTypeEnum() );
+	auto type_object = std::make_shared<IfcSanitaryTerminalTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BATH." ) == 0 )
 	{
 		type_object->m_enum = IfcSanitaryTerminalTypeEnum::ENUM_BATH;

@@ -21,8 +21,8 @@
 #include "include/IfcSurfaceStyleLighting.h"
 
 // ENTITY IfcSurfaceStyleLighting 
-IfcSurfaceStyleLighting::IfcSurfaceStyleLighting() { m_entity_enum = IFCSURFACESTYLELIGHTING; }
-IfcSurfaceStyleLighting::IfcSurfaceStyleLighting( int id ) { m_id = id; m_entity_enum = IFCSURFACESTYLELIGHTING; }
+IfcSurfaceStyleLighting::IfcSurfaceStyleLighting() {}
+IfcSurfaceStyleLighting::IfcSurfaceStyleLighting( int id ) { m_id = id; }
 IfcSurfaceStyleLighting::~IfcSurfaceStyleLighting() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -26,8 +26,8 @@
 #include "include/IfcStyleModel.h"
 
 // ENTITY IfcStyleModel 
-IfcStyleModel::IfcStyleModel() { m_entity_enum = IFCSTYLEMODEL; }
-IfcStyleModel::IfcStyleModel( int id ) { m_id = id; m_entity_enum = IFCSTYLEMODEL; }
+IfcStyleModel::IfcStyleModel() {}
+IfcStyleModel::IfcStyleModel( int id ) { m_id = id; }
 IfcStyleModel::~IfcStyleModel() {}
 
 // method setEntity takes over all attributes from another instance of the class

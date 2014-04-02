@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAudioVisualApplianceType 
-IfcAudioVisualApplianceType::IfcAudioVisualApplianceType() { m_entity_enum = IFCAUDIOVISUALAPPLIANCETYPE; }
-IfcAudioVisualApplianceType::IfcAudioVisualApplianceType( int id ) { m_id = id; m_entity_enum = IFCAUDIOVISUALAPPLIANCETYPE; }
+IfcAudioVisualApplianceType::IfcAudioVisualApplianceType() {}
+IfcAudioVisualApplianceType::IfcAudioVisualApplianceType( int id ) { m_id = id; }
 IfcAudioVisualApplianceType::~IfcAudioVisualApplianceType() {}
 
 // method setEntity takes over all attributes from another instance of the class

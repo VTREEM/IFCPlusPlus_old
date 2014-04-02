@@ -24,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcResourceApprovalRelationship 
-IfcResourceApprovalRelationship::IfcResourceApprovalRelationship() { m_entity_enum = IFCRESOURCEAPPROVALRELATIONSHIP; }
-IfcResourceApprovalRelationship::IfcResourceApprovalRelationship( int id ) { m_id = id; m_entity_enum = IFCRESOURCEAPPROVALRELATIONSHIP; }
+IfcResourceApprovalRelationship::IfcResourceApprovalRelationship() {}
+IfcResourceApprovalRelationship::IfcResourceApprovalRelationship( int id ) { m_id = id; }
 IfcResourceApprovalRelationship::~IfcResourceApprovalRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

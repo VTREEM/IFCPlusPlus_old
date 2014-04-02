@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcElementAssemblyTypeEnum = ENUMERATION OF	(ACCESSORY_ASSEMBLY	,ARCH	,BEAM_GRID	,BRACED_FRAME	,GIRDER	,REINFORCEMENT_UNIT	,RIGID_FRAME	,SLAB_FIELD	,TRUSS	,USERDEFINED	,NOTDEFINED);
-class IfcElementAssemblyTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcElementAssemblyTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcElementAssemblyTypeEnumEnum

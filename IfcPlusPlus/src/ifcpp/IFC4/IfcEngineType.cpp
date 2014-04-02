@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcEngineType 
-IfcEngineType::IfcEngineType() { m_entity_enum = IFCENGINETYPE; }
-IfcEngineType::IfcEngineType( int id ) { m_id = id; m_entity_enum = IFCENGINETYPE; }
+IfcEngineType::IfcEngineType() {}
+IfcEngineType::IfcEngineType( int id ) { m_id = id; }
 IfcEngineType::~IfcEngineType() {}
 
 // method setEntity takes over all attributes from another instance of the class

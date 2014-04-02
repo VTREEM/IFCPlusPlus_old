@@ -24,8 +24,8 @@
 #include "include/IfcSweptAreaSolid.h"
 
 // ENTITY IfcSweptAreaSolid 
-IfcSweptAreaSolid::IfcSweptAreaSolid() { m_entity_enum = IFCSWEPTAREASOLID; }
-IfcSweptAreaSolid::IfcSweptAreaSolid( int id ) { m_id = id; m_entity_enum = IFCSWEPTAREASOLID; }
+IfcSweptAreaSolid::IfcSweptAreaSolid() {}
+IfcSweptAreaSolid::IfcSweptAreaSolid( int id ) { m_id = id; }
 IfcSweptAreaSolid::~IfcSweptAreaSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

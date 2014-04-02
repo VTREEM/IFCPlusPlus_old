@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcOuterBoundaryCurve 
-IfcOuterBoundaryCurve::IfcOuterBoundaryCurve() { m_entity_enum = IFCOUTERBOUNDARYCURVE; }
-IfcOuterBoundaryCurve::IfcOuterBoundaryCurve( int id ) { m_id = id; m_entity_enum = IFCOUTERBOUNDARYCURVE; }
+IfcOuterBoundaryCurve::IfcOuterBoundaryCurve() {}
+IfcOuterBoundaryCurve::IfcOuterBoundaryCurve( int id ) { m_id = id; }
 IfcOuterBoundaryCurve::~IfcOuterBoundaryCurve() {}
 
 // method setEntity takes over all attributes from another instance of the class

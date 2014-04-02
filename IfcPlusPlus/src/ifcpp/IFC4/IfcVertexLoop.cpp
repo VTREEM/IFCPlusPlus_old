@@ -23,8 +23,8 @@
 #include "include/IfcVertexLoop.h"
 
 // ENTITY IfcVertexLoop 
-IfcVertexLoop::IfcVertexLoop() { m_entity_enum = IFCVERTEXLOOP; }
-IfcVertexLoop::IfcVertexLoop( int id ) { m_id = id; m_entity_enum = IFCVERTEXLOOP; }
+IfcVertexLoop::IfcVertexLoop() {}
+IfcVertexLoop::IfcVertexLoop( int id ) { m_id = id; }
 IfcVertexLoop::~IfcVertexLoop() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -37,7 +37,7 @@ shared_ptr<IfcPlaneAngleMeasure> IfcPlaneAngleMeasure::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPlaneAngleMeasure>(); }
-	shared_ptr<IfcPlaneAngleMeasure> type_object( new IfcPlaneAngleMeasure() );
+	auto type_object = std::make_shared<IfcPlaneAngleMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

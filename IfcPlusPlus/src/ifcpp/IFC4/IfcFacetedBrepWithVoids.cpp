@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcFacetedBrepWithVoids 
-IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids() { m_entity_enum = IFCFACETEDBREPWITHVOIDS; }
-IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids( int id ) { m_id = id; m_entity_enum = IFCFACETEDBREPWITHVOIDS; }
+IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids() {}
+IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids( int id ) { m_id = id; }
 IfcFacetedBrepWithVoids::~IfcFacetedBrepWithVoids() {}
 
 // method setEntity takes over all attributes from another instance of the class

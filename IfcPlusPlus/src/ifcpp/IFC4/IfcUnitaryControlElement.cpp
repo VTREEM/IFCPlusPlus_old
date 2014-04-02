@@ -48,8 +48,8 @@
 #include "include/IfcUnitaryControlElementTypeEnum.h"
 
 // ENTITY IfcUnitaryControlElement 
-IfcUnitaryControlElement::IfcUnitaryControlElement() { m_entity_enum = IFCUNITARYCONTROLELEMENT; }
-IfcUnitaryControlElement::IfcUnitaryControlElement( int id ) { m_id = id; m_entity_enum = IFCUNITARYCONTROLELEMENT; }
+IfcUnitaryControlElement::IfcUnitaryControlElement() {}
+IfcUnitaryControlElement::IfcUnitaryControlElement( int id ) { m_id = id; }
 IfcUnitaryControlElement::~IfcUnitaryControlElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

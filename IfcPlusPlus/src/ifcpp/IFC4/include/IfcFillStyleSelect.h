@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFillStyleSelect = SELECT	(IfcColour	,IfcExternallyDefinedHatchStyle	,IfcFillAreaStyleHatching	,IfcFillAreaStyleTiles);
-class IfcFillStyleSelect : public IfcPPAbstractSelect
+class IfcFillStyleSelect : virtual public IfcPPObject
 {
 public:
 	IfcFillStyleSelect();
 	~IfcFillStyleSelect();
 	virtual const char* classname() const { return "IfcFillStyleSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcFillStyleSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

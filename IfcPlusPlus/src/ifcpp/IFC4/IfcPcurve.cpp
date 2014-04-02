@@ -24,8 +24,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcPcurve 
-IfcPcurve::IfcPcurve() { m_entity_enum = IFCPCURVE; }
-IfcPcurve::IfcPcurve( int id ) { m_id = id; m_entity_enum = IFCPCURVE; }
+IfcPcurve::IfcPcurve() {}
+IfcPcurve::IfcPcurve( int id ) { m_id = id; }
 IfcPcurve::~IfcPcurve() {}
 
 // method setEntity takes over all attributes from another instance of the class

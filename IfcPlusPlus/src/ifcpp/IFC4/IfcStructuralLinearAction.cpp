@@ -40,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralLinearAction 
-IfcStructuralLinearAction::IfcStructuralLinearAction() { m_entity_enum = IFCSTRUCTURALLINEARACTION; }
-IfcStructuralLinearAction::IfcStructuralLinearAction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLINEARACTION; }
+IfcStructuralLinearAction::IfcStructuralLinearAction() {}
+IfcStructuralLinearAction::IfcStructuralLinearAction( int id ) { m_id = id; }
 IfcStructuralLinearAction::~IfcStructuralLinearAction() {}
 
 // method setEntity takes over all attributes from another instance of the class

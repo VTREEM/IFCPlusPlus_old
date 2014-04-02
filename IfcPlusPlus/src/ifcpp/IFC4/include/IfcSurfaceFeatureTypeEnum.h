@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSurfaceFeatureTypeEnum = ENUMERATION OF	(MARK	,TAG	,TREATMENT	,USERDEFINED	,NOTDEFINED);
-class IfcSurfaceFeatureTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSurfaceFeatureTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSurfaceFeatureTypeEnumEnum

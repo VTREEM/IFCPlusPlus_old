@@ -36,7 +36,7 @@ shared_ptr<IfcLinearVelocityMeasure> IfcLinearVelocityMeasure::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLinearVelocityMeasure>(); }
-	shared_ptr<IfcLinearVelocityMeasure> type_object( new IfcLinearVelocityMeasure() );
+	auto type_object = std::make_shared<IfcLinearVelocityMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

@@ -28,8 +28,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcAsymmetricIShapeProfileDef 
-IfcAsymmetricIShapeProfileDef::IfcAsymmetricIShapeProfileDef() { m_entity_enum = IFCASYMMETRICISHAPEPROFILEDEF; }
-IfcAsymmetricIShapeProfileDef::IfcAsymmetricIShapeProfileDef( int id ) { m_id = id; m_entity_enum = IFCASYMMETRICISHAPEPROFILEDEF; }
+IfcAsymmetricIShapeProfileDef::IfcAsymmetricIShapeProfileDef() {}
+IfcAsymmetricIShapeProfileDef::IfcAsymmetricIShapeProfileDef( int id ) { m_id = id; }
 IfcAsymmetricIShapeProfileDef::~IfcAsymmetricIShapeProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

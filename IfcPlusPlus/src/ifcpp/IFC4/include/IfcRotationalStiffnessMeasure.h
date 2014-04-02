@@ -22,7 +22,7 @@
 #include "IfcRotationalStiffnessSelect.h"
 
 // TYPE IfcRotationalStiffnessMeasure = REAL;
-class IfcRotationalStiffnessMeasure : public IfcDerivedMeasureValue, public IfcRotationalStiffnessSelect, public IfcPPType
+class IfcRotationalStiffnessMeasure : public IfcDerivedMeasureValue, public IfcRotationalStiffnessSelect
 {
 public:
 	IfcRotationalStiffnessMeasure();

@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcDate = STRING;
-class IfcDate : public IfcSimpleValue, public IfcPPType
+class IfcDate : public IfcSimpleValue
 {
 public:
 	IfcDate();

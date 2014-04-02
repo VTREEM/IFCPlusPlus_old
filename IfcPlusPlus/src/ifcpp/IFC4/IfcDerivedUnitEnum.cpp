@@ -244,7 +244,7 @@ shared_ptr<IfcDerivedUnitEnum> IfcDerivedUnitEnum::createObjectFromStepData( con
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDerivedUnitEnum>(); }
-	shared_ptr<IfcDerivedUnitEnum> type_object( new IfcDerivedUnitEnum() );
+	auto type_object = std::make_shared<IfcDerivedUnitEnum>();
 	if( _stricmp( arg.c_str(), ".ANGULARVELOCITYUNIT." ) == 0 )
 	{
 		type_object->m_enum = IfcDerivedUnitEnum::ENUM_ANGULARVELOCITYUNIT;

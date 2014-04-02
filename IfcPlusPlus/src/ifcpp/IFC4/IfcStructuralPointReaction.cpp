@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralPointReaction 
-IfcStructuralPointReaction::IfcStructuralPointReaction() { m_entity_enum = IFCSTRUCTURALPOINTREACTION; }
-IfcStructuralPointReaction::IfcStructuralPointReaction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALPOINTREACTION; }
+IfcStructuralPointReaction::IfcStructuralPointReaction() {}
+IfcStructuralPointReaction::IfcStructuralPointReaction( int id ) { m_id = id; }
 IfcStructuralPointReaction::~IfcStructuralPointReaction() {}
 
 // method setEntity takes over all attributes from another instance of the class

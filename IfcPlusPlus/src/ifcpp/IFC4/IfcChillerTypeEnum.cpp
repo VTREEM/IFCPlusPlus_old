@@ -52,7 +52,7 @@ shared_ptr<IfcChillerTypeEnum> IfcChillerTypeEnum::createObjectFromStepData( con
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcChillerTypeEnum>(); }
-	shared_ptr<IfcChillerTypeEnum> type_object( new IfcChillerTypeEnum() );
+	auto type_object = std::make_shared<IfcChillerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AIRCOOLED." ) == 0 )
 	{
 		type_object->m_enum = IfcChillerTypeEnum::ENUM_AIRCOOLED;

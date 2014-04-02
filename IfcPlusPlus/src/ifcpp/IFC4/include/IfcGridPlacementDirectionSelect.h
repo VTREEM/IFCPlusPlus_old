@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcGridPlacementDirectionSelect = SELECT	(IfcDirection	,IfcVirtualGridIntersection);
-class IfcGridPlacementDirectionSelect : public IfcPPAbstractSelect
+class IfcGridPlacementDirectionSelect : virtual public IfcPPObject
 {
 public:
 	IfcGridPlacementDirectionSelect();
 	~IfcGridPlacementDirectionSelect();
 	virtual const char* classname() const { return "IfcGridPlacementDirectionSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcGridPlacementDirectionSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

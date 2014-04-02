@@ -28,8 +28,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcLShapeProfileDef 
-IfcLShapeProfileDef::IfcLShapeProfileDef() { m_entity_enum = IFCLSHAPEPROFILEDEF; }
-IfcLShapeProfileDef::IfcLShapeProfileDef( int id ) { m_id = id; m_entity_enum = IFCLSHAPEPROFILEDEF; }
+IfcLShapeProfileDef::IfcLShapeProfileDef() {}
+IfcLShapeProfileDef::IfcLShapeProfileDef( int id ) { m_id = id; }
 IfcLShapeProfileDef::~IfcLShapeProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

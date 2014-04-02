@@ -40,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcExternalSpatialElement 
-IfcExternalSpatialElement::IfcExternalSpatialElement() { m_entity_enum = IFCEXTERNALSPATIALELEMENT; }
-IfcExternalSpatialElement::IfcExternalSpatialElement( int id ) { m_id = id; m_entity_enum = IFCEXTERNALSPATIALELEMENT; }
+IfcExternalSpatialElement::IfcExternalSpatialElement() {}
+IfcExternalSpatialElement::IfcExternalSpatialElement( int id ) { m_id = id; }
 IfcExternalSpatialElement::~IfcExternalSpatialElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

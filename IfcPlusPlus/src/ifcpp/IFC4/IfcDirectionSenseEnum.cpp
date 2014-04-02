@@ -40,7 +40,7 @@ shared_ptr<IfcDirectionSenseEnum> IfcDirectionSenseEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDirectionSenseEnum>(); }
-	shared_ptr<IfcDirectionSenseEnum> type_object( new IfcDirectionSenseEnum() );
+	auto type_object = std::make_shared<IfcDirectionSenseEnum>();
 	if( _stricmp( arg.c_str(), ".POSITIVE." ) == 0 )
 	{
 		type_object->m_enum = IfcDirectionSenseEnum::ENUM_POSITIVE;

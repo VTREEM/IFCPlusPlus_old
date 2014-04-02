@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsWithRealizingElements 
-IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements() { m_entity_enum = IFCRELCONNECTSWITHREALIZINGELEMENTS; }
-IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSWITHREALIZINGELEMENTS; }
+IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements() {}
+IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements( int id ) { m_id = id; }
 IfcRelConnectsWithRealizingElements::~IfcRelConnectsWithRealizingElements() {}
 
 // method setEntity takes over all attributes from another instance of the class

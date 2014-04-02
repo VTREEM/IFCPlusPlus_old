@@ -36,7 +36,7 @@ shared_ptr<IfcLuminousFluxMeasure> IfcLuminousFluxMeasure::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLuminousFluxMeasure>(); }
-	shared_ptr<IfcLuminousFluxMeasure> type_object( new IfcLuminousFluxMeasure() );
+	auto type_object = std::make_shared<IfcLuminousFluxMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

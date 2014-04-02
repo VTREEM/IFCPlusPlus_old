@@ -36,7 +36,7 @@ shared_ptr<IfcPowerMeasure> IfcPowerMeasure::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPowerMeasure>(); }
-	shared_ptr<IfcPowerMeasure> type_object( new IfcPowerMeasure() );
+	auto type_object = std::make_shared<IfcPowerMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

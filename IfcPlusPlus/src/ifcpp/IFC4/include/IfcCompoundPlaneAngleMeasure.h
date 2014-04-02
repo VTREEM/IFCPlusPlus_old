@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcCompoundPlaneAngleMeasure = LIST [3:4] OF INTEGER;
-class IfcCompoundPlaneAngleMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcCompoundPlaneAngleMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcCompoundPlaneAngleMeasure();

@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcLinearVelocityMeasure = REAL;
-class IfcLinearVelocityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcLinearVelocityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcLinearVelocityMeasure();

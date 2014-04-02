@@ -28,8 +28,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcLightSourcePositional 
-IfcLightSourcePositional::IfcLightSourcePositional() { m_entity_enum = IFCLIGHTSOURCEPOSITIONAL; }
-IfcLightSourcePositional::IfcLightSourcePositional( int id ) { m_id = id; m_entity_enum = IFCLIGHTSOURCEPOSITIONAL; }
+IfcLightSourcePositional::IfcLightSourcePositional() {}
+IfcLightSourcePositional::IfcLightSourcePositional( int id ) { m_id = id; }
 IfcLightSourcePositional::~IfcLightSourcePositional() {}
 
 // method setEntity takes over all attributes from another instance of the class

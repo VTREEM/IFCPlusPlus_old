@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcStyledItem 
-IfcStyledItem::IfcStyledItem() { m_entity_enum = IFCSTYLEDITEM; }
-IfcStyledItem::IfcStyledItem( int id ) { m_id = id; m_entity_enum = IFCSTYLEDITEM; }
+IfcStyledItem::IfcStyledItem() {}
+IfcStyledItem::IfcStyledItem( int id ) { m_id = id; }
 IfcStyledItem::~IfcStyledItem() {}
 
 // method setEntity takes over all attributes from another instance of the class

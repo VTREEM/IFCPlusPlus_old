@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcVibrationIsolatorTypeEnum = ENUMERATION OF	(COMPRESSION	,SPRING	,USERDEFINED	,NOTDEFINED);
-class IfcVibrationIsolatorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcVibrationIsolatorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcVibrationIsolatorTypeEnumEnum

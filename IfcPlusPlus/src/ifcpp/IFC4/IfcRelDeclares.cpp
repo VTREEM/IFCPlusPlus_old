@@ -28,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelDeclares 
-IfcRelDeclares::IfcRelDeclares() { m_entity_enum = IFCRELDECLARES; }
-IfcRelDeclares::IfcRelDeclares( int id ) { m_id = id; m_entity_enum = IFCRELDECLARES; }
+IfcRelDeclares::IfcRelDeclares() {}
+IfcRelDeclares::IfcRelDeclares( int id ) { m_id = id; }
 IfcRelDeclares::~IfcRelDeclares() {}
 
 // method setEntity takes over all attributes from another instance of the class

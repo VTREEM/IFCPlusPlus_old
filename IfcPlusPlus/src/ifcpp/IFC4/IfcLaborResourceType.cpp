@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcLaborResourceType 
-IfcLaborResourceType::IfcLaborResourceType() { m_entity_enum = IFCLABORRESOURCETYPE; }
-IfcLaborResourceType::IfcLaborResourceType( int id ) { m_id = id; m_entity_enum = IFCLABORRESOURCETYPE; }
+IfcLaborResourceType::IfcLaborResourceType() {}
+IfcLaborResourceType::IfcLaborResourceType( int id ) { m_id = id; }
 IfcLaborResourceType::~IfcLaborResourceType() {}
 
 // method setEntity takes over all attributes from another instance of the class

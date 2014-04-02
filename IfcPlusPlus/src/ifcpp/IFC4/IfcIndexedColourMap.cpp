@@ -23,8 +23,8 @@
 #include "include/IfcTessellatedFaceSet.h"
 
 // ENTITY IfcIndexedColourMap 
-IfcIndexedColourMap::IfcIndexedColourMap() { m_entity_enum = IFCINDEXEDCOLOURMAP; }
-IfcIndexedColourMap::IfcIndexedColourMap( int id ) { m_id = id; m_entity_enum = IFCINDEXEDCOLOURMAP; }
+IfcIndexedColourMap::IfcIndexedColourMap() {}
+IfcIndexedColourMap::IfcIndexedColourMap( int id ) { m_id = id; }
 IfcIndexedColourMap::~IfcIndexedColourMap() {}
 
 // method setEntity takes over all attributes from another instance of the class

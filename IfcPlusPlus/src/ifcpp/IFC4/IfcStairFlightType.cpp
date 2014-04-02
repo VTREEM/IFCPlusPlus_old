@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStairFlightType 
-IfcStairFlightType::IfcStairFlightType() { m_entity_enum = IFCSTAIRFLIGHTTYPE; }
-IfcStairFlightType::IfcStairFlightType( int id ) { m_id = id; m_entity_enum = IFCSTAIRFLIGHTTYPE; }
+IfcStairFlightType::IfcStairFlightType() {}
+IfcStairFlightType::IfcStairFlightType( int id ) { m_id = id; }
 IfcStairFlightType::~IfcStairFlightType() {}
 
 // method setEntity takes over all attributes from another instance of the class

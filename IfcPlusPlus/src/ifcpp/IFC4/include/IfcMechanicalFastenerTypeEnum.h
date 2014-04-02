@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcMechanicalFastenerTypeEnum = ENUMERATION OF	(ANCHORBOLT	,BOLT	,DOWEL	,NAIL	,NAILPLATE	,RIVET	,SCREW	,SHEARCONNECTOR	,STAPLE	,STUDSHEARCONNECTOR	,USERDEFINED	,NOTDEFINED);
-class IfcMechanicalFastenerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcMechanicalFastenerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcMechanicalFastenerTypeEnumEnum

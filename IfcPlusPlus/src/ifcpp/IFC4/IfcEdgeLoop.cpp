@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcEdgeLoop 
-IfcEdgeLoop::IfcEdgeLoop() { m_entity_enum = IFCEDGELOOP; }
-IfcEdgeLoop::IfcEdgeLoop( int id ) { m_id = id; m_entity_enum = IFCEDGELOOP; }
+IfcEdgeLoop::IfcEdgeLoop() {}
+IfcEdgeLoop::IfcEdgeLoop( int id ) { m_id = id; }
 IfcEdgeLoop::~IfcEdgeLoop() {}
 
 // method setEntity takes over all attributes from another instance of the class

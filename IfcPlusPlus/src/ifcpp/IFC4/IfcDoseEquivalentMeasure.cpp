@@ -36,7 +36,7 @@ shared_ptr<IfcDoseEquivalentMeasure> IfcDoseEquivalentMeasure::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDoseEquivalentMeasure>(); }
-	shared_ptr<IfcDoseEquivalentMeasure> type_object( new IfcDoseEquivalentMeasure() );
+	auto type_object = std::make_shared<IfcDoseEquivalentMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

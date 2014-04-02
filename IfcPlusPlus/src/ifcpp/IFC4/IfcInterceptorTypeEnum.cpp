@@ -56,7 +56,7 @@ shared_ptr<IfcInterceptorTypeEnum> IfcInterceptorTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcInterceptorTypeEnum>(); }
-	shared_ptr<IfcInterceptorTypeEnum> type_object( new IfcInterceptorTypeEnum() );
+	auto type_object = std::make_shared<IfcInterceptorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CYCLONIC." ) == 0 )
 	{
 		type_object->m_enum = IfcInterceptorTypeEnum::ENUM_CYCLONIC;

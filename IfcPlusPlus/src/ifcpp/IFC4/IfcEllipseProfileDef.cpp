@@ -26,8 +26,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcEllipseProfileDef 
-IfcEllipseProfileDef::IfcEllipseProfileDef() { m_entity_enum = IFCELLIPSEPROFILEDEF; }
-IfcEllipseProfileDef::IfcEllipseProfileDef( int id ) { m_id = id; m_entity_enum = IFCELLIPSEPROFILEDEF; }
+IfcEllipseProfileDef::IfcEllipseProfileDef() {}
+IfcEllipseProfileDef::IfcEllipseProfileDef( int id ) { m_id = id; }
 IfcEllipseProfileDef::~IfcEllipseProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

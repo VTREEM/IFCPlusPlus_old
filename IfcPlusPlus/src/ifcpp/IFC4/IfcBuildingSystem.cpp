@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBuildingSystem 
-IfcBuildingSystem::IfcBuildingSystem() { m_entity_enum = IFCBUILDINGSYSTEM; }
-IfcBuildingSystem::IfcBuildingSystem( int id ) { m_id = id; m_entity_enum = IFCBUILDINGSYSTEM; }
+IfcBuildingSystem::IfcBuildingSystem() {}
+IfcBuildingSystem::IfcBuildingSystem( int id ) { m_id = id; }
 IfcBuildingSystem::~IfcBuildingSystem() {}
 
 // method setEntity takes over all attributes from another instance of the class

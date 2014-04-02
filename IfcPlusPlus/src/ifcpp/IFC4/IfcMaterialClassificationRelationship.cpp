@@ -22,8 +22,8 @@
 #include "include/IfcMaterialClassificationRelationship.h"
 
 // ENTITY IfcMaterialClassificationRelationship 
-IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship() { m_entity_enum = IFCMATERIALCLASSIFICATIONRELATIONSHIP; }
-IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship( int id ) { m_id = id; m_entity_enum = IFCMATERIALCLASSIFICATIONRELATIONSHIP; }
+IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship() {}
+IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship( int id ) { m_id = id; }
 IfcMaterialClassificationRelationship::~IfcMaterialClassificationRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

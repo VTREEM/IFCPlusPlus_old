@@ -29,8 +29,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcPreDefinedPropertySet 
-IfcPreDefinedPropertySet::IfcPreDefinedPropertySet() { m_entity_enum = IFCPREDEFINEDPROPERTYSET; }
-IfcPreDefinedPropertySet::IfcPreDefinedPropertySet( int id ) { m_id = id; m_entity_enum = IFCPREDEFINEDPROPERTYSET; }
+IfcPreDefinedPropertySet::IfcPreDefinedPropertySet() {}
+IfcPreDefinedPropertySet::IfcPreDefinedPropertySet( int id ) { m_id = id; }
 IfcPreDefinedPropertySet::~IfcPreDefinedPropertySet() {}
 
 // method setEntity takes over all attributes from another instance of the class

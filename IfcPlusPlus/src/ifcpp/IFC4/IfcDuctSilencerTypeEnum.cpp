@@ -52,7 +52,7 @@ shared_ptr<IfcDuctSilencerTypeEnum> IfcDuctSilencerTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDuctSilencerTypeEnum>(); }
-	shared_ptr<IfcDuctSilencerTypeEnum> type_object( new IfcDuctSilencerTypeEnum() );
+	auto type_object = std::make_shared<IfcDuctSilencerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FLATOVAL." ) == 0 )
 	{
 		type_object->m_enum = IfcDuctSilencerTypeEnum::ENUM_FLATOVAL;

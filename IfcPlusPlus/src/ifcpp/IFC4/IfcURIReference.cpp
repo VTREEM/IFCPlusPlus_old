@@ -35,7 +35,7 @@ shared_ptr<IfcURIReference> IfcURIReference::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcURIReference>(); }
-	shared_ptr<IfcURIReference> type_object( new IfcURIReference() );
+	auto type_object = std::make_shared<IfcURIReference>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

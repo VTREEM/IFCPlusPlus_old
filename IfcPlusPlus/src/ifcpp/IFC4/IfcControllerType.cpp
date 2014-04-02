@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcControllerType 
-IfcControllerType::IfcControllerType() { m_entity_enum = IFCCONTROLLERTYPE; }
-IfcControllerType::IfcControllerType( int id ) { m_id = id; m_entity_enum = IFCCONTROLLERTYPE; }
+IfcControllerType::IfcControllerType() {}
+IfcControllerType::IfcControllerType( int id ) { m_id = id; }
 IfcControllerType::~IfcControllerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

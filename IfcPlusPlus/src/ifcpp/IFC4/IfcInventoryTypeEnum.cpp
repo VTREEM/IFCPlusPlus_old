@@ -52,7 +52,7 @@ shared_ptr<IfcInventoryTypeEnum> IfcInventoryTypeEnum::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcInventoryTypeEnum>(); }
-	shared_ptr<IfcInventoryTypeEnum> type_object( new IfcInventoryTypeEnum() );
+	auto type_object = std::make_shared<IfcInventoryTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ASSETINVENTORY." ) == 0 )
 	{
 		type_object->m_enum = IfcInventoryTypeEnum::ENUM_ASSETINVENTORY;

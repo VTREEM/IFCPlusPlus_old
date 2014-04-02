@@ -60,7 +60,7 @@ shared_ptr<IfcProjectOrderTypeEnum> IfcProjectOrderTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcProjectOrderTypeEnum>(); }
-	shared_ptr<IfcProjectOrderTypeEnum> type_object( new IfcProjectOrderTypeEnum() );
+	auto type_object = std::make_shared<IfcProjectOrderTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CHANGEORDER." ) == 0 )
 	{
 		type_object->m_enum = IfcProjectOrderTypeEnum::ENUM_CHANGEORDER;

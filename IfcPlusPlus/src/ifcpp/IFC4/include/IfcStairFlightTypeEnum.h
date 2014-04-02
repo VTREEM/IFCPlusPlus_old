@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStairFlightTypeEnum = ENUMERATION OF	(STRAIGHT	,WINDER	,SPIRAL	,CURVED	,FREEFORM	,USERDEFINED	,NOTDEFINED);
-class IfcStairFlightTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcStairFlightTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcStairFlightTypeEnumEnum

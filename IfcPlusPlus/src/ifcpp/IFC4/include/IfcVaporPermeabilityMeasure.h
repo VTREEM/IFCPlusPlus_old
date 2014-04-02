@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcVaporPermeabilityMeasure = REAL;
-class IfcVaporPermeabilityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcVaporPermeabilityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcVaporPermeabilityMeasure();

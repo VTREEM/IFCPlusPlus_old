@@ -25,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProductDefinitionShape 
-IfcProductDefinitionShape::IfcProductDefinitionShape() { m_entity_enum = IFCPRODUCTDEFINITIONSHAPE; }
-IfcProductDefinitionShape::IfcProductDefinitionShape( int id ) { m_id = id; m_entity_enum = IFCPRODUCTDEFINITIONSHAPE; }
+IfcProductDefinitionShape::IfcProductDefinitionShape() {}
+IfcProductDefinitionShape::IfcProductDefinitionShape( int id ) { m_id = id; }
 IfcProductDefinitionShape::~IfcProductDefinitionShape() {}
 
 // method setEntity takes over all attributes from another instance of the class

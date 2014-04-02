@@ -23,8 +23,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProductRepresentation 
-IfcProductRepresentation::IfcProductRepresentation() { m_entity_enum = IFCPRODUCTREPRESENTATION; }
-IfcProductRepresentation::IfcProductRepresentation( int id ) { m_id = id; m_entity_enum = IFCPRODUCTREPRESENTATION; }
+IfcProductRepresentation::IfcProductRepresentation() {}
+IfcProductRepresentation::IfcProductRepresentation( int id ) { m_id = id; }
 IfcProductRepresentation::~IfcProductRepresentation() {}
 
 // method setEntity takes over all attributes from another instance of the class

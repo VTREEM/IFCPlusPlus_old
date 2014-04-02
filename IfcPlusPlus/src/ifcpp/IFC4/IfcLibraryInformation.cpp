@@ -27,8 +27,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcLibraryInformation 
-IfcLibraryInformation::IfcLibraryInformation() { m_entity_enum = IFCLIBRARYINFORMATION; }
-IfcLibraryInformation::IfcLibraryInformation( int id ) { m_id = id; m_entity_enum = IFCLIBRARYINFORMATION; }
+IfcLibraryInformation::IfcLibraryInformation() {}
+IfcLibraryInformation::IfcLibraryInformation( int id ) { m_id = id; }
 IfcLibraryInformation::~IfcLibraryInformation() {}
 
 // method setEntity takes over all attributes from another instance of the class

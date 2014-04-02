@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcGrid 
-IfcGrid::IfcGrid() { m_entity_enum = IFCGRID; }
-IfcGrid::IfcGrid( int id ) { m_id = id; m_entity_enum = IFCGRID; }
+IfcGrid::IfcGrid() {}
+IfcGrid::IfcGrid( int id ) { m_id = id; }
 IfcGrid::~IfcGrid() {}
 
 // method setEntity takes over all attributes from another instance of the class

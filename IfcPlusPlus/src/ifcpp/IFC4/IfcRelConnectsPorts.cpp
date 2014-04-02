@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsPorts 
-IfcRelConnectsPorts::IfcRelConnectsPorts() { m_entity_enum = IFCRELCONNECTSPORTS; }
-IfcRelConnectsPorts::IfcRelConnectsPorts( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSPORTS; }
+IfcRelConnectsPorts::IfcRelConnectsPorts() {}
+IfcRelConnectsPorts::IfcRelConnectsPorts( int id ) { m_id = id; }
 IfcRelConnectsPorts::~IfcRelConnectsPorts() {}
 
 // method setEntity takes over all attributes from another instance of the class

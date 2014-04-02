@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcDynamicViscosityMeasure = REAL;
-class IfcDynamicViscosityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcDynamicViscosityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcDynamicViscosityMeasure();

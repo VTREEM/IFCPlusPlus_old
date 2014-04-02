@@ -106,15 +106,15 @@ bool IfcPlusPlusSystem::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 				else if( key == 'm' )
 				{
 					osg::Material* mat = m_view_controller->getDefaultMaterial();
-					float shinyness = mat->getShininess( osg::Material::FRONT_AND_BACK ) + 1.f;
-					mat->setShininess( osg::Material::FRONT_AND_BACK, shinyness );
+					float shinyness = mat->getShininess( osg::Material::FRONT ) + 1.f;
+					mat->setShininess( osg::Material::FRONT, shinyness );
 					std::cout << "shininess: " << shinyness << std::endl;
 				}
 				else if( key == 'n' )
 				{
 					osg::Material* mat = m_view_controller->getDefaultMaterial();
-					float shinyness = mat->getShininess( osg::Material::FRONT_AND_BACK ) - 1.f;
-					mat->setShininess( osg::Material::FRONT_AND_BACK, shinyness );
+					float shinyness = mat->getShininess( osg::Material::FRONT ) - 1.f;
+					mat->setShininess( osg::Material::FRONT, shinyness );
 					std::cout << "shininess: " << shinyness << std::endl;
 				}
 				else if( key == 'b' )
@@ -257,10 +257,6 @@ void IfcPlusPlusSystem::setObjectSelected( shared_ptr<IfcPPEntity> ifc_object, b
 			}
 		}
 
-		std::map<int, shared_ptr<IfcPPEntity> > map_objects;
-		map_objects[id] = ifc_object;
-		emit( signalObjectsSelected( map_objects ) );
-
 #ifdef _DEBUG
 		shared_ptr<IfcProduct> product = dynamic_pointer_cast<IfcProduct>( ifc_object );
 		if( product )
@@ -275,8 +271,11 @@ void IfcPlusPlusSystem::setObjectSelected( shared_ptr<IfcPPEntity> ifc_object, b
 			}
 			renderShapeInputDataInDebugViewer( product_shape.get(), osg::Vec4f( 0.5, 0.5, 0.5, 1.0 ), true  );
 		}
-
 #endif
+
+		std::map<int, shared_ptr<IfcPPEntity> > map_objects;
+		map_objects[id] = ifc_object;
+		emit( signalObjectsSelected( map_objects ) );
 	}
 	else
 	{

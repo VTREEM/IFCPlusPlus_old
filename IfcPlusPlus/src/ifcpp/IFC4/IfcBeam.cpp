@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcBeam 
-IfcBeam::IfcBeam() { m_entity_enum = IFCBEAM; }
-IfcBeam::IfcBeam( int id ) { m_id = id; m_entity_enum = IFCBEAM; }
+IfcBeam::IfcBeam() {}
+IfcBeam::IfcBeam( int id ) { m_id = id; }
 IfcBeam::~IfcBeam() {}
 
 // method setEntity takes over all attributes from another instance of the class

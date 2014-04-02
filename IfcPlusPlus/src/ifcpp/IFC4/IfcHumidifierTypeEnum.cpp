@@ -92,7 +92,7 @@ shared_ptr<IfcHumidifierTypeEnum> IfcHumidifierTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcHumidifierTypeEnum>(); }
-	shared_ptr<IfcHumidifierTypeEnum> type_object( new IfcHumidifierTypeEnum() );
+	auto type_object = std::make_shared<IfcHumidifierTypeEnum>();
 	if( _stricmp( arg.c_str(), ".STEAMINJECTION." ) == 0 )
 	{
 		type_object->m_enum = IfcHumidifierTypeEnum::ENUM_STEAMINJECTION;

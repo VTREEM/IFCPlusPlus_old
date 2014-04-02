@@ -21,8 +21,8 @@
 #include "include/IfcPresentationStyleSelect.h"
 
 // ENTITY IfcPresentationStyleAssignment 
-IfcPresentationStyleAssignment::IfcPresentationStyleAssignment() { m_entity_enum = IFCPRESENTATIONSTYLEASSIGNMENT; }
-IfcPresentationStyleAssignment::IfcPresentationStyleAssignment( int id ) { m_id = id; m_entity_enum = IFCPRESENTATIONSTYLEASSIGNMENT; }
+IfcPresentationStyleAssignment::IfcPresentationStyleAssignment() {}
+IfcPresentationStyleAssignment::IfcPresentationStyleAssignment( int id ) { m_id = id; }
 IfcPresentationStyleAssignment::~IfcPresentationStyleAssignment() {}
 
 // method setEntity takes over all attributes from another instance of the class

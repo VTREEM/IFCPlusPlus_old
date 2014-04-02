@@ -24,8 +24,8 @@
 #include "include/IfcReal.h"
 
 // ENTITY IfcMapConversion 
-IfcMapConversion::IfcMapConversion() { m_entity_enum = IFCMAPCONVERSION; }
-IfcMapConversion::IfcMapConversion( int id ) { m_id = id; m_entity_enum = IFCMAPCONVERSION; }
+IfcMapConversion::IfcMapConversion() {}
+IfcMapConversion::IfcMapConversion( int id ) { m_id = id; }
 IfcMapConversion::~IfcMapConversion() {}
 
 // method setEntity takes over all attributes from another instance of the class

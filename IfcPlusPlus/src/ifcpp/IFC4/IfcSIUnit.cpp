@@ -24,8 +24,8 @@
 #include "include/IfcUnitEnum.h"
 
 // ENTITY IfcSIUnit 
-IfcSIUnit::IfcSIUnit() { m_entity_enum = IFCSIUNIT; }
-IfcSIUnit::IfcSIUnit( int id ) { m_id = id; m_entity_enum = IFCSIUNIT; }
+IfcSIUnit::IfcSIUnit() {}
+IfcSIUnit::IfcSIUnit( int id ) { m_id = id; }
 IfcSIUnit::~IfcSIUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class

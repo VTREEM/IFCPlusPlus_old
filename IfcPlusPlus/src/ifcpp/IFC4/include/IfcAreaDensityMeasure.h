@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcAreaDensityMeasure = REAL;
-class IfcAreaDensityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcAreaDensityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcAreaDensityMeasure();

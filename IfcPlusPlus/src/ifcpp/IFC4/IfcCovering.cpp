@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCovering 
-IfcCovering::IfcCovering() { m_entity_enum = IFCCOVERING; }
-IfcCovering::IfcCovering( int id ) { m_id = id; m_entity_enum = IFCCOVERING; }
+IfcCovering::IfcCovering() {}
+IfcCovering::IfcCovering( int id ) { m_id = id; }
 IfcCovering::~IfcCovering() {}
 
 // method setEntity takes over all attributes from another instance of the class

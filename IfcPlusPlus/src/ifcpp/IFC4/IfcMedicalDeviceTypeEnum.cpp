@@ -60,7 +60,7 @@ shared_ptr<IfcMedicalDeviceTypeEnum> IfcMedicalDeviceTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMedicalDeviceTypeEnum>(); }
-	shared_ptr<IfcMedicalDeviceTypeEnum> type_object( new IfcMedicalDeviceTypeEnum() );
+	auto type_object = std::make_shared<IfcMedicalDeviceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AIRSTATION." ) == 0 )
 	{
 		type_object->m_enum = IfcMedicalDeviceTypeEnum::ENUM_AIRSTATION;

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDocumentConfidentialityEnum = ENUMERATION OF	(PUBLIC	,RESTRICTED	,CONFIDENTIAL	,PERSONAL	,USERDEFINED	,NOTDEFINED);
-class IfcDocumentConfidentialityEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDocumentConfidentialityEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDocumentConfidentialityEnumEnum

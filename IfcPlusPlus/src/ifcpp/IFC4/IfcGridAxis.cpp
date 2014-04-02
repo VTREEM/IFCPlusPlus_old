@@ -25,8 +25,8 @@
 #include "include/IfcVirtualGridIntersection.h"
 
 // ENTITY IfcGridAxis 
-IfcGridAxis::IfcGridAxis() { m_entity_enum = IFCGRIDAXIS; }
-IfcGridAxis::IfcGridAxis( int id ) { m_id = id; m_entity_enum = IFCGRIDAXIS; }
+IfcGridAxis::IfcGridAxis() {}
+IfcGridAxis::IfcGridAxis( int id ) { m_id = id; }
 IfcGridAxis::~IfcGridAxis() {}
 
 // method setEntity takes over all attributes from another instance of the class

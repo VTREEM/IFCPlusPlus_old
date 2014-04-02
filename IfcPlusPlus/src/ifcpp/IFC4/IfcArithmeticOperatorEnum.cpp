@@ -48,7 +48,7 @@ shared_ptr<IfcArithmeticOperatorEnum> IfcArithmeticOperatorEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcArithmeticOperatorEnum>(); }
-	shared_ptr<IfcArithmeticOperatorEnum> type_object( new IfcArithmeticOperatorEnum() );
+	auto type_object = std::make_shared<IfcArithmeticOperatorEnum>();
 	if( _stricmp( arg.c_str(), ".ADD." ) == 0 )
 	{
 		type_object->m_enum = IfcArithmeticOperatorEnum::ENUM_ADD;

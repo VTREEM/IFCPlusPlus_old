@@ -36,7 +36,7 @@ shared_ptr<IfcAreaMeasure> IfcAreaMeasure::createObjectFromStepData( const std::
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAreaMeasure>(); }
-	shared_ptr<IfcAreaMeasure> type_object( new IfcAreaMeasure() );
+	auto type_object = std::make_shared<IfcAreaMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

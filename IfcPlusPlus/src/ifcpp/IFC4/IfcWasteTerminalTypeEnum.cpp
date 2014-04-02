@@ -68,7 +68,7 @@ shared_ptr<IfcWasteTerminalTypeEnum> IfcWasteTerminalTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWasteTerminalTypeEnum>(); }
-	shared_ptr<IfcWasteTerminalTypeEnum> type_object( new IfcWasteTerminalTypeEnum() );
+	auto type_object = std::make_shared<IfcWasteTerminalTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FLOORTRAP." ) == 0 )
 	{
 		type_object->m_enum = IfcWasteTerminalTypeEnum::ENUM_FLOORTRAP;

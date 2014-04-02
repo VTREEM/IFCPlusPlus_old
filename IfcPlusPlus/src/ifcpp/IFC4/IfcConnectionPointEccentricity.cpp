@@ -22,8 +22,8 @@
 #include "include/IfcPointOrVertexPoint.h"
 
 // ENTITY IfcConnectionPointEccentricity 
-IfcConnectionPointEccentricity::IfcConnectionPointEccentricity() { m_entity_enum = IFCCONNECTIONPOINTECCENTRICITY; }
-IfcConnectionPointEccentricity::IfcConnectionPointEccentricity( int id ) { m_id = id; m_entity_enum = IFCCONNECTIONPOINTECCENTRICITY; }
+IfcConnectionPointEccentricity::IfcConnectionPointEccentricity() {}
+IfcConnectionPointEccentricity::IfcConnectionPointEccentricity( int id ) { m_id = id; }
 IfcConnectionPointEccentricity::~IfcConnectionPointEccentricity() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -60,7 +60,7 @@ shared_ptr<IfcFootingTypeEnum> IfcFootingTypeEnum::createObjectFromStepData( con
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFootingTypeEnum>(); }
-	shared_ptr<IfcFootingTypeEnum> type_object( new IfcFootingTypeEnum() );
+	auto type_object = std::make_shared<IfcFootingTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CAISSON_FOUNDATION." ) == 0 )
 	{
 		type_object->m_enum = IfcFootingTypeEnum::ENUM_CAISSON_FOUNDATION;

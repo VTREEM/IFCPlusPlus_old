@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFlowControllerType 
-IfcFlowControllerType::IfcFlowControllerType() { m_entity_enum = IFCFLOWCONTROLLERTYPE; }
-IfcFlowControllerType::IfcFlowControllerType( int id ) { m_id = id; m_entity_enum = IFCFLOWCONTROLLERTYPE; }
+IfcFlowControllerType::IfcFlowControllerType() {}
+IfcFlowControllerType::IfcFlowControllerType( int id ) { m_id = id; }
 IfcFlowControllerType::~IfcFlowControllerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

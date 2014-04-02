@@ -56,7 +56,7 @@ shared_ptr<IfcStructuralSurfaceActivityTypeEnum> IfcStructuralSurfaceActivityTyp
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStructuralSurfaceActivityTypeEnum>(); }
-	shared_ptr<IfcStructuralSurfaceActivityTypeEnum> type_object( new IfcStructuralSurfaceActivityTypeEnum() );
+	auto type_object = std::make_shared<IfcStructuralSurfaceActivityTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONST." ) == 0 )
 	{
 		type_object->m_enum = IfcStructuralSurfaceActivityTypeEnum::ENUM_CONST;

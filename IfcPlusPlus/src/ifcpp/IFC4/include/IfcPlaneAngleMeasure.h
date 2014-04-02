@@ -22,7 +22,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcPlaneAngleMeasure = REAL;
-class IfcPlaneAngleMeasure : public IfcBendingParameterSelect, public IfcMeasureValue, public IfcPPType
+class IfcPlaneAngleMeasure : public IfcBendingParameterSelect, public IfcMeasureValue
 {
 public:
 	IfcPlaneAngleMeasure();

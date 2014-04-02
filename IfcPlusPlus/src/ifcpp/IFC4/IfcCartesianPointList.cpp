@@ -22,8 +22,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCartesianPointList 
-IfcCartesianPointList::IfcCartesianPointList() { m_entity_enum = IFCCARTESIANPOINTLIST; }
-IfcCartesianPointList::IfcCartesianPointList( int id ) { m_id = id; m_entity_enum = IFCCARTESIANPOINTLIST; }
+IfcCartesianPointList::IfcCartesianPointList() {}
+IfcCartesianPointList::IfcCartesianPointList( int id ) { m_id = id; }
 IfcCartesianPointList::~IfcCartesianPointList() {}
 
 // method setEntity takes over all attributes from another instance of the class

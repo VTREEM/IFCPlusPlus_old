@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcThermodynamicTemperatureMeasure = REAL;
-class IfcThermodynamicTemperatureMeasure : public IfcMeasureValue, public IfcPPType
+class IfcThermodynamicTemperatureMeasure : public IfcMeasureValue
 {
 public:
 	IfcThermodynamicTemperatureMeasure();

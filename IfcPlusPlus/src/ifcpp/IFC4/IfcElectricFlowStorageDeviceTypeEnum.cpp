@@ -60,7 +60,7 @@ shared_ptr<IfcElectricFlowStorageDeviceTypeEnum> IfcElectricFlowStorageDeviceTyp
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricFlowStorageDeviceTypeEnum>(); }
-	shared_ptr<IfcElectricFlowStorageDeviceTypeEnum> type_object( new IfcElectricFlowStorageDeviceTypeEnum() );
+	auto type_object = std::make_shared<IfcElectricFlowStorageDeviceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BATTERY." ) == 0 )
 	{
 		type_object->m_enum = IfcElectricFlowStorageDeviceTypeEnum::ENUM_BATTERY;

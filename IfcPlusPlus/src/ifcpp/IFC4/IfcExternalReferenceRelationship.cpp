@@ -35,8 +35,8 @@
 #include "include/IfcTimeSeries.h"
 
 // ENTITY IfcExternalReferenceRelationship 
-IfcExternalReferenceRelationship::IfcExternalReferenceRelationship() { m_entity_enum = IFCEXTERNALREFERENCERELATIONSHIP; }
-IfcExternalReferenceRelationship::IfcExternalReferenceRelationship( int id ) { m_id = id; m_entity_enum = IFCEXTERNALREFERENCERELATIONSHIP; }
+IfcExternalReferenceRelationship::IfcExternalReferenceRelationship() {}
+IfcExternalReferenceRelationship::IfcExternalReferenceRelationship( int id ) { m_id = id; }
 IfcExternalReferenceRelationship::~IfcExternalReferenceRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

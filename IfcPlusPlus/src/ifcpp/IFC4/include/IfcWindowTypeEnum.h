@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcWindowTypeEnum = ENUMERATION OF	(WINDOW	,SKYLIGHT	,LIGHTDOME	,USERDEFINED	,NOTDEFINED);
-class IfcWindowTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcWindowTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcWindowTypeEnumEnum

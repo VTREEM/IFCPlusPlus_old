@@ -65,7 +65,7 @@ shared_ptr<IfcTextFontSelect> IfcTextFontSelect::createObjectFromStepData( const
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcTextFontSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcTextFontSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcTextFontSelect>();

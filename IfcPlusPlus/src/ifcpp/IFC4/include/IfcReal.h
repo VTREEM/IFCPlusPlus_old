@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcReal = REAL;
-class IfcReal : public IfcSimpleValue, public IfcPPType
+class IfcReal : public IfcSimpleValue
 {
 public:
 	IfcReal();

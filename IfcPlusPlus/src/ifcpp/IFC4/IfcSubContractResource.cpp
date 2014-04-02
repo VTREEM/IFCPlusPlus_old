@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSubContractResource 
-IfcSubContractResource::IfcSubContractResource() { m_entity_enum = IFCSUBCONTRACTRESOURCE; }
-IfcSubContractResource::IfcSubContractResource( int id ) { m_id = id; m_entity_enum = IFCSUBCONTRACTRESOURCE; }
+IfcSubContractResource::IfcSubContractResource() {}
+IfcSubContractResource::IfcSubContractResource( int id ) { m_id = id; }
 IfcSubContractResource::~IfcSubContractResource() {}
 
 // method setEntity takes over all attributes from another instance of the class

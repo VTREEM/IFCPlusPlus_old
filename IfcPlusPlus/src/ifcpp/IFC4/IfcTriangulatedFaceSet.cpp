@@ -26,8 +26,8 @@
 #include "include/IfcTriangulatedFaceSet.h"
 
 // ENTITY IfcTriangulatedFaceSet 
-IfcTriangulatedFaceSet::IfcTriangulatedFaceSet() { m_entity_enum = IFCTRIANGULATEDFACESET; }
-IfcTriangulatedFaceSet::IfcTriangulatedFaceSet( int id ) { m_id = id; m_entity_enum = IFCTRIANGULATEDFACESET; }
+IfcTriangulatedFaceSet::IfcTriangulatedFaceSet() {}
+IfcTriangulatedFaceSet::IfcTriangulatedFaceSet( int id ) { m_id = id; }
 IfcTriangulatedFaceSet::~IfcTriangulatedFaceSet() {}
 
 // method setEntity takes over all attributes from another instance of the class

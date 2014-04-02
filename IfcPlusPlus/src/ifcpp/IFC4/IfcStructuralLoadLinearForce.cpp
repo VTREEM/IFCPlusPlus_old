@@ -23,8 +23,8 @@
 #include "include/IfcStructuralLoadLinearForce.h"
 
 // ENTITY IfcStructuralLoadLinearForce 
-IfcStructuralLoadLinearForce::IfcStructuralLoadLinearForce() { m_entity_enum = IFCSTRUCTURALLOADLINEARFORCE; }
-IfcStructuralLoadLinearForce::IfcStructuralLoadLinearForce( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADLINEARFORCE; }
+IfcStructuralLoadLinearForce::IfcStructuralLoadLinearForce() {}
+IfcStructuralLoadLinearForce::IfcStructuralLoadLinearForce( int id ) { m_id = id; }
 IfcStructuralLoadLinearForce::~IfcStructuralLoadLinearForce() {}
 
 // method setEntity takes over all attributes from another instance of the class

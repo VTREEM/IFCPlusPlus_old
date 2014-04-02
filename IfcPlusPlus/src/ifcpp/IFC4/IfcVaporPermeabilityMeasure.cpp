@@ -36,7 +36,7 @@ shared_ptr<IfcVaporPermeabilityMeasure> IfcVaporPermeabilityMeasure::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcVaporPermeabilityMeasure>(); }
-	shared_ptr<IfcVaporPermeabilityMeasure> type_object( new IfcVaporPermeabilityMeasure() );
+	auto type_object = std::make_shared<IfcVaporPermeabilityMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

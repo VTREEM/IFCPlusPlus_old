@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelFillsElement 
-IfcRelFillsElement::IfcRelFillsElement() { m_entity_enum = IFCRELFILLSELEMENT; }
-IfcRelFillsElement::IfcRelFillsElement( int id ) { m_id = id; m_entity_enum = IFCRELFILLSELEMENT; }
+IfcRelFillsElement::IfcRelFillsElement() {}
+IfcRelFillsElement::IfcRelFillsElement( int id ) { m_id = id; }
 IfcRelFillsElement::~IfcRelFillsElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

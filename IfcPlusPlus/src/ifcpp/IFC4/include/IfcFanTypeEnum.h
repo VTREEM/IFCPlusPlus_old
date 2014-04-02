@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFanTypeEnum = ENUMERATION OF	(CENTRIFUGALFORWARDCURVED	,CENTRIFUGALRADIAL	,CENTRIFUGALBACKWARDINCLINEDCURVED	,CENTRIFUGALAIRFOIL	,TUBEAXIAL	,VANEAXIAL	,PROPELLORAXIAL	,USERDEFINED	,NOTDEFINED);
-class IfcFanTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFanTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFanTypeEnumEnum

@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCostSchedule 
-IfcCostSchedule::IfcCostSchedule() { m_entity_enum = IFCCOSTSCHEDULE; }
-IfcCostSchedule::IfcCostSchedule( int id ) { m_id = id; m_entity_enum = IFCCOSTSCHEDULE; }
+IfcCostSchedule::IfcCostSchedule() {}
+IfcCostSchedule::IfcCostSchedule( int id ) { m_id = id; }
 IfcCostSchedule::~IfcCostSchedule() {}
 
 // method setEntity takes over all attributes from another instance of the class

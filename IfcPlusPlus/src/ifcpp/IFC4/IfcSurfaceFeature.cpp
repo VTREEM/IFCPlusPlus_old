@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSurfaceFeature 
-IfcSurfaceFeature::IfcSurfaceFeature() { m_entity_enum = IFCSURFACEFEATURE; }
-IfcSurfaceFeature::IfcSurfaceFeature( int id ) { m_id = id; m_entity_enum = IFCSURFACEFEATURE; }
+IfcSurfaceFeature::IfcSurfaceFeature() {}
+IfcSurfaceFeature::IfcSurfaceFeature( int id ) { m_id = id; }
 IfcSurfaceFeature::~IfcSurfaceFeature() {}
 
 // method setEntity takes over all attributes from another instance of the class

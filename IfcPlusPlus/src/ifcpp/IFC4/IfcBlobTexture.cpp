@@ -24,8 +24,8 @@
 #include "include/IfcTextureCoordinate.h"
 
 // ENTITY IfcBlobTexture 
-IfcBlobTexture::IfcBlobTexture() { m_entity_enum = IFCBLOBTEXTURE; }
-IfcBlobTexture::IfcBlobTexture( int id ) { m_id = id; m_entity_enum = IFCBLOBTEXTURE; }
+IfcBlobTexture::IfcBlobTexture() {}
+IfcBlobTexture::IfcBlobTexture( int id ) { m_id = id; }
 IfcBlobTexture::~IfcBlobTexture() {}
 
 // method setEntity takes over all attributes from another instance of the class

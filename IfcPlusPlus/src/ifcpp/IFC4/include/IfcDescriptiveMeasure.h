@@ -22,7 +22,7 @@
 #include "IfcSizeSelect.h"
 
 // TYPE IfcDescriptiveMeasure = STRING;
-class IfcDescriptiveMeasure : public IfcMeasureValue, public IfcSizeSelect, public IfcPPType
+class IfcDescriptiveMeasure : public IfcMeasureValue, public IfcSizeSelect
 {
 public:
 	IfcDescriptiveMeasure();

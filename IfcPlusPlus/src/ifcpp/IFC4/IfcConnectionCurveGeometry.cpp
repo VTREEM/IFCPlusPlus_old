@@ -21,8 +21,8 @@
 #include "include/IfcCurveOrEdgeCurve.h"
 
 // ENTITY IfcConnectionCurveGeometry 
-IfcConnectionCurveGeometry::IfcConnectionCurveGeometry() { m_entity_enum = IFCCONNECTIONCURVEGEOMETRY; }
-IfcConnectionCurveGeometry::IfcConnectionCurveGeometry( int id ) { m_id = id; m_entity_enum = IFCCONNECTIONCURVEGEOMETRY; }
+IfcConnectionCurveGeometry::IfcConnectionCurveGeometry() {}
+IfcConnectionCurveGeometry::IfcConnectionCurveGeometry( int id ) { m_id = id; }
 IfcConnectionCurveGeometry::~IfcConnectionCurveGeometry() {}
 
 // method setEntity takes over all attributes from another instance of the class

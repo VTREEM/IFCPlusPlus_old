@@ -25,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcSectionedSpine 
-IfcSectionedSpine::IfcSectionedSpine() { m_entity_enum = IFCSECTIONEDSPINE; }
-IfcSectionedSpine::IfcSectionedSpine( int id ) { m_id = id; m_entity_enum = IFCSECTIONEDSPINE; }
+IfcSectionedSpine::IfcSectionedSpine() {}
+IfcSectionedSpine::IfcSectionedSpine( int id ) { m_id = id; }
 IfcSectionedSpine::~IfcSectionedSpine() {}
 
 // method setEntity takes over all attributes from another instance of the class

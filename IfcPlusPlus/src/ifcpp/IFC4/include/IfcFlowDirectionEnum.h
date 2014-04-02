@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFlowDirectionEnum = ENUMERATION OF	(SOURCE	,SINK	,SOURCEANDSINK	,NOTDEFINED);
-class IfcFlowDirectionEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFlowDirectionEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFlowDirectionEnumEnum

@@ -23,8 +23,8 @@
 #include "include/IfcRelAssociatesMaterial.h"
 
 // ENTITY IfcMaterialDefinition 
-IfcMaterialDefinition::IfcMaterialDefinition() { m_entity_enum = IFCMATERIALDEFINITION; }
-IfcMaterialDefinition::IfcMaterialDefinition( int id ) { m_id = id; m_entity_enum = IFCMATERIALDEFINITION; }
+IfcMaterialDefinition::IfcMaterialDefinition() {}
+IfcMaterialDefinition::IfcMaterialDefinition( int id ) { m_id = id; }
 IfcMaterialDefinition::~IfcMaterialDefinition() {}
 
 // method setEntity takes over all attributes from another instance of the class

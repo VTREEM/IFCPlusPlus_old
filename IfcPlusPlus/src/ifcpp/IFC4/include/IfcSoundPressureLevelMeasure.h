@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcSoundPressureLevelMeasure = REAL;
-class IfcSoundPressureLevelMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcSoundPressureLevelMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcSoundPressureLevelMeasure();

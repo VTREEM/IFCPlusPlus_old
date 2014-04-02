@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcLampType 
-IfcLampType::IfcLampType() { m_entity_enum = IFCLAMPTYPE; }
-IfcLampType::IfcLampType( int id ) { m_id = id; m_entity_enum = IFCLAMPTYPE; }
+IfcLampType::IfcLampType() {}
+IfcLampType::IfcLampType( int id ) { m_id = id; }
 IfcLampType::~IfcLampType() {}
 
 // method setEntity takes over all attributes from another instance of the class

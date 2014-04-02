@@ -48,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProtectiveDeviceTrippingUnit 
-IfcProtectiveDeviceTrippingUnit::IfcProtectiveDeviceTrippingUnit() { m_entity_enum = IFCPROTECTIVEDEVICETRIPPINGUNIT; }
-IfcProtectiveDeviceTrippingUnit::IfcProtectiveDeviceTrippingUnit( int id ) { m_id = id; m_entity_enum = IFCPROTECTIVEDEVICETRIPPINGUNIT; }
+IfcProtectiveDeviceTrippingUnit::IfcProtectiveDeviceTrippingUnit() {}
+IfcProtectiveDeviceTrippingUnit::IfcProtectiveDeviceTrippingUnit( int id ) { m_id = id; }
 IfcProtectiveDeviceTrippingUnit::~IfcProtectiveDeviceTrippingUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class

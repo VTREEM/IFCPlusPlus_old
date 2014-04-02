@@ -67,7 +67,7 @@ shared_ptr<IfcTranslationalStiffnessSelect> IfcTranslationalStiffnessSelect::cre
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcTranslationalStiffnessSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcTranslationalStiffnessSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcTranslationalStiffnessSelect>();

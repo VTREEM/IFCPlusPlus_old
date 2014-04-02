@@ -36,8 +36,8 @@
 #include "include/IfcWorkTime.h"
 
 // ENTITY IfcWorkCalendar 
-IfcWorkCalendar::IfcWorkCalendar() { m_entity_enum = IFCWORKCALENDAR; }
-IfcWorkCalendar::IfcWorkCalendar( int id ) { m_id = id; m_entity_enum = IFCWORKCALENDAR; }
+IfcWorkCalendar::IfcWorkCalendar() {}
+IfcWorkCalendar::IfcWorkCalendar( int id ) { m_id = id; }
 IfcWorkCalendar::~IfcWorkCalendar() {}
 
 // method setEntity takes over all attributes from another instance of the class

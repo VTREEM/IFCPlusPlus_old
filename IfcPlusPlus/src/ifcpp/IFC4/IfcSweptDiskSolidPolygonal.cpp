@@ -25,8 +25,8 @@
 #include "include/IfcSweptDiskSolidPolygonal.h"
 
 // ENTITY IfcSweptDiskSolidPolygonal 
-IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal() { m_entity_enum = IFCSWEPTDISKSOLIDPOLYGONAL; }
-IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal( int id ) { m_id = id; m_entity_enum = IFCSWEPTDISKSOLIDPOLYGONAL; }
+IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal() {}
+IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal( int id ) { m_id = id; }
 IfcSweptDiskSolidPolygonal::~IfcSweptDiskSolidPolygonal() {}
 
 // method setEntity takes over all attributes from another instance of the class

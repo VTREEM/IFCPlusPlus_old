@@ -40,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralPlanarAction 
-IfcStructuralPlanarAction::IfcStructuralPlanarAction() { m_entity_enum = IFCSTRUCTURALPLANARACTION; }
-IfcStructuralPlanarAction::IfcStructuralPlanarAction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALPLANARACTION; }
+IfcStructuralPlanarAction::IfcStructuralPlanarAction() {}
+IfcStructuralPlanarAction::IfcStructuralPlanarAction( int id ) { m_id = id; }
 IfcStructuralPlanarAction::~IfcStructuralPlanarAction() {}
 
 // method setEntity takes over all attributes from another instance of the class

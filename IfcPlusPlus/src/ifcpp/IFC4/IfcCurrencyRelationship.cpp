@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCurrencyRelationship 
-IfcCurrencyRelationship::IfcCurrencyRelationship() { m_entity_enum = IFCCURRENCYRELATIONSHIP; }
-IfcCurrencyRelationship::IfcCurrencyRelationship( int id ) { m_id = id; m_entity_enum = IFCCURRENCYRELATIONSHIP; }
+IfcCurrencyRelationship::IfcCurrencyRelationship() {}
+IfcCurrencyRelationship::IfcCurrencyRelationship( int id ) { m_id = id; }
 IfcCurrencyRelationship::~IfcCurrencyRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

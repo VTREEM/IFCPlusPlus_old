@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBSplineCurveForm = ENUMERATION OF	(POLYLINE_FORM	,CIRCULAR_ARC	,ELLIPTIC_ARC	,PARABOLIC_ARC	,HYPERBOLIC_ARC	,UNSPECIFIED);
-class IfcBSplineCurveForm : public IfcPPAbstractEnum, public IfcPPType
+class IfcBSplineCurveForm : virtual public IfcPPObject
 {
 public:
 	enum IfcBSplineCurveFormEnum

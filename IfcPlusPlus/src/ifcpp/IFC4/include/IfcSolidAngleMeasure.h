@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcSolidAngleMeasure = REAL;
-class IfcSolidAngleMeasure : public IfcMeasureValue, public IfcPPType
+class IfcSolidAngleMeasure : public IfcMeasureValue
 {
 public:
 	IfcSolidAngleMeasure();

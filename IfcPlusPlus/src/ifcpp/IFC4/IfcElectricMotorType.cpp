@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcElectricMotorType 
-IfcElectricMotorType::IfcElectricMotorType() { m_entity_enum = IFCELECTRICMOTORTYPE; }
-IfcElectricMotorType::IfcElectricMotorType( int id ) { m_id = id; m_entity_enum = IFCELECTRICMOTORTYPE; }
+IfcElectricMotorType::IfcElectricMotorType() {}
+IfcElectricMotorType::IfcElectricMotorType( int id ) { m_id = id; }
 IfcElectricMotorType::~IfcElectricMotorType() {}
 
 // method setEntity takes over all attributes from another instance of the class

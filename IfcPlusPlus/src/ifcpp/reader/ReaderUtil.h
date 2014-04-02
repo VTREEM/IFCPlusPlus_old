@@ -256,6 +256,8 @@ void readTypeList( const std::string arg_complete, std::vector<shared_ptr<T> >& 
 	{
 		std::string& item = list_items[i];
 		vec.push_back( T::createObjectFromStepData( item ) );
+		//shared_ptr<T> ptr_type( new T() );
+		//createTypeObject( item, ptr_type );
 	}
 }
 
@@ -301,7 +303,32 @@ void readSelectList( const std::string& arg_complete, std::vector<shared_ptr<T> 
 		else
 		{
 			// could be type like IFCPARAMETERVALUE(90)
-			vec.push_back( T::createObjectFromStepData( item, map_entities ) );
+			//vec.push_back( T::createObjectFromStepData( item, map_entities ) );
+			//shared_ptr<IfcPPObject> ptr( new IfcPPObject() );
+			//createTypeObject( item, map_entities, ptr );
+			//shared_ptr<T> ptr_t = dynamic_pointer_cast<T>( ptr );
+			//if( ptr_t )
+			//{
+			//	vec.push_back( ptr_t );
+			//}
+			std::string keyword;
+			std::string inline_arg;
+			tokenizeInlineArgument( item, keyword, inline_arg );
+			shared_ptr<IfcPPObject> result_object;
+			readInlineTypeOrEntity( item, result_object, map_entities );
+			if( result_object )
+			{
+				shared_ptr<T> ptr_t = dynamic_pointer_cast<T>( result_object );
+				if( ptr_t )
+				{
+					vec.push_back( ptr_t );
+					continue;
+				}
+			}
+			std::stringstream strs;
+			strs << "unhandled inline argument: " << item << " in function IfcAppliedValueSelect::readStepData" << std::endl;
+			throw IfcPPException( strs.str() );
+
 		}
 	}
 	return;

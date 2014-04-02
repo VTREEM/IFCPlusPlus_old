@@ -49,8 +49,8 @@
 #include "include/IfcWindowTypePartitioningEnum.h"
 
 // ENTITY IfcWindow 
-IfcWindow::IfcWindow() { m_entity_enum = IFCWINDOW; }
-IfcWindow::IfcWindow( int id ) { m_id = id; m_entity_enum = IFCWINDOW; }
+IfcWindow::IfcWindow() {}
+IfcWindow::IfcWindow( int id ) { m_id = id; }
 IfcWindow::~IfcWindow() {}
 
 // method setEntity takes over all attributes from another instance of the class

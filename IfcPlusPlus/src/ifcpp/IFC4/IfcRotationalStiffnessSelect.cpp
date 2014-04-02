@@ -67,7 +67,7 @@ shared_ptr<IfcRotationalStiffnessSelect> IfcRotationalStiffnessSelect::createObj
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcRotationalStiffnessSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcRotationalStiffnessSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcRotationalStiffnessSelect>();

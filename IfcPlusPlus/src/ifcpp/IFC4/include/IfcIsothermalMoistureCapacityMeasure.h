@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcIsothermalMoistureCapacityMeasure = REAL;
-class IfcIsothermalMoistureCapacityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcIsothermalMoistureCapacityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcIsothermalMoistureCapacityMeasure();

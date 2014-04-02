@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFireSuppressionTerminalType 
-IfcFireSuppressionTerminalType::IfcFireSuppressionTerminalType() { m_entity_enum = IFCFIRESUPPRESSIONTERMINALTYPE; }
-IfcFireSuppressionTerminalType::IfcFireSuppressionTerminalType( int id ) { m_id = id; m_entity_enum = IFCFIRESUPPRESSIONTERMINALTYPE; }
+IfcFireSuppressionTerminalType::IfcFireSuppressionTerminalType() {}
+IfcFireSuppressionTerminalType::IfcFireSuppressionTerminalType( int id ) { m_id = id; }
 IfcFireSuppressionTerminalType::~IfcFireSuppressionTerminalType() {}
 
 // method setEntity takes over all attributes from another instance of the class

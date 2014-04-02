@@ -24,8 +24,8 @@
 #include "include/IfcTextureCoordinate.h"
 
 // ENTITY IfcSurfaceTexture 
-IfcSurfaceTexture::IfcSurfaceTexture() { m_entity_enum = IFCSURFACETEXTURE; }
-IfcSurfaceTexture::IfcSurfaceTexture( int id ) { m_id = id; m_entity_enum = IFCSURFACETEXTURE; }
+IfcSurfaceTexture::IfcSurfaceTexture() {}
+IfcSurfaceTexture::IfcSurfaceTexture( int id ) { m_id = id; }
 IfcSurfaceTexture::~IfcSurfaceTexture() {}
 
 // method setEntity takes over all attributes from another instance of the class

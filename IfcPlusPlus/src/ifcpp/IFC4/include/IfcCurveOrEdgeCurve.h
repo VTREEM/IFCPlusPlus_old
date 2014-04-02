@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCurveOrEdgeCurve = SELECT	(IfcBoundedCurve	,IfcEdgeCurve);
-class IfcCurveOrEdgeCurve : public IfcPPAbstractSelect
+class IfcCurveOrEdgeCurve : virtual public IfcPPObject
 {
 public:
 	IfcCurveOrEdgeCurve();
 	~IfcCurveOrEdgeCurve();
 	virtual const char* classname() const { return "IfcCurveOrEdgeCurve"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcCurveOrEdgeCurve> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

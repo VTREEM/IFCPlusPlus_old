@@ -65,7 +65,7 @@ shared_ptr<IfcStructuralActivityAssignmentSelect> IfcStructuralActivityAssignmen
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcStructuralActivityAssignmentSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcStructuralActivityAssignmentSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcStructuralActivityAssignmentSelect>();

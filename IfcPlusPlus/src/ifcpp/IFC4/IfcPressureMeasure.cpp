@@ -36,7 +36,7 @@ shared_ptr<IfcPressureMeasure> IfcPressureMeasure::createObjectFromStepData( con
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPressureMeasure>(); }
-	shared_ptr<IfcPressureMeasure> type_object( new IfcPressureMeasure() );
+	auto type_object = std::make_shared<IfcPressureMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

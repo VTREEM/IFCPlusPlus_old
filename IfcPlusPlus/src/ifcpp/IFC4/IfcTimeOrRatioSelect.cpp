@@ -67,7 +67,7 @@ shared_ptr<IfcTimeOrRatioSelect> IfcTimeOrRatioSelect::createObjectFromStepData(
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcTimeOrRatioSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcTimeOrRatioSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcTimeOrRatioSelect>();

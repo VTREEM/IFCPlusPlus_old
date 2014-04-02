@@ -32,8 +32,8 @@
 #include "include/IfcUnitAssignment.h"
 
 // ENTITY IfcProjectLibrary 
-IfcProjectLibrary::IfcProjectLibrary() { m_entity_enum = IFCPROJECTLIBRARY; }
-IfcProjectLibrary::IfcProjectLibrary( int id ) { m_id = id; m_entity_enum = IFCPROJECTLIBRARY; }
+IfcProjectLibrary::IfcProjectLibrary() {}
+IfcProjectLibrary::IfcProjectLibrary( int id ) { m_id = id; }
 IfcProjectLibrary::~IfcProjectLibrary() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -40,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralSurfaceAction 
-IfcStructuralSurfaceAction::IfcStructuralSurfaceAction() { m_entity_enum = IFCSTRUCTURALSURFACEACTION; }
-IfcStructuralSurfaceAction::IfcStructuralSurfaceAction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALSURFACEACTION; }
+IfcStructuralSurfaceAction::IfcStructuralSurfaceAction() {}
+IfcStructuralSurfaceAction::IfcStructuralSurfaceAction( int id ) { m_id = id; }
 IfcStructuralSurfaceAction::~IfcStructuralSurfaceAction() {}
 
 // method setEntity takes over all attributes from another instance of the class

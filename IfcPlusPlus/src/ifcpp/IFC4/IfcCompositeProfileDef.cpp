@@ -25,8 +25,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcCompositeProfileDef 
-IfcCompositeProfileDef::IfcCompositeProfileDef() { m_entity_enum = IFCCOMPOSITEPROFILEDEF; }
-IfcCompositeProfileDef::IfcCompositeProfileDef( int id ) { m_id = id; m_entity_enum = IFCCOMPOSITEPROFILEDEF; }
+IfcCompositeProfileDef::IfcCompositeProfileDef() {}
+IfcCompositeProfileDef::IfcCompositeProfileDef( int id ) { m_id = id; }
 IfcCompositeProfileDef::~IfcCompositeProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

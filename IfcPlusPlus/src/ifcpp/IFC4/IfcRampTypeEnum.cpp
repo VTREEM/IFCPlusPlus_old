@@ -64,7 +64,7 @@ shared_ptr<IfcRampTypeEnum> IfcRampTypeEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRampTypeEnum>(); }
-	shared_ptr<IfcRampTypeEnum> type_object( new IfcRampTypeEnum() );
+	auto type_object = std::make_shared<IfcRampTypeEnum>();
 	if( _stricmp( arg.c_str(), ".STRAIGHT_RUN_RAMP." ) == 0 )
 	{
 		type_object->m_enum = IfcRampTypeEnum::ENUM_STRAIGHT_RUN_RAMP;

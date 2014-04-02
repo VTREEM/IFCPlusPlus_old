@@ -20,8 +20,8 @@
 #include "include/IfcConnectionGeometry.h"
 
 // ENTITY IfcConnectionGeometry 
-IfcConnectionGeometry::IfcConnectionGeometry() { m_entity_enum = IFCCONNECTIONGEOMETRY; }
-IfcConnectionGeometry::IfcConnectionGeometry( int id ) { m_id = id; m_entity_enum = IFCCONNECTIONGEOMETRY; }
+IfcConnectionGeometry::IfcConnectionGeometry() {}
+IfcConnectionGeometry::IfcConnectionGeometry( int id ) { m_id = id; }
 IfcConnectionGeometry::~IfcConnectionGeometry() {}
 
 // method setEntity takes over all attributes from another instance of the class

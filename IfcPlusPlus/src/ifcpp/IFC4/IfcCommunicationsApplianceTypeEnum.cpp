@@ -88,7 +88,7 @@ shared_ptr<IfcCommunicationsApplianceTypeEnum> IfcCommunicationsApplianceTypeEnu
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCommunicationsApplianceTypeEnum>(); }
-	shared_ptr<IfcCommunicationsApplianceTypeEnum> type_object( new IfcCommunicationsApplianceTypeEnum() );
+	auto type_object = std::make_shared<IfcCommunicationsApplianceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ANTENNA." ) == 0 )
 	{
 		type_object->m_enum = IfcCommunicationsApplianceTypeEnum::ENUM_ANTENNA;

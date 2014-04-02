@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPropertyTemplateDefinition 
-IfcPropertyTemplateDefinition::IfcPropertyTemplateDefinition() { m_entity_enum = IFCPROPERTYTEMPLATEDEFINITION; }
-IfcPropertyTemplateDefinition::IfcPropertyTemplateDefinition( int id ) { m_id = id; m_entity_enum = IFCPROPERTYTEMPLATEDEFINITION; }
+IfcPropertyTemplateDefinition::IfcPropertyTemplateDefinition() {}
+IfcPropertyTemplateDefinition::IfcPropertyTemplateDefinition( int id ) { m_id = id; }
 IfcPropertyTemplateDefinition::~IfcPropertyTemplateDefinition() {}
 
 // method setEntity takes over all attributes from another instance of the class

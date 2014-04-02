@@ -68,7 +68,7 @@ shared_ptr<IfcPumpTypeEnum> IfcPumpTypeEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPumpTypeEnum>(); }
-	shared_ptr<IfcPumpTypeEnum> type_object( new IfcPumpTypeEnum() );
+	auto type_object = std::make_shared<IfcPumpTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CIRCULATOR." ) == 0 )
 	{
 		type_object->m_enum = IfcPumpTypeEnum::ENUM_CIRCULATOR;

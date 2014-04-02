@@ -22,8 +22,8 @@
 #include "include/IfcLightIntensityDistribution.h"
 
 // ENTITY IfcLightIntensityDistribution 
-IfcLightIntensityDistribution::IfcLightIntensityDistribution() { m_entity_enum = IFCLIGHTINTENSITYDISTRIBUTION; }
-IfcLightIntensityDistribution::IfcLightIntensityDistribution( int id ) { m_id = id; m_entity_enum = IFCLIGHTINTENSITYDISTRIBUTION; }
+IfcLightIntensityDistribution::IfcLightIntensityDistribution() {}
+IfcLightIntensityDistribution::IfcLightIntensityDistribution( int id ) { m_id = id; }
 IfcLightIntensityDistribution::~IfcLightIntensityDistribution() {}
 
 // method setEntity takes over all attributes from another instance of the class

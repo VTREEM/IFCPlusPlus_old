@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcTaskType 
-IfcTaskType::IfcTaskType() { m_entity_enum = IFCTASKTYPE; }
-IfcTaskType::IfcTaskType( int id ) { m_id = id; m_entity_enum = IFCTASKTYPE; }
+IfcTaskType::IfcTaskType() {}
+IfcTaskType::IfcTaskType( int id ) { m_id = id; }
 IfcTaskType::~IfcTaskType() {}
 
 // method setEntity takes over all attributes from another instance of the class

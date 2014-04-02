@@ -65,7 +65,7 @@ shared_ptr<IfcPointOrVertexPoint> IfcPointOrVertexPoint::createObjectFromStepDat
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcPointOrVertexPoint::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcPointOrVertexPoint::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcPointOrVertexPoint>();

@@ -52,7 +52,7 @@ shared_ptr<IfcWindowTypeEnum> IfcWindowTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWindowTypeEnum>(); }
-	shared_ptr<IfcWindowTypeEnum> type_object( new IfcWindowTypeEnum() );
+	auto type_object = std::make_shared<IfcWindowTypeEnum>();
 	if( _stricmp( arg.c_str(), ".WINDOW." ) == 0 )
 	{
 		type_object->m_enum = IfcWindowTypeEnum::ENUM_WINDOW;

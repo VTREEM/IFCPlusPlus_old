@@ -56,7 +56,7 @@ shared_ptr<IfcTendonTypeEnum> IfcTendonTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTendonTypeEnum>(); }
-	shared_ptr<IfcTendonTypeEnum> type_object( new IfcTendonTypeEnum() );
+	auto type_object = std::make_shared<IfcTendonTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BAR." ) == 0 )
 	{
 		type_object->m_enum = IfcTendonTypeEnum::ENUM_BAR;

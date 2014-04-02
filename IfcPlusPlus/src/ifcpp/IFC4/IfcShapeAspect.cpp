@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcShapeAspect 
-IfcShapeAspect::IfcShapeAspect() { m_entity_enum = IFCSHAPEASPECT; }
-IfcShapeAspect::IfcShapeAspect( int id ) { m_id = id; m_entity_enum = IFCSHAPEASPECT; }
+IfcShapeAspect::IfcShapeAspect() {}
+IfcShapeAspect::IfcShapeAspect( int id ) { m_id = id; }
 IfcShapeAspect::~IfcShapeAspect() {}
 
 // method setEntity takes over all attributes from another instance of the class

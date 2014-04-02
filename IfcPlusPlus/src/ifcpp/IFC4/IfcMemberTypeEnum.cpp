@@ -88,7 +88,7 @@ shared_ptr<IfcMemberTypeEnum> IfcMemberTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMemberTypeEnum>(); }
-	shared_ptr<IfcMemberTypeEnum> type_object( new IfcMemberTypeEnum() );
+	auto type_object = std::make_shared<IfcMemberTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BRACE." ) == 0 )
 	{
 		type_object->m_enum = IfcMemberTypeEnum::ENUM_BRACE;

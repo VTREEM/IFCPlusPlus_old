@@ -24,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcActorRole 
-IfcActorRole::IfcActorRole() { m_entity_enum = IFCACTORROLE; }
-IfcActorRole::IfcActorRole( int id ) { m_id = id; m_entity_enum = IFCACTORROLE; }
+IfcActorRole::IfcActorRole() {}
+IfcActorRole::IfcActorRole( int id ) { m_id = id; }
 IfcActorRole::~IfcActorRole() {}
 
 // method setEntity takes over all attributes from another instance of the class

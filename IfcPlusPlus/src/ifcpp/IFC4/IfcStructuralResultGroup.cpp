@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralResultGroup 
-IfcStructuralResultGroup::IfcStructuralResultGroup() { m_entity_enum = IFCSTRUCTURALRESULTGROUP; }
-IfcStructuralResultGroup::IfcStructuralResultGroup( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALRESULTGROUP; }
+IfcStructuralResultGroup::IfcStructuralResultGroup() {}
+IfcStructuralResultGroup::IfcStructuralResultGroup( int id ) { m_id = id; }
 IfcStructuralResultGroup::~IfcStructuralResultGroup() {}
 
 // method setEntity takes over all attributes from another instance of the class

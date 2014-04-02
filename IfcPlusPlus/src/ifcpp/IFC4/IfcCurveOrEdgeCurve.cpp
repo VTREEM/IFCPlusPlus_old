@@ -65,7 +65,7 @@ shared_ptr<IfcCurveOrEdgeCurve> IfcCurveOrEdgeCurve::createObjectFromStepData( c
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcCurveOrEdgeCurve::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcCurveOrEdgeCurve::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcCurveOrEdgeCurve>();

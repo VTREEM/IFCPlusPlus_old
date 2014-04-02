@@ -33,8 +33,8 @@
 #include "include/IfcTypeProcess.h"
 
 // ENTITY IfcTypeProcess 
-IfcTypeProcess::IfcTypeProcess() { m_entity_enum = IFCTYPEPROCESS; }
-IfcTypeProcess::IfcTypeProcess( int id ) { m_id = id; m_entity_enum = IFCTYPEPROCESS; }
+IfcTypeProcess::IfcTypeProcess() {}
+IfcTypeProcess::IfcTypeProcess( int id ) { m_id = id; }
 IfcTypeProcess::~IfcTypeProcess() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFlowTerminalType 
-IfcFlowTerminalType::IfcFlowTerminalType() { m_entity_enum = IFCFLOWTERMINALTYPE; }
-IfcFlowTerminalType::IfcFlowTerminalType( int id ) { m_id = id; m_entity_enum = IFCFLOWTERMINALTYPE; }
+IfcFlowTerminalType::IfcFlowTerminalType() {}
+IfcFlowTerminalType::IfcFlowTerminalType( int id ) { m_id = id; }
 IfcFlowTerminalType::~IfcFlowTerminalType() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBSplineSurface 
-IfcBSplineSurface::IfcBSplineSurface() { m_entity_enum = IFCBSPLINESURFACE; }
-IfcBSplineSurface::IfcBSplineSurface( int id ) { m_id = id; m_entity_enum = IFCBSPLINESURFACE; }
+IfcBSplineSurface::IfcBSplineSurface() {}
+IfcBSplineSurface::IfcBSplineSurface( int id ) { m_id = id; }
 IfcBSplineSurface::~IfcBSplineSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -152,7 +152,7 @@ shared_ptr<IfcUnitEnum> IfcUnitEnum::createObjectFromStepData( const std::string
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcUnitEnum>(); }
-	shared_ptr<IfcUnitEnum> type_object( new IfcUnitEnum() );
+	auto type_object = std::make_shared<IfcUnitEnum>();
 	if( _stricmp( arg.c_str(), ".ABSORBEDDOSEUNIT." ) == 0 )
 	{
 		type_object->m_enum = IfcUnitEnum::ENUM_ABSORBEDDOSEUNIT;

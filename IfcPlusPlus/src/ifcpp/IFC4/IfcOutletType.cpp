@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcOutletType 
-IfcOutletType::IfcOutletType() { m_entity_enum = IFCOUTLETTYPE; }
-IfcOutletType::IfcOutletType( int id ) { m_id = id; m_entity_enum = IFCOUTLETTYPE; }
+IfcOutletType::IfcOutletType() {}
+IfcOutletType::IfcOutletType( int id ) { m_id = id; }
 IfcOutletType::~IfcOutletType() {}
 
 // method setEntity takes over all attributes from another instance of the class

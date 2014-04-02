@@ -60,7 +60,7 @@ shared_ptr<IfcTransportElementTypeEnum> IfcTransportElementTypeEnum::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTransportElementTypeEnum>(); }
-	shared_ptr<IfcTransportElementTypeEnum> type_object( new IfcTransportElementTypeEnum() );
+	auto type_object = std::make_shared<IfcTransportElementTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ELEVATOR." ) == 0 )
 	{
 		type_object->m_enum = IfcTransportElementTypeEnum::ENUM_ELEVATOR;

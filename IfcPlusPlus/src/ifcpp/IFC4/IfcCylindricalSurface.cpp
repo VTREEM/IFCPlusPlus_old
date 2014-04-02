@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCylindricalSurface 
-IfcCylindricalSurface::IfcCylindricalSurface() { m_entity_enum = IFCCYLINDRICALSURFACE; }
-IfcCylindricalSurface::IfcCylindricalSurface( int id ) { m_id = id; m_entity_enum = IFCCYLINDRICALSURFACE; }
+IfcCylindricalSurface::IfcCylindricalSurface() {}
+IfcCylindricalSurface::IfcCylindricalSurface( int id ) { m_id = id; }
 IfcCylindricalSurface::~IfcCylindricalSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -28,8 +28,8 @@
 #include "include/IfcValue.h"
 
 // ENTITY IfcPropertyBoundedValue 
-IfcPropertyBoundedValue::IfcPropertyBoundedValue() { m_entity_enum = IFCPROPERTYBOUNDEDVALUE; }
-IfcPropertyBoundedValue::IfcPropertyBoundedValue( int id ) { m_id = id; m_entity_enum = IFCPROPERTYBOUNDEDVALUE; }
+IfcPropertyBoundedValue::IfcPropertyBoundedValue() {}
+IfcPropertyBoundedValue::IfcPropertyBoundedValue( int id ) { m_id = id; }
 IfcPropertyBoundedValue::~IfcPropertyBoundedValue() {}
 
 // method setEntity takes over all attributes from another instance of the class

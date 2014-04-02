@@ -30,8 +30,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsStructuralMember 
-IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember() { m_entity_enum = IFCRELCONNECTSSTRUCTURALMEMBER; }
-IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSSTRUCTURALMEMBER; }
+IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember() {}
+IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember( int id ) { m_id = id; }
 IfcRelConnectsStructuralMember::~IfcRelConnectsStructuralMember() {}
 
 // method setEntity takes over all attributes from another instance of the class

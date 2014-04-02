@@ -23,8 +23,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcDerivedUnit 
-IfcDerivedUnit::IfcDerivedUnit() { m_entity_enum = IFCDERIVEDUNIT; }
-IfcDerivedUnit::IfcDerivedUnit( int id ) { m_id = id; m_entity_enum = IFCDERIVEDUNIT; }
+IfcDerivedUnit::IfcDerivedUnit() {}
+IfcDerivedUnit::IfcDerivedUnit( int id ) { m_id = id; }
 IfcDerivedUnit::~IfcDerivedUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class

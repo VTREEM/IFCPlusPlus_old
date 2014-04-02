@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcLightFixtureTypeEnum = ENUMERATION OF	(POINTSOURCE	,DIRECTIONSOURCE	,SECURITYLIGHTING	,USERDEFINED	,NOTDEFINED);
-class IfcLightFixtureTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcLightFixtureTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcLightFixtureTypeEnumEnum

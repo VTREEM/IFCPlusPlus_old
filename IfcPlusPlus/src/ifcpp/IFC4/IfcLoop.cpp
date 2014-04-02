@@ -22,8 +22,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcLoop 
-IfcLoop::IfcLoop() { m_entity_enum = IFCLOOP; }
-IfcLoop::IfcLoop( int id ) { m_id = id; m_entity_enum = IFCLOOP; }
+IfcLoop::IfcLoop() {}
+IfcLoop::IfcLoop( int id ) { m_id = id; }
 IfcLoop::~IfcLoop() {}
 
 // method setEntity takes over all attributes from another instance of the class

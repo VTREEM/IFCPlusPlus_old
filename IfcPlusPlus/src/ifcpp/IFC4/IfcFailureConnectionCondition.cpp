@@ -22,8 +22,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcFailureConnectionCondition 
-IfcFailureConnectionCondition::IfcFailureConnectionCondition() { m_entity_enum = IFCFAILURECONNECTIONCONDITION; }
-IfcFailureConnectionCondition::IfcFailureConnectionCondition( int id ) { m_id = id; m_entity_enum = IFCFAILURECONNECTIONCONDITION; }
+IfcFailureConnectionCondition::IfcFailureConnectionCondition() {}
+IfcFailureConnectionCondition::IfcFailureConnectionCondition( int id ) { m_id = id; }
 IfcFailureConnectionCondition::~IfcFailureConnectionCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class

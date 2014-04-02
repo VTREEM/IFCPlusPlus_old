@@ -26,8 +26,8 @@
 #include "include/IfcSurfaceOfLinearExtrusion.h"
 
 // ENTITY IfcSurfaceOfLinearExtrusion 
-IfcSurfaceOfLinearExtrusion::IfcSurfaceOfLinearExtrusion() { m_entity_enum = IFCSURFACEOFLINEAREXTRUSION; }
-IfcSurfaceOfLinearExtrusion::IfcSurfaceOfLinearExtrusion( int id ) { m_id = id; m_entity_enum = IFCSURFACEOFLINEAREXTRUSION; }
+IfcSurfaceOfLinearExtrusion::IfcSurfaceOfLinearExtrusion() {}
+IfcSurfaceOfLinearExtrusion::IfcSurfaceOfLinearExtrusion( int id ) { m_id = id; }
 IfcSurfaceOfLinearExtrusion::~IfcSurfaceOfLinearExtrusion() {}
 
 // method setEntity takes over all attributes from another instance of the class

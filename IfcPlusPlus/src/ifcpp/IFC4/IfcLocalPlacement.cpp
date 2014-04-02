@@ -23,8 +23,8 @@
 #include "include/IfcProduct.h"
 
 // ENTITY IfcLocalPlacement 
-IfcLocalPlacement::IfcLocalPlacement() { m_entity_enum = IFCLOCALPLACEMENT; }
-IfcLocalPlacement::IfcLocalPlacement( int id ) { m_id = id; m_entity_enum = IFCLOCALPLACEMENT; }
+IfcLocalPlacement::IfcLocalPlacement() {}
+IfcLocalPlacement::IfcLocalPlacement( int id ) { m_id = id; }
 IfcLocalPlacement::~IfcLocalPlacement() {}
 
 // method setEntity takes over all attributes from another instance of the class

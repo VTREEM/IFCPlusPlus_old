@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCrewResource 
-IfcCrewResource::IfcCrewResource() { m_entity_enum = IFCCREWRESOURCE; }
-IfcCrewResource::IfcCrewResource( int id ) { m_id = id; m_entity_enum = IFCCREWRESOURCE; }
+IfcCrewResource::IfcCrewResource() {}
+IfcCrewResource::IfcCrewResource( int id ) { m_id = id; }
 IfcCrewResource::~IfcCrewResource() {}
 
 // method setEntity takes over all attributes from another instance of the class

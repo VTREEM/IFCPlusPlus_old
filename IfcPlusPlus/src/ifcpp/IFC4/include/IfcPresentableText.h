@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPresentableText = STRING;
-class IfcPresentableText : public IfcPPType
+class IfcPresentableText : public IfcPPObject
 {
 public:
 	IfcPresentableText();

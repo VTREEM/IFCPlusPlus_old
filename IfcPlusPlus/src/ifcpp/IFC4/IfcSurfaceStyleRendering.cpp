@@ -25,8 +25,8 @@
 #include "include/IfcSurfaceStyleRendering.h"
 
 // ENTITY IfcSurfaceStyleRendering 
-IfcSurfaceStyleRendering::IfcSurfaceStyleRendering() { m_entity_enum = IFCSURFACESTYLERENDERING; }
-IfcSurfaceStyleRendering::IfcSurfaceStyleRendering( int id ) { m_id = id; m_entity_enum = IFCSURFACESTYLERENDERING; }
+IfcSurfaceStyleRendering::IfcSurfaceStyleRendering() {}
+IfcSurfaceStyleRendering::IfcSurfaceStyleRendering( int id ) { m_id = id; }
 IfcSurfaceStyleRendering::~IfcSurfaceStyleRendering() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -21,8 +21,8 @@
 #include "include/IfcTextureVertexList.h"
 
 // ENTITY IfcTextureVertexList 
-IfcTextureVertexList::IfcTextureVertexList() { m_entity_enum = IFCTEXTUREVERTEXLIST; }
-IfcTextureVertexList::IfcTextureVertexList( int id ) { m_id = id; m_entity_enum = IFCTEXTUREVERTEXLIST; }
+IfcTextureVertexList::IfcTextureVertexList() {}
+IfcTextureVertexList::IfcTextureVertexList( int id ) { m_id = id; }
 IfcTextureVertexList::~IfcTextureVertexList() {}
 
 // method setEntity takes over all attributes from another instance of the class

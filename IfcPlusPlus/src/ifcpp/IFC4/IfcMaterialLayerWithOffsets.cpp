@@ -32,8 +32,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMaterialLayerWithOffsets 
-IfcMaterialLayerWithOffsets::IfcMaterialLayerWithOffsets() { m_entity_enum = IFCMATERIALLAYERWITHOFFSETS; }
-IfcMaterialLayerWithOffsets::IfcMaterialLayerWithOffsets( int id ) { m_id = id; m_entity_enum = IFCMATERIALLAYERWITHOFFSETS; }
+IfcMaterialLayerWithOffsets::IfcMaterialLayerWithOffsets() {}
+IfcMaterialLayerWithOffsets::IfcMaterialLayerWithOffsets( int id ) { m_id = id; }
 IfcMaterialLayerWithOffsets::~IfcMaterialLayerWithOffsets() {}
 
 // method setEntity takes over all attributes from another instance of the class

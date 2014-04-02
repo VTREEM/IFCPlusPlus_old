@@ -21,8 +21,8 @@
 #include "include/IfcPropertyAbstraction.h"
 
 // ENTITY IfcPropertyAbstraction 
-IfcPropertyAbstraction::IfcPropertyAbstraction() { m_entity_enum = IFCPROPERTYABSTRACTION; }
-IfcPropertyAbstraction::IfcPropertyAbstraction( int id ) { m_id = id; m_entity_enum = IFCPROPERTYABSTRACTION; }
+IfcPropertyAbstraction::IfcPropertyAbstraction() {}
+IfcPropertyAbstraction::IfcPropertyAbstraction( int id ) { m_id = id; }
 IfcPropertyAbstraction::~IfcPropertyAbstraction() {}
 
 // method setEntity takes over all attributes from another instance of the class

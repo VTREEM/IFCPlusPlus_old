@@ -52,7 +52,7 @@ shared_ptr<IfcLogicalOperatorEnum> IfcLogicalOperatorEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLogicalOperatorEnum>(); }
-	shared_ptr<IfcLogicalOperatorEnum> type_object( new IfcLogicalOperatorEnum() );
+	auto type_object = std::make_shared<IfcLogicalOperatorEnum>();
 	if( _stricmp( arg.c_str(), ".LOGICALAND." ) == 0 )
 	{
 		type_object->m_enum = IfcLogicalOperatorEnum::ENUM_LOGICALAND;

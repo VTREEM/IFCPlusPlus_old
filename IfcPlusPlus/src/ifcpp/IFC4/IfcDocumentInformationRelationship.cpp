@@ -23,8 +23,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDocumentInformationRelationship 
-IfcDocumentInformationRelationship::IfcDocumentInformationRelationship() { m_entity_enum = IFCDOCUMENTINFORMATIONRELATIONSHIP; }
-IfcDocumentInformationRelationship::IfcDocumentInformationRelationship( int id ) { m_id = id; m_entity_enum = IFCDOCUMENTINFORMATIONRELATIONSHIP; }
+IfcDocumentInformationRelationship::IfcDocumentInformationRelationship() {}
+IfcDocumentInformationRelationship::IfcDocumentInformationRelationship( int id ) { m_id = id; }
 IfcDocumentInformationRelationship::~IfcDocumentInformationRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

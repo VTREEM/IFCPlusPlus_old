@@ -25,8 +25,8 @@
 #include "include/IfcSweptDiskSolid.h"
 
 // ENTITY IfcSweptDiskSolid 
-IfcSweptDiskSolid::IfcSweptDiskSolid() { m_entity_enum = IFCSWEPTDISKSOLID; }
-IfcSweptDiskSolid::IfcSweptDiskSolid( int id ) { m_id = id; m_entity_enum = IFCSWEPTDISKSOLID; }
+IfcSweptDiskSolid::IfcSweptDiskSolid() {}
+IfcSweptDiskSolid::IfcSweptDiskSolid( int id ) { m_id = id; }
 IfcSweptDiskSolid::~IfcSweptDiskSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

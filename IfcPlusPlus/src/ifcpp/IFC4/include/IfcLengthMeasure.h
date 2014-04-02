@@ -23,7 +23,7 @@
 #include "IfcSizeSelect.h"
 
 // TYPE IfcLengthMeasure = REAL;
-class IfcLengthMeasure : public IfcBendingParameterSelect, public IfcMeasureValue, public IfcSizeSelect, public IfcPPType
+class IfcLengthMeasure : public IfcBendingParameterSelect, public IfcMeasureValue, public IfcSizeSelect
 {
 public:
 	IfcLengthMeasure();

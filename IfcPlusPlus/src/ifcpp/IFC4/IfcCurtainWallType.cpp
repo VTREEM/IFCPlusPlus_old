@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCurtainWallType 
-IfcCurtainWallType::IfcCurtainWallType() { m_entity_enum = IFCCURTAINWALLTYPE; }
-IfcCurtainWallType::IfcCurtainWallType( int id ) { m_id = id; m_entity_enum = IFCCURTAINWALLTYPE; }
+IfcCurtainWallType::IfcCurtainWallType() {}
+IfcCurtainWallType::IfcCurtainWallType( int id ) { m_id = id; }
 IfcCurtainWallType::~IfcCurtainWallType() {}
 
 // method setEntity takes over all attributes from another instance of the class

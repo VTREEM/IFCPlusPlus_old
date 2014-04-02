@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMotorConnectionType 
-IfcMotorConnectionType::IfcMotorConnectionType() { m_entity_enum = IFCMOTORCONNECTIONTYPE; }
-IfcMotorConnectionType::IfcMotorConnectionType( int id ) { m_id = id; m_entity_enum = IFCMOTORCONNECTIONTYPE; }
+IfcMotorConnectionType::IfcMotorConnectionType() {}
+IfcMotorConnectionType::IfcMotorConnectionType( int id ) { m_id = id; }
 IfcMotorConnectionType::~IfcMotorConnectionType() {}
 
 // method setEntity takes over all attributes from another instance of the class

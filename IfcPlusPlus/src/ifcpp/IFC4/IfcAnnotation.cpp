@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAnnotation 
-IfcAnnotation::IfcAnnotation() { m_entity_enum = IFCANNOTATION; }
-IfcAnnotation::IfcAnnotation( int id ) { m_id = id; m_entity_enum = IFCANNOTATION; }
+IfcAnnotation::IfcAnnotation() {}
+IfcAnnotation::IfcAnnotation( int id ) { m_id = id; }
 IfcAnnotation::~IfcAnnotation() {}
 
 // method setEntity takes over all attributes from another instance of the class

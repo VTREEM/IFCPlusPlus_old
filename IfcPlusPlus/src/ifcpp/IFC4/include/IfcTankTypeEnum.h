@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTankTypeEnum = ENUMERATION OF	(BASIN	,BREAKPRESSURE	,EXPANSION	,FEEDANDEXPANSION	,PRESSUREVESSEL	,STORAGE	,VESSEL	,USERDEFINED	,NOTDEFINED);
-class IfcTankTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTankTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTankTypeEnumEnum

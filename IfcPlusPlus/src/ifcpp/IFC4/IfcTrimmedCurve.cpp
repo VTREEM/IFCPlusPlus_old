@@ -25,8 +25,8 @@
 #include "include/IfcTrimmingSelect.h"
 
 // ENTITY IfcTrimmedCurve 
-IfcTrimmedCurve::IfcTrimmedCurve() { m_entity_enum = IFCTRIMMEDCURVE; }
-IfcTrimmedCurve::IfcTrimmedCurve( int id ) { m_id = id; m_entity_enum = IFCTRIMMEDCURVE; }
+IfcTrimmedCurve::IfcTrimmedCurve() {}
+IfcTrimmedCurve::IfcTrimmedCurve( int id ) { m_id = id; }
 IfcTrimmedCurve::~IfcTrimmedCurve() {}
 
 // method setEntity takes over all attributes from another instance of the class

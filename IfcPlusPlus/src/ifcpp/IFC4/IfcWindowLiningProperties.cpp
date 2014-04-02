@@ -34,8 +34,8 @@
 #include "include/IfcWindowLiningProperties.h"
 
 // ENTITY IfcWindowLiningProperties 
-IfcWindowLiningProperties::IfcWindowLiningProperties() { m_entity_enum = IFCWINDOWLININGPROPERTIES; }
-IfcWindowLiningProperties::IfcWindowLiningProperties( int id ) { m_id = id; m_entity_enum = IFCWINDOWLININGPROPERTIES; }
+IfcWindowLiningProperties::IfcWindowLiningProperties() {}
+IfcWindowLiningProperties::IfcWindowLiningProperties( int id ) { m_id = id; }
 IfcWindowLiningProperties::~IfcWindowLiningProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

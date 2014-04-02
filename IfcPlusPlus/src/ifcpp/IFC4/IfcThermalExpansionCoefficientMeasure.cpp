@@ -36,7 +36,7 @@ shared_ptr<IfcThermalExpansionCoefficientMeasure> IfcThermalExpansionCoefficient
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcThermalExpansionCoefficientMeasure>(); }
-	shared_ptr<IfcThermalExpansionCoefficientMeasure> type_object( new IfcThermalExpansionCoefficientMeasure() );
+	auto type_object = std::make_shared<IfcThermalExpansionCoefficientMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAlarmType 
-IfcAlarmType::IfcAlarmType() { m_entity_enum = IFCALARMTYPE; }
-IfcAlarmType::IfcAlarmType( int id ) { m_id = id; m_entity_enum = IFCALARMTYPE; }
+IfcAlarmType::IfcAlarmType() {}
+IfcAlarmType::IfcAlarmType( int id ) { m_id = id; }
 IfcAlarmType::~IfcAlarmType() {}
 
 // method setEntity takes over all attributes from another instance of the class

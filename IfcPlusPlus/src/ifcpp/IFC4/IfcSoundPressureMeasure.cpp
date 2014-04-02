@@ -36,7 +36,7 @@ shared_ptr<IfcSoundPressureMeasure> IfcSoundPressureMeasure::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSoundPressureMeasure>(); }
-	shared_ptr<IfcSoundPressureMeasure> type_object( new IfcSoundPressureMeasure() );
+	auto type_object = std::make_shared<IfcSoundPressureMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

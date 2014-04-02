@@ -27,8 +27,8 @@
 #include "include/IfcTopologyRepresentation.h"
 
 // ENTITY IfcTopologyRepresentation 
-IfcTopologyRepresentation::IfcTopologyRepresentation() { m_entity_enum = IFCTOPOLOGYREPRESENTATION; }
-IfcTopologyRepresentation::IfcTopologyRepresentation( int id ) { m_id = id; m_entity_enum = IFCTOPOLOGYREPRESENTATION; }
+IfcTopologyRepresentation::IfcTopologyRepresentation() {}
+IfcTopologyRepresentation::IfcTopologyRepresentation( int id ) { m_id = id; }
 IfcTopologyRepresentation::~IfcTopologyRepresentation() {}
 
 // method setEntity takes over all attributes from another instance of the class

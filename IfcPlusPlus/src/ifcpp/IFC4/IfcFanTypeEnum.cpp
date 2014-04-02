@@ -68,7 +68,7 @@ shared_ptr<IfcFanTypeEnum> IfcFanTypeEnum::createObjectFromStepData( const std::
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFanTypeEnum>(); }
-	shared_ptr<IfcFanTypeEnum> type_object( new IfcFanTypeEnum() );
+	auto type_object = std::make_shared<IfcFanTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CENTRIFUGALFORWARDCURVED." ) == 0 )
 	{
 		type_object->m_enum = IfcFanTypeEnum::ENUM_CENTRIFUGALFORWARDCURVED;

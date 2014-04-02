@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAsset 
-IfcAsset::IfcAsset() { m_entity_enum = IFCASSET; }
-IfcAsset::IfcAsset( int id ) { m_id = id; m_entity_enum = IFCASSET; }
+IfcAsset::IfcAsset() {}
+IfcAsset::IfcAsset( int id ) { m_id = id; }
 IfcAsset::~IfcAsset() {}
 
 // method setEntity takes over all attributes from another instance of the class

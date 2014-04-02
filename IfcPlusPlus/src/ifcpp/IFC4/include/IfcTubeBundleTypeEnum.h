@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTubeBundleTypeEnum = ENUMERATION OF	(FINNED	,USERDEFINED	,NOTDEFINED);
-class IfcTubeBundleTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTubeBundleTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTubeBundleTypeEnumEnum

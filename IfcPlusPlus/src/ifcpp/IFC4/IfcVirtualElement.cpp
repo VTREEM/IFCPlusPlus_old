@@ -45,8 +45,8 @@
 #include "include/IfcVirtualElement.h"
 
 // ENTITY IfcVirtualElement 
-IfcVirtualElement::IfcVirtualElement() { m_entity_enum = IFCVIRTUALELEMENT; }
-IfcVirtualElement::IfcVirtualElement( int id ) { m_id = id; m_entity_enum = IFCVIRTUALELEMENT; }
+IfcVirtualElement::IfcVirtualElement() {}
+IfcVirtualElement::IfcVirtualElement( int id ) { m_id = id; }
 IfcVirtualElement::~IfcVirtualElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -22,8 +22,8 @@
 #include "include/IfcVertex.h"
 
 // ENTITY IfcVertex 
-IfcVertex::IfcVertex() { m_entity_enum = IFCVERTEX; }
-IfcVertex::IfcVertex( int id ) { m_id = id; m_entity_enum = IFCVERTEX; }
+IfcVertex::IfcVertex() {}
+IfcVertex::IfcVertex( int id ) { m_id = id; }
 IfcVertex::~IfcVertex() {}
 
 // method setEntity takes over all attributes from another instance of the class

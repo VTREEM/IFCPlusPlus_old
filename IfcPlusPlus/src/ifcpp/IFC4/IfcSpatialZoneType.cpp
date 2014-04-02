@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSpatialZoneType 
-IfcSpatialZoneType::IfcSpatialZoneType() { m_entity_enum = IFCSPATIALZONETYPE; }
-IfcSpatialZoneType::IfcSpatialZoneType( int id ) { m_id = id; m_entity_enum = IFCSPATIALZONETYPE; }
+IfcSpatialZoneType::IfcSpatialZoneType() {}
+IfcSpatialZoneType::IfcSpatialZoneType( int id ) { m_id = id; }
 IfcSpatialZoneType::~IfcSpatialZoneType() {}
 
 // method setEntity takes over all attributes from another instance of the class

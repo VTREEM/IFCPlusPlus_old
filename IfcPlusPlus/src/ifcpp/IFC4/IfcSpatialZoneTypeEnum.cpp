@@ -72,7 +72,7 @@ shared_ptr<IfcSpatialZoneTypeEnum> IfcSpatialZoneTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSpatialZoneTypeEnum>(); }
-	shared_ptr<IfcSpatialZoneTypeEnum> type_object( new IfcSpatialZoneTypeEnum() );
+	auto type_object = std::make_shared<IfcSpatialZoneTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONSTRUCTION." ) == 0 )
 	{
 		type_object->m_enum = IfcSpatialZoneTypeEnum::ENUM_CONSTRUCTION;

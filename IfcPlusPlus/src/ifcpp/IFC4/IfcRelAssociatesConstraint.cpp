@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelAssociatesConstraint 
-IfcRelAssociatesConstraint::IfcRelAssociatesConstraint() { m_entity_enum = IFCRELASSOCIATESCONSTRAINT; }
-IfcRelAssociatesConstraint::IfcRelAssociatesConstraint( int id ) { m_id = id; m_entity_enum = IFCRELASSOCIATESCONSTRAINT; }
+IfcRelAssociatesConstraint::IfcRelAssociatesConstraint() {}
+IfcRelAssociatesConstraint::IfcRelAssociatesConstraint( int id ) { m_id = id; }
 IfcRelAssociatesConstraint::~IfcRelAssociatesConstraint() {}
 
 // method setEntity takes over all attributes from another instance of the class

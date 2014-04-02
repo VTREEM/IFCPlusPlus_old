@@ -38,7 +38,7 @@ shared_ptr<IfcLengthMeasure> IfcLengthMeasure::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLengthMeasure>(); }
-	shared_ptr<IfcLengthMeasure> type_object( new IfcLengthMeasure() );
+	auto type_object = std::make_shared<IfcLengthMeasure>();
 	//supertype as attribute: double m_value
 	type_object->m_value = atof( arg.c_str() );
 	return type_object;

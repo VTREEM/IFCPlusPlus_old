@@ -26,8 +26,8 @@
 #include "include/IfcRoundedRectangleProfileDef.h"
 
 // ENTITY IfcRoundedRectangleProfileDef 
-IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef() { m_entity_enum = IFCROUNDEDRECTANGLEPROFILEDEF; }
-IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef( int id ) { m_id = id; m_entity_enum = IFCROUNDEDRECTANGLEPROFILEDEF; }
+IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef() {}
+IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef( int id ) { m_id = id; }
 IfcRoundedRectangleProfileDef::~IfcRoundedRectangleProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

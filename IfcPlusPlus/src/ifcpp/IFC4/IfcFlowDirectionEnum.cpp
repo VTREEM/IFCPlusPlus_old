@@ -48,7 +48,7 @@ shared_ptr<IfcFlowDirectionEnum> IfcFlowDirectionEnum::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFlowDirectionEnum>(); }
-	shared_ptr<IfcFlowDirectionEnum> type_object( new IfcFlowDirectionEnum() );
+	auto type_object = std::make_shared<IfcFlowDirectionEnum>();
 	if( _stricmp( arg.c_str(), ".SOURCE." ) == 0 )
 	{
 		type_object->m_enum = IfcFlowDirectionEnum::ENUM_SOURCE;

@@ -27,8 +27,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcDocumentReference 
-IfcDocumentReference::IfcDocumentReference() { m_entity_enum = IFCDOCUMENTREFERENCE; }
-IfcDocumentReference::IfcDocumentReference( int id ) { m_id = id; m_entity_enum = IFCDOCUMENTREFERENCE; }
+IfcDocumentReference::IfcDocumentReference() {}
+IfcDocumentReference::IfcDocumentReference( int id ) { m_id = id; }
 IfcDocumentReference::~IfcDocumentReference() {}
 
 // method setEntity takes over all attributes from another instance of the class

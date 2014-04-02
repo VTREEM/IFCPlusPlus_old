@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcModulusOfRotationalSubgradeReactionSelect = SELECT	(IfcBoolean	,IfcModulusOfRotationalSubgradeReactionMeasure);
-class IfcModulusOfRotationalSubgradeReactionSelect : public IfcPPAbstractSelect
+class IfcModulusOfRotationalSubgradeReactionSelect : virtual public IfcPPObject
 {
 public:
 	IfcModulusOfRotationalSubgradeReactionSelect();
 	~IfcModulusOfRotationalSubgradeReactionSelect();
 	virtual const char* classname() const { return "IfcModulusOfRotationalSubgradeReactionSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcModulusOfRotationalSubgradeReactionSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

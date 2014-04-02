@@ -39,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralAnalysisModel 
-IfcStructuralAnalysisModel::IfcStructuralAnalysisModel() { m_entity_enum = IFCSTRUCTURALANALYSISMODEL; }
-IfcStructuralAnalysisModel::IfcStructuralAnalysisModel( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALANALYSISMODEL; }
+IfcStructuralAnalysisModel::IfcStructuralAnalysisModel() {}
+IfcStructuralAnalysisModel::IfcStructuralAnalysisModel( int id ) { m_id = id; }
 IfcStructuralAnalysisModel::~IfcStructuralAnalysisModel() {}
 
 // method setEntity takes over all attributes from another instance of the class

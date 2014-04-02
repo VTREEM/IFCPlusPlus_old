@@ -24,8 +24,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcRectangularTrimmedSurface 
-IfcRectangularTrimmedSurface::IfcRectangularTrimmedSurface() { m_entity_enum = IFCRECTANGULARTRIMMEDSURFACE; }
-IfcRectangularTrimmedSurface::IfcRectangularTrimmedSurface( int id ) { m_id = id; m_entity_enum = IFCRECTANGULARTRIMMEDSURFACE; }
+IfcRectangularTrimmedSurface::IfcRectangularTrimmedSurface() {}
+IfcRectangularTrimmedSurface::IfcRectangularTrimmedSurface( int id ) { m_id = id; }
 IfcRectangularTrimmedSurface::~IfcRectangularTrimmedSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

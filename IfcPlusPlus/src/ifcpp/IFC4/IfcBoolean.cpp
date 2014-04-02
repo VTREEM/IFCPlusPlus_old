@@ -49,7 +49,7 @@ shared_ptr<IfcBoolean> IfcBoolean::createObjectFromStepData( const std::string& 
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBoolean>(); }
-	shared_ptr<IfcBoolean> type_object( new IfcBoolean() );
+	auto type_object = std::make_shared<IfcBoolean>();
 	//supertype as attribute: bool m_value
 	if( _stricmp( arg.c_str(), ".F." ) == 0 )
 	{

@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcGeographicElement 
-IfcGeographicElement::IfcGeographicElement() { m_entity_enum = IFCGEOGRAPHICELEMENT; }
-IfcGeographicElement::IfcGeographicElement( int id ) { m_id = id; m_entity_enum = IFCGEOGRAPHICELEMENT; }
+IfcGeographicElement::IfcGeographicElement() {}
+IfcGeographicElement::IfcGeographicElement( int id ) { m_id = id; }
 IfcGeographicElement::~IfcGeographicElement() {}
 
 // method setEntity takes over all attributes from another instance of the class

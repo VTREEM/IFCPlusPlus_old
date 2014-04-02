@@ -36,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProduct 
-IfcProduct::IfcProduct() { m_entity_enum = IFCPRODUCT; }
-IfcProduct::IfcProduct( int id ) { m_id = id; m_entity_enum = IFCPRODUCT; }
+IfcProduct::IfcProduct() {}
+IfcProduct::IfcProduct( int id ) { m_id = id; }
 IfcProduct::~IfcProduct() {}
 
 // method setEntity takes over all attributes from another instance of the class

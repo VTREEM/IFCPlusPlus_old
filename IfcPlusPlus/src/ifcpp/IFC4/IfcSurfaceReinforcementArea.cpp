@@ -23,8 +23,8 @@
 #include "include/IfcSurfaceReinforcementArea.h"
 
 // ENTITY IfcSurfaceReinforcementArea 
-IfcSurfaceReinforcementArea::IfcSurfaceReinforcementArea() { m_entity_enum = IFCSURFACEREINFORCEMENTAREA; }
-IfcSurfaceReinforcementArea::IfcSurfaceReinforcementArea( int id ) { m_id = id; m_entity_enum = IFCSURFACEREINFORCEMENTAREA; }
+IfcSurfaceReinforcementArea::IfcSurfaceReinforcementArea() {}
+IfcSurfaceReinforcementArea::IfcSurfaceReinforcementArea( int id ) { m_id = id; }
 IfcSurfaceReinforcementArea::~IfcSurfaceReinforcementArea() {}
 
 // method setEntity takes over all attributes from another instance of the class

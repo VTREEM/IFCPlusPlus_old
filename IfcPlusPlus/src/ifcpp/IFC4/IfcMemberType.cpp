@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMemberType 
-IfcMemberType::IfcMemberType() { m_entity_enum = IFCMEMBERTYPE; }
-IfcMemberType::IfcMemberType( int id ) { m_id = id; m_entity_enum = IFCMEMBERTYPE; }
+IfcMemberType::IfcMemberType() {}
+IfcMemberType::IfcMemberType( int id ) { m_id = id; }
 IfcMemberType::~IfcMemberType() {}
 
 // method setEntity takes over all attributes from another instance of the class

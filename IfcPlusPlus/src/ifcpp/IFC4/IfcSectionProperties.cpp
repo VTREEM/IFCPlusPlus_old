@@ -23,8 +23,8 @@
 #include "include/IfcSectionTypeEnum.h"
 
 // ENTITY IfcSectionProperties 
-IfcSectionProperties::IfcSectionProperties() { m_entity_enum = IFCSECTIONPROPERTIES; }
-IfcSectionProperties::IfcSectionProperties( int id ) { m_id = id; m_entity_enum = IFCSECTIONPROPERTIES; }
+IfcSectionProperties::IfcSectionProperties() {}
+IfcSectionProperties::IfcSectionProperties( int id ) { m_id = id; }
 IfcSectionProperties::~IfcSectionProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class

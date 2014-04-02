@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCsgPrimitive3D 
-IfcCsgPrimitive3D::IfcCsgPrimitive3D() { m_entity_enum = IFCCSGPRIMITIVE3D; }
-IfcCsgPrimitive3D::IfcCsgPrimitive3D( int id ) { m_id = id; m_entity_enum = IFCCSGPRIMITIVE3D; }
+IfcCsgPrimitive3D::IfcCsgPrimitive3D() {}
+IfcCsgPrimitive3D::IfcCsgPrimitive3D( int id ) { m_id = id; }
 IfcCsgPrimitive3D::~IfcCsgPrimitive3D() {}
 
 // method setEntity takes over all attributes from another instance of the class

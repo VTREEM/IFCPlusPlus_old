@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSurfaceSide = ENUMERATION OF	(POSITIVE	,NEGATIVE	,BOTH);
-class IfcSurfaceSide : public IfcPPAbstractEnum, public IfcPPType
+class IfcSurfaceSide : virtual public IfcPPObject
 {
 public:
 	enum IfcSurfaceSideEnum

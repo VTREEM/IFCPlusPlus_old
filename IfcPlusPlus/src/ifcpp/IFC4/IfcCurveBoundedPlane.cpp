@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCurveBoundedPlane 
-IfcCurveBoundedPlane::IfcCurveBoundedPlane() { m_entity_enum = IFCCURVEBOUNDEDPLANE; }
-IfcCurveBoundedPlane::IfcCurveBoundedPlane( int id ) { m_id = id; m_entity_enum = IFCCURVEBOUNDEDPLANE; }
+IfcCurveBoundedPlane::IfcCurveBoundedPlane() {}
+IfcCurveBoundedPlane::IfcCurveBoundedPlane( int id ) { m_id = id; }
 IfcCurveBoundedPlane::~IfcCurveBoundedPlane() {}
 
 // method setEntity takes over all attributes from another instance of the class

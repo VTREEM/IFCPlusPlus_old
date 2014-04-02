@@ -27,8 +27,8 @@
 #include "include/IfcTrapeziumProfileDef.h"
 
 // ENTITY IfcTrapeziumProfileDef 
-IfcTrapeziumProfileDef::IfcTrapeziumProfileDef() { m_entity_enum = IFCTRAPEZIUMPROFILEDEF; }
-IfcTrapeziumProfileDef::IfcTrapeziumProfileDef( int id ) { m_id = id; m_entity_enum = IFCTRAPEZIUMPROFILEDEF; }
+IfcTrapeziumProfileDef::IfcTrapeziumProfileDef() {}
+IfcTrapeziumProfileDef::IfcTrapeziumProfileDef( int id ) { m_id = id; }
 IfcTrapeziumProfileDef::~IfcTrapeziumProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class

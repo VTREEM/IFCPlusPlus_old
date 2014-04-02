@@ -25,8 +25,8 @@
 #include "include/IfcPersonAndOrganization.h"
 
 // ENTITY IfcPerson 
-IfcPerson::IfcPerson() { m_entity_enum = IFCPERSON; }
-IfcPerson::IfcPerson( int id ) { m_id = id; m_entity_enum = IFCPERSON; }
+IfcPerson::IfcPerson() {}
+IfcPerson::IfcPerson( int id ) { m_id = id; }
 IfcPerson::~IfcPerson() {}
 
 // method setEntity takes over all attributes from another instance of the class

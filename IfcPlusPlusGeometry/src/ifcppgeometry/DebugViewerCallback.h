@@ -34,7 +34,7 @@ void createTest( osg::Group* group, osg::Group* root );
 void createTest2( osg::Group* group );
 void createTest4( osg::Group* group );
 void dumpMeshsets( carve::mesh::MeshSet<3>* operand1, carve::mesh::MeshSet<3>* operand2, carve::mesh::MeshSet<3>* result, int id_operand1, int id_operand2 );
-void dumpToVTK( const std::vector<std::vector<carve::geom::vector<2> > >& paths );
+void dumpPathToVTK( const std::vector<std::vector<carve::geom::vector<2> > >& paths );
 void drawVertexNumbers( const carve::input::PolyhedronData* poly, const osg::Vec4f& color, osg::Geode* geode );
 
 #endif

@@ -48,7 +48,7 @@ shared_ptr<IfcTextPath> IfcTextPath::createObjectFromStepData( const std::string
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextPath>(); }
-	shared_ptr<IfcTextPath> type_object( new IfcTextPath() );
+	auto type_object = std::make_shared<IfcTextPath>();
 	if( _stricmp( arg.c_str(), ".LEFT." ) == 0 )
 	{
 		type_object->m_enum = IfcTextPath::ENUM_LEFT;

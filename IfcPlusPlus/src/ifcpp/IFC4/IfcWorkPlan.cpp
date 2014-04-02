@@ -38,8 +38,8 @@
 #include "include/IfcWorkPlanTypeEnum.h"
 
 // ENTITY IfcWorkPlan 
-IfcWorkPlan::IfcWorkPlan() { m_entity_enum = IFCWORKPLAN; }
-IfcWorkPlan::IfcWorkPlan( int id ) { m_id = id; m_entity_enum = IFCWORKPLAN; }
+IfcWorkPlan::IfcWorkPlan() {}
+IfcWorkPlan::IfcWorkPlan( int id ) { m_id = id; }
 IfcWorkPlan::~IfcWorkPlan() {}
 
 // method setEntity takes over all attributes from another instance of the class

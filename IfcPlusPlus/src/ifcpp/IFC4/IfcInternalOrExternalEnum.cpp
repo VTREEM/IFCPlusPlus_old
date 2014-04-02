@@ -56,7 +56,7 @@ shared_ptr<IfcInternalOrExternalEnum> IfcInternalOrExternalEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcInternalOrExternalEnum>(); }
-	shared_ptr<IfcInternalOrExternalEnum> type_object( new IfcInternalOrExternalEnum() );
+	auto type_object = std::make_shared<IfcInternalOrExternalEnum>();
 	if( _stricmp( arg.c_str(), ".INTERNAL." ) == 0 )
 	{
 		type_object->m_enum = IfcInternalOrExternalEnum::ENUM_INTERNAL;

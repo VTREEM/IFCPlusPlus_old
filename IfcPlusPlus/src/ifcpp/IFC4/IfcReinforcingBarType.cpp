@@ -39,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcReinforcingBarType 
-IfcReinforcingBarType::IfcReinforcingBarType() { m_entity_enum = IFCREINFORCINGBARTYPE; }
-IfcReinforcingBarType::IfcReinforcingBarType( int id ) { m_id = id; m_entity_enum = IFCREINFORCINGBARTYPE; }
+IfcReinforcingBarType::IfcReinforcingBarType() {}
+IfcReinforcingBarType::IfcReinforcingBarType( int id ) { m_id = id; }
 IfcReinforcingBarType::~IfcReinforcingBarType() {}
 
 // method setEntity takes over all attributes from another instance of the class

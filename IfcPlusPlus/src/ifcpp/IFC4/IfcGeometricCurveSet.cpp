@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcGeometricCurveSet 
-IfcGeometricCurveSet::IfcGeometricCurveSet() { m_entity_enum = IFCGEOMETRICCURVESET; }
-IfcGeometricCurveSet::IfcGeometricCurveSet( int id ) { m_id = id; m_entity_enum = IFCGEOMETRICCURVESET; }
+IfcGeometricCurveSet::IfcGeometricCurveSet() {}
+IfcGeometricCurveSet::IfcGeometricCurveSet( int id ) { m_id = id; }
 IfcGeometricCurveSet::~IfcGeometricCurveSet() {}
 
 // method setEntity takes over all attributes from another instance of the class

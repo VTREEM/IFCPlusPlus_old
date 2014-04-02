@@ -22,8 +22,8 @@
 #include "include/IfcModulusOfSubgradeReactionSelect.h"
 
 // ENTITY IfcBoundaryFaceCondition 
-IfcBoundaryFaceCondition::IfcBoundaryFaceCondition() { m_entity_enum = IFCBOUNDARYFACECONDITION; }
-IfcBoundaryFaceCondition::IfcBoundaryFaceCondition( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYFACECONDITION; }
+IfcBoundaryFaceCondition::IfcBoundaryFaceCondition() {}
+IfcBoundaryFaceCondition::IfcBoundaryFaceCondition( int id ) { m_id = id; }
 IfcBoundaryFaceCondition::~IfcBoundaryFaceCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class

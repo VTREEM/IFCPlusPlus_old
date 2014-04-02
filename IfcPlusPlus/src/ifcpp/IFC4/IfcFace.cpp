@@ -24,8 +24,8 @@
 #include "include/IfcTextureMap.h"
 
 // ENTITY IfcFace 
-IfcFace::IfcFace() { m_entity_enum = IFCFACE; }
-IfcFace::IfcFace( int id ) { m_id = id; m_entity_enum = IFCFACE; }
+IfcFace::IfcFace() {}
+IfcFace::IfcFace( int id ) { m_id = id; }
 IfcFace::~IfcFace() {}
 
 // method setEntity takes over all attributes from another instance of the class

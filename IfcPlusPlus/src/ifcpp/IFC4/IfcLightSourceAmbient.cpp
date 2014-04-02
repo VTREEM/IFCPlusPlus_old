@@ -25,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcLightSourceAmbient 
-IfcLightSourceAmbient::IfcLightSourceAmbient() { m_entity_enum = IFCLIGHTSOURCEAMBIENT; }
-IfcLightSourceAmbient::IfcLightSourceAmbient( int id ) { m_id = id; m_entity_enum = IFCLIGHTSOURCEAMBIENT; }
+IfcLightSourceAmbient::IfcLightSourceAmbient() {}
+IfcLightSourceAmbient::IfcLightSourceAmbient( int id ) { m_id = id; }
 IfcLightSourceAmbient::~IfcLightSourceAmbient() {}
 
 // method setEntity takes over all attributes from another instance of the class

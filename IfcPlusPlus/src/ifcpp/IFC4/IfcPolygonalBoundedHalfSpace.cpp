@@ -25,8 +25,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcPolygonalBoundedHalfSpace 
-IfcPolygonalBoundedHalfSpace::IfcPolygonalBoundedHalfSpace() { m_entity_enum = IFCPOLYGONALBOUNDEDHALFSPACE; }
-IfcPolygonalBoundedHalfSpace::IfcPolygonalBoundedHalfSpace( int id ) { m_id = id; m_entity_enum = IFCPOLYGONALBOUNDEDHALFSPACE; }
+IfcPolygonalBoundedHalfSpace::IfcPolygonalBoundedHalfSpace() {}
+IfcPolygonalBoundedHalfSpace::IfcPolygonalBoundedHalfSpace( int id ) { m_id = id; }
 IfcPolygonalBoundedHalfSpace::~IfcPolygonalBoundedHalfSpace() {}
 
 // method setEntity takes over all attributes from another instance of the class

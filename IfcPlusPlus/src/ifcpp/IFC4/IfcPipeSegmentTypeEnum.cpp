@@ -60,7 +60,7 @@ shared_ptr<IfcPipeSegmentTypeEnum> IfcPipeSegmentTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPipeSegmentTypeEnum>(); }
-	shared_ptr<IfcPipeSegmentTypeEnum> type_object( new IfcPipeSegmentTypeEnum() );
+	auto type_object = std::make_shared<IfcPipeSegmentTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CULVERT." ) == 0 )
 	{
 		type_object->m_enum = IfcPipeSegmentTypeEnum::ENUM_CULVERT;

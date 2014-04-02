@@ -26,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBSplineSurfaceWithKnots 
-IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots() { m_entity_enum = IFCBSPLINESURFACEWITHKNOTS; }
-IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots( int id ) { m_id = id; m_entity_enum = IFCBSPLINESURFACEWITHKNOTS; }
+IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots() {}
+IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots( int id ) { m_id = id; }
 IfcBSplineSurfaceWithKnots::~IfcBSplineSurfaceWithKnots() {}
 
 // method setEntity takes over all attributes from another instance of the class

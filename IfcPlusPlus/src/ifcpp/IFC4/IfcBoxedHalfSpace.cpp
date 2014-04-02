@@ -24,8 +24,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcBoxedHalfSpace 
-IfcBoxedHalfSpace::IfcBoxedHalfSpace() { m_entity_enum = IFCBOXEDHALFSPACE; }
-IfcBoxedHalfSpace::IfcBoxedHalfSpace( int id ) { m_id = id; m_entity_enum = IFCBOXEDHALFSPACE; }
+IfcBoxedHalfSpace::IfcBoxedHalfSpace() {}
+IfcBoxedHalfSpace::IfcBoxedHalfSpace( int id ) { m_id = id; }
 IfcBoxedHalfSpace::~IfcBoxedHalfSpace() {}
 
 // method setEntity takes over all attributes from another instance of the class

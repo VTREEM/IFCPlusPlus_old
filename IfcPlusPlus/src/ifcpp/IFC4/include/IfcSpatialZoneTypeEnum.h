@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSpatialZoneTypeEnum = ENUMERATION OF	(CONSTRUCTION	,FIRESAFETY	,LIGHTING	,OCCUPANCY	,SECURITY	,THERMAL	,TRANSPORT	,VENTILATION	,USERDEFINED	,NOTDEFINED);
-class IfcSpatialZoneTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSpatialZoneTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSpatialZoneTypeEnumEnum

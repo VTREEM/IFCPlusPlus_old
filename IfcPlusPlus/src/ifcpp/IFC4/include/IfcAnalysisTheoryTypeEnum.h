@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAnalysisTheoryTypeEnum = ENUMERATION OF	(FIRST_ORDER_THEORY	,SECOND_ORDER_THEORY	,THIRD_ORDER_THEORY	,FULL_NONLINEAR_THEORY	,USERDEFINED	,NOTDEFINED);
-class IfcAnalysisTheoryTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAnalysisTheoryTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAnalysisTheoryTypeEnumEnum

@@ -26,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcRevolvedAreaSolid 
-IfcRevolvedAreaSolid::IfcRevolvedAreaSolid() { m_entity_enum = IFCREVOLVEDAREASOLID; }
-IfcRevolvedAreaSolid::IfcRevolvedAreaSolid( int id ) { m_id = id; m_entity_enum = IFCREVOLVEDAREASOLID; }
+IfcRevolvedAreaSolid::IfcRevolvedAreaSolid() {}
+IfcRevolvedAreaSolid::IfcRevolvedAreaSolid( int id ) { m_id = id; }
 IfcRevolvedAreaSolid::~IfcRevolvedAreaSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class

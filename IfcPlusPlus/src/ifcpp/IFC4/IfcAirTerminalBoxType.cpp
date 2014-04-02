@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAirTerminalBoxType 
-IfcAirTerminalBoxType::IfcAirTerminalBoxType() { m_entity_enum = IFCAIRTERMINALBOXTYPE; }
-IfcAirTerminalBoxType::IfcAirTerminalBoxType( int id ) { m_id = id; m_entity_enum = IFCAIRTERMINALBOXTYPE; }
+IfcAirTerminalBoxType::IfcAirTerminalBoxType() {}
+IfcAirTerminalBoxType::IfcAirTerminalBoxType( int id ) { m_id = id; }
 IfcAirTerminalBoxType::~IfcAirTerminalBoxType() {}
 
 // method setEntity takes over all attributes from another instance of the class

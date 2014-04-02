@@ -46,8 +46,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcTendonAnchor 
-IfcTendonAnchor::IfcTendonAnchor() { m_entity_enum = IFCTENDONANCHOR; }
-IfcTendonAnchor::IfcTendonAnchor( int id ) { m_id = id; m_entity_enum = IFCTENDONANCHOR; }
+IfcTendonAnchor::IfcTendonAnchor() {}
+IfcTendonAnchor::IfcTendonAnchor( int id ) { m_id = id; }
 IfcTendonAnchor::~IfcTendonAnchor() {}
 
 // method setEntity takes over all attributes from another instance of the class

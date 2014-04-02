@@ -21,8 +21,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcBoundaryCondition 
-IfcBoundaryCondition::IfcBoundaryCondition() { m_entity_enum = IFCBOUNDARYCONDITION; }
-IfcBoundaryCondition::IfcBoundaryCondition( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYCONDITION; }
+IfcBoundaryCondition::IfcBoundaryCondition() {}
+IfcBoundaryCondition::IfcBoundaryCondition( int id ) { m_id = id; }
 IfcBoundaryCondition::~IfcBoundaryCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class

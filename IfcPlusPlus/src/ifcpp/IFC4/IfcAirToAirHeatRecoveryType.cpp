@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAirToAirHeatRecoveryType 
-IfcAirToAirHeatRecoveryType::IfcAirToAirHeatRecoveryType() { m_entity_enum = IFCAIRTOAIRHEATRECOVERYTYPE; }
-IfcAirToAirHeatRecoveryType::IfcAirToAirHeatRecoveryType( int id ) { m_id = id; m_entity_enum = IFCAIRTOAIRHEATRECOVERYTYPE; }
+IfcAirToAirHeatRecoveryType::IfcAirToAirHeatRecoveryType() {}
+IfcAirToAirHeatRecoveryType::IfcAirToAirHeatRecoveryType( int id ) { m_id = id; }
 IfcAirToAirHeatRecoveryType::~IfcAirToAirHeatRecoveryType() {}
 
 // method setEntity takes over all attributes from another instance of the class

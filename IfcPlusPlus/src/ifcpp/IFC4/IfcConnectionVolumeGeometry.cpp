@@ -21,8 +21,8 @@
 #include "include/IfcSolidOrShell.h"
 
 // ENTITY IfcConnectionVolumeGeometry 
-IfcConnectionVolumeGeometry::IfcConnectionVolumeGeometry() { m_entity_enum = IFCCONNECTIONVOLUMEGEOMETRY; }
-IfcConnectionVolumeGeometry::IfcConnectionVolumeGeometry( int id ) { m_id = id; m_entity_enum = IFCCONNECTIONVOLUMEGEOMETRY; }
+IfcConnectionVolumeGeometry::IfcConnectionVolumeGeometry() {}
+IfcConnectionVolumeGeometry::IfcConnectionVolumeGeometry( int id ) { m_id = id; }
 IfcConnectionVolumeGeometry::~IfcConnectionVolumeGeometry() {}
 
 // method setEntity takes over all attributes from another instance of the class

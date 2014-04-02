@@ -27,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelInterferesElements 
-IfcRelInterferesElements::IfcRelInterferesElements() { m_entity_enum = IFCRELINTERFERESELEMENTS; }
-IfcRelInterferesElements::IfcRelInterferesElements( int id ) { m_id = id; m_entity_enum = IFCRELINTERFERESELEMENTS; }
+IfcRelInterferesElements::IfcRelInterferesElements() {}
+IfcRelInterferesElements::IfcRelInterferesElements( int id ) { m_id = id; }
 IfcRelInterferesElements::~IfcRelInterferesElements() {}
 
 // method setEntity takes over all attributes from another instance of the class

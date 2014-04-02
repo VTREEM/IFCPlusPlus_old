@@ -37,7 +37,7 @@ shared_ptr<IfcDescriptiveMeasure> IfcDescriptiveMeasure::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDescriptiveMeasure>(); }
-	shared_ptr<IfcDescriptiveMeasure> type_object( new IfcDescriptiveMeasure() );
+	auto type_object = std::make_shared<IfcDescriptiveMeasure>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

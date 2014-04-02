@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDuctSilencerTypeEnum = ENUMERATION OF	(FLATOVAL	,RECTANGULAR	,ROUND	,USERDEFINED	,NOTDEFINED);
-class IfcDuctSilencerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDuctSilencerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDuctSilencerTypeEnumEnum

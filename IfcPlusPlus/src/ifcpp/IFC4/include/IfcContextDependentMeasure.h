@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcContextDependentMeasure = REAL;
-class IfcContextDependentMeasure : public IfcMeasureValue, public IfcPPType
+class IfcContextDependentMeasure : public IfcMeasureValue
 {
 public:
 	IfcContextDependentMeasure();

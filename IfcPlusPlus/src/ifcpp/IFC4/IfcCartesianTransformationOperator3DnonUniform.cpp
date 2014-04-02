@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCartesianTransformationOperator3DnonUniform 
-IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform() { m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM; }
-IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform( int id ) { m_id = id; m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM; }
+IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform() {}
+IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform( int id ) { m_id = id; }
 IfcCartesianTransformationOperator3DnonUniform::~IfcCartesianTransformationOperator3DnonUniform() {}
 
 // method setEntity takes over all attributes from another instance of the class

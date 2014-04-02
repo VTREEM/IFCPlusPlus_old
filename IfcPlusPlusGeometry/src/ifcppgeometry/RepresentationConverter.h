@@ -17,13 +17,10 @@
 #include <sstream>
 
 #include <ifcpp/model/shared_ptr.h>
+#include <ifcpp/model/IfcPPOpenMP.h>
 #include "IncludeCarveHeaders.h"
 #include "GeometryInputData.h"
 #include "GeometrySettings.h"
-
-#ifdef IFCPP_OPENMP
-#include <omp.h>
-#endif
 
 class UnitConverter;
 class StylesConverter;
@@ -46,14 +43,13 @@ public:
 	RepresentationConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> unit_converter );
 	~RepresentationConverter();
 
-	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	const carve::math::Matrix& pos,	shared_ptr<ShapeInputData>& shape_data, std::stringstream& err );
-	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	shared_ptr<ShapeInputData>& shape_data, std::stringstream& err );
+	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,				const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcPropertySet(					const shared_ptr<IfcPropertySet>& property_set,	osg::Group* group );
 	void convertStyledItem(						const shared_ptr<IfcRepresentationItem>& representation_item, shared_ptr<ItemData>& item_data );
-	void convertOpenings(						const shared_ptr<IfcElement>& ifc_element, std::vector<shared_ptr<ShapeInputData> >& vec_opening_data, std::stringstream& strs_err );
-	void subtractOpenings(						const shared_ptr<IfcElement>& ifc_element, shared_ptr<ItemData>& item_data, std::vector<shared_ptr<ShapeInputData> >& vec_opening_data, std::stringstream& err );
+	void subtractOpenings(						const shared_ptr<IfcElement>& ifc_element, shared_ptr<ShapeInputData>& product_shape, std::stringstream& err );
 
 	shared_ptr<SolidModelConverter>& getSolidConverter() { return m_solid_converter; }
 	shared_ptr<ProfileCache>& getProfileCache() { return m_profile_cache; }
@@ -75,6 +71,6 @@ protected:
 	bool								m_handle_layer_assignments;
 	
 #ifdef IFCPP_OPENMP
-	omp_lock_t m_writelock_styles_converter;
+	Mutex m_writelock_styles_converter;
 #endif
 };

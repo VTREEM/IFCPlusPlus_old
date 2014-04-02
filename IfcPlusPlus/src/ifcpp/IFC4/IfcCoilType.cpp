@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCoilType 
-IfcCoilType::IfcCoilType() { m_entity_enum = IFCCOILTYPE; }
-IfcCoilType::IfcCoilType( int id ) { m_id = id; m_entity_enum = IFCCOILTYPE; }
+IfcCoilType::IfcCoilType() {}
+IfcCoilType::IfcCoilType( int id ) { m_id = id; }
 IfcCoilType::~IfcCoilType() {}
 
 // method setEntity takes over all attributes from another instance of the class

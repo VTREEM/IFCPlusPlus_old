@@ -52,7 +52,7 @@ shared_ptr<IfcLightFixtureTypeEnum> IfcLightFixtureTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLightFixtureTypeEnum>(); }
-	shared_ptr<IfcLightFixtureTypeEnum> type_object( new IfcLightFixtureTypeEnum() );
+	auto type_object = std::make_shared<IfcLightFixtureTypeEnum>();
 	if( _stricmp( arg.c_str(), ".POINTSOURCE." ) == 0 )
 	{
 		type_object->m_enum = IfcLightFixtureTypeEnum::ENUM_POINTSOURCE;

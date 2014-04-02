@@ -66,7 +66,7 @@ shared_ptr<IfcPropertySetDefinitionSelect> IfcPropertySetDefinitionSelect::creat
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcPropertySetDefinitionSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcPropertySetDefinitionSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcPropertySetDefinitionSelect>();

@@ -35,7 +35,7 @@ shared_ptr<IfcDimensionCount> IfcDimensionCount::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDimensionCount>(); }
-	shared_ptr<IfcDimensionCount> type_object( new IfcDimensionCount() );
+	auto type_object = std::make_shared<IfcDimensionCount>();
 	//supertype as attribute: int m_value
 	type_object->m_value = atoi( arg.c_str() );
 	return type_object;

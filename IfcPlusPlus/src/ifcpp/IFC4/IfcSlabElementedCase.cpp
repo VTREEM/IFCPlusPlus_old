@@ -47,8 +47,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSlabElementedCase 
-IfcSlabElementedCase::IfcSlabElementedCase() { m_entity_enum = IFCSLABELEMENTEDCASE; }
-IfcSlabElementedCase::IfcSlabElementedCase( int id ) { m_id = id; m_entity_enum = IFCSLABELEMENTEDCASE; }
+IfcSlabElementedCase::IfcSlabElementedCase() {}
+IfcSlabElementedCase::IfcSlabElementedCase( int id ) { m_id = id; }
 IfcSlabElementedCase::~IfcSlabElementedCase() {}
 
 // method setEntity takes over all attributes from another instance of the class

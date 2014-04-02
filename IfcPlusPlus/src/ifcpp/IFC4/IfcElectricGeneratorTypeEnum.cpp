@@ -52,7 +52,7 @@ shared_ptr<IfcElectricGeneratorTypeEnum> IfcElectricGeneratorTypeEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricGeneratorTypeEnum>(); }
-	shared_ptr<IfcElectricGeneratorTypeEnum> type_object( new IfcElectricGeneratorTypeEnum() );
+	auto type_object = std::make_shared<IfcElectricGeneratorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CHP." ) == 0 )
 	{
 		type_object->m_enum = IfcElectricGeneratorTypeEnum::ENUM_CHP;

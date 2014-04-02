@@ -26,8 +26,8 @@
 #include "include/IfcRepresentationMap.h"
 
 // ENTITY IfcRepresentation 
-IfcRepresentation::IfcRepresentation() { m_entity_enum = IFCREPRESENTATION; }
-IfcRepresentation::IfcRepresentation( int id ) { m_id = id; m_entity_enum = IFCREPRESENTATION; }
+IfcRepresentation::IfcRepresentation() {}
+IfcRepresentation::IfcRepresentation( int id ) { m_id = id; }
 IfcRepresentation::~IfcRepresentation() {}
 
 // method setEntity takes over all attributes from another instance of the class

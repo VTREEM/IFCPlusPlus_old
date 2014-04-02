@@ -22,8 +22,8 @@
 #include "include/IfcTessellatedItem.h"
 
 // ENTITY IfcTessellatedItem 
-IfcTessellatedItem::IfcTessellatedItem() { m_entity_enum = IFCTESSELLATEDITEM; }
-IfcTessellatedItem::IfcTessellatedItem( int id ) { m_id = id; m_entity_enum = IFCTESSELLATEDITEM; }
+IfcTessellatedItem::IfcTessellatedItem() {}
+IfcTessellatedItem::IfcTessellatedItem( int id ) { m_id = id; }
 IfcTessellatedItem::~IfcTessellatedItem() {}
 
 // method setEntity takes over all attributes from another instance of the class

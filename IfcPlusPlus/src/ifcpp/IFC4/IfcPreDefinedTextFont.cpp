@@ -21,8 +21,8 @@
 #include "include/IfcPreDefinedTextFont.h"
 
 // ENTITY IfcPreDefinedTextFont 
-IfcPreDefinedTextFont::IfcPreDefinedTextFont() { m_entity_enum = IFCPREDEFINEDTEXTFONT; }
-IfcPreDefinedTextFont::IfcPreDefinedTextFont( int id ) { m_id = id; m_entity_enum = IFCPREDEFINEDTEXTFONT; }
+IfcPreDefinedTextFont::IfcPreDefinedTextFont() {}
+IfcPreDefinedTextFont::IfcPreDefinedTextFont( int id ) { m_id = id; }
 IfcPreDefinedTextFont::~IfcPreDefinedTextFont() {}
 
 // method setEntity takes over all attributes from another instance of the class

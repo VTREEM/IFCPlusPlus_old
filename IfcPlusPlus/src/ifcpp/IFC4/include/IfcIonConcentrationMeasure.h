@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcIonConcentrationMeasure = REAL;
-class IfcIonConcentrationMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcIonConcentrationMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcIonConcentrationMeasure();

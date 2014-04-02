@@ -66,7 +66,7 @@ shared_ptr<IfcHatchLineDistanceSelect> IfcHatchLineDistanceSelect::createObjectF
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcHatchLineDistanceSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcHatchLineDistanceSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcHatchLineDistanceSelect>();

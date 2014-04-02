@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcUnitaryEquipmentTypeEnum = ENUMERATION OF	(AIRHANDLER	,AIRCONDITIONINGUNIT	,DEHUMIDIFIER	,SPLITSYSTEM	,ROOFTOPUNIT	,USERDEFINED	,NOTDEFINED);
-class IfcUnitaryEquipmentTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcUnitaryEquipmentTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcUnitaryEquipmentTypeEnumEnum

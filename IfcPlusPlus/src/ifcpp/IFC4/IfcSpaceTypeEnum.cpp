@@ -60,7 +60,7 @@ shared_ptr<IfcSpaceTypeEnum> IfcSpaceTypeEnum::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSpaceTypeEnum>(); }
-	shared_ptr<IfcSpaceTypeEnum> type_object( new IfcSpaceTypeEnum() );
+	auto type_object = std::make_shared<IfcSpaceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".SPACE." ) == 0 )
 	{
 		type_object->m_enum = IfcSpaceTypeEnum::ENUM_SPACE;

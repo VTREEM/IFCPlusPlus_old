@@ -31,8 +31,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsWithEccentricity 
-IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity() { m_entity_enum = IFCRELCONNECTSWITHECCENTRICITY; }
-IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSWITHECCENTRICITY; }
+IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity() {}
+IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity( int id ) { m_id = id; }
 IfcRelConnectsWithEccentricity::~IfcRelConnectsWithEccentricity() {}
 
 // method setEntity takes over all attributes from another instance of the class

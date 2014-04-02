@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcEnergyConversionDeviceType 
-IfcEnergyConversionDeviceType::IfcEnergyConversionDeviceType() { m_entity_enum = IFCENERGYCONVERSIONDEVICETYPE; }
-IfcEnergyConversionDeviceType::IfcEnergyConversionDeviceType( int id ) { m_id = id; m_entity_enum = IFCENERGYCONVERSIONDEVICETYPE; }
+IfcEnergyConversionDeviceType::IfcEnergyConversionDeviceType() {}
+IfcEnergyConversionDeviceType::IfcEnergyConversionDeviceType( int id ) { m_id = id; }
 IfcEnergyConversionDeviceType::~IfcEnergyConversionDeviceType() {}
 
 // method setEntity takes over all attributes from another instance of the class

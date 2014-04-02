@@ -21,8 +21,8 @@
 #include "include/IfcSurfaceStyleRefraction.h"
 
 // ENTITY IfcSurfaceStyleRefraction 
-IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction() { m_entity_enum = IFCSURFACESTYLEREFRACTION; }
-IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction( int id ) { m_id = id; m_entity_enum = IFCSURFACESTYLEREFRACTION; }
+IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction() {}
+IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction( int id ) { m_id = id; }
 IfcSurfaceStyleRefraction::~IfcSurfaceStyleRefraction() {}
 
 // method setEntity takes over all attributes from another instance of the class

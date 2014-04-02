@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCableCarrierFittingTypeEnum = ENUMERATION OF	(BEND	,CROSS	,REDUCER	,TEE	,USERDEFINED	,NOTDEFINED);
-class IfcCableCarrierFittingTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCableCarrierFittingTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCableCarrierFittingTypeEnumEnum

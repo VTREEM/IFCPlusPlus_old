@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcFrequencyMeasure = REAL;
-class IfcFrequencyMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcFrequencyMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcFrequencyMeasure();

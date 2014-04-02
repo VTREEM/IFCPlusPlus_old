@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcActionTypeEnum = ENUMERATION OF	(PERMANENT_G	,VARIABLE_Q	,EXTRAORDINARY_A	,USERDEFINED	,NOTDEFINED);
-class IfcActionTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcActionTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcActionTypeEnumEnum

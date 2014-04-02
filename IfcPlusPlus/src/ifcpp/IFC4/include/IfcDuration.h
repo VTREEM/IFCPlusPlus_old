@@ -22,7 +22,7 @@
 #include "IfcTimeOrRatioSelect.h"
 
 // TYPE IfcDuration = STRING;
-class IfcDuration : public IfcSimpleValue, public IfcTimeOrRatioSelect, public IfcPPType
+class IfcDuration : public IfcSimpleValue, public IfcTimeOrRatioSelect
 {
 public:
 	IfcDuration();

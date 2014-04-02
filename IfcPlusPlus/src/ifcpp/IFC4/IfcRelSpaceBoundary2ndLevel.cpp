@@ -30,8 +30,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelSpaceBoundary2ndLevel 
-IfcRelSpaceBoundary2ndLevel::IfcRelSpaceBoundary2ndLevel() { m_entity_enum = IFCRELSPACEBOUNDARY2NDLEVEL; }
-IfcRelSpaceBoundary2ndLevel::IfcRelSpaceBoundary2ndLevel( int id ) { m_id = id; m_entity_enum = IFCRELSPACEBOUNDARY2NDLEVEL; }
+IfcRelSpaceBoundary2ndLevel::IfcRelSpaceBoundary2ndLevel() {}
+IfcRelSpaceBoundary2ndLevel::IfcRelSpaceBoundary2ndLevel( int id ) { m_id = id; }
 IfcRelSpaceBoundary2ndLevel::~IfcRelSpaceBoundary2ndLevel() {}
 
 // method setEntity takes over all attributes from another instance of the class

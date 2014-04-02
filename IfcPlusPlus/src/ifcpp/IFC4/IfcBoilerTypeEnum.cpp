@@ -48,7 +48,7 @@ shared_ptr<IfcBoilerTypeEnum> IfcBoilerTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBoilerTypeEnum>(); }
-	shared_ptr<IfcBoilerTypeEnum> type_object( new IfcBoilerTypeEnum() );
+	auto type_object = std::make_shared<IfcBoilerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".WATER." ) == 0 )
 	{
 		type_object->m_enum = IfcBoilerTypeEnum::ENUM_WATER;

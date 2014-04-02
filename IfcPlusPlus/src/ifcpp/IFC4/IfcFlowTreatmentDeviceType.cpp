@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFlowTreatmentDeviceType 
-IfcFlowTreatmentDeviceType::IfcFlowTreatmentDeviceType() { m_entity_enum = IFCFLOWTREATMENTDEVICETYPE; }
-IfcFlowTreatmentDeviceType::IfcFlowTreatmentDeviceType( int id ) { m_id = id; m_entity_enum = IFCFLOWTREATMENTDEVICETYPE; }
+IfcFlowTreatmentDeviceType::IfcFlowTreatmentDeviceType() {}
+IfcFlowTreatmentDeviceType::IfcFlowTreatmentDeviceType( int id ) { m_id = id; }
 IfcFlowTreatmentDeviceType::~IfcFlowTreatmentDeviceType() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcWallTypeEnum = ENUMERATION OF	(MOVABLE	,PARAPET	,PARTITIONING	,PLUMBINGWALL	,SHEAR	,SOLIDWALL	,STANDARD	,POLYGONAL	,ELEMENTEDWALL	,USERDEFINED	,NOTDEFINED);
-class IfcWallTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcWallTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcWallTypeEnumEnum

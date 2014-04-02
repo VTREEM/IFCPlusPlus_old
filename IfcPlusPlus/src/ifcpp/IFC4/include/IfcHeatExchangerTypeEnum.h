@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcHeatExchangerTypeEnum = ENUMERATION OF	(PLATE	,SHELLANDTUBE	,USERDEFINED	,NOTDEFINED);
-class IfcHeatExchangerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcHeatExchangerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcHeatExchangerTypeEnumEnum

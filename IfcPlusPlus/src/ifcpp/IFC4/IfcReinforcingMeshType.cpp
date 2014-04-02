@@ -38,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcReinforcingMeshType 
-IfcReinforcingMeshType::IfcReinforcingMeshType() { m_entity_enum = IFCREINFORCINGMESHTYPE; }
-IfcReinforcingMeshType::IfcReinforcingMeshType( int id ) { m_id = id; m_entity_enum = IFCREINFORCINGMESHTYPE; }
+IfcReinforcingMeshType::IfcReinforcingMeshType() {}
+IfcReinforcingMeshType::IfcReinforcingMeshType( int id ) { m_id = id; }
 IfcReinforcingMeshType::~IfcReinforcingMeshType() {}
 
 // method setEntity takes over all attributes from another instance of the class

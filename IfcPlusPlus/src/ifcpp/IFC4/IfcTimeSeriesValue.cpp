@@ -21,8 +21,8 @@
 #include "include/IfcValue.h"
 
 // ENTITY IfcTimeSeriesValue 
-IfcTimeSeriesValue::IfcTimeSeriesValue() { m_entity_enum = IFCTIMESERIESVALUE; }
-IfcTimeSeriesValue::IfcTimeSeriesValue( int id ) { m_id = id; m_entity_enum = IFCTIMESERIESVALUE; }
+IfcTimeSeriesValue::IfcTimeSeriesValue() {}
+IfcTimeSeriesValue::IfcTimeSeriesValue( int id ) { m_id = id; }
 IfcTimeSeriesValue::~IfcTimeSeriesValue() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -33,8 +33,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcGroup 
-IfcGroup::IfcGroup() { m_entity_enum = IFCGROUP; }
-IfcGroup::IfcGroup( int id ) { m_id = id; m_entity_enum = IFCGROUP; }
+IfcGroup::IfcGroup() {}
+IfcGroup::IfcGroup( int id ) { m_id = id; }
 IfcGroup::~IfcGroup() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -43,7 +43,7 @@ shared_ptr<IfcLogical> IfcLogical::createObjectFromStepData( const std::string& 
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLogical>(); }
-	shared_ptr<IfcLogical> type_object( new IfcLogical() );
+	auto type_object = std::make_shared<IfcLogical>();
 	//supertype as attribute: bool m_value
 	if( _stricmp( arg.c_str(), ".F." ) == 0 )
 	{

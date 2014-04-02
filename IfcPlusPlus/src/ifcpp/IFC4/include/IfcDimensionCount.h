@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDimensionCount = INTEGER;
-class IfcDimensionCount : public IfcPPType
+class IfcDimensionCount : public IfcPPObject
 {
 public:
 	IfcDimensionCount();

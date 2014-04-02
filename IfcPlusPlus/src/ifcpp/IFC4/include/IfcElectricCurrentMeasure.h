@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcElectricCurrentMeasure = REAL;
-class IfcElectricCurrentMeasure : public IfcMeasureValue, public IfcPPType
+class IfcElectricCurrentMeasure : public IfcMeasureValue
 {
 public:
 	IfcElectricCurrentMeasure();

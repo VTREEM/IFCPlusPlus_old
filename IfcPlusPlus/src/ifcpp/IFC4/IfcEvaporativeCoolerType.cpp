@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcEvaporativeCoolerType 
-IfcEvaporativeCoolerType::IfcEvaporativeCoolerType() { m_entity_enum = IFCEVAPORATIVECOOLERTYPE; }
-IfcEvaporativeCoolerType::IfcEvaporativeCoolerType( int id ) { m_id = id; m_entity_enum = IFCEVAPORATIVECOOLERTYPE; }
+IfcEvaporativeCoolerType::IfcEvaporativeCoolerType() {}
+IfcEvaporativeCoolerType::IfcEvaporativeCoolerType( int id ) { m_id = id; }
 IfcEvaporativeCoolerType::~IfcEvaporativeCoolerType() {}
 
 // method setEntity takes over all attributes from another instance of the class

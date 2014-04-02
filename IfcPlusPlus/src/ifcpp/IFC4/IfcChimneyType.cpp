@@ -35,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcChimneyType 
-IfcChimneyType::IfcChimneyType() { m_entity_enum = IFCCHIMNEYTYPE; }
-IfcChimneyType::IfcChimneyType( int id ) { m_id = id; m_entity_enum = IFCCHIMNEYTYPE; }
+IfcChimneyType::IfcChimneyType() {}
+IfcChimneyType::IfcChimneyType( int id ) { m_id = id; }
 IfcChimneyType::~IfcChimneyType() {}
 
 // method setEntity takes over all attributes from another instance of the class

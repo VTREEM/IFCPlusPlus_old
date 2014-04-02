@@ -52,7 +52,7 @@ shared_ptr<IfcDocumentStatusEnum> IfcDocumentStatusEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDocumentStatusEnum>(); }
-	shared_ptr<IfcDocumentStatusEnum> type_object( new IfcDocumentStatusEnum() );
+	auto type_object = std::make_shared<IfcDocumentStatusEnum>();
 	if( _stricmp( arg.c_str(), ".DRAFT." ) == 0 )
 	{
 		type_object->m_enum = IfcDocumentStatusEnum::ENUM_DRAFT;

@@ -35,8 +35,8 @@
 #include "include/IfcValveTypeEnum.h"
 
 // ENTITY IfcValveType 
-IfcValveType::IfcValveType() { m_entity_enum = IFCVALVETYPE; }
-IfcValveType::IfcValveType( int id ) { m_id = id; m_entity_enum = IFCVALVETYPE; }
+IfcValveType::IfcValveType() {}
+IfcValveType::IfcValveType( int id ) { m_id = id; }
 IfcValveType::~IfcValveType() {}
 
 // method setEntity takes over all attributes from another instance of the class

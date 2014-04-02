@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcURIReference = STRING;
-class IfcURIReference : public IfcPPType
+class IfcURIReference : public IfcPPObject
 {
 public:
 	IfcURIReference();

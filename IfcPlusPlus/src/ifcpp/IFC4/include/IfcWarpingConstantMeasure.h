@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcWarpingConstantMeasure = REAL;
-class IfcWarpingConstantMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcWarpingConstantMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcWarpingConstantMeasure();

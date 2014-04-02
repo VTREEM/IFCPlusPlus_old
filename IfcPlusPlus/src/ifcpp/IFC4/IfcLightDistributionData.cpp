@@ -22,8 +22,8 @@
 #include "include/IfcPlaneAngleMeasure.h"
 
 // ENTITY IfcLightDistributionData 
-IfcLightDistributionData::IfcLightDistributionData() { m_entity_enum = IFCLIGHTDISTRIBUTIONDATA; }
-IfcLightDistributionData::IfcLightDistributionData( int id ) { m_id = id; m_entity_enum = IFCLIGHTDISTRIBUTIONDATA; }
+IfcLightDistributionData::IfcLightDistributionData() {}
+IfcLightDistributionData::IfcLightDistributionData( int id ) { m_id = id; }
 IfcLightDistributionData::~IfcLightDistributionData() {}
 
 // method setEntity takes over all attributes from another instance of the class

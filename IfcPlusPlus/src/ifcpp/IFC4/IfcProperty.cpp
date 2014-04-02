@@ -26,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProperty 
-IfcProperty::IfcProperty() { m_entity_enum = IFCPROPERTY; }
-IfcProperty::IfcProperty( int id ) { m_id = id; m_entity_enum = IFCPROPERTY; }
+IfcProperty::IfcProperty() {}
+IfcProperty::IfcProperty( int id ) { m_id = id; }
 IfcProperty::~IfcProperty() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcRadioActivityMeasure = REAL;
-class IfcRadioActivityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcRadioActivityMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcRadioActivityMeasure();

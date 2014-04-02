@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcTorqueMeasure = REAL;
-class IfcTorqueMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcTorqueMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcTorqueMeasure();

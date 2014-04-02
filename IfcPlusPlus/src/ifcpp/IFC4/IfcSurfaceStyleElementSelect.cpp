@@ -65,7 +65,7 @@ shared_ptr<IfcSurfaceStyleElementSelect> IfcSurfaceStyleElementSelect::createObj
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSurfaceStyleElementSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcSurfaceStyleElementSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcSurfaceStyleElementSelect>();

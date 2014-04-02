@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcHatchLineDistanceSelect = SELECT	(IfcPositiveLengthMeasure	,IfcVector);
-class IfcHatchLineDistanceSelect : public IfcPPAbstractSelect
+class IfcHatchLineDistanceSelect : virtual public IfcPPObject
 {
 public:
 	IfcHatchLineDistanceSelect();
 	~IfcHatchLineDistanceSelect();
 	virtual const char* classname() const { return "IfcHatchLineDistanceSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcHatchLineDistanceSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

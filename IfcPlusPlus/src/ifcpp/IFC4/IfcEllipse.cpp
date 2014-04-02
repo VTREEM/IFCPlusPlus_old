@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcEllipse 
-IfcEllipse::IfcEllipse() { m_entity_enum = IFCELLIPSE; }
-IfcEllipse::IfcEllipse( int id ) { m_id = id; m_entity_enum = IFCELLIPSE; }
+IfcEllipse::IfcEllipse() {}
+IfcEllipse::IfcEllipse( int id ) { m_id = id; }
 IfcEllipse::~IfcEllipse() {}
 
 // method setEntity takes over all attributes from another instance of the class

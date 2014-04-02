@@ -23,8 +23,8 @@
 #include "include/IfcStructuralLoadOrResult.h"
 
 // ENTITY IfcStructuralLoadConfiguration 
-IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration() { m_entity_enum = IFCSTRUCTURALLOADCONFIGURATION; }
-IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADCONFIGURATION; }
+IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration() {}
+IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration( int id ) { m_id = id; }
 IfcStructuralLoadConfiguration::~IfcStructuralLoadConfiguration() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSpatialElementType 
-IfcSpatialElementType::IfcSpatialElementType() { m_entity_enum = IFCSPATIALELEMENTTYPE; }
-IfcSpatialElementType::IfcSpatialElementType( int id ) { m_id = id; m_entity_enum = IFCSPATIALELEMENTTYPE; }
+IfcSpatialElementType::IfcSpatialElementType() {}
+IfcSpatialElementType::IfcSpatialElementType( int id ) { m_id = id; }
 IfcSpatialElementType::~IfcSpatialElementType() {}
 
 // method setEntity takes over all attributes from another instance of the class

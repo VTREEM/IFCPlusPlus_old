@@ -52,7 +52,7 @@ shared_ptr<IfcChangeActionEnum> IfcChangeActionEnum::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcChangeActionEnum>(); }
-	shared_ptr<IfcChangeActionEnum> type_object( new IfcChangeActionEnum() );
+	auto type_object = std::make_shared<IfcChangeActionEnum>();
 	if( _stricmp( arg.c_str(), ".NOCHANGE." ) == 0 )
 	{
 		type_object->m_enum = IfcChangeActionEnum::ENUM_NOCHANGE;

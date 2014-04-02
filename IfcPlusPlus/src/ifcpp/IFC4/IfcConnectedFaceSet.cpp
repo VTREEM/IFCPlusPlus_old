@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcConnectedFaceSet 
-IfcConnectedFaceSet::IfcConnectedFaceSet() { m_entity_enum = IFCCONNECTEDFACESET; }
-IfcConnectedFaceSet::IfcConnectedFaceSet( int id ) { m_id = id; m_entity_enum = IFCCONNECTEDFACESET; }
+IfcConnectedFaceSet::IfcConnectedFaceSet() {}
+IfcConnectedFaceSet::IfcConnectedFaceSet( int id ) { m_id = id; }
 IfcConnectedFaceSet::~IfcConnectedFaceSet() {}
 
 // method setEntity takes over all attributes from another instance of the class

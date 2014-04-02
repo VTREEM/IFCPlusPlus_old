@@ -23,8 +23,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcApprovalRelationship 
-IfcApprovalRelationship::IfcApprovalRelationship() { m_entity_enum = IFCAPPROVALRELATIONSHIP; }
-IfcApprovalRelationship::IfcApprovalRelationship( int id ) { m_id = id; m_entity_enum = IFCAPPROVALRELATIONSHIP; }
+IfcApprovalRelationship::IfcApprovalRelationship() {}
+IfcApprovalRelationship::IfcApprovalRelationship( int id ) { m_id = id; }
 IfcApprovalRelationship::~IfcApprovalRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class

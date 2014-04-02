@@ -65,7 +65,7 @@ shared_ptr<IfcStyleAssignmentSelect> IfcStyleAssignmentSelect::createObjectFromS
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcStyleAssignmentSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcStyleAssignmentSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcStyleAssignmentSelect>();

@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcClosedShell 
-IfcClosedShell::IfcClosedShell() { m_entity_enum = IFCCLOSEDSHELL; }
-IfcClosedShell::IfcClosedShell( int id ) { m_id = id; m_entity_enum = IFCCLOSEDSHELL; }
+IfcClosedShell::IfcClosedShell() {}
+IfcClosedShell::IfcClosedShell( int id ) { m_id = id; }
 IfcClosedShell::~IfcClosedShell() {}
 
 // method setEntity takes over all attributes from another instance of the class

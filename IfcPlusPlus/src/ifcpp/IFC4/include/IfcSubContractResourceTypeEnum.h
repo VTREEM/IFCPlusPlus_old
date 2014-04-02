@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSubContractResourceTypeEnum = ENUMERATION OF	(PURCHASE	,WORK	,USERDEFINED	,NOTDEFINED);
-class IfcSubContractResourceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSubContractResourceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSubContractResourceTypeEnumEnum

@@ -34,8 +34,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcActor 
-IfcActor::IfcActor() { m_entity_enum = IFCACTOR; }
-IfcActor::IfcActor( int id ) { m_id = id; m_entity_enum = IFCACTOR; }
+IfcActor::IfcActor() {}
+IfcActor::IfcActor( int id ) { m_id = id; }
 IfcActor::~IfcActor() {}
 
 // method setEntity takes over all attributes from another instance of the class

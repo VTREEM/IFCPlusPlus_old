@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPumpTypeEnum = ENUMERATION OF	(CIRCULATOR	,ENDSUCTION	,SPLITCASE	,SUBMERSIBLEPUMP	,SUMPPUMP	,VERTICALINLINE	,VERTICALTURBINE	,USERDEFINED	,NOTDEFINED);
-class IfcPumpTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPumpTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPumpTypeEnumEnum

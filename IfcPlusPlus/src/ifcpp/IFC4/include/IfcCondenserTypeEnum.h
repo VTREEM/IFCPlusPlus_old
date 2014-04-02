@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCondenserTypeEnum = ENUMERATION OF	(AIRCOOLED	,EVAPORATIVECOOLED	,WATERCOOLED	,WATERCOOLEDBRAZEDPLATE	,WATERCOOLEDSHELLCOIL	,WATERCOOLEDSHELLTUBE	,WATERCOOLEDTUBEINTUBE	,USERDEFINED	,NOTDEFINED);
-class IfcCondenserTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCondenserTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCondenserTypeEnumEnum

@@ -24,8 +24,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcExternallyDefinedTextFont 
-IfcExternallyDefinedTextFont::IfcExternallyDefinedTextFont() { m_entity_enum = IFCEXTERNALLYDEFINEDTEXTFONT; }
-IfcExternallyDefinedTextFont::IfcExternallyDefinedTextFont( int id ) { m_id = id; m_entity_enum = IFCEXTERNALLYDEFINEDTEXTFONT; }
+IfcExternallyDefinedTextFont::IfcExternallyDefinedTextFont() {}
+IfcExternallyDefinedTextFont::IfcExternallyDefinedTextFont( int id ) { m_id = id; }
 IfcExternallyDefinedTextFont::~IfcExternallyDefinedTextFont() {}
 
 // method setEntity takes over all attributes from another instance of the class

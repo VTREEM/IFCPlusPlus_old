@@ -26,8 +26,8 @@
 #include "include/IfcVolumeMeasure.h"
 
 // ENTITY IfcQuantityVolume 
-IfcQuantityVolume::IfcQuantityVolume() { m_entity_enum = IFCQUANTITYVOLUME; }
-IfcQuantityVolume::IfcQuantityVolume( int id ) { m_id = id; m_entity_enum = IFCQUANTITYVOLUME; }
+IfcQuantityVolume::IfcQuantityVolume() {}
+IfcQuantityVolume::IfcQuantityVolume( int id ) { m_id = id; }
 IfcQuantityVolume::~IfcQuantityVolume() {}
 
 // method setEntity takes over all attributes from another instance of the class

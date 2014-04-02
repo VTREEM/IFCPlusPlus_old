@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcAxis2Placement3D 
-IfcAxis2Placement3D::IfcAxis2Placement3D() { m_entity_enum = IFCAXIS2PLACEMENT3D; }
-IfcAxis2Placement3D::IfcAxis2Placement3D( int id ) { m_id = id; m_entity_enum = IFCAXIS2PLACEMENT3D; }
+IfcAxis2Placement3D::IfcAxis2Placement3D() {}
+IfcAxis2Placement3D::IfcAxis2Placement3D( int id ) { m_id = id; }
 IfcAxis2Placement3D::~IfcAxis2Placement3D() {}
 
 // method setEntity takes over all attributes from another instance of the class

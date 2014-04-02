@@ -24,8 +24,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcPointOnSurface 
-IfcPointOnSurface::IfcPointOnSurface() { m_entity_enum = IFCPOINTONSURFACE; }
-IfcPointOnSurface::IfcPointOnSurface( int id ) { m_id = id; m_entity_enum = IFCPOINTONSURFACE; }
+IfcPointOnSurface::IfcPointOnSurface() {}
+IfcPointOnSurface::IfcPointOnSurface( int id ) { m_id = id; }
 IfcPointOnSurface::~IfcPointOnSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class

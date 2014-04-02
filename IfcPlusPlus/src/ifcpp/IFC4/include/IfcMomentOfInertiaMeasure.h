@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMomentOfInertiaMeasure = REAL;
-class IfcMomentOfInertiaMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMomentOfInertiaMeasure : public IfcDerivedMeasureValue
 {
 public:
 	IfcMomentOfInertiaMeasure();

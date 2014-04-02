@@ -25,8 +25,8 @@
 #include "include/IfcTimeStamp.h"
 
 // ENTITY IfcOwnerHistory 
-IfcOwnerHistory::IfcOwnerHistory() { m_entity_enum = IFCOWNERHISTORY; }
-IfcOwnerHistory::IfcOwnerHistory( int id ) { m_id = id; m_entity_enum = IFCOWNERHISTORY; }
+IfcOwnerHistory::IfcOwnerHistory() {}
+IfcOwnerHistory::IfcOwnerHistory( int id ) { m_id = id; }
 IfcOwnerHistory::~IfcOwnerHistory() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -25,8 +25,8 @@
 #include "include/IfcUnit.h"
 
 // ENTITY IfcTableColumn 
-IfcTableColumn::IfcTableColumn() { m_entity_enum = IFCTABLECOLUMN; }
-IfcTableColumn::IfcTableColumn( int id ) { m_id = id; m_entity_enum = IFCTABLECOLUMN; }
+IfcTableColumn::IfcTableColumn() {}
+IfcTableColumn::IfcTableColumn( int id ) { m_id = id; }
 IfcTableColumn::~IfcTableColumn() {}
 
 // method setEntity takes over all attributes from another instance of the class

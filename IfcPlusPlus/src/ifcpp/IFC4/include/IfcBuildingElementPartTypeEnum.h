@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBuildingElementPartTypeEnum = ENUMERATION OF	(INSULATION	,PRECASTPANEL	,USERDEFINED	,NOTDEFINED);
-class IfcBuildingElementPartTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcBuildingElementPartTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcBuildingElementPartTypeEnumEnum

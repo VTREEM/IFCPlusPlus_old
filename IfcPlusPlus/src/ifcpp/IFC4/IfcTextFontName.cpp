@@ -35,7 +35,7 @@ shared_ptr<IfcTextFontName> IfcTextFontName::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextFontName>(); }
-	shared_ptr<IfcTextFontName> type_object( new IfcTextFontName() );
+	auto type_object = std::make_shared<IfcTextFontName>();
 	//supertype as attribute: std::string m_value
 	type_object->m_value = arg;
 	return type_object;

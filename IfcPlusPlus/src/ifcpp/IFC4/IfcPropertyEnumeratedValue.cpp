@@ -28,8 +28,8 @@
 #include "include/IfcValue.h"
 
 // ENTITY IfcPropertyEnumeratedValue 
-IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue() { m_entity_enum = IFCPROPERTYENUMERATEDVALUE; }
-IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue( int id ) { m_id = id; m_entity_enum = IFCPROPERTYENUMERATEDVALUE; }
+IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue() {}
+IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue( int id ) { m_id = id; }
 IfcPropertyEnumeratedValue::~IfcPropertyEnumeratedValue() {}
 
 // method setEntity takes over all attributes from another instance of the class

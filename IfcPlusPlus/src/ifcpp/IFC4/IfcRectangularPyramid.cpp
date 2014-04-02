@@ -24,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcRectangularPyramid 
-IfcRectangularPyramid::IfcRectangularPyramid() { m_entity_enum = IFCRECTANGULARPYRAMID; }
-IfcRectangularPyramid::IfcRectangularPyramid( int id ) { m_id = id; m_entity_enum = IFCRECTANGULARPYRAMID; }
+IfcRectangularPyramid::IfcRectangularPyramid() {}
+IfcRectangularPyramid::IfcRectangularPyramid( int id ) { m_id = id; }
 IfcRectangularPyramid::~IfcRectangularPyramid() {}
 
 // method setEntity takes over all attributes from another instance of the class

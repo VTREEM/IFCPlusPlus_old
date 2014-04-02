@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDocumentStatusEnum = ENUMERATION OF	(DRAFT	,FINALDRAFT	,FINAL	,REVISION	,NOTDEFINED);
-class IfcDocumentStatusEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDocumentStatusEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDocumentStatusEnumEnum

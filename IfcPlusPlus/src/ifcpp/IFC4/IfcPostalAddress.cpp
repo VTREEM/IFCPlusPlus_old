@@ -25,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPostalAddress 
-IfcPostalAddress::IfcPostalAddress() { m_entity_enum = IFCPOSTALADDRESS; }
-IfcPostalAddress::IfcPostalAddress( int id ) { m_id = id; m_entity_enum = IFCPOSTALADDRESS; }
+IfcPostalAddress::IfcPostalAddress() {}
+IfcPostalAddress::IfcPostalAddress( int id ) { m_id = id; }
 IfcPostalAddress::~IfcPostalAddress() {}
 
 // method setEntity takes over all attributes from another instance of the class

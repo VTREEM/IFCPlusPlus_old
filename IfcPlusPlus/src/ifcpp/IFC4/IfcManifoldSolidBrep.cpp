@@ -23,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcManifoldSolidBrep 
-IfcManifoldSolidBrep::IfcManifoldSolidBrep() { m_entity_enum = IFCMANIFOLDSOLIDBREP; }
-IfcManifoldSolidBrep::IfcManifoldSolidBrep( int id ) { m_id = id; m_entity_enum = IFCMANIFOLDSOLIDBREP; }
+IfcManifoldSolidBrep::IfcManifoldSolidBrep() {}
+IfcManifoldSolidBrep::IfcManifoldSolidBrep( int id ) { m_id = id; }
 IfcManifoldSolidBrep::~IfcManifoldSolidBrep() {}
 
 // method setEntity takes over all attributes from another instance of the class

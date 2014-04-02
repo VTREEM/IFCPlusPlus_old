@@ -37,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralMember 
-IfcStructuralMember::IfcStructuralMember() { m_entity_enum = IFCSTRUCTURALMEMBER; }
-IfcStructuralMember::IfcStructuralMember( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALMEMBER; }
+IfcStructuralMember::IfcStructuralMember() {}
+IfcStructuralMember::IfcStructuralMember( int id ) { m_id = id; }
 IfcStructuralMember::~IfcStructuralMember() {}
 
 // method setEntity takes over all attributes from another instance of the class

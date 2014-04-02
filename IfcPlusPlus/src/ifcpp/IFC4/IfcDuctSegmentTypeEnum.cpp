@@ -48,7 +48,7 @@ shared_ptr<IfcDuctSegmentTypeEnum> IfcDuctSegmentTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDuctSegmentTypeEnum>(); }
-	shared_ptr<IfcDuctSegmentTypeEnum> type_object( new IfcDuctSegmentTypeEnum() );
+	auto type_object = std::make_shared<IfcDuctSegmentTypeEnum>();
 	if( _stricmp( arg.c_str(), ".RIGIDSEGMENT." ) == 0 )
 	{
 		type_object->m_enum = IfcDuctSegmentTypeEnum::ENUM_RIGIDSEGMENT;

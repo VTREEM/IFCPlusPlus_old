@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSystemFurnitureElementTypeEnum = ENUMERATION OF	(PANEL	,WORKSURFACE	,USERDEFINED	,NOTDEFINED);
-class IfcSystemFurnitureElementTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSystemFurnitureElementTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSystemFurnitureElementTypeEnumEnum

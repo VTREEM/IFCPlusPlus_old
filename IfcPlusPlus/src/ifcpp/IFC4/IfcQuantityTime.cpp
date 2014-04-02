@@ -26,8 +26,8 @@
 #include "include/IfcTimeMeasure.h"
 
 // ENTITY IfcQuantityTime 
-IfcQuantityTime::IfcQuantityTime() { m_entity_enum = IFCQUANTITYTIME; }
-IfcQuantityTime::IfcQuantityTime( int id ) { m_id = id; m_entity_enum = IFCQUANTITYTIME; }
+IfcQuantityTime::IfcQuantityTime() {}
+IfcQuantityTime::IfcQuantityTime( int id ) { m_id = id; }
 IfcQuantityTime::~IfcQuantityTime() {}
 
 // method setEntity takes over all attributes from another instance of the class

@@ -35,7 +35,7 @@ shared_ptr<IfcMonthInYearNumber> IfcMonthInYearNumber::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMonthInYearNumber>(); }
-	shared_ptr<IfcMonthInYearNumber> type_object( new IfcMonthInYearNumber() );
+	auto type_object = std::make_shared<IfcMonthInYearNumber>();
 	//supertype as attribute: int m_value
 	type_object->m_value = atoi( arg.c_str() );
 	return type_object;
