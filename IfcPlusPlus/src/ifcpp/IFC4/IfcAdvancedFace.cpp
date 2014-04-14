@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -61,6 +62,13 @@ void IfcAdvancedFace::readStepArguments( const std::vector<std::string>& args, c
 	readEntityReference( args[1], m_FaceSurface, map );
 	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SameSense = false; }
 	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SameSense = true; }
+}
+void IfcAdvancedFace::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFaceSurface::getAttributes( vec_attributes );
+}
+void IfcAdvancedFace::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAdvancedFace::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

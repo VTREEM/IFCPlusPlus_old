@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -102,6 +103,14 @@ void IfcBuildingStorey::readStepArguments( const std::vector<std::string>& args,
 	m_LongName = IfcLabel::createObjectFromStepData( args[7] );
 	m_CompositionType = IfcElementCompositionEnum::createObjectFromStepData( args[8] );
 	m_Elevation = IfcLengthMeasure::createObjectFromStepData( args[9] );
+}
+void IfcBuildingStorey::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSpatialStructureElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Elevation", m_Elevation ) );
+}
+void IfcBuildingStorey::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBuildingStorey::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -15,25 +15,12 @@
 
 #ifdef  _DEBUG
 
+#define DISABLE_OFSTREAM
 
-//void setRenderPolyhedronCallBack( void* obj_ptr, void (*func)(void*, const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe) ){}
-//void setRenderMeshsetCallBack( void* obj_ptr, void (*func)(void*, const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe) ){}
-//void setRenderPolylineCallBack( void* obj_ptr, void (*func)(void*, const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color ) ){}
-//void setRenderPathsCallBack( void* obj_ptr, void (*func)(void*, const std::vector<std::vector<carve::geom::vector<2> > >& paths ) ){}
-//
-//void renderShapeInputDataInDebugViewer( const ShapeInputData* product_shape, const osg::Vec4f& color, const bool wireframe ){}
-//void renderPolyhedronInDebugViewer( const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe){}
-//void renderMeshsetInDebugViewer(const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe){}
-//void renderPolylineInDebugViewer( const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color ){}
-//void renderPathsInDebugViewer( const std::vector<std::vector<carve::geom::vector<2> > >& paths ){}
-//
-//void dumpMeshsets( carve::mesh::MeshSet<3>* operand1, carve::mesh::MeshSet<3>* operand2, carve::mesh::MeshSet<3>* result, int id_operand1, int id_operand2 ){}
-//void dumpPathToVTK( const std::vector<std::vector<carve::geom::vector<2> > >& paths ){}
-//void drawVertexNumbers( const carve::input::PolyhedronData* poly, const osg::Vec4f& color, osg::Geode* geode ){}
-
-
-
+#ifndef DISABLE_OFSTREAM
 #include <fstream>
+#endif
+
 #include <osgText/Text>
 #include <ifcpp/model/UnitConverter.h>
 #include <ifcpp/IFC4/include/IfcSphere.h>
@@ -283,11 +270,13 @@ void dumpMeshset( carve::mesh::MeshSet<3>* meshset, int poly_num, const int file
 		}
 		strs_out << ");" << std::endl;
 	}
+#ifndef DISABLE_OFSTREAM
 	std::stringstream file_name;
 	file_name << "dump_mesh" << file_out_num << ".txt";
 	std::ofstream dump_ofstream( file_name.str().c_str(), std::ofstream::out);
 	dump_ofstream << strs_out.str().c_str();
 	dump_ofstream.close();
+#endif
 }
 
 
@@ -318,11 +307,13 @@ void dumpMeshsets( carve::mesh::MeshSet<3>* first_operand_meshset,
 		dumpMeshset( result_meshset, 3, cpp_input );
 	}
 
+#ifndef DISABLE_OFSTREAM
 	std::stringstream file_name;
 	file_name << "dump_csg_failure" << dump_meshset_count << ".txt";
 	std::ofstream ofs_meshset( file_name.str().c_str(), std::ofstream::out);
 	ofs_meshset << cpp_input.str().c_str();
 	ofs_meshset.close();
+#endif
 
 	++dump_meshset_count;
 }
@@ -406,11 +397,13 @@ void dumpPathToVTK( const std::vector<std::vector<carve::geom::vector<2> > >& pa
 	//out << "LOOKUP_TABLE default" << std::endl;
 	//out << "0 1 2 1.1" << std::endl;
 
+#ifndef DISABLE_OFSTREAM
 	std::stringstream file_name;
 	file_name << "dump_paths" << vtk_dump_meshset_count << ".vtk";
 	std::ofstream ofs_vtk_dump_meshset( file_name.str().c_str(), std::ofstream::out);
 	ofs_vtk_dump_meshset << out.str().c_str();
 	ofs_vtk_dump_meshset.close();
+#endif
 	++vtk_dump_meshset_count;
 }
 
@@ -1095,7 +1088,8 @@ void createTest( osg::Group* group, osg::Group* root )
 
 	shared_ptr<ItemData> item_data( new ItemData() );
 	std::stringstream strs_err;
-	representation_converter->getSolidConverter()->convertIfcCsgPrimitive3D( sphere, carve::math::Matrix::TRANS(1.0, 1.0, 1.0), item_data, strs_err );
+	representation_converter->getSolidConverter()->convertIfcCsgPrimitive3D( sphere, item_data, strs_err );
+	item_data->applyPosition( carve::math::Matrix::TRANS(1.0, 1.0, 1.0) );
 	item_data->createMeshSetsFromClosedPolyhedrons();
 
 

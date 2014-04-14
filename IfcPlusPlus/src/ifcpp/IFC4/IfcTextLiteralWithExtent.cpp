@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -69,6 +70,15 @@ void IfcTextLiteralWithExtent::readStepArguments( const std::vector<std::string>
 	m_Path = IfcTextPath::createObjectFromStepData( args[2] );
 	readEntityReference( args[3], m_Extent, map );
 	m_BoxAlignment = IfcBoxAlignment::createObjectFromStepData( args[4] );
+}
+void IfcTextLiteralWithExtent::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTextLiteral::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Extent", m_Extent ) );
+	vec_attributes.push_back( std::make_pair( "BoxAlignment", m_BoxAlignment ) );
+}
+void IfcTextLiteralWithExtent::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTextLiteralWithExtent::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

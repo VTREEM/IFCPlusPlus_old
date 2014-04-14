@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -106,6 +107,14 @@ void IfcTransformer::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcTransformerTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcTransformer::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEnergyConversionDevice::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcTransformer::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTransformer::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

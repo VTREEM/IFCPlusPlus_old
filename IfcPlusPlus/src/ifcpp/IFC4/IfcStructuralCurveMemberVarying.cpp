@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -97,6 +98,13 @@ void IfcStructuralCurveMemberVarying::readStepArguments( const std::vector<std::
 	readEntityReference( args[6], m_Representation, map );
 	m_PredefinedType = IfcStructuralCurveMemberTypeEnum::createObjectFromStepData( args[7] );
 	readEntityReference( args[8], m_Axis, map );
+}
+void IfcStructuralCurveMemberVarying::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralCurveMember::getAttributes( vec_attributes );
+}
+void IfcStructuralCurveMemberVarying::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralCurveMemberVarying::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -65,6 +66,15 @@ void IfcMaterialRelationship::readStepArguments( const std::vector<std::string>&
 	readEntityReference( args[2], m_RelatingMaterial, map );
 	readEntityReferenceList( args[3], m_RelatedMaterials, map );
 	m_Expression = IfcLabel::createObjectFromStepData( args[4] );
+}
+void IfcMaterialRelationship::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcResourceLevelRelationship::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingMaterial", m_RelatingMaterial ) );
+	vec_attributes.push_back( std::make_pair( "Expression", m_Expression ) );
+}
+void IfcMaterialRelationship::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

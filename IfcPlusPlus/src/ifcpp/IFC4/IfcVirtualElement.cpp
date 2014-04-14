@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -99,6 +100,13 @@ void IfcVirtualElement::readStepArguments( const std::vector<std::string>& args,
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
+}
+void IfcVirtualElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcElement::getAttributes( vec_attributes );
+}
+void IfcVirtualElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcVirtualElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

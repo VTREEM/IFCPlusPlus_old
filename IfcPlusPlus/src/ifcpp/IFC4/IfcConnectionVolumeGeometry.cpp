@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -51,6 +52,15 @@ void IfcConnectionVolumeGeometry::readStepArguments( const std::vector<std::stri
 	#endif
 	m_VolumeOnRelatingElement = IfcSolidOrShell::createObjectFromStepData( args[0], map );
 	m_VolumeOnRelatedElement = IfcSolidOrShell::createObjectFromStepData( args[1], map );
+}
+void IfcConnectionVolumeGeometry::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConnectionGeometry::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "VolumeOnRelatingElement", m_VolumeOnRelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "VolumeOnRelatedElement", m_VolumeOnRelatedElement ) );
+}
+void IfcConnectionVolumeGeometry::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConnectionVolumeGeometry::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

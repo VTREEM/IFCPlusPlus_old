@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -72,6 +73,15 @@ void IfcRelProjectsElement::readStepArguments( const std::vector<std::string>& a
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_RelatingElement, map );
 	readEntityReference( args[5], m_RelatedFeatureElement, map );
+}
+void IfcRelProjectsElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelDecomposes::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingElement", m_RelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "RelatedFeatureElement", m_RelatedFeatureElement ) );
+}
+void IfcRelProjectsElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelProjectsElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

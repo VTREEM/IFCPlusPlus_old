@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -60,6 +61,14 @@ void IfcBoxedHalfSpace::readStepArguments( const std::vector<std::string>& args,
 	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_AgreementFlag = false; }
 	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_AgreementFlag = true; }
 	readEntityReference( args[2], m_Enclosure, map );
+}
+void IfcBoxedHalfSpace::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcHalfSpaceSolid::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Enclosure", m_Enclosure ) );
+}
+void IfcBoxedHalfSpace::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBoxedHalfSpace::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -101,6 +102,15 @@ void IfcSpaceType::readStepArguments( const std::vector<std::string>& args, cons
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcSpaceTypeEnum::createObjectFromStepData( args[9] );
 	m_LongName = IfcLabel::createObjectFromStepData( args[10] );
+}
+void IfcSpaceType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSpatialStructureElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "LongName", m_LongName ) );
+}
+void IfcSpaceType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSpaceType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

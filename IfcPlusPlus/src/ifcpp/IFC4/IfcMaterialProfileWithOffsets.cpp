@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -80,6 +81,16 @@ void IfcMaterialProfileWithOffsets::readStepArguments( const std::vector<std::st
 	m_Priority = IfcNormalisedRatioMeasure::createObjectFromStepData( args[4] );
 	m_Category = IfcLabel::createObjectFromStepData( args[5] );
 	readTypeOfRealList( args[6], m_OffsetValues );
+}
+void IfcMaterialProfileWithOffsets::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcMaterialProfile::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> OffsetValues_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_OffsetValues.begin(), m_OffsetValues.end(), std::back_inserter( OffsetValues_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "OffsetValues", OffsetValues_vec_object ) );
+}
+void IfcMaterialProfileWithOffsets::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialProfileWithOffsets::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

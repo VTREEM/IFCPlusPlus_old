@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -98,6 +99,17 @@ void IfcCostSchedule::readStepArguments( const std::vector<std::string>& args, c
 	m_Status = IfcLabel::createObjectFromStepData( args[7] );
 	m_SubmittedOn = IfcDateTime::createObjectFromStepData( args[8] );
 	m_UpdateDate = IfcDateTime::createObjectFromStepData( args[9] );
+}
+void IfcCostSchedule::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcControl::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "Status", m_Status ) );
+	vec_attributes.push_back( std::make_pair( "SubmittedOn", m_SubmittedOn ) );
+	vec_attributes.push_back( std::make_pair( "UpdateDate", m_UpdateDate ) );
+}
+void IfcCostSchedule::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCostSchedule::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

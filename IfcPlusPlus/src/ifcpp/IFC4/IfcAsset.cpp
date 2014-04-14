@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -116,6 +117,22 @@ void IfcAsset::readStepArguments( const std::vector<std::string>& args, const st
 	readEntityReference( args[11], m_ResponsiblePerson, map );
 	m_IncorporationDate = IfcDate::createObjectFromStepData( args[12] );
 	readEntityReference( args[13], m_DepreciatedValue, map );
+}
+void IfcAsset::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGroup::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Identification", m_Identification ) );
+	vec_attributes.push_back( std::make_pair( "OriginalValue", m_OriginalValue ) );
+	vec_attributes.push_back( std::make_pair( "CurrentValue", m_CurrentValue ) );
+	vec_attributes.push_back( std::make_pair( "TotalReplacementCost", m_TotalReplacementCost ) );
+	vec_attributes.push_back( std::make_pair( "Owner", m_Owner ) );
+	vec_attributes.push_back( std::make_pair( "User", m_User ) );
+	vec_attributes.push_back( std::make_pair( "ResponsiblePerson", m_ResponsiblePerson ) );
+	vec_attributes.push_back( std::make_pair( "IncorporationDate", m_IncorporationDate ) );
+	vec_attributes.push_back( std::make_pair( "DepreciatedValue", m_DepreciatedValue ) );
+}
+void IfcAsset::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAsset::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

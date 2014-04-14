@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -64,6 +65,15 @@ void IfcEdgeCurve::readStepArguments( const std::vector<std::string>& args, cons
 	readEntityReference( args[2], m_EdgeGeometry, map );
 	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_SameSense = false; }
 	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_SameSense = true; }
+}
+void IfcEdgeCurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEdge::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "EdgeGeometry", m_EdgeGeometry ) );
+	vec_attributes.push_back( std::make_pair( "SameSense", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SameSense ) ) ) );
+}
+void IfcEdgeCurve::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcEdgeCurve::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

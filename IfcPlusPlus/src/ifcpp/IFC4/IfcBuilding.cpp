@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -111,6 +112,16 @@ void IfcBuilding::readStepArguments( const std::vector<std::string>& args, const
 	m_ElevationOfRefHeight = IfcLengthMeasure::createObjectFromStepData( args[9] );
 	m_ElevationOfTerrain = IfcLengthMeasure::createObjectFromStepData( args[10] );
 	readEntityReference( args[11], m_BuildingAddress, map );
+}
+void IfcBuilding::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSpatialStructureElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ElevationOfRefHeight", m_ElevationOfRefHeight ) );
+	vec_attributes.push_back( std::make_pair( "ElevationOfTerrain", m_ElevationOfTerrain ) );
+	vec_attributes.push_back( std::make_pair( "BuildingAddress", m_BuildingAddress ) );
+}
+void IfcBuilding::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBuilding::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

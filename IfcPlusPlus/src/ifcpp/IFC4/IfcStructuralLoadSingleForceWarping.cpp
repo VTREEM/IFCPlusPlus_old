@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -78,6 +79,14 @@ void IfcStructuralLoadSingleForceWarping::readStepArguments( const std::vector<s
 	m_MomentY = IfcTorqueMeasure::createObjectFromStepData( args[5] );
 	m_MomentZ = IfcTorqueMeasure::createObjectFromStepData( args[6] );
 	m_WarpingMoment = IfcWarpingMomentMeasure::createObjectFromStepData( args[7] );
+}
+void IfcStructuralLoadSingleForceWarping::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadSingleForce::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "WarpingMoment", m_WarpingMoment ) );
+}
+void IfcStructuralLoadSingleForceWarping::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadSingleForceWarping::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

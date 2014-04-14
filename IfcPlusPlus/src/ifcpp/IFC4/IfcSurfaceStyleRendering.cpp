@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -83,6 +84,21 @@ void IfcSurfaceStyleRendering::readStepArguments( const std::vector<std::string>
 	m_SpecularColour = IfcColourOrFactor::createObjectFromStepData( args[6], map );
 	m_SpecularHighlight = IfcSpecularHighlightSelect::createObjectFromStepData( args[7], map );
 	m_ReflectanceMethod = IfcReflectanceMethodEnum::createObjectFromStepData( args[8] );
+}
+void IfcSurfaceStyleRendering::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSurfaceStyleShading::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Transparency", m_Transparency ) );
+	vec_attributes.push_back( std::make_pair( "DiffuseColour", m_DiffuseColour ) );
+	vec_attributes.push_back( std::make_pair( "TransmissionColour", m_TransmissionColour ) );
+	vec_attributes.push_back( std::make_pair( "DiffuseTransmissionColour", m_DiffuseTransmissionColour ) );
+	vec_attributes.push_back( std::make_pair( "ReflectionColour", m_ReflectionColour ) );
+	vec_attributes.push_back( std::make_pair( "SpecularColour", m_SpecularColour ) );
+	vec_attributes.push_back( std::make_pair( "SpecularHighlight", m_SpecularHighlight ) );
+	vec_attributes.push_back( std::make_pair( "ReflectanceMethod", m_ReflectanceMethod ) );
+}
+void IfcSurfaceStyleRendering::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSurfaceStyleRendering::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

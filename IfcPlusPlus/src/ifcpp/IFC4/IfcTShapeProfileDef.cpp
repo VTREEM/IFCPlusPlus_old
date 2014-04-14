@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -98,6 +99,22 @@ void IfcTShapeProfileDef::readStepArguments( const std::vector<std::string>& arg
 	m_WebEdgeRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[9] );
 	m_WebSlope = IfcPlaneAngleMeasure::createObjectFromStepData( args[10] );
 	m_FlangeSlope = IfcPlaneAngleMeasure::createObjectFromStepData( args[11] );
+}
+void IfcTShapeProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcParameterizedProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Depth", m_Depth ) );
+	vec_attributes.push_back( std::make_pair( "FlangeWidth", m_FlangeWidth ) );
+	vec_attributes.push_back( std::make_pair( "WebThickness", m_WebThickness ) );
+	vec_attributes.push_back( std::make_pair( "FlangeThickness", m_FlangeThickness ) );
+	vec_attributes.push_back( std::make_pair( "FilletRadius", m_FilletRadius ) );
+	vec_attributes.push_back( std::make_pair( "FlangeEdgeRadius", m_FlangeEdgeRadius ) );
+	vec_attributes.push_back( std::make_pair( "WebEdgeRadius", m_WebEdgeRadius ) );
+	vec_attributes.push_back( std::make_pair( "WebSlope", m_WebSlope ) );
+	vec_attributes.push_back( std::make_pair( "FlangeSlope", m_FlangeSlope ) );
+}
+void IfcTShapeProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTShapeProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

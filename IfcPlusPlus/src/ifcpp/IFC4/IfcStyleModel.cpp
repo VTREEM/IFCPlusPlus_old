@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -64,6 +65,13 @@ void IfcStyleModel::readStepArguments( const std::vector<std::string>& args, con
 	m_RepresentationIdentifier = IfcLabel::createObjectFromStepData( args[1] );
 	m_RepresentationType = IfcLabel::createObjectFromStepData( args[2] );
 	readEntityReferenceList( args[3], m_Items, map );
+}
+void IfcStyleModel::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRepresentation::getAttributes( vec_attributes );
+}
+void IfcStyleModel::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStyleModel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

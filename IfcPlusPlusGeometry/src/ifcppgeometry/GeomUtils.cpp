@@ -150,6 +150,41 @@ void GeomUtils::cullFrontBack( bool front, bool back, osg::StateSet* stateset )
 	}
 }
 
+void GeomUtils::setMaterialTransparent( osg::Node* node, float transparency )
+{
+	osg::StateSet* stateset = node->getStateSet();
+	if( stateset )
+	{
+		osg::ref_ptr<osg::Material> mat = dynamic_cast<osg::Material*>( stateset->getAttribute( osg::StateAttribute::MATERIAL ));
+		if( mat )
+		{
+			mat->setTransparency( osg::Material::FRONT_AND_BACK, transparency );
+			
+			const osg::Vec4& ambient = mat->getAmbient( osg::Material::FRONT );
+			mat->setAmbient( osg::Material::FRONT, osg::Vec4( ambient.r(), ambient.g(), ambient.b(), transparency ) );
+
+			const osg::Vec4& diffuse = mat->getDiffuse( osg::Material::FRONT );
+			mat->setDiffuse( osg::Material::FRONT, osg::Vec4( diffuse.r(), diffuse.g(), diffuse.b(), transparency ) );
+
+			//const osg::Vec4& specular = mat->getSpecular( osg::Material::FRONT );
+			//mat->setSpecular( osg::Material::FRONT, osg::Vec4( specular.r(), specular.g(), specular.b(), transparency ) );
+
+			//mat->setShininess( osg::Material::FRONT, 64.f );
+			//mat->setColorMode( osg::Material::SPECULAR );
+		}
+	}
+	osg::Group* group = dynamic_cast<osg::Group*>( node );
+	if( group )
+	{
+		for( unsigned int ii=0; ii<group->getNumChildren(); ++ii )
+		{
+			osg::Node* child_node = group->getChild( ii );
+			setMaterialTransparent( child_node, transparency );
+		}
+	}
+}
+
+
 //#define COORDINATE_AXES_NO_COLORS
 
 osg::ref_ptr<osg::Geode> GeomUtils::createCoordinateAxes()
@@ -300,6 +335,15 @@ osg::ref_ptr<osg::Group> GeomUtils::createCoordinateAxesArrows()
 		geode->addDrawable(cyl_drawable);
 		mt1->addChild(geode);
 		group->addChild( mt1 );
+
+		osg::Material* material = new osg::Material();
+		material->setAmbient( osg::Material::FRONT, osg::Vec4f( 0.7f, 0.f, 0.f, 0.7f ) );
+		material->setDiffuse( osg::Material::FRONT, osg::Vec4f( 0.7f, 0.f, 0.f, 0.7f ) );
+		material->setSpecular( osg::Material::FRONT, osg::Vec4f( 1.f, 0.4f, 0.4f, 0.7f ) );
+		material->setShininess( osg::Material::FRONT, 30.0 );
+		cone_drawable->getOrCreateStateSet()->setAttribute( material, osg::StateAttribute::ON );
+		cyl_drawable->getOrCreateStateSet()->setAttribute( material, osg::StateAttribute::ON );
+
 	}
 
 	{
@@ -310,6 +354,7 @@ osg::ref_ptr<osg::Group> GeomUtils::createCoordinateAxesArrows()
 		osg::ref_ptr<osg::ShapeDrawable> cyl_drawable = new osg::ShapeDrawable( new osg::Cylinder( osg::Vec3f( 0.f, 0.f, cone_base*0.5 ), cone_radius*0.2, cone_base ) );
 		cone_drawable->setColor( osg::Vec4f(0.f, 0.7f, 0.f, 0.7f) );
 		cyl_drawable->setColor( osg::Vec4f(0.f, 0.7f, 0.f, 0.7f) );
+
 		
 		osg::ref_ptr<osg::MatrixTransform> mt1 = new osg::MatrixTransform( osg::Matrix::rotate( -M_PI_2, osg::Vec3d(1,0,0) )*osg::Matrix::translate(0, 1, 0) );
 		osg::ref_ptr<osg::MatrixTransform> mt2 = new osg::MatrixTransform( osg::Matrix::rotate( -M_PI_2, osg::Vec3d(1,0,0) )*osg::Matrix::translate(0, 1+cone_height, 0) );
@@ -326,6 +371,14 @@ osg::ref_ptr<osg::Group> GeomUtils::createCoordinateAxesArrows()
 		group->addChild( mt1 );
 		group->addChild( mt2 );
 		group->addChild( mt_cyl );
+
+		osg::Material* material = new osg::Material();
+		material->setAmbient( osg::Material::FRONT, osg::Vec4f( 0.0f, 0.7f, 0.f, 0.7f ) );
+		material->setDiffuse( osg::Material::FRONT, osg::Vec4f( 0.0f, 0.7f, 0.f, 0.7f ) );
+		material->setSpecular( osg::Material::FRONT, osg::Vec4f( 0.4f, 1.f, 0.4f, 0.7f ) );
+		material->setShininess( osg::Material::FRONT, 30.0 );
+		cone_drawable->getOrCreateStateSet()->setAttribute( material, osg::StateAttribute::ON );
+		cyl_drawable->getOrCreateStateSet()->setAttribute( material, osg::StateAttribute::ON );
 	}
 
 	{
@@ -350,6 +403,14 @@ osg::ref_ptr<osg::Group> GeomUtils::createCoordinateAxesArrows()
 		group->addChild( mt2 );
 		group->addChild( mt3 );
 		group->addChild( geode_cyl );
+
+		osg::Material* material = new osg::Material();
+		material->setAmbient( osg::Material::FRONT, osg::Vec4f( 0.f, 0.f, 0.8f, 0.7f ) );
+		material->setDiffuse( osg::Material::FRONT, osg::Vec4f( 0.f, 0.f, 0.8f, 0.7f ) );
+		material->setSpecular( osg::Material::FRONT, osg::Vec4f( 0.4f, 0.4f, 1.f, 0.7f ) );
+		material->setShininess( osg::Material::FRONT, 30.0 );
+		cone_drawable->getOrCreateStateSet()->setAttribute( material, osg::StateAttribute::ON );
+		cyl_drawable->getOrCreateStateSet()->setAttribute( material, osg::StateAttribute::ON );
 	}
 
 	//group->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::ON );	
@@ -1187,42 +1248,17 @@ void GeomUtils::appendPointsToCurve( const std::vector<carve::geom::vector<3> >&
 }
 
 
-void GeomUtils::makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m )
+void GeomUtils::makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& resulting_matrix )
 {
-	carve::geom::vector<3> f(center-eye);
-    f.normalize();
-    carve::geom::vector<3> s = cross(f,up);
-    s.normalize();
-    carve::geom::vector<3> u = cross(s, f);
-    u.normalize();
+	carve::geom::vector<3> zaxis = (center - eye).normalize();
+	carve::geom::vector<3> xaxis = cross(up, zaxis).normalize();
+	carve::geom::vector<3> yaxis = cross(zaxis, xaxis);
 
-	m._11 = s[0];
-	m._12 = u[0];
-	m._13 = -f[0];
-	m._14 = 0.0;
-	m._21 = s[1];
-	m._22 = u[1];
-	m._23 = -f[1];
-	m._24 = 0.0;
-	m._31 = s[2];
-	m._32 = u[2];
-	m._33 = -f[2];
-	m._34 = 0.0;
-	m._41 = 0.0;
-	m._42 = 0.0;
-	m._43 = 0.0;
-	m._44 = 1.0;
-
-	for (unsigned i = 0; i < 3; ++i)
-    {
-        double tmp = -eye[i];
-        if (tmp == 0)
-            continue;
-        m.m[3][0] += tmp*m.m[i][0];
-        m.m[3][1] += tmp*m.m[i][1];
-        m.m[3][2] += tmp*m.m[i][2];
-        m.m[3][3] += tmp*m.m[i][3];
-    }
+	resulting_matrix = carve::math::Matrix(
+		xaxis.x,		yaxis.x,		zaxis.x,	0,//-dot(xaxis, eye), // translate.x,
+		xaxis.y,		yaxis.y,		zaxis.y,	0,//-dot(yaxis, eye), //translate.y,
+		xaxis.z,		yaxis.z,		zaxis.z,	0,//-dot(zaxis, eye), //translate.z,
+		0,				0,				0,			1 );
 }
 
 bool GeomUtils::bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal )
@@ -1286,29 +1322,68 @@ bool GeomUtils::bisectingPlane( const carve::geom::vector<3>& v1, const carve::g
 void GeomUtils::convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 
 						 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix )
 {
-	carve::geom::vector<3> local_x( plane_normal );
-	local_x.normalize();
+	carve::geom::vector<3> local_normal( plane_normal );
+	local_normal.normalize();
 	carve::geom::vector<3> local_z_new( local_z );
+	//local_z_new.normalize();
 
-	carve::geom::vector<3> local_y = cross( local_x, local_z_new );
-	local_z_new = cross( local_y, local_x );
-	local_z_new.normalize();
+	carve::geom::vector<3> local_y = cross( local_normal, local_z_new );
 	local_y.normalize();
+	local_z_new = cross( local_y, local_normal );
+	local_z_new.normalize();
 
-	resulting_matrix._11 = local_x.x;
-	resulting_matrix._12 = local_x.y;
-	resulting_matrix._13 = local_x.z,
-	resulting_matrix._14 = 0;
-	resulting_matrix._21 = local_y.x;
-	resulting_matrix._22 = local_y.y;
-	resulting_matrix._23 =	local_y.z;
-	resulting_matrix._24 =	0;
-	resulting_matrix._31 = local_z_new.x;
-	resulting_matrix._32 = local_z_new.y;
-	resulting_matrix._33 = local_z_new.z;
-	resulting_matrix._34 = 0;
-	resulting_matrix._41 = plane_position.x;
-	resulting_matrix._42 = plane_position.y;
-	resulting_matrix._43 = plane_position.z;
-	resulting_matrix._44 = 1;
+	resulting_matrix = carve::math::Matrix(
+		local_normal.x,		local_y.x,		local_z_new.x,	plane_position.x,
+		local_normal.y,		local_y.y,		local_z_new.y,	plane_position.y,
+		local_normal.z,		local_y.z,		local_z_new.z,	plane_position.z,
+		0,					0,				0,				1 );
+
 }
+
+void GeomUtils::applyTranslate( osg::Group* grp, const osg::Vec3f& trans )
+{
+	int num_children = grp->getNumChildren();
+	for( int i=0; i<num_children; ++i )
+	{
+		osg::Node* node = grp->getChild(i);
+		osg::Group* child_group = dynamic_cast<osg::Group*>(node);
+		if( child_group )
+		{
+			applyTranslate( child_group, trans );
+			continue;
+		}
+		osg::Geode* child_geode = dynamic_cast<osg::Geode*>(node);
+		if( child_geode )
+		{
+			const osg::Geode::DrawableList& drawable_list = child_geode->getDrawableList();
+			for( osg::Geode::DrawableList::const_iterator it_drawables=drawable_list.begin(); it_drawables!=drawable_list.end(); ++it_drawables )
+			{
+				osg::Drawable* drawable = (*it_drawables);
+				osg::Geometry* child_gemetry = dynamic_cast<osg::Geometry*>(drawable);
+				if( !child_gemetry )
+				{
+					std::cout << "!child_gemetry" << std::endl;
+					return;
+				}
+				osg::Array* vertices_array = child_gemetry->getVertexArray();
+				osg::Vec3Array* vertices_float = dynamic_cast<osg::Vec3Array*>(vertices_array);
+
+				if( !vertices_float )
+				{
+					std::cout << "!vertices_float" << std::endl; 
+					return;
+				}
+
+				for( osg::Vec3Array::iterator it_array = vertices_float->begin(); it_array != vertices_float->end(); ++it_array )
+				{
+					osg::Vec3f& vertex = (*it_array);
+					vertex = vertex + trans;
+				}
+				child_gemetry->dirtyBound();
+				child_gemetry->dirtyDisplayList();
+				child_geode->dirtyBound();
+			}
+		}
+	}
+}
+

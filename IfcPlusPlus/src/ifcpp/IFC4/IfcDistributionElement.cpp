@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -100,6 +101,13 @@ void IfcDistributionElement::readStepArguments( const std::vector<std::string>& 
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
+}
+void IfcDistributionElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcElement::getAttributes( vec_attributes );
+}
+void IfcDistributionElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDistributionElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

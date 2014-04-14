@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -57,6 +58,17 @@ void IfcTextureCoordinateGenerator::readStepArguments( const std::vector<std::st
 	readEntityReferenceList( args[0], m_Maps, map );
 	m_Mode = IfcLabel::createObjectFromStepData( args[1] );
 	readTypeOfRealList( args[2], m_Parameter );
+}
+void IfcTextureCoordinateGenerator::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTextureCoordinate::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Mode", m_Mode ) );
+	shared_ptr<IfcPPAttributeObjectVector> Parameter_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Parameter.begin(), m_Parameter.end(), std::back_inserter( Parameter_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Parameter", Parameter_vec_object ) );
+}
+void IfcTextureCoordinateGenerator::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTextureCoordinateGenerator::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

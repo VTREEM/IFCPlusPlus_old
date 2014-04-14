@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -76,6 +77,16 @@ void IfcRelConnectsPorts::readStepArguments( const std::vector<std::string>& arg
 	readEntityReference( args[4], m_RelatingPort, map );
 	readEntityReference( args[5], m_RelatedPort, map );
 	readEntityReference( args[6], m_RealizingElement, map );
+}
+void IfcRelConnectsPorts::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingPort", m_RelatingPort ) );
+	vec_attributes.push_back( std::make_pair( "RelatedPort", m_RelatedPort ) );
+	vec_attributes.push_back( std::make_pair( "RealizingElement", m_RealizingElement ) );
+}
+void IfcRelConnectsPorts::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelConnectsPorts::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -87,6 +88,16 @@ void IfcPixelTexture::readStepArguments( const std::vector<std::string>& args, c
 	m_Height = IfcInteger::createObjectFromStepData( args[6] );
 	m_ColourComponents = IfcInteger::createObjectFromStepData( args[7] );
 	readConstCharList( args[8], m_Pixel );
+}
+void IfcPixelTexture::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSurfaceTexture::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Width", m_Width ) );
+	vec_attributes.push_back( std::make_pair( "Height", m_Height ) );
+	vec_attributes.push_back( std::make_pair( "ColourComponents", m_ColourComponents ) );
+}
+void IfcPixelTexture::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPixelTexture::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

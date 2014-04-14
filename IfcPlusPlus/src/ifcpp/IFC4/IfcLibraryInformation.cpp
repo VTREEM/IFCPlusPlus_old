@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -73,6 +74,19 @@ void IfcLibraryInformation::readStepArguments( const std::vector<std::string>& a
 	m_VersionDate = IfcDateTime::createObjectFromStepData( args[3] );
 	m_Location = IfcURIReference::createObjectFromStepData( args[4] );
 	m_Description = IfcText::createObjectFromStepData( args[5] );
+}
+void IfcLibraryInformation::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalInformation::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Version", m_Version ) );
+	vec_attributes.push_back( std::make_pair( "Publisher", m_Publisher ) );
+	vec_attributes.push_back( std::make_pair( "VersionDate", m_VersionDate ) );
+	vec_attributes.push_back( std::make_pair( "Location", m_Location ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+}
+void IfcLibraryInformation::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLibraryInformation::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

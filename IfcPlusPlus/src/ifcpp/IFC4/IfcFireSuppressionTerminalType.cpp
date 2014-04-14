@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -97,6 +98,14 @@ void IfcFireSuppressionTerminalType::readStepArguments( const std::vector<std::s
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcFireSuppressionTerminalTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcFireSuppressionTerminalType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowTerminalType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcFireSuppressionTerminalType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFireSuppressionTerminalType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

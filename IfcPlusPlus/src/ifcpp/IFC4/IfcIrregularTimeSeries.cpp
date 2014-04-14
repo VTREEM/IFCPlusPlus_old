@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -86,6 +87,13 @@ void IfcIrregularTimeSeries::readStepArguments( const std::vector<std::string>& 
 	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[6] );
 	m_Unit = IfcUnit::createObjectFromStepData( args[7], map );
 	readEntityReferenceList( args[8], m_Values, map );
+}
+void IfcIrregularTimeSeries::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTimeSeries::getAttributes( vec_attributes );
+}
+void IfcIrregularTimeSeries::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcIrregularTimeSeries::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

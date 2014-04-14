@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -102,6 +103,21 @@ void IfcSimplePropertyTemplate::readStepArguments( const std::vector<std::string
 	m_SecondaryUnit = IfcUnit::createObjectFromStepData( args[9], map );
 	m_Expression = IfcLabel::createObjectFromStepData( args[10] );
 	m_AccessState = IfcStateEnum::createObjectFromStepData( args[11] );
+}
+void IfcSimplePropertyTemplate::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPropertyTemplate::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TemplateType", m_TemplateType ) );
+	vec_attributes.push_back( std::make_pair( "PrimaryMeasureType", m_PrimaryMeasureType ) );
+	vec_attributes.push_back( std::make_pair( "SecondaryMeasureType", m_SecondaryMeasureType ) );
+	vec_attributes.push_back( std::make_pair( "Enumerators", m_Enumerators ) );
+	vec_attributes.push_back( std::make_pair( "PrimaryUnit", m_PrimaryUnit ) );
+	vec_attributes.push_back( std::make_pair( "SecondaryUnit", m_SecondaryUnit ) );
+	vec_attributes.push_back( std::make_pair( "Expression", m_Expression ) );
+	vec_attributes.push_back( std::make_pair( "AccessState", m_AccessState ) );
+}
+void IfcSimplePropertyTemplate::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSimplePropertyTemplate::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

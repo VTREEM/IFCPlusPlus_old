@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -96,6 +97,17 @@ void IfcMetric::readStepArguments( const std::vector<std::string>& args, const s
 	m_ValueSource = IfcLabel::createObjectFromStepData( args[8] );
 	m_DataValue = IfcMetricValueSelect::createObjectFromStepData( args[9], map );
 	readEntityReference( args[10], m_ReferencePath, map );
+}
+void IfcMetric::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConstraint::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Benchmark", m_Benchmark ) );
+	vec_attributes.push_back( std::make_pair( "ValueSource", m_ValueSource ) );
+	vec_attributes.push_back( std::make_pair( "DataValue", m_DataValue ) );
+	vec_attributes.push_back( std::make_pair( "ReferencePath", m_ReferencePath ) );
+}
+void IfcMetric::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMetric::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

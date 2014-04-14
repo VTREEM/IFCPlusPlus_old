@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -76,6 +77,14 @@ void IfcReinforcementDefinitionProperties::readStepArguments( const std::vector<
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	m_DefinitionType = IfcLabel::createObjectFromStepData( args[4] );
 	readEntityReferenceList( args[5], m_ReinforcementSectionDefinitions, map );
+}
+void IfcReinforcementDefinitionProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedPropertySet::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "DefinitionType", m_DefinitionType ) );
+}
+void IfcReinforcementDefinitionProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcReinforcementDefinitionProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -65,6 +66,15 @@ void IfcPolygonalBoundedHalfSpace::readStepArguments( const std::vector<std::str
 	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_AgreementFlag = true; }
 	readEntityReference( args[2], m_Position, map );
 	readEntityReference( args[3], m_PolygonalBoundary, map );
+}
+void IfcPolygonalBoundedHalfSpace::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcHalfSpaceSolid::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Position", m_Position ) );
+	vec_attributes.push_back( std::make_pair( "PolygonalBoundary", m_PolygonalBoundary ) );
+}
+void IfcPolygonalBoundedHalfSpace::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPolygonalBoundedHalfSpace::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

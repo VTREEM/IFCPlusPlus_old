@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -59,6 +60,14 @@ void IfcSurfaceOfRevolution::readStepArguments( const std::vector<std::string>& 
 	readEntityReference( args[0], m_SweptCurve, map );
 	readEntityReference( args[1], m_Position, map );
 	readEntityReference( args[2], m_AxisPosition, map );
+}
+void IfcSurfaceOfRevolution::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSweptSurface::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "AxisPosition", m_AxisPosition ) );
+}
+void IfcSurfaceOfRevolution::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSurfaceOfRevolution::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

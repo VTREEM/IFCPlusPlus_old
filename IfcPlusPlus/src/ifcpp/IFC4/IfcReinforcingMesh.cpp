@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -142,6 +143,22 @@ void IfcReinforcingMesh::readStepArguments( const std::vector<std::string>& args
 	m_LongitudinalBarSpacing = IfcPositiveLengthMeasure::createObjectFromStepData( args[15] );
 	m_TransverseBarSpacing = IfcPositiveLengthMeasure::createObjectFromStepData( args[16] );
 	m_PredefinedType = IfcReinforcingMeshTypeEnum::createObjectFromStepData( args[17] );
+}
+void IfcReinforcingMesh::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcReinforcingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "MeshLength", m_MeshLength ) );
+	vec_attributes.push_back( std::make_pair( "MeshWidth", m_MeshWidth ) );
+	vec_attributes.push_back( std::make_pair( "LongitudinalBarNominalDiameter", m_LongitudinalBarNominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "TransverseBarNominalDiameter", m_TransverseBarNominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "LongitudinalBarCrossSectionArea", m_LongitudinalBarCrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "TransverseBarCrossSectionArea", m_TransverseBarCrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "LongitudinalBarSpacing", m_LongitudinalBarSpacing ) );
+	vec_attributes.push_back( std::make_pair( "TransverseBarSpacing", m_TransverseBarSpacing ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcReinforcingMesh::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcReinforcingMesh::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -124,6 +125,18 @@ void IfcStairFlight::readStepArguments( const std::vector<std::string>& args, co
 	m_RiserHeight = IfcPositiveLengthMeasure::createObjectFromStepData( args[10] );
 	m_TreadLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[11] );
 	m_PredefinedType = IfcStairFlightTypeEnum::createObjectFromStepData( args[12] );
+}
+void IfcStairFlight::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "NumberOfRiser", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_NumberOfRiser ) ) ) );
+	vec_attributes.push_back( std::make_pair( "NumberOfTreads", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_NumberOfTreads ) ) ) );
+	vec_attributes.push_back( std::make_pair( "RiserHeight", m_RiserHeight ) );
+	vec_attributes.push_back( std::make_pair( "TreadLength", m_TreadLength ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcStairFlight::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStairFlight::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

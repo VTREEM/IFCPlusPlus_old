@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -74,6 +75,20 @@ void IfcTextStyleTextModel::readStepArguments( const std::vector<std::string>& a
 	m_WordSpacing = IfcSizeSelect::createObjectFromStepData( args[4], map );
 	m_TextTransform = IfcTextTransformation::createObjectFromStepData( args[5] );
 	m_LineHeight = IfcSizeSelect::createObjectFromStepData( args[6], map );
+}
+void IfcTextStyleTextModel::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TextIndent", m_TextIndent ) );
+	vec_attributes.push_back( std::make_pair( "TextAlign", m_TextAlign ) );
+	vec_attributes.push_back( std::make_pair( "TextDecoration", m_TextDecoration ) );
+	vec_attributes.push_back( std::make_pair( "LetterSpacing", m_LetterSpacing ) );
+	vec_attributes.push_back( std::make_pair( "WordSpacing", m_WordSpacing ) );
+	vec_attributes.push_back( std::make_pair( "TextTransform", m_TextTransform ) );
+	vec_attributes.push_back( std::make_pair( "LineHeight", m_LineHeight ) );
+}
+void IfcTextStyleTextModel::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTextStyleTextModel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

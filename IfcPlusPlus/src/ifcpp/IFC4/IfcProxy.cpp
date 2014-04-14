@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -94,6 +95,15 @@ void IfcProxy::readStepArguments( const std::vector<std::string>& args, const st
 	readEntityReference( args[6], m_Representation, map );
 	m_ProxyType = IfcObjectTypeEnum::createObjectFromStepData( args[7] );
 	m_Tag = IfcLabel::createObjectFromStepData( args[8] );
+}
+void IfcProxy::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProduct::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ProxyType", m_ProxyType ) );
+	vec_attributes.push_back( std::make_pair( "Tag", m_Tag ) );
+}
+void IfcProxy::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcProxy::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

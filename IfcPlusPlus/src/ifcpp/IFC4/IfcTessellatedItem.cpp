@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -39,6 +40,13 @@ void IfcTessellatedItem::getStepLine( std::stringstream& stream ) const
 }
 void IfcTessellatedItem::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcTessellatedItem::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcTessellatedItem::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+}
+void IfcTessellatedItem::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcTessellatedItem::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

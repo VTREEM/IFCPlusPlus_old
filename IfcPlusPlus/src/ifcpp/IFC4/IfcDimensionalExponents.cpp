@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -77,6 +78,19 @@ void IfcDimensionalExponents::readStepArguments( const std::vector<std::string>&
 	readIntValue( args[4], m_ThermodynamicTemperatureExponent );
 	readIntValue( args[5], m_AmountOfSubstanceExponent );
 	readIntValue( args[6], m_LuminousIntensityExponent );
+}
+void IfcDimensionalExponents::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "LengthExponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_LengthExponent ) ) ) );
+	vec_attributes.push_back( std::make_pair( "MassExponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_MassExponent ) ) ) );
+	vec_attributes.push_back( std::make_pair( "TimeExponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_TimeExponent ) ) ) );
+	vec_attributes.push_back( std::make_pair( "ElectricCurrentExponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_ElectricCurrentExponent ) ) ) );
+	vec_attributes.push_back( std::make_pair( "ThermodynamicTemperatureExponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_ThermodynamicTemperatureExponent ) ) ) );
+	vec_attributes.push_back( std::make_pair( "AmountOfSubstanceExponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_AmountOfSubstanceExponent ) ) ) );
+	vec_attributes.push_back( std::make_pair( "LuminousIntensityExponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_LuminousIntensityExponent ) ) ) );
+}
+void IfcDimensionalExponents::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDimensionalExponents::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

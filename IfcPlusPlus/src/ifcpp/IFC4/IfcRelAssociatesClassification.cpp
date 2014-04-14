@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -74,6 +75,14 @@ void IfcRelAssociatesClassification::readStepArguments( const std::vector<std::s
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readSelectList( args[4], m_RelatedObjects, map );
 	m_RelatingClassification = IfcClassificationSelect::createObjectFromStepData( args[5], map );
+}
+void IfcRelAssociatesClassification::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelAssociates::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingClassification", m_RelatingClassification ) );
+}
+void IfcRelAssociatesClassification::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelAssociatesClassification::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

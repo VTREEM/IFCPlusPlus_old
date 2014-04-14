@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -61,6 +62,16 @@ void IfcApplication::readStepArguments( const std::vector<std::string>& args, co
 	m_Version = IfcLabel::createObjectFromStepData( args[1] );
 	m_ApplicationFullName = IfcLabel::createObjectFromStepData( args[2] );
 	m_ApplicationIdentifier = IfcIdentifier::createObjectFromStepData( args[3] );
+}
+void IfcApplication::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "ApplicationDeveloper", m_ApplicationDeveloper ) );
+	vec_attributes.push_back( std::make_pair( "Version", m_Version ) );
+	vec_attributes.push_back( std::make_pair( "ApplicationFullName", m_ApplicationFullName ) );
+	vec_attributes.push_back( std::make_pair( "ApplicationIdentifier", m_ApplicationIdentifier ) );
+}
+void IfcApplication::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcApplication::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

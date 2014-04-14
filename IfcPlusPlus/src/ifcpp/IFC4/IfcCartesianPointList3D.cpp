@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,6 +50,13 @@ void IfcCartesianPointList3D::readStepArguments( const std::vector<std::string>&
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcCartesianPointList3D, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readTypeOfRealList2D( args[0], m_CoordList );
+}
+void IfcCartesianPointList3D::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCartesianPointList::getAttributes( vec_attributes );
+}
+void IfcCartesianPointList3D::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCartesianPointList3D::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

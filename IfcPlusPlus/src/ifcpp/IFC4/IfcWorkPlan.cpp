@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -116,6 +117,14 @@ void IfcWorkPlan::readStepArguments( const std::vector<std::string>& args, const
 	m_StartTime = IfcDateTime::createObjectFromStepData( args[11] );
 	m_FinishTime = IfcDateTime::createObjectFromStepData( args[12] );
 	m_PredefinedType = IfcWorkPlanTypeEnum::createObjectFromStepData( args[13] );
+}
+void IfcWorkPlan::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcWorkControl::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcWorkPlan::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWorkPlan::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

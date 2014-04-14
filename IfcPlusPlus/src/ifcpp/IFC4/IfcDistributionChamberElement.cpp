@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -106,6 +107,14 @@ void IfcDistributionChamberElement::readStepArguments( const std::vector<std::st
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcDistributionChamberElementTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcDistributionChamberElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDistributionFlowElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcDistributionChamberElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDistributionChamberElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -58,6 +59,13 @@ void IfcExternallyDefinedHatchStyle::readStepArguments( const std::vector<std::s
 	m_Location = IfcURIReference::createObjectFromStepData( args[0] );
 	m_Identification = IfcIdentifier::createObjectFromStepData( args[1] );
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+}
+void IfcExternallyDefinedHatchStyle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalReference::getAttributes( vec_attributes );
+}
+void IfcExternallyDefinedHatchStyle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcExternallyDefinedHatchStyle::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -80,6 +81,21 @@ void IfcMaterialLayer::readStepArguments( const std::vector<std::string>& args, 
 	m_Description = IfcText::createObjectFromStepData( args[4] );
 	m_Category = IfcLabel::createObjectFromStepData( args[5] );
 	m_Priority = IfcNormalisedRatioMeasure::createObjectFromStepData( args[6] );
+}
+void IfcMaterialLayer::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcMaterialDefinition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Material", m_Material ) );
+	vec_attributes.push_back( std::make_pair( "LayerThickness", m_LayerThickness ) );
+	vec_attributes.push_back( std::make_pair( "IsVentilated", m_IsVentilated ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "Category", m_Category ) );
+	vec_attributes.push_back( std::make_pair( "Priority", m_Priority ) );
+}
+void IfcMaterialLayer::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "ToMaterialLayerSet_inverse", shared_ptr<IfcPPEntity>( m_ToMaterialLayerSet_inverse ) ) );
 }
 void IfcMaterialLayer::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -87,6 +88,18 @@ void IfcRelInterferesElements::readStepArguments( const std::vector<std::string>
 	m_InterferenceType = IfcIdentifier::createObjectFromStepData( args[7] );
 	if( _stricmp( args[8].c_str(), ".F." ) == 0 ) { m_ImpliedOrder = false; }
 	else if( _stricmp( args[8].c_str(), ".T." ) == 0 ) { m_ImpliedOrder = true; }
+}
+void IfcRelInterferesElements::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingElement", m_RelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "RelatedElement", m_RelatedElement ) );
+	vec_attributes.push_back( std::make_pair( "InterferenceGeometry", m_InterferenceGeometry ) );
+	vec_attributes.push_back( std::make_pair( "InterferenceType", m_InterferenceType ) );
+	vec_attributes.push_back( std::make_pair( "ImpliedOrder", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ImpliedOrder ) ) ) );
+}
+void IfcRelInterferesElements::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelInterferesElements::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

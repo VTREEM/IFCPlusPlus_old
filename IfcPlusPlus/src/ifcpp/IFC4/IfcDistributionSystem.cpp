@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -85,6 +86,15 @@ void IfcDistributionSystem::readStepArguments( const std::vector<std::string>& a
 	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
 	m_LongName = IfcLabel::createObjectFromStepData( args[5] );
 	m_PredefinedType = IfcDistributionSystemEnum::createObjectFromStepData( args[6] );
+}
+void IfcDistributionSystem::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSystem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LongName", m_LongName ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcDistributionSystem::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDistributionSystem::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

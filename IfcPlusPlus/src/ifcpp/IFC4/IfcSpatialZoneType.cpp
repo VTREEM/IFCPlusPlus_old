@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -101,6 +102,15 @@ void IfcSpatialZoneType::readStepArguments( const std::vector<std::string>& args
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcSpatialZoneTypeEnum::createObjectFromStepData( args[9] );
 	m_LongName = IfcLabel::createObjectFromStepData( args[10] );
+}
+void IfcSpatialZoneType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSpatialElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "LongName", m_LongName ) );
+}
+void IfcSpatialZoneType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSpatialZoneType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

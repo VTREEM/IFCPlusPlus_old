@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -51,6 +52,15 @@ void IfcConnectionCurveGeometry::readStepArguments( const std::vector<std::strin
 	#endif
 	m_CurveOnRelatingElement = IfcCurveOrEdgeCurve::createObjectFromStepData( args[0], map );
 	m_CurveOnRelatedElement = IfcCurveOrEdgeCurve::createObjectFromStepData( args[1], map );
+}
+void IfcConnectionCurveGeometry::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConnectionGeometry::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "CurveOnRelatingElement", m_CurveOnRelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "CurveOnRelatedElement", m_CurveOnRelatedElement ) );
+}
+void IfcConnectionCurveGeometry::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConnectionCurveGeometry::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

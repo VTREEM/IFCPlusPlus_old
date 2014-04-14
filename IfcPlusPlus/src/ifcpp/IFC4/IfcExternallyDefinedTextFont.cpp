@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -58,6 +59,13 @@ void IfcExternallyDefinedTextFont::readStepArguments( const std::vector<std::str
 	m_Location = IfcURIReference::createObjectFromStepData( args[0] );
 	m_Identification = IfcIdentifier::createObjectFromStepData( args[1] );
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+}
+void IfcExternallyDefinedTextFont::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalReference::getAttributes( vec_attributes );
+}
+void IfcExternallyDefinedTextFont::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcExternallyDefinedTextFont::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -73,6 +74,19 @@ void IfcStructuralLoadSingleForce::readStepArguments( const std::vector<std::str
 	m_MomentX = IfcTorqueMeasure::createObjectFromStepData( args[4] );
 	m_MomentY = IfcTorqueMeasure::createObjectFromStepData( args[5] );
 	m_MomentZ = IfcTorqueMeasure::createObjectFromStepData( args[6] );
+}
+void IfcStructuralLoadSingleForce::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadStatic::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ForceX", m_ForceX ) );
+	vec_attributes.push_back( std::make_pair( "ForceY", m_ForceY ) );
+	vec_attributes.push_back( std::make_pair( "ForceZ", m_ForceZ ) );
+	vec_attributes.push_back( std::make_pair( "MomentX", m_MomentX ) );
+	vec_attributes.push_back( std::make_pair( "MomentY", m_MomentY ) );
+	vec_attributes.push_back( std::make_pair( "MomentZ", m_MomentZ ) );
+}
+void IfcStructuralLoadSingleForce::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadSingleForce::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

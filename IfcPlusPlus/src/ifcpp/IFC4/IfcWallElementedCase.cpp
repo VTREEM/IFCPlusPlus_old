@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -105,6 +106,13 @@ void IfcWallElementedCase::readStepArguments( const std::vector<std::string>& ar
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcWallTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcWallElementedCase::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcWall::getAttributes( vec_attributes );
+}
+void IfcWallElementedCase::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWallElementedCase::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

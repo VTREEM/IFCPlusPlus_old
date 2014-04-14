@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -76,6 +77,15 @@ void IfcRelAssociatesConstraint::readStepArguments( const std::vector<std::strin
 	readSelectList( args[4], m_RelatedObjects, map );
 	m_Intent = IfcLabel::createObjectFromStepData( args[5] );
 	readEntityReference( args[6], m_RelatingConstraint, map );
+}
+void IfcRelAssociatesConstraint::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelAssociates::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Intent", m_Intent ) );
+	vec_attributes.push_back( std::make_pair( "RelatingConstraint", m_RelatingConstraint ) );
+}
+void IfcRelAssociatesConstraint::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelAssociatesConstraint::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

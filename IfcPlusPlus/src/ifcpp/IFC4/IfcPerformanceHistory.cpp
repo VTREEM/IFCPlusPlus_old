@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -89,6 +90,15 @@ void IfcPerformanceHistory::readStepArguments( const std::vector<std::string>& a
 	m_Identification = IfcIdentifier::createObjectFromStepData( args[5] );
 	m_LifeCyclePhase = IfcLabel::createObjectFromStepData( args[6] );
 	m_PredefinedType = IfcPerformanceHistoryTypeEnum::createObjectFromStepData( args[7] );
+}
+void IfcPerformanceHistory::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcControl::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LifeCyclePhase", m_LifeCyclePhase ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcPerformanceHistory::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPerformanceHistory::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

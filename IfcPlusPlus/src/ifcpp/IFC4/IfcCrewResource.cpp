@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -104,6 +105,14 @@ void IfcCrewResource::readStepArguments( const std::vector<std::string>& args, c
 	readEntityReferenceList( args[8], m_BaseCosts, map );
 	readEntityReference( args[9], m_BaseQuantity, map );
 	m_PredefinedType = IfcCrewResourceTypeEnum::createObjectFromStepData( args[10] );
+}
+void IfcCrewResource::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConstructionResource::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcCrewResource::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCrewResource::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

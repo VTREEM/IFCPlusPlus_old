@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -102,6 +103,14 @@ void IfcStructuralAction::readStepArguments( const std::vector<std::string>& arg
 	m_GlobalOrLocal = IfcGlobalOrLocalEnum::createObjectFromStepData( args[8] );
 	if( _stricmp( args[9].c_str(), ".F." ) == 0 ) { m_DestabilizingLoad = false; }
 	else if( _stricmp( args[9].c_str(), ".T." ) == 0 ) { m_DestabilizingLoad = true; }
+}
+void IfcStructuralAction::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralActivity::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "DestabilizingLoad", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_DestabilizingLoad ) ) ) );
+}
+void IfcStructuralAction::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralAction::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

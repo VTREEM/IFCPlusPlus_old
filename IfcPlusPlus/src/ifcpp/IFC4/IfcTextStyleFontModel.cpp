@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -72,6 +73,20 @@ void IfcTextStyleFontModel::readStepArguments( const std::vector<std::string>& a
 	m_FontVariant = IfcFontVariant::createObjectFromStepData( args[3] );
 	m_FontWeight = IfcFontWeight::createObjectFromStepData( args[4] );
 	m_FontSize = IfcSizeSelect::createObjectFromStepData( args[5], map );
+}
+void IfcTextStyleFontModel::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedTextFont::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> FontFamily_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_FontFamily.begin(), m_FontFamily.end(), std::back_inserter( FontFamily_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "FontFamily", FontFamily_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "FontStyle", m_FontStyle ) );
+	vec_attributes.push_back( std::make_pair( "FontVariant", m_FontVariant ) );
+	vec_attributes.push_back( std::make_pair( "FontWeight", m_FontWeight ) );
+	vec_attributes.push_back( std::make_pair( "FontSize", m_FontSize ) );
+}
+void IfcTextStyleFontModel::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTextStyleFontModel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,14 @@ void IfcCartesianTransformationOperator2DnonUniform::readStepArguments( const st
 	readEntityReference( args[2], m_LocalOrigin, map );
 	readRealValue( args[3], m_Scale );
 	readRealValue( args[4], m_Scale2 );
+}
+void IfcCartesianTransformationOperator2DnonUniform::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCartesianTransformationOperator2D::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Scale2", shared_ptr<IfcPPAttributeObjectDouble>( new  IfcPPAttributeObjectDouble( m_Scale2 ) ) ) );
+}
+void IfcCartesianTransformationOperator2DnonUniform::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCartesianTransformationOperator2DnonUniform::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -18,6 +18,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 #include "ifcpp/model/IfcPPException.h"
 #include "ifcppgeometry/ReaderWriterIFC.h"
+#include "ifcppgeometry/GeomUtils.h"
 
 #include "Command.h"
 #include "IfcPlusPlusSystem.h"
@@ -82,15 +83,24 @@ bool CmdLoadIfcFile::doCmd()
 		{
 			bool optimize = true;
 
-			
 			if( optimize )
 			{
 				osgUtil::Optimizer opt;
 				opt.optimize(group);
 				//opt.optimize( group, osgUtil::Optimizer::INDEX_MESH );
 			}
-			model_group->addChild( group );
 
+			// if model bounding sphere is far from origin, move to origin
+			const osg::BoundingSphere& bsphere = group->getBound();
+			if( bsphere.center().length() > 10000 )
+			{
+				if( bsphere.center().length()/bsphere.radius() > 100 )
+				{
+					GeomUtils::applyTranslate( group, -bsphere.center() );
+				}
+			}
+
+			model_group->addChild( group );
 
 
 			// TODO: handle spaces, terrain, storeys separately. add buttons in gui to show/hide spaces or terrain and to shift storeys

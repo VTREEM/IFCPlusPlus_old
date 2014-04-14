@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -66,6 +67,17 @@ void IfcPropertyListValue::readStepArguments( const std::vector<std::string>& ar
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readSelectList( args[2], m_ListValues, map );
 	m_Unit = IfcUnit::createObjectFromStepData( args[3], map );
+}
+void IfcPropertyListValue::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSimpleProperty::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> ListValues_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_ListValues.begin(), m_ListValues.end(), std::back_inserter( ListValues_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "ListValues", ListValues_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "Unit", m_Unit ) );
+}
+void IfcPropertyListValue::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPropertyListValue::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

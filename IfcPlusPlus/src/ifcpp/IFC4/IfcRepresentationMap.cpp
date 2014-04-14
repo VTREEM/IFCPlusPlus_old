@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -54,6 +55,14 @@ void IfcRepresentationMap::readStepArguments( const std::vector<std::string>& ar
 	#endif
 	m_MappingOrigin = IfcAxis2Placement::createObjectFromStepData( args[0], map );
 	readEntityReference( args[1], m_MappedRepresentation, map );
+}
+void IfcRepresentationMap::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "MappingOrigin", m_MappingOrigin ) );
+	vec_attributes.push_back( std::make_pair( "MappedRepresentation", m_MappedRepresentation ) );
+}
+void IfcRepresentationMap::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRepresentationMap::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

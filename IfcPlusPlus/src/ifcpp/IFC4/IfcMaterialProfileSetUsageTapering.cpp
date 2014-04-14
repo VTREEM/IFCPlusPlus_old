@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -66,6 +67,15 @@ void IfcMaterialProfileSetUsageTapering::readStepArguments( const std::vector<st
 	m_ReferenceExtent = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
 	readEntityReference( args[3], m_ForProfileEndSet, map );
 	m_CardinalEndPoint = IfcCardinalPointReference::createObjectFromStepData( args[4] );
+}
+void IfcMaterialProfileSetUsageTapering::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcMaterialProfileSetUsage::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ForProfileEndSet", m_ForProfileEndSet ) );
+	vec_attributes.push_back( std::make_pair( "CardinalEndPoint", m_CardinalEndPoint ) );
+}
+void IfcMaterialProfileSetUsageTapering::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialProfileSetUsageTapering::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

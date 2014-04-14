@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -65,6 +66,16 @@ void IfcMaterialProfileSet::readStepArguments( const std::vector<std::string>& a
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReferenceList( args[2], m_MaterialProfiles, map );
 	readEntityReference( args[3], m_CompositeProfile, map );
+}
+void IfcMaterialProfileSet::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcMaterialDefinition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "CompositeProfile", m_CompositeProfile ) );
+}
+void IfcMaterialProfileSet::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialProfileSet::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

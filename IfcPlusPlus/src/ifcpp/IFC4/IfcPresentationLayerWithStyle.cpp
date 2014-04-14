@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -85,6 +86,16 @@ void IfcPresentationLayerWithStyle::readStepArguments( const std::vector<std::st
 	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_LayerBlocked = false; }
 	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_LayerBlocked = true; }
 	readEntityReferenceList( args[7], m_LayerStyles, map );
+}
+void IfcPresentationLayerWithStyle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationLayerAssignment::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LayerOn", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_LayerOn ) ) ) );
+	vec_attributes.push_back( std::make_pair( "LayerFrozen", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_LayerFrozen ) ) ) );
+	vec_attributes.push_back( std::make_pair( "LayerBlocked", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_LayerBlocked ) ) ) );
+}
+void IfcPresentationLayerWithStyle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPresentationLayerWithStyle::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

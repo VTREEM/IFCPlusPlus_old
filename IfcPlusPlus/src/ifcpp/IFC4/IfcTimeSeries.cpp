@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -81,6 +82,20 @@ void IfcTimeSeries::readStepArguments( const std::vector<std::string>& args, con
 	m_DataOrigin = IfcDataOriginEnum::createObjectFromStepData( args[5] );
 	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[6] );
 	m_Unit = IfcUnit::createObjectFromStepData( args[7], map );
+}
+void IfcTimeSeries::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "StartTime", m_StartTime ) );
+	vec_attributes.push_back( std::make_pair( "EndTime", m_EndTime ) );
+	vec_attributes.push_back( std::make_pair( "TimeSeriesDataType", m_TimeSeriesDataType ) );
+	vec_attributes.push_back( std::make_pair( "DataOrigin", m_DataOrigin ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedDataOrigin", m_UserDefinedDataOrigin ) );
+	vec_attributes.push_back( std::make_pair( "Unit", m_Unit ) );
+}
+void IfcTimeSeries::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTimeSeries::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

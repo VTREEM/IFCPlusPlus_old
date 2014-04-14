@@ -149,11 +149,11 @@ void tokenizeList( std::string& list_str, std::vector<std::string>& list_items )
 		if( *stream_pos == ',' )
 		{
 			std::string item( last_token, stream_pos-last_token );
-			if( item.at(0) == '\'' && item.at(item.size()-1) == '\'' )
-			{
-				item.erase(item.size()-1);
-				item.erase(0);
-			}
+			//if( item.at(0) == '\'' && item.at(item.size()-1) == '\'' )
+			//{
+			//	item.erase(item.size()-1);
+			//	item.erase(0);
+			//}
 			list_items.push_back( item );
 
 			++stream_pos;
@@ -173,11 +173,11 @@ void tokenizeList( std::string& list_str, std::vector<std::string>& list_items )
 		if( last_token != stream_pos )
 		{
 			std::string item( last_token, stream_pos-last_token );
-			if( item.at(0) == '\'' && item.at(item.size()-1) == '\'' )
-			{
-				item.erase(item.size()-1);
-				item.erase(0);
-			}
+			//if( item.at(0) == '\'' && item.at(item.size()-1) == '\'' )
+			//{
+			//	item.erase(item.size()-1);
+			//	item.erase(0);
+			//}
 			list_items.push_back( item );
 		}
 	}
@@ -669,32 +669,16 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 								}
 							}
 						}
-						else
-							if( *(stream_pos+1) == 'X' )
+						else if( *(stream_pos+1) == 'X' )
 						{
-							//++stream_pos;
 							if( *(stream_pos+2) == '\\' )
 							{
-
 								wchar_t wc = Hex2Wchar(*(stream_pos+3), *(stream_pos+4));
-
-
-
-
-
-
-
-
 								unsigned char char_ascii = wctob(wc);
-								//*stream_pos_new = char_ascii;
-								//++stream_pos_new;
-								arg_str_new+= char_ascii;
+								arg_str_new += char_ascii;
 
 								stream_pos += 4;
 								continue;
-
-
-
 							}
 							else if( *(stream_pos+2) == '0' )
 							{
@@ -717,14 +701,9 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 									do
 									{
 										wchar_t wc = Hex4Wchar(*(stream_pos), *(stream_pos+1), *(stream_pos+2), *(stream_pos+3));
-										
-
 										unsigned char char_ascii = wctob(wc);
-										//*stream_pos_new = char_ascii;
-										//++stream_pos_new;
 										arg_str_new+= char_ascii;
 										stream_pos += 4;
-										
 
 									} while (( *stream_pos != '\0' ) && ( *stream_pos != '\\' ));
 
@@ -732,19 +711,22 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 								}
 							}
 						}
+						else if( *(stream_pos+1) == 'N' )
+						{
+							if( *(stream_pos+2) == '\\' )
+							{
+								arg_str_new += "\n";
+								stream_pos += 3;
+								continue;
+							}
+						}
 					}
 					
-					//*stream_pos_new = *stream_pos;
-					//++stream_pos_new;
 					arg_str_new+= *stream_pos;
 					++stream_pos;
 				}
-
-				//*stream_pos_new = '\0';
 			}
 		}
-
-		//arg_str_new.resize(strlen(arg_str_new.c_str()));
 		argument_str.assign( arg_str_new );
 	}
 }
@@ -792,15 +774,15 @@ void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::
 					++begin_arg; 
 				}
 				char* end_arg = stream_pos-1;
-				if( *begin_arg == '\'' && *end_arg == '\'' )
-				{
-					std::string arg_str( begin_arg+1, end_arg-begin_arg-1 );
-					entity_arguments.push_back( arg_str );
-				}
-				else
-				{
+				//if( *begin_arg == '\'' && *end_arg == '\'' )
+				//{
+				//	std::string arg_str( begin_arg+1, end_arg-begin_arg-1 );
+				//	entity_arguments.push_back( arg_str );
+				//}
+				//else
+				//{
 					entity_arguments.push_back( std::string( begin_arg, end_arg-begin_arg+1 ) );
-				}
+//				}
 				last_token = stream_pos;
 			}
 		}
@@ -826,14 +808,14 @@ void tokenizeEntityArguments( const std::string& argument_str, std::vector<std::
 				if( remaining_size > 0 )
 				{
 					char* end_arg = stream_pos-1;
-					if( *begin_arg == '\'' && *end_arg == '\'' )
-					{
-						entity_arguments.push_back( std::string( begin_arg+1, end_arg-begin_arg-1 ) );
-					}
-					else
-					{
+					//if( *begin_arg == '\'' && *end_arg == '\'' )
+					//{
+					//	entity_arguments.push_back( std::string( begin_arg+1, end_arg-begin_arg-1 ) );
+					//}
+					//else
+					//{
 						entity_arguments.push_back( std::string( begin_arg, end_arg-begin_arg+1 ) );
-					}
+//					}
 				}
 				break;
 			}
@@ -933,14 +915,14 @@ void tokenizeInlineArgument( std::string arg, std::string& keyword, std::string&
 				++inline_argument_begin;
 			}
 			char* end_arg = stream_pos-1;
-			if( *inline_argument_begin == '\'' && *end_arg == '\'' )
-			{
-				inline_argument = std::string( inline_argument_begin+1, end_arg-inline_argument_begin-1 );
-			}
-			else
-			{
+			//if( *inline_argument_begin == '\'' && *end_arg == '\'' )
+			//{
+			//	inline_argument = std::string( inline_argument_begin+1, end_arg-inline_argument_begin-1 );
+			//}
+			//else
+			//{
 				inline_argument = std::string( inline_argument_begin, end_arg-inline_argument_begin+1 );
-			}
+			//}
 			
 			break;
 		}

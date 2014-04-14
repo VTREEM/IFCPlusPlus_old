@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,17 @@ void IfcCurveStyle::readStepArguments( const std::vector<std::string>& args, con
 	m_CurveColour = IfcColour::createObjectFromStepData( args[3], map );
 	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_ModelOrDraughting = false; }
 	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_ModelOrDraughting = true; }
+}
+void IfcCurveStyle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationStyle::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "CurveFont", m_CurveFont ) );
+	vec_attributes.push_back( std::make_pair( "CurveWidth", m_CurveWidth ) );
+	vec_attributes.push_back( std::make_pair( "CurveColour", m_CurveColour ) );
+	vec_attributes.push_back( std::make_pair( "ModelOrDraughting", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ModelOrDraughting ) ) ) );
+}
+void IfcCurveStyle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCurveStyle::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

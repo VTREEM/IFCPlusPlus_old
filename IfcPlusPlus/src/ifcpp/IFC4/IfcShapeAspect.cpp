@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -70,6 +71,16 @@ void IfcShapeAspect::readStepArguments( const std::vector<std::string>& args, co
 	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_ProductDefinitional = false; }
 	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_ProductDefinitional = true; }
 	m_PartOfProductDefinitionShape = IfcProductRepresentationSelect::createObjectFromStepData( args[4], map );
+}
+void IfcShapeAspect::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "ProductDefinitional", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ProductDefinitional ) ) ) );
+	vec_attributes.push_back( std::make_pair( "PartOfProductDefinitionShape", m_PartOfProductDefinitionShape ) );
+}
+void IfcShapeAspect::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcShapeAspect::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

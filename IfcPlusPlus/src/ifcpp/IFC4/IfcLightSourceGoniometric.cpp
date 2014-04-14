@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -92,6 +93,19 @@ void IfcLightSourceGoniometric::readStepArguments( const std::vector<std::string
 	m_LuminousFlux = IfcLuminousFluxMeasure::createObjectFromStepData( args[7] );
 	m_LightEmissionSource = IfcLightEmissionSourceEnum::createObjectFromStepData( args[8] );
 	m_LightDistributionDataSource = IfcLightDistributionDataSourceSelect::createObjectFromStepData( args[9], map );
+}
+void IfcLightSourceGoniometric::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcLightSource::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Position", m_Position ) );
+	vec_attributes.push_back( std::make_pair( "ColourAppearance", m_ColourAppearance ) );
+	vec_attributes.push_back( std::make_pair( "ColourTemperature", m_ColourTemperature ) );
+	vec_attributes.push_back( std::make_pair( "LuminousFlux", m_LuminousFlux ) );
+	vec_attributes.push_back( std::make_pair( "LightEmissionSource", m_LightEmissionSource ) );
+	vec_attributes.push_back( std::make_pair( "LightDistributionDataSource", m_LightDistributionDataSource ) );
+}
+void IfcLightSourceGoniometric::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLightSourceGoniometric::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

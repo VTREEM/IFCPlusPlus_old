@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -135,6 +136,14 @@ void IfcTaskTimeRecurring::readStepArguments( const std::vector<std::string>& ar
 	m_RemainingTime = IfcDuration::createObjectFromStepData( args[18] );
 	m_Completion = IfcPositiveRatioMeasure::createObjectFromStepData( args[19] );
 	readEntityReference( args[20], m_Recurrance, map );
+}
+void IfcTaskTimeRecurring::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTaskTime::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Recurrance", m_Recurrance ) );
+}
+void IfcTaskTimeRecurring::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTaskTimeRecurring::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

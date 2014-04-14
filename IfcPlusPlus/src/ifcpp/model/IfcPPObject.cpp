@@ -55,3 +55,11 @@ void IfcPPEntity::unlinkSelf()
 {
 	throw IfcPPException("IfcPPEntity::unlinkSelf(), this method should be overwritten");
 }
+
+void IfcPPEntity::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+}
+
+void IfcPPEntity::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+}

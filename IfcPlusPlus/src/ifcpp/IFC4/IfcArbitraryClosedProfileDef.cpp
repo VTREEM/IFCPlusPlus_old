@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -59,6 +60,14 @@ void IfcArbitraryClosedProfileDef::readStepArguments( const std::vector<std::str
 	m_ProfileType = IfcProfileTypeEnum::createObjectFromStepData( args[0] );
 	m_ProfileName = IfcLabel::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_OuterCurve, map );
+}
+void IfcArbitraryClosedProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "OuterCurve", m_OuterCurve ) );
+}
+void IfcArbitraryClosedProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcArbitraryClosedProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

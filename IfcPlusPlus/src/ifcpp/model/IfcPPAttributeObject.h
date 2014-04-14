@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "ifcpp/model/shared_ptr.h"
+#include "ifcpp/model/IfcPPObject.h"
 
 //enum IfcPPAttributeType {
 //	IfcPPAttribute_bool,
@@ -18,36 +19,71 @@
 //	IfcPP_cardinality_vec3d
 //};
 
-class IfcPPAttributeObject
+
+class IfcPPAttributeObject : public IfcPPObject
 {
 public:
-	IfcPPAttributeObject( std::string& attribute_name )
+	IfcPPAttributeObject()
 	{
 	}
-
-	std::string m_attribute_name;
-	//IfcPPAttributeType m_type;
-	//IfcPPAttributeCardinality m_cardinality;
+	//IfcPPAttributeObject( std::string& name ) : m_attribute_name( name )
+	//{
+	//}
+	~IfcPPAttributeObject()
+	{
+	}
+	//std::string m_attribute_name;
 };
 
 
-class IfcPPAttributeObjectBool : public IfcPPAttributeObject
+class IfcPPAttributeObjectBool : public IfcPPObject
 {
 public:
-	IfcPPAttributeObjectBool( std::string& attribute_name, bool attribute_value ) : m_attribute_name( attribute_name ), m_value(attribute_value)
-	{
-	}
+	IfcPPAttributeObjectBool( bool attribute_value );
 	bool m_value;
 };
 
-class IfcPPAttributeObjectVector : public IfcPPAttributeObject
+class IfcPPAttributeObjectInt : public IfcPPObject
 {
 public:
-	IfcPPAttributeObjectVector( std::string& attribute_name, bool attribute_value )
-	{
-	}
-
-	std::vector<shared_ptr<IfcPPAttributeObject> > m_vec;
-	
+	IfcPPAttributeObjectInt( int attribute_value );
+	int m_value;
 };
 
+class IfcPPAttributeObjectDouble : public IfcPPObject
+{
+public:
+	IfcPPAttributeObjectDouble( double attribute_value );
+	double m_value;
+};
+
+class IfcPPAttributeObjectString : public IfcPPObject
+{
+public:
+	IfcPPAttributeObjectString( std::string& attribute_value );
+	std::string m_value;
+};
+
+class IfcPPAttributeObjectVector : public IfcPPObject
+{
+public:
+	IfcPPAttributeObjectVector();
+	IfcPPAttributeObjectVector( std::vector<shared_ptr<IfcPPObject> > vec );
+	~IfcPPAttributeObjectVector();
+	std::vector<shared_ptr<IfcPPObject> > m_vec;
+};
+
+//class IfcPPAttributeEntity : public IfcPPAttributeObject
+//{
+//public:
+//	IfcPPAttributeEntity()
+//	{
+//	}
+//	IfcPPAttributeEntity( std::string& name, shared_ptr<IfcPPEntity>& entity ) : IfcPPAttributeObject( name ), m_attribute_entity(entity)
+//	{
+//	}
+//	~IfcPPAttributeEntity()
+//	{
+//	}
+//	shared_ptr<IfcPPEntity> m_attribute_entity;
+//};

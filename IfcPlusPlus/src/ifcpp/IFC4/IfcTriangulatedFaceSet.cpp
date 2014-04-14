@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -70,6 +71,13 @@ void IfcTriangulatedFaceSet::readStepArguments( const std::vector<std::string>& 
 	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_Closed = true; }
 	readIntList2D(  args[3], m_CoordIndex );
 	readIntList2D(  args[4], m_NormalIndex );
+}
+void IfcTriangulatedFaceSet::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTessellatedFaceSet::getAttributes( vec_attributes );
+}
+void IfcTriangulatedFaceSet::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTriangulatedFaceSet::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

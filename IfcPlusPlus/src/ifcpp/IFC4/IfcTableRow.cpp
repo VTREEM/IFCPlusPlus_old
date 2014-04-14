@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -54,6 +55,17 @@ void IfcTableRow::readStepArguments( const std::vector<std::string>& args, const
 	readSelectList( args[0], m_RowCells, map );
 	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_IsHeading = false; }
 	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_IsHeading = true; }
+}
+void IfcTableRow::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	shared_ptr<IfcPPAttributeObjectVector> RowCells_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_RowCells.begin(), m_RowCells.end(), std::back_inserter( RowCells_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "RowCells", RowCells_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "IsHeading", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_IsHeading ) ) ) );
+}
+void IfcTableRow::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "OfTable_inverse", shared_ptr<IfcPPEntity>( m_OfTable_inverse ) ) );
 }
 void IfcTableRow::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

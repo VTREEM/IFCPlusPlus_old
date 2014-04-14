@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -63,6 +64,13 @@ void IfcCartesianTransformationOperator2D::readStepArguments( const std::vector<
 	readEntityReference( args[1], m_Axis2, map );
 	readEntityReference( args[2], m_LocalOrigin, map );
 	readRealValue( args[3], m_Scale );
+}
+void IfcCartesianTransformationOperator2D::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCartesianTransformationOperator::getAttributes( vec_attributes );
+}
+void IfcCartesianTransformationOperator2D::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCartesianTransformationOperator2D::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

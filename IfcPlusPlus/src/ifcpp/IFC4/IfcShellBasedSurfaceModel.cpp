@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,6 +50,16 @@ void IfcShellBasedSurfaceModel::readStepArguments( const std::vector<std::string
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcShellBasedSurfaceModel, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readSelectList( args[0], m_SbsmBoundary, map );
+}
+void IfcShellBasedSurfaceModel::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> SbsmBoundary_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_SbsmBoundary.begin(), m_SbsmBoundary.end(), std::back_inserter( SbsmBoundary_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "SbsmBoundary", SbsmBoundary_vec_object ) );
+}
+void IfcShellBasedSurfaceModel::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcShellBasedSurfaceModel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

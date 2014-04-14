@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -108,6 +109,13 @@ void IfcRationalBSplineSurfaceWithKnots::readStepArguments( const std::vector<st
 	readTypeOfRealList( args[10], m_VKnots );
 	m_KnotSpec = IfcKnotType::createObjectFromStepData( args[11] );
 	readDoubleList2D( args[12], m_WeightsData );
+}
+void IfcRationalBSplineSurfaceWithKnots::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBSplineSurfaceWithKnots::getAttributes( vec_attributes );
+}
+void IfcRationalBSplineSurfaceWithKnots::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRationalBSplineSurfaceWithKnots::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

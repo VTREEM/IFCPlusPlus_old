@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -106,6 +107,16 @@ void IfcMechanicalFastenerType::readStepArguments( const std::vector<std::string
 	m_PredefinedType = IfcMechanicalFastenerTypeEnum::createObjectFromStepData( args[9] );
 	m_NominalDiameter = IfcPositiveLengthMeasure::createObjectFromStepData( args[10] );
 	m_NominalLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[11] );
+}
+void IfcMechanicalFastenerType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcElementComponentType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "NominalDiameter", m_NominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "NominalLength", m_NominalLength ) );
+}
+void IfcMechanicalFastenerType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMechanicalFastenerType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

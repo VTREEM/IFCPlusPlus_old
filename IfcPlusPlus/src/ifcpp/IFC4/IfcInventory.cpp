@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -104,6 +105,18 @@ void IfcInventory::readStepArguments( const std::vector<std::string>& args, cons
 	m_LastUpdateDate = IfcDate::createObjectFromStepData( args[8] );
 	readEntityReference( args[9], m_CurrentValue, map );
 	readEntityReference( args[10], m_OriginalValue, map );
+}
+void IfcInventory::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGroup::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "Jurisdiction", m_Jurisdiction ) );
+	vec_attributes.push_back( std::make_pair( "LastUpdateDate", m_LastUpdateDate ) );
+	vec_attributes.push_back( std::make_pair( "CurrentValue", m_CurrentValue ) );
+	vec_attributes.push_back( std::make_pair( "OriginalValue", m_OriginalValue ) );
+}
+void IfcInventory::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcInventory::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

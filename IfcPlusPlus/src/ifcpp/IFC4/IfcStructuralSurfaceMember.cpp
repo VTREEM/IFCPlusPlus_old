@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -97,6 +98,15 @@ void IfcStructuralSurfaceMember::readStepArguments( const std::vector<std::strin
 	readEntityReference( args[6], m_Representation, map );
 	m_PredefinedType = IfcStructuralSurfaceMemberTypeEnum::createObjectFromStepData( args[7] );
 	m_Thickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[8] );
+}
+void IfcStructuralSurfaceMember::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralMember::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "Thickness", m_Thickness ) );
+}
+void IfcStructuralSurfaceMember::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralSurfaceMember::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

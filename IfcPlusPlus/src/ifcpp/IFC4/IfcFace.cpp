@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -50,6 +51,13 @@ void IfcFace::readStepArguments( const std::vector<std::string>& args, const std
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcFace, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_Bounds, map );
+}
+void IfcFace::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTopologicalRepresentationItem::getAttributes( vec_attributes );
+}
+void IfcFace::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFace::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

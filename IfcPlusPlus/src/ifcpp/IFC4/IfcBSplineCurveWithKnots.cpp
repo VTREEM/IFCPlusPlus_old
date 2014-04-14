@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -85,6 +86,17 @@ void IfcBSplineCurveWithKnots::readStepArguments( const std::vector<std::string>
 	readIntList(  args[5], m_KnotMultiplicities );
 	readTypeOfRealList( args[6], m_Knots );
 	m_KnotSpec = IfcKnotType::createObjectFromStepData( args[7] );
+}
+void IfcBSplineCurveWithKnots::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBSplineCurve::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> Knots_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Knots.begin(), m_Knots.end(), std::back_inserter( Knots_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Knots", Knots_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "KnotSpec", m_KnotSpec ) );
+}
+void IfcBSplineCurveWithKnots::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBSplineCurveWithKnots::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -63,6 +64,17 @@ void IfcLightSource::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReference( args[1], m_LightColour, map );
 	m_AmbientIntensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[2] );
 	m_Intensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[3] );
+}
+void IfcLightSource::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "LightColour", m_LightColour ) );
+	vec_attributes.push_back( std::make_pair( "AmbientIntensity", m_AmbientIntensity ) );
+	vec_attributes.push_back( std::make_pair( "Intensity", m_Intensity ) );
+}
+void IfcLightSource::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLightSource::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,15 @@ void IfcQuantityVolume::readStepArguments( const std::vector<std::string>& args,
 	readEntityReference( args[2], m_Unit, map );
 	m_VolumeValue = IfcVolumeMeasure::createObjectFromStepData( args[3] );
 	m_Formula = IfcLabel::createObjectFromStepData( args[4] );
+}
+void IfcQuantityVolume::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPhysicalSimpleQuantity::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "VolumeValue", m_VolumeValue ) );
+	vec_attributes.push_back( std::make_pair( "Formula", m_Formula ) );
+}
+void IfcQuantityVolume::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcQuantityVolume::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

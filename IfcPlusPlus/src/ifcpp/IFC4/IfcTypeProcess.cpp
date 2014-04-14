@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -91,6 +92,16 @@ void IfcTypeProcess::readStepArguments( const std::vector<std::string>& args, co
 	m_Identification = IfcIdentifier::createObjectFromStepData( args[6] );
 	m_LongDescription = IfcText::createObjectFromStepData( args[7] );
 	m_ProcessType = IfcLabel::createObjectFromStepData( args[8] );
+}
+void IfcTypeProcess::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTypeObject::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Identification", m_Identification ) );
+	vec_attributes.push_back( std::make_pair( "LongDescription", m_LongDescription ) );
+	vec_attributes.push_back( std::make_pair( "ProcessType", m_ProcessType ) );
+}
+void IfcTypeProcess::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTypeProcess::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

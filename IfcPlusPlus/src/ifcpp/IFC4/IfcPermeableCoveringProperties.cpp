@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -91,6 +92,18 @@ void IfcPermeableCoveringProperties::readStepArguments( const std::vector<std::s
 	m_FrameDepth = IfcPositiveLengthMeasure::createObjectFromStepData( args[6] );
 	m_FrameThickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[7] );
 	readEntityReference( args[8], m_ShapeAspectStyle, map );
+}
+void IfcPermeableCoveringProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedPropertySet::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "OperationType", m_OperationType ) );
+	vec_attributes.push_back( std::make_pair( "PanelPosition", m_PanelPosition ) );
+	vec_attributes.push_back( std::make_pair( "FrameDepth", m_FrameDepth ) );
+	vec_attributes.push_back( std::make_pair( "FrameThickness", m_FrameThickness ) );
+	vec_attributes.push_back( std::make_pair( "ShapeAspectStyle", m_ShapeAspectStyle ) );
+}
+void IfcPermeableCoveringProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPermeableCoveringProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

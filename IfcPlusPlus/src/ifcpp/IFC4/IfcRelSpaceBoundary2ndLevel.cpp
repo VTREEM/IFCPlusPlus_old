@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -96,6 +97,14 @@ void IfcRelSpaceBoundary2ndLevel::readStepArguments( const std::vector<std::stri
 	m_InternalOrExternalBoundary = IfcInternalOrExternalEnum::createObjectFromStepData( args[8] );
 	readEntityReference( args[9], m_ParentBoundary, map );
 	readEntityReference( args[10], m_CorrespondingBoundary, map );
+}
+void IfcRelSpaceBoundary2ndLevel::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelSpaceBoundary1stLevel::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "CorrespondingBoundary", m_CorrespondingBoundary ) );
+}
+void IfcRelSpaceBoundary2ndLevel::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelSpaceBoundary2ndLevel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

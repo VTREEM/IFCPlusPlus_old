@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -61,6 +62,16 @@ void IfcIndexedColourMap::readStepArguments( const std::vector<std::string>& arg
 	readEntityReference( args[1], m_Overrides, map );
 	readEntityReference( args[2], m_Colours, map );
 	readIntList(  args[3], m_ColourIndex );
+}
+void IfcIndexedColourMap::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "MappedTo", m_MappedTo ) );
+	vec_attributes.push_back( std::make_pair( "Overrides", m_Overrides ) );
+	vec_attributes.push_back( std::make_pair( "Colours", m_Colours ) );
+}
+void IfcIndexedColourMap::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcIndexedColourMap::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

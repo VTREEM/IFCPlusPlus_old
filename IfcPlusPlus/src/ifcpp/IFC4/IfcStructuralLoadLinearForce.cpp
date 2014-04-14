@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -73,6 +74,19 @@ void IfcStructuralLoadLinearForce::readStepArguments( const std::vector<std::str
 	m_LinearMomentX = IfcLinearMomentMeasure::createObjectFromStepData( args[4] );
 	m_LinearMomentY = IfcLinearMomentMeasure::createObjectFromStepData( args[5] );
 	m_LinearMomentZ = IfcLinearMomentMeasure::createObjectFromStepData( args[6] );
+}
+void IfcStructuralLoadLinearForce::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadStatic::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LinearForceX", m_LinearForceX ) );
+	vec_attributes.push_back( std::make_pair( "LinearForceY", m_LinearForceY ) );
+	vec_attributes.push_back( std::make_pair( "LinearForceZ", m_LinearForceZ ) );
+	vec_attributes.push_back( std::make_pair( "LinearMomentX", m_LinearMomentX ) );
+	vec_attributes.push_back( std::make_pair( "LinearMomentY", m_LinearMomentY ) );
+	vec_attributes.push_back( std::make_pair( "LinearMomentZ", m_LinearMomentZ ) );
+}
+void IfcStructuralLoadLinearForce::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadLinearForce::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -61,6 +62,14 @@ void IfcApprovalRelationship::readStepArguments( const std::vector<std::string>&
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_RelatingApproval, map );
 	readEntityReferenceList( args[3], m_RelatedApprovals, map );
+}
+void IfcApprovalRelationship::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcResourceLevelRelationship::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingApproval", m_RelatingApproval ) );
+}
+void IfcApprovalRelationship::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcApprovalRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

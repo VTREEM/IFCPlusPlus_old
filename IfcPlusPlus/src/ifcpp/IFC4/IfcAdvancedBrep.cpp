@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,6 +50,13 @@ void IfcAdvancedBrep::readStepArguments( const std::vector<std::string>& args, c
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcAdvancedBrep, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Outer, map );
+}
+void IfcAdvancedBrep::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcManifoldSolidBrep::getAttributes( vec_attributes );
+}
+void IfcAdvancedBrep::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAdvancedBrep::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

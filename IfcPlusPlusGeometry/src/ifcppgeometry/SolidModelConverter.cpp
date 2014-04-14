@@ -70,14 +70,8 @@ SolidModelConverter::~SolidModelConverter()
 }
 
 // ENTITY IfcSolidModel ABSTRACT SUPERTYPE OF(ONEOF(IfcCsgSolid, IfcManifoldSolidBrep, IfcSweptAreaSolid, IfcSweptDiskSolid))
-void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>& solid_model, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
+void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>& solid_model, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
-	if( pos != carve::math::Matrix::IDENT() )
-	{
-		// TODO: check to remove pos parameter
-		int wait=0;
-	}
-
 	shared_ptr<IfcSweptAreaSolid> swept_area_solid = dynamic_pointer_cast<IfcSweptAreaSolid>(solid_model);
 	if( swept_area_solid )
 	{
@@ -93,13 +87,12 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 		shared_ptr<IfcProfileDef>& swept_area = swept_area_solid->m_SweptArea;
 
 		// check if local coordinate system is specified for extrusion
-		carve::math::Matrix swept_area_pos( pos );
+		carve::math::Matrix swept_area_pos;
 		if( swept_area_solid->m_Position )
 		{
 			double length_factor = m_unit_converter->getLengthInMeterFactor();
 			shared_ptr<IfcAxis2Placement3D> swept_area_position = swept_area_solid->m_Position;
 			PlacementConverter::convertIfcAxis2Placement3D( swept_area_position, swept_area_pos, length_factor );
-			swept_area_pos = pos*swept_area_pos;
 		}
 
 		shared_ptr<IfcExtrudedAreaSolid> extruded_area = dynamic_pointer_cast<IfcExtrudedAreaSolid>(swept_area_solid);
@@ -181,7 +174,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			// first convert outer shell
 			std::vector<shared_ptr<IfcFace> >& vec_faces_outer_shell = outer_shell->m_CfsFaces;
 			shared_ptr<ItemData> input_data_outer_shell( new ItemData() );
-			m_face_converter->convertIfcFaceList( vec_faces_outer_shell, pos, input_data_outer_shell );
+			m_face_converter->convertIfcFaceList( vec_faces_outer_shell, carve::math::Matrix::IDENT(), input_data_outer_shell );
 			std::copy( input_data_outer_shell->open_or_closed_polyhedrons.begin(), input_data_outer_shell->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->closed_polyhedrons) );
 		}
 
@@ -219,12 +212,12 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 		if( dynamic_pointer_cast<IfcBooleanResult>(csg_select) )
 		{
 			shared_ptr<IfcBooleanResult> csg_select_boolean_result = dynamic_pointer_cast<IfcBooleanResult>(csg_select);
-			convertIfcBooleanResult( csg_select_boolean_result, pos, item_data, strs_err );
+			convertIfcBooleanResult( csg_select_boolean_result, item_data, strs_err );
 		}
 		else if( dynamic_pointer_cast<IfcCsgPrimitive3D>(csg_select) )
 		{
 			shared_ptr<IfcCsgPrimitive3D> csg_select_primitive_3d = dynamic_pointer_cast<IfcCsgPrimitive3D>(csg_select);
-			convertIfcCsgPrimitive3D( csg_select_primitive_3d, pos, item_data, strs_err );
+			convertIfcCsgPrimitive3D( csg_select_primitive_3d, item_data, strs_err );
 		}
 		return;
 	}
@@ -281,38 +274,21 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 		item_data->closed_polyhedrons.push_back(pipe_data);
 		std::vector<carve::geom::vector<3> > inner_shape_points;
 
-		double angle = 0;
-		double delta_angle = 2.0*M_PI/double(nvc);	// TODO: adapt to model size and complexity
-		std::vector<carve::geom::vector<3> > circle_points;
-		std::vector<carve::geom::vector<3> > circle_points_inner;
-		for( int i = 0; i < nvc; ++i )
-		{
-			// cross section (circle) is defined in YZ plane
-			double x = sin(angle);
-			double y = cos(angle);
-			circle_points.push_back(		carve::geom::VECTOR( 0.0,	x*radius,		y*radius) );
-			circle_points_inner.push_back(	carve::geom::VECTOR( 0.0,	x*radius_inner,	y*radius_inner) );
-			angle += delta_angle;
-		}
-
-		int num_base_points = basis_curve_points.size();
-		carve::math::Matrix matrix_sweep;
-
 		carve::geom::vector<3> local_z( carve::geom::VECTOR( 0, 0, 1 ) );
-
-		if( num_base_points < 2 )
+		const int num_curve_points = basis_curve_points.size();
+		if( num_curve_points < 2 )
 		{
 			std::cout << "IfcSweptDiskSolid: num curve points < 2" << std::endl;
 			return;
 		}
 
 		bool bend_found = false;
-		if( num_base_points > 3 )
+		if( num_curve_points > 3 )
 		{
 			// compute local z vector by dot product of the first bend of the reference line
 			carve::geom::vector<3> vertex_back2 = basis_curve_points.at(0);
 			carve::geom::vector<3> vertex_back1 = basis_curve_points.at(1);
-			for( int i=2; i<num_base_points; ++i )
+			for( int i=2; i<num_curve_points; ++i )
 			{
 				carve::geom::vector<3> vertex_current = basis_curve_points.at(i);
 				carve::geom::vector<3> section1 = vertex_back1 - vertex_back2;
@@ -348,7 +324,42 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			}
 		}
 
-		for( int ii=0; ii<num_base_points; ++ii )
+		// rotate disc into first direction
+		carve::geom::vector<3>  section_local_y = local_z;
+		carve::geom::vector<3>  section_local_z = basis_curve_points.at(0) - basis_curve_points.at(1);
+		carve::geom::vector<3>  section_local_x = carve::geom::cross( section_local_y, section_local_z );
+		section_local_y = carve::geom::cross( section_local_x, section_local_z );
+	
+		section_local_x.normalize();
+		section_local_y.normalize();
+		section_local_z.normalize();
+
+		carve::math::Matrix matrix_first_direction = carve::math::Matrix(
+			section_local_x.x,		section_local_y.x,		section_local_z.x,	0,
+			section_local_x.y,		section_local_y.y,		section_local_z.y,	0,
+			section_local_x.z,		section_local_y.z,		section_local_z.z,	0,
+			0,				0,				0,			1 );
+
+		double angle = 0;
+		double delta_angle = 2.0*M_PI/double(nvc);	// TODO: adapt to model size and complexity
+		std::vector<carve::geom::vector<3> > circle_points;
+		std::vector<carve::geom::vector<3> > circle_points_inner;
+		for( int i = 0; i < nvc; ++i )
+		{
+			// cross section (circle) is defined in XY plane
+			double x = sin(angle);
+			double y = cos(angle);
+			carve::geom::vector<3> vertex( carve::geom::VECTOR( x*radius, y*radius, 0.0 ) );
+			carve::geom::vector<3> vertex_inner( carve::geom::VECTOR( x*radius_inner, y*radius_inner, 0.0 ) );
+			vertex = matrix_first_direction*vertex + basis_curve_points.at(0);
+			vertex_inner = matrix_first_direction*vertex_inner + basis_curve_points.at(0);
+
+			circle_points.push_back( vertex );
+			circle_points_inner.push_back( vertex_inner );
+			angle += delta_angle;
+		}
+
+		for( int ii=0; ii<num_curve_points; ++ii )
 		{
 			carve::geom::vector<3> vertex_current = basis_curve_points.at(ii);
 			carve::geom::vector<3> vertex_next;
@@ -360,7 +371,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 				carve::geom::vector<3> delta_element = vertex_next - vertex_current;
 				vertex_before = vertex_current - (delta_element);
 			}
-			else if( ii == num_base_points-1 )
+			else if( ii == num_curve_points-1 )
 			{
 				// last point
 				vertex_before	= basis_curve_points.at(ii-1);
@@ -391,18 +402,28 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 				local_z = cross( lateral_vec, section1 );
 				local_z.normalize();
 			}
-			if( ii == num_base_points -1 )
+			if( ii == num_curve_points -1 )
 			{
 				bisecting_normal *= -1.0;
 			}
 
-			GeomUtils::convertPlane2Matrix( bisecting_normal, vertex_current, local_z, matrix_sweep );
-			matrix_sweep = pos*matrix_sweep;
-
+			carve::geom::plane<3> bisecting_plane( bisecting_normal, vertex_current );
 			for( int jj = 0; jj < nvc; ++jj )
 			{
-				carve::geom::vector<3> vertex = circle_points.at( jj );
-				vertex = matrix_sweep*vertex;
+				carve::geom::vector<3>& vertex = circle_points.at( jj );
+
+				carve::geom::vector<3> v;
+				double t;
+				carve::IntersectionClass intersect = carve::geom3d::rayPlaneIntersection( bisecting_plane, vertex, vertex + section1, v, t);
+				if( intersect > 0 )
+				{
+					vertex = v;
+				}
+				else
+				{
+					std::cout << "no intersection found" << std::endl;
+				}
+
 				pipe_data->addVertex( vertex );
 			}
 
@@ -410,17 +431,28 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			{
 				for( int jj = 0; jj < nvc; ++jj )
 				{
-					carve::geom::vector<3> vertex = circle_points_inner.at( jj );
-					vertex = matrix_sweep*vertex;
+					carve::geom::vector<3>& vertex = circle_points_inner.at( jj );
+					
+					carve::geom::vector<3> v;
+					double t;
+					carve::IntersectionClass intersect = carve::geom3d::rayPlaneIntersection( bisecting_plane, vertex, vertex + section1, v, t);
+					if( intersect > 0 )
+					{
+						vertex = v;
+					}
+					else
+					{
+						std::cout << "no intersection found" << std::endl;
+					}
+
 					inner_shape_points.push_back( vertex );
-					//pipe_data->addVertex( vertex );
 				}
 			}
 		}
 
 		// outer shape
 		size_t num_vertices_outer = pipe_data->getVertexCount();
-		for( size_t i=0; i<num_base_points- 1; ++i )
+		for( size_t i=0; i<num_curve_points- 1; ++i )
 		{
 			int i_offset = i*nvc;
 			int i_offset_next = (i+1)*nvc;
@@ -449,7 +481,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			}
 
 			// faces of inner shape
-			for( size_t i=0; i<num_base_points- 1; ++i )
+			for( size_t i=0; i<num_curve_points- 1; ++i )
 			{
 				int i_offset = i*nvc + num_vertices_outer;
 				int i_offset_next = (i+1)*nvc + num_vertices_outer;
@@ -475,7 +507,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			}
 
 			// back cap
-			int back_offset = (num_base_points - 1)*nvc;
+			int back_offset = (num_curve_points - 1)*nvc;
 			for( int jj = 0; jj < nvc; ++jj )
 			{
 				int outer_rim_next = (jj+1)%nvc + back_offset;
@@ -493,7 +525,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			}
 
 			// back cap
-			int back_offset = (num_base_points - 1)*nvc;
+			int back_offset = (num_curve_points - 1)*nvc;
 			for( int jj = 0; jj < nvc - 2; ++jj )
 			{
 				pipe_data->addFace( back_offset, back_offset + jj+2, back_offset + jj+1 );
@@ -826,13 +858,8 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 }
 
 
-void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanResult>& bool_result, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
+void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanResult>& bool_result, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
-	if( pos != carve::math::Matrix::IDENT() )
-	{
-		int wait=0;
-	}
-
 	const int boolean_result_id = bool_result->getId();
 	shared_ptr<IfcBooleanClippingResult> boolean_clipping_result = dynamic_pointer_cast<IfcBooleanClippingResult>(bool_result);
 	if( boolean_clipping_result )
@@ -868,12 +895,12 @@ void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanRe
 		// convert the first operand
 		shared_ptr<ItemData> first_operand_data( new ItemData() );
 		shared_ptr<ItemData> empty_operand;
-		convertIfcBooleanOperand( ifc_first_operand, pos, first_operand_data, empty_operand, strs_err );
+		convertIfcBooleanOperand( ifc_first_operand, first_operand_data, empty_operand, strs_err );
 		first_operand_data->createMeshSetsFromClosedPolyhedrons();
 
 		// convert the second operand
 		shared_ptr<ItemData> second_operand_data( new ItemData() );
-		convertIfcBooleanOperand( ifc_second_operand, pos, second_operand_data, first_operand_data, strs_err );
+		convertIfcBooleanOperand( ifc_second_operand, second_operand_data, first_operand_data, strs_err );
 		second_operand_data->createMeshSetsFromClosedPolyhedrons();
 
 		// for every first operand polyhedrons, apply all second operand polyhedrons
@@ -900,7 +927,7 @@ void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanRe
 
 				shared_ptr<carve::mesh::MeshSet<3> > result;
 				bool csg_op_ok = computeCSG( first_operand_meshset.get(), second_operand_meshset.get(), csg_operation, id1, id2, strs_err, result );
-
+				item_data->m_csg_computed = true;
 				if( csg_op_ok )
 				{
 					first_operand_meshset = result;
@@ -914,7 +941,7 @@ void SolidModelConverter::convertIfcBooleanResult( const shared_ptr<IfcBooleanRe
 }
 
 
-void SolidModelConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,	const carve::math::Matrix& pos, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
+void SolidModelConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,	shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
 	shared_ptr<carve::input::PolyhedronData> polyhedron_data( new carve::input::PolyhedronData() );
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
@@ -922,11 +949,10 @@ void SolidModelConverter::convertIfcCsgPrimitive3D(	const shared_ptr<IfcCsgPrimi
 	// ENTITY IfcCsgPrimitive3D  ABSTRACT SUPERTYPE OF(ONEOF(IfcBlock, IfcRectangularPyramid, IfcRightCircularCone, IfcRightCircularCylinder, IfcSphere
 	shared_ptr<IfcAxis2Placement3D>& primitive_placement = csg_primitive->m_Position;
 
-	carve::math::Matrix primitive_placement_matrix( pos );
+	carve::math::Matrix primitive_placement_matrix;
 	if( primitive_placement )
 	{
 		PlacementConverter::convertIfcAxis2Placement3D( primitive_placement, primitive_placement_matrix, length_factor );
-		primitive_placement_matrix = pos*primitive_placement_matrix;
 	}
 
 	shared_ptr<IfcBlock> block = dynamic_pointer_cast<IfcBlock>(csg_primitive);
@@ -1206,13 +1232,12 @@ void extrudeBox( const std::vector<carve::geom::vector<3> >& boundary_points, co
 	box_data->addFace( 7,3,2 );
 }
 
-void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanOperand>& operand, const carve::math::Matrix& pos,
-												   shared_ptr<ItemData> item_data, const shared_ptr<ItemData>& other_operand, std::stringstream& strs_err )
+void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanOperand>& operand, shared_ptr<ItemData> item_data, const shared_ptr<ItemData>& other_operand, std::stringstream& strs_err )
 {
 	shared_ptr<IfcSolidModel> solid_model = dynamic_pointer_cast<IfcSolidModel>(operand);
 	if( solid_model )
 	{
-		convertIfcSolidModel( solid_model, pos, item_data, strs_err );
+		convertIfcSolidModel( solid_model, item_data, strs_err );
 		return;
 	}
 	double length_factor = m_unit_converter->getLengthInMeterFactor();
@@ -1269,7 +1294,7 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 
 			carve::geom::vector<3> corner;
 			m_curve_converter->convertIfcCartesianPoint( bbox_corner, corner );
-			carve::math::Matrix box_position_matrix = pos*base_position_matrix*carve::math::Matrix::TRANS( corner );
+			carve::math::Matrix box_position_matrix = base_position_matrix*carve::math::Matrix::TRANS( corner );
 
 			// else, its an unbounded half space solid, create simple box
 			shared_ptr<carve::input::PolyhedronData> polyhedron_data( new carve::input::PolyhedronData() );
@@ -1297,7 +1322,7 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 
 			item_data->closed_polyhedrons.push_back( polyhedron_data );
 
-			// apply object coordinate system
+			// apply box coordinate system
 			for( std::vector<carve::geom::vector<3> >::iterator it_points = polyhedron_data->points.begin(); it_points != polyhedron_data->points.end(); ++it_points )
 			{
 				carve::geom::vector<3> & poly_point = (*it_points);
@@ -1383,14 +1408,13 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 				vertex = boundary_position_matrix*vertex;
 			}
 
-
 			// project to base surface
 			for( int i_base_point = 0; i_base_point < poly_data->points.size(); ++i_base_point )
 			{
 				carve::geom::vector<3>& poly_point = poly_data->points[i_base_point];//(*it_points);
 
 				// points below the base surface are projected into plane
-				double distance_to_base_surface = carve::geom::distance(base_surface_plane, poly_point);
+				//double distance_to_base_surface = carve::geom::distance(base_surface_plane, poly_point);
 				carve::geom::vector<3> v;
 				double t;
 				carve::IntersectionClass intersect = carve::geom3d::rayPlaneIntersection( base_surface_plane, poly_point, poly_point + boundary_plane_normal, v, t);
@@ -1411,15 +1435,7 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 				}
 			}
 
-			// apply object coordinate system
-			for( std::vector<carve::geom::vector<3> >::iterator it_points = poly_data->points.begin(); it_points != poly_data->points.end(); ++it_points )
-			{
-				carve::geom::vector<3>& poly_point = (*it_points);
-				poly_point = pos*poly_point;
-			}
-
 			item_data->closed_polyhedrons.push_back( poly_data );
-
 
 			//shared_ptr<carve::mesh::MeshSet<3> > meshset( poly_data->createMesh(carve::input::opts()) );
 			//	renderMeshsetInDebugViewer( meshset.get(), osg::Vec4(1.0f, 0.5f, 0.0f, 1.0f), true );
@@ -1462,13 +1478,6 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 				shared_ptr<carve::input::PolyhedronData> half_space_box_data( new carve::input::PolyhedronData() );
 				item_data->closed_polyhedrons.push_back(half_space_box_data);
 				extrudeBox( base_surface_points, half_space_extrusion_vector, half_space_box_data );
-
-				// apply object coordinate system
-				for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_box_data->points.begin(); it_points != half_space_box_data->points.end(); ++it_points )
-				{
-					carve::geom::vector<3> & poly_point = (*it_points);
-					poly_point = pos*poly_point;
-				}
 			}
 			
 			if( var == 1 )
@@ -1492,13 +1501,6 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 				shared_ptr<carve::input::PolyhedronData> half_space_box_data( new carve::input::PolyhedronData() );
 				item_data->closed_polyhedrons.push_back(half_space_box_data);
 				extrudeBox( box_base_points, half_space_extrusion_vector, half_space_box_data );
-
-				// apply object coordinate system
-				for( std::vector<carve::geom::vector<3> >::iterator it_points = half_space_box_data->points.begin(); it_points != half_space_box_data->points.end(); ++it_points )
-				{
-					carve::geom::vector<3> & poly_point = (*it_points);
-					poly_point = pos*poly_point;
-				}
 			}
 
 			return;
@@ -1509,14 +1511,14 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 	shared_ptr<IfcBooleanResult> boolean_result = dynamic_pointer_cast<IfcBooleanResult>(operand);
 	if( boolean_result )
 	{
-		convertIfcBooleanResult( boolean_result, pos, item_data, strs_err );
+		convertIfcBooleanResult( boolean_result, item_data, strs_err );
 		return;
 	}
 
 	shared_ptr<IfcCsgPrimitive3D> csg_primitive3D = dynamic_pointer_cast<IfcCsgPrimitive3D>(operand);
 	if( csg_primitive3D )
 	{
-		convertIfcCsgPrimitive3D( csg_primitive3D, pos, item_data, strs_err );
+		convertIfcCsgPrimitive3D( csg_primitive3D, item_data, strs_err );
 		return;
 	}
 

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -123,6 +124,26 @@ void IfcDoorLiningProperties::readStepArguments( const std::vector<std::string>&
 	readEntityReference( args[14], m_ShapeAspectStyle, map );
 	m_LiningToPanelOffsetX = IfcLengthMeasure::createObjectFromStepData( args[15] );
 	m_LiningToPanelOffsetY = IfcLengthMeasure::createObjectFromStepData( args[16] );
+}
+void IfcDoorLiningProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedPropertySet::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LiningDepth", m_LiningDepth ) );
+	vec_attributes.push_back( std::make_pair( "LiningThickness", m_LiningThickness ) );
+	vec_attributes.push_back( std::make_pair( "ThresholdDepth", m_ThresholdDepth ) );
+	vec_attributes.push_back( std::make_pair( "ThresholdThickness", m_ThresholdThickness ) );
+	vec_attributes.push_back( std::make_pair( "TransomThickness", m_TransomThickness ) );
+	vec_attributes.push_back( std::make_pair( "TransomOffset", m_TransomOffset ) );
+	vec_attributes.push_back( std::make_pair( "LiningOffset", m_LiningOffset ) );
+	vec_attributes.push_back( std::make_pair( "ThresholdOffset", m_ThresholdOffset ) );
+	vec_attributes.push_back( std::make_pair( "CasingThickness", m_CasingThickness ) );
+	vec_attributes.push_back( std::make_pair( "CasingDepth", m_CasingDepth ) );
+	vec_attributes.push_back( std::make_pair( "ShapeAspectStyle", m_ShapeAspectStyle ) );
+	vec_attributes.push_back( std::make_pair( "LiningToPanelOffsetX", m_LiningToPanelOffsetX ) );
+	vec_attributes.push_back( std::make_pair( "LiningToPanelOffsetY", m_LiningToPanelOffsetY ) );
+}
+void IfcDoorLiningProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDoorLiningProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

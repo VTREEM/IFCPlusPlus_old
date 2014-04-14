@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -56,6 +57,15 @@ void IfcSchedulingTime::readStepArguments( const std::vector<std::string>& args,
 	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	m_DataOrigin = IfcDataOriginEnum::createObjectFromStepData( args[1] );
 	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[2] );
+}
+void IfcSchedulingTime::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "DataOrigin", m_DataOrigin ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedDataOrigin", m_UserDefinedDataOrigin ) );
+}
+void IfcSchedulingTime::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSchedulingTime::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

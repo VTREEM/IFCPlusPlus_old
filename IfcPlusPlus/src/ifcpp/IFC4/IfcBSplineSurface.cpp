@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -82,6 +83,19 @@ void IfcBSplineSurface::readStepArguments( const std::vector<std::string>& args,
 	else if( _stricmp( args[5].c_str(), ".T." ) == 0 ) { m_VClosed = true; }
 	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
 	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+}
+void IfcBSplineSurface::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundedSurface::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "UDegree", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_UDegree ) ) ) );
+	vec_attributes.push_back( std::make_pair( "VDegree", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_VDegree ) ) ) );
+	vec_attributes.push_back( std::make_pair( "SurfaceForm", m_SurfaceForm ) );
+	vec_attributes.push_back( std::make_pair( "UClosed", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_UClosed ) ) ) );
+	vec_attributes.push_back( std::make_pair( "VClosed", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_VClosed ) ) ) );
+	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SelfIntersect ) ) ) );
+}
+void IfcBSplineSurface::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBSplineSurface::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

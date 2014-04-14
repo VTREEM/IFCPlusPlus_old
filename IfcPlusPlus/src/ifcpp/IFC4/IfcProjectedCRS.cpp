@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -74,6 +75,16 @@ void IfcProjectedCRS::readStepArguments( const std::vector<std::string>& args, c
 	m_MapProjection = IfcIdentifier::createObjectFromStepData( args[4] );
 	m_MapZone = IfcIdentifier::createObjectFromStepData( args[5] );
 	readEntityReference( args[6], m_MapUnit, map );
+}
+void IfcProjectedCRS::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCoordinateReferenceSystem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "MapProjection", m_MapProjection ) );
+	vec_attributes.push_back( std::make_pair( "MapZone", m_MapZone ) );
+	vec_attributes.push_back( std::make_pair( "MapUnit", m_MapUnit ) );
+}
+void IfcProjectedCRS::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcProjectedCRS::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

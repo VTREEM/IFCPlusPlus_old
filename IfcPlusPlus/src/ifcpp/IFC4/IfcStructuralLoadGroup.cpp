@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -101,6 +102,18 @@ void IfcStructuralLoadGroup::readStepArguments( const std::vector<std::string>& 
 	m_ActionSource = IfcActionSourceTypeEnum::createObjectFromStepData( args[7] );
 	m_Coefficient = IfcRatioMeasure::createObjectFromStepData( args[8] );
 	m_Purpose = IfcLabel::createObjectFromStepData( args[9] );
+}
+void IfcStructuralLoadGroup::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGroup::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "ActionType", m_ActionType ) );
+	vec_attributes.push_back( std::make_pair( "ActionSource", m_ActionSource ) );
+	vec_attributes.push_back( std::make_pair( "Coefficient", m_Coefficient ) );
+	vec_attributes.push_back( std::make_pair( "Purpose", m_Purpose ) );
+}
+void IfcStructuralLoadGroup::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadGroup::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

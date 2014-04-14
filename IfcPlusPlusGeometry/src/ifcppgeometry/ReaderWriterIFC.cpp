@@ -659,7 +659,10 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 		for( std::vector<shared_ptr<carve::mesh::MeshSet<3> > >::iterator it_meshsets = item_data->meshsets.begin(); it_meshsets != item_data->meshsets.end(); ++it_meshsets )
 		{
 			shared_ptr<carve::mesh::MeshSet<3> >& item_meshset = (*it_meshsets);
-			m_representation_converter->getSolidConverter()->simplifyMesh( item_meshset );
+			if( item_data->m_csg_computed )
+			{
+				m_representation_converter->getSolidConverter()->simplifyMesh( item_meshset );
+			}
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
 			ConverterOSG::drawMeshSet( item_meshset.get(), geode_result );
 			item_group->addChild(geode_result);
@@ -782,6 +785,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 	{
 		// TODO: make only glass part of window transparent
 		product_switch->setStateSet( m_glass_stateset );
+		GeomUtils::setMaterialTransparent( product_switch, 0.6f );
 	}
 	else if( dynamic_pointer_cast<IfcSite>(product) )
 	{

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -64,6 +65,14 @@ void IfcCenterLineProfileDef::readStepArguments( const std::vector<std::string>&
 	m_ProfileName = IfcLabel::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_Curve, map );
 	m_Thickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
+}
+void IfcCenterLineProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcArbitraryOpenProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Thickness", m_Thickness ) );
+}
+void IfcCenterLineProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCenterLineProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -36,12 +36,12 @@ public:
 	SolidModelConverter( shared_ptr<GeometrySettings> settings, shared_ptr<UnitConverter> uc, shared_ptr<CurveConverter>	cc, shared_ptr<FaceConverter> fc, shared_ptr<ProfileCache>	pc );
 	~SolidModelConverter();
 
-	void convertIfcBooleanResult(		const shared_ptr<IfcBooleanResult>& operand,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
-	void convertIfcBooleanOperand(		const shared_ptr<IfcBooleanOperand>& operand,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, const shared_ptr<ItemData>& other_operand, std::stringstream& err );
-	void convertIfcSolidModel(			const shared_ptr<IfcSolidModel>& solid_model,			const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcBooleanResult(		const shared_ptr<IfcBooleanResult>& operand,			shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcBooleanOperand(		const shared_ptr<IfcBooleanOperand>& operand,			shared_ptr<ItemData> item_data, const shared_ptr<ItemData>& other_operand, std::stringstream& err );
+	void convertIfcSolidModel(			const shared_ptr<IfcSolidModel>& solid_model,			shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcExtrudedAreaSolid(	const shared_ptr<IfcExtrudedAreaSolid>& extruded_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcRevolvedAreaSolid(	const shared_ptr<IfcRevolvedAreaSolid>& revolved_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
-	void convertIfcCsgPrimitive3D(		const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,		const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcCsgPrimitive3D(		const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,		shared_ptr<ItemData> item_data, std::stringstream& err );
 	void simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& meshset );
 	bool computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh::MeshSet<3>* op2, const carve::csg::CSG::OP operation, 
 				const int entity1, const int entity2, std::stringstream& err, shared_ptr<carve::mesh::MeshSet<3> >& result );

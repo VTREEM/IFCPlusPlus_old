@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -60,6 +61,16 @@ void IfcSlippageConnectionCondition::readStepArguments( const std::vector<std::s
 	m_SlippageX = IfcLengthMeasure::createObjectFromStepData( args[1] );
 	m_SlippageY = IfcLengthMeasure::createObjectFromStepData( args[2] );
 	m_SlippageZ = IfcLengthMeasure::createObjectFromStepData( args[3] );
+}
+void IfcSlippageConnectionCondition::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralConnectionCondition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "SlippageX", m_SlippageX ) );
+	vec_attributes.push_back( std::make_pair( "SlippageY", m_SlippageY ) );
+	vec_attributes.push_back( std::make_pair( "SlippageZ", m_SlippageZ ) );
+}
+void IfcSlippageConnectionCondition::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSlippageConnectionCondition::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

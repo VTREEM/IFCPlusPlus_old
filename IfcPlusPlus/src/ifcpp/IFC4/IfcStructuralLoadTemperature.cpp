@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -60,6 +61,16 @@ void IfcStructuralLoadTemperature::readStepArguments( const std::vector<std::str
 	m_DeltaTConstant = IfcThermodynamicTemperatureMeasure::createObjectFromStepData( args[1] );
 	m_DeltaTY = IfcThermodynamicTemperatureMeasure::createObjectFromStepData( args[2] );
 	m_DeltaTZ = IfcThermodynamicTemperatureMeasure::createObjectFromStepData( args[3] );
+}
+void IfcStructuralLoadTemperature::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadStatic::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "DeltaTConstant", m_DeltaTConstant ) );
+	vec_attributes.push_back( std::make_pair( "DeltaTY", m_DeltaTY ) );
+	vec_attributes.push_back( std::make_pair( "DeltaTZ", m_DeltaTZ ) );
+}
+void IfcStructuralLoadTemperature::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadTemperature::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

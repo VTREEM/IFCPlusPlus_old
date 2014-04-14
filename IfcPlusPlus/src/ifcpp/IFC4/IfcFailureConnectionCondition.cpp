@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -72,6 +73,19 @@ void IfcFailureConnectionCondition::readStepArguments( const std::vector<std::st
 	m_CompressionFailureX = IfcForceMeasure::createObjectFromStepData( args[4] );
 	m_CompressionFailureY = IfcForceMeasure::createObjectFromStepData( args[5] );
 	m_CompressionFailureZ = IfcForceMeasure::createObjectFromStepData( args[6] );
+}
+void IfcFailureConnectionCondition::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralConnectionCondition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TensionFailureX", m_TensionFailureX ) );
+	vec_attributes.push_back( std::make_pair( "TensionFailureY", m_TensionFailureY ) );
+	vec_attributes.push_back( std::make_pair( "TensionFailureZ", m_TensionFailureZ ) );
+	vec_attributes.push_back( std::make_pair( "CompressionFailureX", m_CompressionFailureX ) );
+	vec_attributes.push_back( std::make_pair( "CompressionFailureY", m_CompressionFailureY ) );
+	vec_attributes.push_back( std::make_pair( "CompressionFailureZ", m_CompressionFailureZ ) );
+}
+void IfcFailureConnectionCondition::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFailureConnectionCondition::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

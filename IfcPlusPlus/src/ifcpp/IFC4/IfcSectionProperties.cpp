@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -57,6 +58,16 @@ void IfcSectionProperties::readStepArguments( const std::vector<std::string>& ar
 	m_SectionType = IfcSectionTypeEnum::createObjectFromStepData( args[0] );
 	readEntityReference( args[1], m_StartProfile, map );
 	readEntityReference( args[2], m_EndProfile, map );
+}
+void IfcSectionProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedProperties::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "SectionType", m_SectionType ) );
+	vec_attributes.push_back( std::make_pair( "StartProfile", m_StartProfile ) );
+	vec_attributes.push_back( std::make_pair( "EndProfile", m_EndProfile ) );
+}
+void IfcSectionProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSectionProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

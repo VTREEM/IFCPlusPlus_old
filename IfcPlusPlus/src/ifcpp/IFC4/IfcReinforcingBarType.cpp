@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -125,6 +126,22 @@ void IfcReinforcingBarType::readStepArguments( const std::vector<std::string>& a
 	m_BarSurface = IfcReinforcingBarSurfaceEnum::createObjectFromStepData( args[13] );
 	m_BendingShapeCode = IfcLabel::createObjectFromStepData( args[14] );
 	readSelectList( args[15], m_BendingParameters, map );
+}
+void IfcReinforcingBarType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcReinforcingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "NominalDiameter", m_NominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "CrossSectionArea", m_CrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "BarLength", m_BarLength ) );
+	vec_attributes.push_back( std::make_pair( "BarSurface", m_BarSurface ) );
+	vec_attributes.push_back( std::make_pair( "BendingShapeCode", m_BendingShapeCode ) );
+	shared_ptr<IfcPPAttributeObjectVector> BendingParameters_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_BendingParameters.begin(), m_BendingParameters.end(), std::back_inserter( BendingParameters_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "BendingParameters", BendingParameters_vec_object ) );
+}
+void IfcReinforcingBarType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcReinforcingBarType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

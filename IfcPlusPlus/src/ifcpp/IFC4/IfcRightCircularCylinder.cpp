@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -58,6 +59,15 @@ void IfcRightCircularCylinder::readStepArguments( const std::vector<std::string>
 	readEntityReference( args[0], m_Position, map );
 	m_Height = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
 	m_Radius = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
+}
+void IfcRightCircularCylinder::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCsgPrimitive3D::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Height", m_Height ) );
+	vec_attributes.push_back( std::make_pair( "Radius", m_Radius ) );
+}
+void IfcRightCircularCylinder::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRightCircularCylinder::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

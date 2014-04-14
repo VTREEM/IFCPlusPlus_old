@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -64,6 +65,15 @@ void IfcOrientedEdge::readStepArguments( const std::vector<std::string>& args, c
 	readEntityReference( args[2], m_EdgeElement, map );
 	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_Orientation = false; }
 	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_Orientation = true; }
+}
+void IfcOrientedEdge::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEdge::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "EdgeElement", m_EdgeElement ) );
+	vec_attributes.push_back( std::make_pair( "Orientation", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_Orientation ) ) ) );
+}
+void IfcOrientedEdge::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcOrientedEdge::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

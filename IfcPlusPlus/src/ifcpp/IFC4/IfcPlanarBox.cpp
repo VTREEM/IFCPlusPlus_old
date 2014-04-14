@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -58,6 +59,14 @@ void IfcPlanarBox::readStepArguments( const std::vector<std::string>& args, cons
 	m_SizeInX = IfcLengthMeasure::createObjectFromStepData( args[0] );
 	m_SizeInY = IfcLengthMeasure::createObjectFromStepData( args[1] );
 	m_Placement = IfcAxis2Placement::createObjectFromStepData( args[2], map );
+}
+void IfcPlanarBox::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPlanarExtent::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Placement", m_Placement ) );
+}
+void IfcPlanarBox::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPlanarBox::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

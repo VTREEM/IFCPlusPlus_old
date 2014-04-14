@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,16 @@ void IfcDerivedProfileDef::readStepArguments( const std::vector<std::string>& ar
 	readEntityReference( args[2], m_ParentProfile, map );
 	readEntityReference( args[3], m_Operator, map );
 	m_Label = IfcLabel::createObjectFromStepData( args[4] );
+}
+void IfcDerivedProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ParentProfile", m_ParentProfile ) );
+	vec_attributes.push_back( std::make_pair( "Operator", m_Operator ) );
+	vec_attributes.push_back( std::make_pair( "Label", m_Label ) );
+}
+void IfcDerivedProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDerivedProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,6 +48,13 @@ void IfcColourRgbList::readStepArguments( const std::vector<std::string>& args, 
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcColourRgbList, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList2D( args[0], m_ColourList, map );
+}
+void IfcColourRgbList::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+}
+void IfcColourRgbList::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcColourRgbList::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -141,6 +142,21 @@ void IfcTendon::readStepArguments( const std::vector<std::string>& args, const s
 	m_FrictionCoefficient = IfcNormalisedRatioMeasure::createObjectFromStepData( args[14] );
 	m_AnchorageSlip = IfcPositiveLengthMeasure::createObjectFromStepData( args[15] );
 	m_MinCurvatureRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[16] );
+}
+void IfcTendon::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcReinforcingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "NominalDiameter", m_NominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "CrossSectionArea", m_CrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "TensionForce", m_TensionForce ) );
+	vec_attributes.push_back( std::make_pair( "PreStress", m_PreStress ) );
+	vec_attributes.push_back( std::make_pair( "FrictionCoefficient", m_FrictionCoefficient ) );
+	vec_attributes.push_back( std::make_pair( "AnchorageSlip", m_AnchorageSlip ) );
+	vec_attributes.push_back( std::make_pair( "MinCurvatureRadius", m_MinCurvatureRadius ) );
+}
+void IfcTendon::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTendon::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

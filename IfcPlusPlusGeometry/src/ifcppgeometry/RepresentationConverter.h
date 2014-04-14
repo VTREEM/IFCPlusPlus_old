@@ -45,10 +45,10 @@ public:
 
 	void convertIfcRepresentation(				const shared_ptr<IfcRepresentation>& representation,	shared_ptr<ShapeInputData>& shape_data, std::stringstream& err );
 	void convertIfcGeometricRepresentationItem(	const shared_ptr<IfcGeometricRepresentationItem>& item,	shared_ptr<ItemData> item_data, std::stringstream& err );
-	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,				const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
-	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcSectionedSpine(				const shared_ptr<IfcSectionedSpine>& spine,				shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcReferencedSectionedSpine(	const shared_ptr<IfcReferencedSectionedSpine>& spine,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertStyledItem(						const shared_ptr<IfcRepresentationItem>& item,			shared_ptr<ItemData>& item_data );
 	void convertIfcPropertySet(					const shared_ptr<IfcPropertySet>& property_set,	osg::Group* group );
-	void convertStyledItem(						const shared_ptr<IfcRepresentationItem>& representation_item, shared_ptr<ItemData>& item_data );
 	void subtractOpenings(						const shared_ptr<IfcElement>& ifc_element, shared_ptr<ShapeInputData>& product_shape, std::stringstream& err );
 
 	shared_ptr<SolidModelConverter>& getSolidConverter() { return m_solid_converter; }

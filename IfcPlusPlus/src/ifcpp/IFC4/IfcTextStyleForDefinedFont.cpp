@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -51,6 +52,15 @@ void IfcTextStyleForDefinedFont::readStepArguments( const std::vector<std::strin
 	#endif
 	m_Colour = IfcColour::createObjectFromStepData( args[0], map );
 	m_BackgroundColour = IfcColour::createObjectFromStepData( args[1], map );
+}
+void IfcTextStyleForDefinedFont::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Colour", m_Colour ) );
+	vec_attributes.push_back( std::make_pair( "BackgroundColour", m_BackgroundColour ) );
+}
+void IfcTextStyleForDefinedFont::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTextStyleForDefinedFont::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

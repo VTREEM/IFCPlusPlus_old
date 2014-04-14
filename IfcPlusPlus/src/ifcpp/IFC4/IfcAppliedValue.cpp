@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -89,6 +90,21 @@ void IfcAppliedValue::readStepArguments( const std::vector<std::string>& args, c
 	m_Condition = IfcLabel::createObjectFromStepData( args[7] );
 	m_ArithmeticOperator = IfcArithmeticOperatorEnum::createObjectFromStepData( args[8] );
 	readEntityReferenceList( args[9], m_Components, map );
+}
+void IfcAppliedValue::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "AppliedValue", m_AppliedValue ) );
+	vec_attributes.push_back( std::make_pair( "UnitBasis", m_UnitBasis ) );
+	vec_attributes.push_back( std::make_pair( "ApplicableDate", m_ApplicableDate ) );
+	vec_attributes.push_back( std::make_pair( "FixedUntilDate", m_FixedUntilDate ) );
+	vec_attributes.push_back( std::make_pair( "Category", m_Category ) );
+	vec_attributes.push_back( std::make_pair( "Condition", m_Condition ) );
+	vec_attributes.push_back( std::make_pair( "ArithmeticOperator", m_ArithmeticOperator ) );
+}
+void IfcAppliedValue::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAppliedValue::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

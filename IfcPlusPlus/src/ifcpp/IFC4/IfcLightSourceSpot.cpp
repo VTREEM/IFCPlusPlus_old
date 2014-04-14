@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -104,6 +105,17 @@ void IfcLightSourceSpot::readStepArguments( const std::vector<std::string>& args
 	m_ConcentrationExponent = IfcReal::createObjectFromStepData( args[10] );
 	m_SpreadAngle = IfcPositivePlaneAngleMeasure::createObjectFromStepData( args[11] );
 	m_BeamWidthAngle = IfcPositivePlaneAngleMeasure::createObjectFromStepData( args[12] );
+}
+void IfcLightSourceSpot::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcLightSourcePositional::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Orientation", m_Orientation ) );
+	vec_attributes.push_back( std::make_pair( "ConcentrationExponent", m_ConcentrationExponent ) );
+	vec_attributes.push_back( std::make_pair( "SpreadAngle", m_SpreadAngle ) );
+	vec_attributes.push_back( std::make_pair( "BeamWidthAngle", m_BeamWidthAngle ) );
+}
+void IfcLightSourceSpot::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLightSourceSpot::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

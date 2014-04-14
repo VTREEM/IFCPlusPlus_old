@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -67,6 +68,18 @@ void IfcSweptDiskSolid::readStepArguments( const std::vector<std::string>& args,
 	m_InnerRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
 	m_StartParam = IfcParameterValue::createObjectFromStepData( args[3] );
 	m_EndParam = IfcParameterValue::createObjectFromStepData( args[4] );
+}
+void IfcSweptDiskSolid::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSolidModel::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Directrix", m_Directrix ) );
+	vec_attributes.push_back( std::make_pair( "Radius", m_Radius ) );
+	vec_attributes.push_back( std::make_pair( "InnerRadius", m_InnerRadius ) );
+	vec_attributes.push_back( std::make_pair( "StartParam", m_StartParam ) );
+	vec_attributes.push_back( std::make_pair( "EndParam", m_EndParam ) );
+}
+void IfcSweptDiskSolid::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSweptDiskSolid::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -62,6 +63,15 @@ void IfcTessellatedFaceSet::readStepArguments( const std::vector<std::string>& a
 	readTypeOfRealList2D( args[1], m_Normals );
 	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_Closed = false; }
 	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_Closed = true; }
+}
+void IfcTessellatedFaceSet::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTessellatedItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Coordinates", m_Coordinates ) );
+	vec_attributes.push_back( std::make_pair( "Closed", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_Closed ) ) ) );
+}
+void IfcTessellatedFaceSet::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTessellatedFaceSet::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

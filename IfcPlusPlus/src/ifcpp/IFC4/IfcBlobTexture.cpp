@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -76,6 +77,14 @@ void IfcBlobTexture::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReference( args[3], m_TextureTransform, map );
 	readTypeList( args[4], m_Parameter );
 	m_RasterFormat = IfcIdentifier::createObjectFromStepData( args[5] );
+}
+void IfcBlobTexture::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSurfaceTexture::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RasterFormat", m_RasterFormat ) );
+}
+void IfcBlobTexture::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBlobTexture::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

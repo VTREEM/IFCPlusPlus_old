@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,6 +50,14 @@ void IfcConic::readStepArguments( const std::vector<std::string>& args, const st
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcConic, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	m_Position = IfcAxis2Placement::createObjectFromStepData( args[0], map );
+}
+void IfcConic::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCurve::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Position", m_Position ) );
+}
+void IfcConic::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConic::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

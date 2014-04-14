@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -87,6 +88,22 @@ void IfcPostalAddress::readStepArguments( const std::vector<std::string>& args, 
 	m_Region = IfcLabel::createObjectFromStepData( args[7] );
 	m_PostalCode = IfcLabel::createObjectFromStepData( args[8] );
 	m_Country = IfcLabel::createObjectFromStepData( args[9] );
+}
+void IfcPostalAddress::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcAddress::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "InternalLocation", m_InternalLocation ) );
+	shared_ptr<IfcPPAttributeObjectVector> AddressLines_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_AddressLines.begin(), m_AddressLines.end(), std::back_inserter( AddressLines_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "AddressLines", AddressLines_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "PostalBox", m_PostalBox ) );
+	vec_attributes.push_back( std::make_pair( "Town", m_Town ) );
+	vec_attributes.push_back( std::make_pair( "Region", m_Region ) );
+	vec_attributes.push_back( std::make_pair( "PostalCode", m_PostalCode ) );
+	vec_attributes.push_back( std::make_pair( "Country", m_Country ) );
+}
+void IfcPostalAddress::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPostalAddress::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -55,6 +56,14 @@ void IfcCompositeCurve::readStepArguments( const std::vector<std::string>& args,
 	readEntityReferenceList( args[0], m_Segments, map );
 	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
 	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+}
+void IfcCompositeCurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundedCurve::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SelfIntersect ) ) ) );
+}
+void IfcCompositeCurve::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCompositeCurve::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

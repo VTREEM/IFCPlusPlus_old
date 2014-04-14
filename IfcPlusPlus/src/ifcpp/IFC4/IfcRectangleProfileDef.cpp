@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,15 @@ void IfcRectangleProfileDef::readStepArguments( const std::vector<std::string>& 
 	readEntityReference( args[2], m_Position, map );
 	m_XDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
 	m_YDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
+}
+void IfcRectangleProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcParameterizedProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "XDim", m_XDim ) );
+	vec_attributes.push_back( std::make_pair( "YDim", m_YDim ) );
+}
+void IfcRectangleProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRectangleProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

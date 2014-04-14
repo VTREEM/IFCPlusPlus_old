@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -76,6 +77,18 @@ void IfcCurrencyRelationship::readStepArguments( const std::vector<std::string>&
 	m_ExchangeRate = IfcPositiveRatioMeasure::createObjectFromStepData( args[4] );
 	m_RateDateTime = IfcDateTime::createObjectFromStepData( args[5] );
 	readEntityReference( args[6], m_RateSource, map );
+}
+void IfcCurrencyRelationship::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcResourceLevelRelationship::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingMonetaryUnit", m_RelatingMonetaryUnit ) );
+	vec_attributes.push_back( std::make_pair( "RelatedMonetaryUnit", m_RelatedMonetaryUnit ) );
+	vec_attributes.push_back( std::make_pair( "ExchangeRate", m_ExchangeRate ) );
+	vec_attributes.push_back( std::make_pair( "RateDateTime", m_RateDateTime ) );
+	vec_attributes.push_back( std::make_pair( "RateSource", m_RateSource ) );
+}
+void IfcCurrencyRelationship::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCurrencyRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

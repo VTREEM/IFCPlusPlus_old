@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -112,6 +113,13 @@ void IfcStructuralLinearAction::readStepArguments( const std::vector<std::string
 	else if( _stricmp( args[9].c_str(), ".T." ) == 0 ) { m_DestabilizingLoad = true; }
 	m_ProjectedOrTrue = IfcProjectedOrTrueLengthEnum::createObjectFromStepData( args[10] );
 	m_PredefinedType = IfcStructuralCurveActivityTypeEnum::createObjectFromStepData( args[11] );
+}
+void IfcStructuralLinearAction::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralCurveAction::getAttributes( vec_attributes );
+}
+void IfcStructuralLinearAction::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLinearAction::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

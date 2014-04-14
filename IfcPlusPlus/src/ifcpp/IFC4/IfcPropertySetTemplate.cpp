@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -80,6 +81,15 @@ void IfcPropertySetTemplate::readStepArguments( const std::vector<std::string>& 
 	m_TemplateType = IfcPropertySetTemplateTypeEnum::createObjectFromStepData( args[4] );
 	m_ApplicableEntity = IfcIdentifier::createObjectFromStepData( args[5] );
 	readEntityReferenceList( args[6], m_HasPropertyTemplates, map );
+}
+void IfcPropertySetTemplate::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPropertyTemplateDefinition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TemplateType", m_TemplateType ) );
+	vec_attributes.push_back( std::make_pair( "ApplicableEntity", m_ApplicableEntity ) );
+}
+void IfcPropertySetTemplate::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPropertySetTemplate::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -58,6 +59,15 @@ void IfcCurveBoundedPlane::readStepArguments( const std::vector<std::string>& ar
 	readEntityReference( args[0], m_BasisSurface, map );
 	readEntityReference( args[1], m_OuterBoundary, map );
 	readEntityReferenceList( args[2], m_InnerBoundaries, map );
+}
+void IfcCurveBoundedPlane::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundedSurface::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "BasisSurface", m_BasisSurface ) );
+	vec_attributes.push_back( std::make_pair( "OuterBoundary", m_OuterBoundary ) );
+}
+void IfcCurveBoundedPlane::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCurveBoundedPlane::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

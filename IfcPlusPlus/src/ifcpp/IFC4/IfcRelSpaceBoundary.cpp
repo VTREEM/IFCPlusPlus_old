@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -89,6 +90,18 @@ void IfcRelSpaceBoundary::readStepArguments( const std::vector<std::string>& arg
 	readEntityReference( args[6], m_ConnectionGeometry, map );
 	m_PhysicalOrVirtualBoundary = IfcPhysicalOrVirtualEnum::createObjectFromStepData( args[7] );
 	m_InternalOrExternalBoundary = IfcInternalOrExternalEnum::createObjectFromStepData( args[8] );
+}
+void IfcRelSpaceBoundary::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingSpace", m_RelatingSpace ) );
+	vec_attributes.push_back( std::make_pair( "RelatedBuildingElement", m_RelatedBuildingElement ) );
+	vec_attributes.push_back( std::make_pair( "ConnectionGeometry", m_ConnectionGeometry ) );
+	vec_attributes.push_back( std::make_pair( "PhysicalOrVirtualBoundary", m_PhysicalOrVirtualBoundary ) );
+	vec_attributes.push_back( std::make_pair( "InternalOrExternalBoundary", m_InternalOrExternalBoundary ) );
+}
+void IfcRelSpaceBoundary::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelSpaceBoundary::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

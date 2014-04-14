@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -84,6 +85,27 @@ void IfcTelecomAddress::readStepArguments( const std::vector<std::string>& args,
 	readTypeList( args[6], m_ElectronicMailAddresses );
 	m_WWWHomePageURL = IfcURIReference::createObjectFromStepData( args[7] );
 	readTypeList( args[8], m_MessagingIDs );
+}
+void IfcTelecomAddress::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcAddress::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> TelephoneNumbers_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_TelephoneNumbers.begin(), m_TelephoneNumbers.end(), std::back_inserter( TelephoneNumbers_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "TelephoneNumbers", TelephoneNumbers_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> FacsimileNumbers_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_FacsimileNumbers.begin(), m_FacsimileNumbers.end(), std::back_inserter( FacsimileNumbers_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "FacsimileNumbers", FacsimileNumbers_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "PagerNumber", m_PagerNumber ) );
+	shared_ptr<IfcPPAttributeObjectVector> ElectronicMailAddresses_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_ElectronicMailAddresses.begin(), m_ElectronicMailAddresses.end(), std::back_inserter( ElectronicMailAddresses_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "ElectronicMailAddresses", ElectronicMailAddresses_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "WWWHomePageURL", m_WWWHomePageURL ) );
+	shared_ptr<IfcPPAttributeObjectVector> MessagingIDs_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_MessagingIDs.begin(), m_MessagingIDs.end(), std::back_inserter( MessagingIDs_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "MessagingIDs", MessagingIDs_vec_object ) );
+}
+void IfcTelecomAddress::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTelecomAddress::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

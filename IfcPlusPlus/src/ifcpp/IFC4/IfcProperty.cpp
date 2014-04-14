@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -56,6 +57,15 @@ void IfcProperty::readStepArguments( const std::vector<std::string>& args, const
 	#endif
 	m_Name = IfcIdentifier::createObjectFromStepData( args[0] );
 	m_Description = IfcText::createObjectFromStepData( args[1] );
+}
+void IfcProperty::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPropertyAbstraction::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+}
+void IfcProperty::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcProperty::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

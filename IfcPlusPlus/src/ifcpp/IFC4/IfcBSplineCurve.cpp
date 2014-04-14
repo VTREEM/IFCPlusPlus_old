@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -71,6 +72,17 @@ void IfcBSplineCurve::readStepArguments( const std::vector<std::string>& args, c
 	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_ClosedCurve = true; }
 	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
 	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+}
+void IfcBSplineCurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundedCurve::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Degree", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_Degree ) ) ) );
+	vec_attributes.push_back( std::make_pair( "CurveForm", m_CurveForm ) );
+	vec_attributes.push_back( std::make_pair( "ClosedCurve", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ClosedCurve ) ) ) );
+	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SelfIntersect ) ) ) );
+}
+void IfcBSplineCurve::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBSplineCurve::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

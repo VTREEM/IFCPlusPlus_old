@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -112,6 +113,15 @@ void IfcStructuralSurfaceAction::readStepArguments( const std::vector<std::strin
 	else if( _stricmp( args[9].c_str(), ".T." ) == 0 ) { m_DestabilizingLoad = true; }
 	m_ProjectedOrTrue = IfcProjectedOrTrueLengthEnum::createObjectFromStepData( args[10] );
 	m_PredefinedType = IfcStructuralSurfaceActivityTypeEnum::createObjectFromStepData( args[11] );
+}
+void IfcStructuralSurfaceAction::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralAction::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ProjectedOrTrue", m_ProjectedOrTrue ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcStructuralSurfaceAction::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralSurfaceAction::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

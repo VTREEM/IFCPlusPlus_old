@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -120,6 +121,18 @@ void IfcSite::readStepArguments( const std::vector<std::string>& args, const std
 	m_RefElevation = IfcLengthMeasure::createObjectFromStepData( args[11] );
 	m_LandTitleNumber = IfcLabel::createObjectFromStepData( args[12] );
 	readEntityReference( args[13], m_SiteAddress, map );
+}
+void IfcSite::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSpatialStructureElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RefLatitude", m_RefLatitude ) );
+	vec_attributes.push_back( std::make_pair( "RefLongitude", m_RefLongitude ) );
+	vec_attributes.push_back( std::make_pair( "RefElevation", m_RefElevation ) );
+	vec_attributes.push_back( std::make_pair( "LandTitleNumber", m_LandTitleNumber ) );
+	vec_attributes.push_back( std::make_pair( "SiteAddress", m_SiteAddress ) );
+}
+void IfcSite::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSite::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

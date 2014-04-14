@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -54,6 +55,14 @@ void IfcCircle::readStepArguments( const std::vector<std::string>& args, const s
 	#endif
 	m_Position = IfcAxis2Placement::createObjectFromStepData( args[0], map );
 	m_Radius = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
+}
+void IfcCircle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConic::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Radius", m_Radius ) );
+}
+void IfcCircle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCircle::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

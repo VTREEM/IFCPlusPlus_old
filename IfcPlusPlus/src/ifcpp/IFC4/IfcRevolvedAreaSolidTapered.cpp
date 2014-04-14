@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,14 @@ void IfcRevolvedAreaSolidTapered::readStepArguments( const std::vector<std::stri
 	readEntityReference( args[2], m_Axis, map );
 	m_Angle = IfcPlaneAngleMeasure::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_EndSweptArea, map );
+}
+void IfcRevolvedAreaSolidTapered::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRevolvedAreaSolid::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "EndSweptArea", m_EndSweptArea ) );
+}
+void IfcRevolvedAreaSolidTapered::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRevolvedAreaSolidTapered::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

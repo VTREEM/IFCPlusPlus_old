@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -104,6 +105,20 @@ void IfcBSplineSurfaceWithKnots::readStepArguments( const std::vector<std::strin
 	readTypeOfRealList( args[9], m_UKnots );
 	readTypeOfRealList( args[10], m_VKnots );
 	m_KnotSpec = IfcKnotType::createObjectFromStepData( args[11] );
+}
+void IfcBSplineSurfaceWithKnots::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBSplineSurface::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> UKnots_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_UKnots.begin(), m_UKnots.end(), std::back_inserter( UKnots_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "UKnots", UKnots_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> VKnots_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_VKnots.begin(), m_VKnots.end(), std::back_inserter( VKnots_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "VKnots", VKnots_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "KnotSpec", m_KnotSpec ) );
+}
+void IfcBSplineSurfaceWithKnots::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBSplineSurfaceWithKnots::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

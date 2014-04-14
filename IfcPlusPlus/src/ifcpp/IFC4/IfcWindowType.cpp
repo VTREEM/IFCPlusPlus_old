@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -112,6 +113,17 @@ void IfcWindowType::readStepArguments( const std::vector<std::string>& args, con
 	if( _stricmp( args[11].c_str(), ".F." ) == 0 ) { m_ParameterTakesPrecedence = false; }
 	else if( _stricmp( args[11].c_str(), ".T." ) == 0 ) { m_ParameterTakesPrecedence = true; }
 	m_UserDefinedPartitioningType = IfcLabel::createObjectFromStepData( args[12] );
+}
+void IfcWindowType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "PartitioningType", m_PartitioningType ) );
+	vec_attributes.push_back( std::make_pair( "ParameterTakesPrecedence", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ParameterTakesPrecedence ) ) ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedPartitioningType", m_UserDefinedPartitioningType ) );
+}
+void IfcWindowType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWindowType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

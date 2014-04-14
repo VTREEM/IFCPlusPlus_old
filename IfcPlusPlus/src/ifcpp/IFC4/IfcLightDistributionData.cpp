@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -56,6 +57,19 @@ void IfcLightDistributionData::readStepArguments( const std::vector<std::string>
 	m_MainPlaneAngle = IfcPlaneAngleMeasure::createObjectFromStepData( args[0] );
 	readTypeOfRealList( args[1], m_SecondaryPlaneAngle );
 	readTypeOfRealList( args[2], m_LuminousIntensity );
+}
+void IfcLightDistributionData::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "MainPlaneAngle", m_MainPlaneAngle ) );
+	shared_ptr<IfcPPAttributeObjectVector> SecondaryPlaneAngle_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_SecondaryPlaneAngle.begin(), m_SecondaryPlaneAngle.end(), std::back_inserter( SecondaryPlaneAngle_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "SecondaryPlaneAngle", SecondaryPlaneAngle_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> LuminousIntensity_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_LuminousIntensity.begin(), m_LuminousIntensity.end(), std::back_inserter( LuminousIntensity_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "LuminousIntensity", LuminousIntensity_vec_object ) );
+}
+void IfcLightDistributionData::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLightDistributionData::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

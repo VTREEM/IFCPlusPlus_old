@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -86,6 +87,18 @@ void IfcLightSourcePositional::readStepArguments( const std::vector<std::string>
 	m_ConstantAttenuation = IfcReal::createObjectFromStepData( args[6] );
 	m_DistanceAttenuation = IfcReal::createObjectFromStepData( args[7] );
 	m_QuadricAttenuation = IfcReal::createObjectFromStepData( args[8] );
+}
+void IfcLightSourcePositional::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcLightSource::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Position", m_Position ) );
+	vec_attributes.push_back( std::make_pair( "Radius", m_Radius ) );
+	vec_attributes.push_back( std::make_pair( "ConstantAttenuation", m_ConstantAttenuation ) );
+	vec_attributes.push_back( std::make_pair( "DistanceAttenuation", m_DistanceAttenuation ) );
+	vec_attributes.push_back( std::make_pair( "QuadricAttenuation", m_QuadricAttenuation ) );
+}
+void IfcLightSourcePositional::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLightSourcePositional::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

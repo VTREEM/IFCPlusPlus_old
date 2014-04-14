@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -111,6 +112,17 @@ void IfcTendonType::readStepArguments( const std::vector<std::string>& args, con
 	m_NominalDiameter = IfcPositiveLengthMeasure::createObjectFromStepData( args[10] );
 	m_CrossSectionArea = IfcAreaMeasure::createObjectFromStepData( args[11] );
 	m_SheethDiameter = IfcPositiveLengthMeasure::createObjectFromStepData( args[12] );
+}
+void IfcTendonType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcReinforcingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "NominalDiameter", m_NominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "CrossSectionArea", m_CrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "SheethDiameter", m_SheethDiameter ) );
+}
+void IfcTendonType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTendonType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

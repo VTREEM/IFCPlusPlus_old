@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,15 @@ void IfcQuantityTime::readStepArguments( const std::vector<std::string>& args, c
 	readEntityReference( args[2], m_Unit, map );
 	m_TimeValue = IfcTimeMeasure::createObjectFromStepData( args[3] );
 	m_Formula = IfcLabel::createObjectFromStepData( args[4] );
+}
+void IfcQuantityTime::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPhysicalSimpleQuantity::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TimeValue", m_TimeValue ) );
+	vec_attributes.push_back( std::make_pair( "Formula", m_Formula ) );
+}
+void IfcQuantityTime::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcQuantityTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

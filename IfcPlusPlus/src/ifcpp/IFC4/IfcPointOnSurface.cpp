@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -58,6 +59,16 @@ void IfcPointOnSurface::readStepArguments( const std::vector<std::string>& args,
 	readEntityReference( args[0], m_BasisSurface, map );
 	m_PointParameterU = IfcParameterValue::createObjectFromStepData( args[1] );
 	m_PointParameterV = IfcParameterValue::createObjectFromStepData( args[2] );
+}
+void IfcPointOnSurface::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPoint::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "BasisSurface", m_BasisSurface ) );
+	vec_attributes.push_back( std::make_pair( "PointParameterU", m_PointParameterU ) );
+	vec_attributes.push_back( std::make_pair( "PointParameterV", m_PointParameterV ) );
+}
+void IfcPointOnSurface::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPointOnSurface::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

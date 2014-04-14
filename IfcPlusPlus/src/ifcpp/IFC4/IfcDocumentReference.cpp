@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -69,6 +70,15 @@ void IfcDocumentReference::readStepArguments( const std::vector<std::string>& ar
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_ReferencedDocument, map );
+}
+void IfcDocumentReference::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalReference::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "ReferencedDocument", m_ReferencedDocument ) );
+}
+void IfcDocumentReference::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDocumentReference::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

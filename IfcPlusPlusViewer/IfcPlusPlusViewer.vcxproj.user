@@ -5,20 +5,20 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b"$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
-    <QTDIR>D:\lib\Qt\5.2.0\5.2.0\msvc2012_64_opengl</QTDIR>
+    <QTDIR>D:\lib\Qt\5.2.1\qtbase</QTDIR>
     <LocalDebuggerDebuggerType>NativeOnly</LocalDebuggerDebuggerType>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b"$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
-    <QTDIR>D:\lib\Qt\5.2.0\5.2.0\msvc2012_64_opengl</QTDIR>
+    <QTDIR>D:\lib\Qt\5.2.1\qtbase</QTDIR>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseNoOptimization|x64'">
-    <QTDIR>D:\lib\Qt\5.2.0\5.2.0\msvc2012_64_opengl</QTDIR>
+    <QTDIR>D:\lib\Qt\5.2.1\qtbase</QTDIR>
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b"$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">
-    <QTDIR>D:\lib\Qt\5.2.0\5.2.0\msvc2012_64_opengl</QTDIR>
+    <QTDIR>D:\lib\Qt\5.2.1\qtbase</QTDIR>
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b"$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|Win32'">

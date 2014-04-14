@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -64,6 +65,16 @@ void IfcConnectionPointEccentricity::readStepArguments( const std::vector<std::s
 	m_EccentricityInX = IfcLengthMeasure::createObjectFromStepData( args[2] );
 	m_EccentricityInY = IfcLengthMeasure::createObjectFromStepData( args[3] );
 	m_EccentricityInZ = IfcLengthMeasure::createObjectFromStepData( args[4] );
+}
+void IfcConnectionPointEccentricity::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConnectionPointGeometry::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "EccentricityInX", m_EccentricityInX ) );
+	vec_attributes.push_back( std::make_pair( "EccentricityInY", m_EccentricityInY ) );
+	vec_attributes.push_back( std::make_pair( "EccentricityInZ", m_EccentricityInZ ) );
+}
+void IfcConnectionPointEccentricity::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConnectionPointEccentricity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

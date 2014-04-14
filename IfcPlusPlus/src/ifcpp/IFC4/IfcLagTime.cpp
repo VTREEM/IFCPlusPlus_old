@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -66,6 +67,15 @@ void IfcLagTime::readStepArguments( const std::vector<std::string>& args, const 
 	m_UserDefinedDataOrigin = IfcLabel::createObjectFromStepData( args[2] );
 	m_LagValue = IfcTimeOrRatioSelect::createObjectFromStepData( args[3], map );
 	m_DurationType = IfcTaskDurationEnum::createObjectFromStepData( args[4] );
+}
+void IfcLagTime::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSchedulingTime::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LagValue", m_LagValue ) );
+	vec_attributes.push_back( std::make_pair( "DurationType", m_DurationType ) );
+}
+void IfcLagTime::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLagTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

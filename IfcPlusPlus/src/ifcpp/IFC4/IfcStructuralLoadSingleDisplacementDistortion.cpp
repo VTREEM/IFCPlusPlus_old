@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -78,6 +79,14 @@ void IfcStructuralLoadSingleDisplacementDistortion::readStepArguments( const std
 	m_RotationalDisplacementRY = IfcPlaneAngleMeasure::createObjectFromStepData( args[5] );
 	m_RotationalDisplacementRZ = IfcPlaneAngleMeasure::createObjectFromStepData( args[6] );
 	m_Distortion = IfcCurvatureMeasure::createObjectFromStepData( args[7] );
+}
+void IfcStructuralLoadSingleDisplacementDistortion::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadSingleDisplacement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Distortion", m_Distortion ) );
+}
+void IfcStructuralLoadSingleDisplacementDistortion::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadSingleDisplacementDistortion::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

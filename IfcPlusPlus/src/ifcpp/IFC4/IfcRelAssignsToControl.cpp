@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -77,6 +78,14 @@ void IfcRelAssignsToControl::readStepArguments( const std::vector<std::string>& 
 	readEntityReferenceList( args[4], m_RelatedObjects, map );
 	m_RelatedObjectsType = IfcObjectTypeEnum::createObjectFromStepData( args[5] );
 	readEntityReference( args[6], m_RelatingControl, map );
+}
+void IfcRelAssignsToControl::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelAssigns::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingControl", m_RelatingControl ) );
+}
+void IfcRelAssignsToControl::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelAssignsToControl::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

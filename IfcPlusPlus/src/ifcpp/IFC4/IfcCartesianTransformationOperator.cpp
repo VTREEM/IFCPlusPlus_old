@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -63,6 +64,17 @@ void IfcCartesianTransformationOperator::readStepArguments( const std::vector<st
 	readEntityReference( args[1], m_Axis2, map );
 	readEntityReference( args[2], m_LocalOrigin, map );
 	readRealValue( args[3], m_Scale );
+}
+void IfcCartesianTransformationOperator::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Axis1", m_Axis1 ) );
+	vec_attributes.push_back( std::make_pair( "Axis2", m_Axis2 ) );
+	vec_attributes.push_back( std::make_pair( "LocalOrigin", m_LocalOrigin ) );
+	vec_attributes.push_back( std::make_pair( "Scale", shared_ptr<IfcPPAttributeObjectDouble>( new  IfcPPAttributeObjectDouble( m_Scale ) ) ) );
+}
+void IfcCartesianTransformationOperator::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCartesianTransformationOperator::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

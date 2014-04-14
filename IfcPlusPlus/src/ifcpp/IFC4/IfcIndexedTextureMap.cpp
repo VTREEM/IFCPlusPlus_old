@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -57,6 +58,15 @@ void IfcIndexedTextureMap::readStepArguments( const std::vector<std::string>& ar
 	readEntityReferenceList( args[0], m_Maps, map );
 	readEntityReference( args[1], m_MappedTo, map );
 	readEntityReference( args[2], m_TexCoords, map );
+}
+void IfcIndexedTextureMap::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTextureCoordinate::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "MappedTo", m_MappedTo ) );
+	vec_attributes.push_back( std::make_pair( "TexCoords", m_TexCoords ) );
+}
+void IfcIndexedTextureMap::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcIndexedTextureMap::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

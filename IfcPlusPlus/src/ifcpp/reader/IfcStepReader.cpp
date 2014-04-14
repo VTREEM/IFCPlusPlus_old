@@ -189,6 +189,10 @@ void IfcStepReader::readStreamHeader( const std::string& read_in )
 	
 	file_header_start += 7;
 	std::string file_header = read_in.substr( file_header_start, file_header_end - file_header_start );
+	std::vector<std::string> vec_header;
+	vec_header.push_back( file_header );
+	decodeArgumentStrings( vec_header );
+	file_header = vec_header[0];
 	m_model->setFileHeader( file_header );
 	
 	std::vector<std::string> vec_header_lines;

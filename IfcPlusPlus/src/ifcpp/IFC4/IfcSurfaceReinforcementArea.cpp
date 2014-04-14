@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -61,6 +62,20 @@ void IfcSurfaceReinforcementArea::readStepArguments( const std::vector<std::stri
 	readTypeOfRealList( args[1], m_SurfaceReinforcement1 );
 	readTypeOfRealList( args[2], m_SurfaceReinforcement2 );
 	m_ShearReinforcement = IfcRatioMeasure::createObjectFromStepData( args[3] );
+}
+void IfcSurfaceReinforcementArea::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadOrResult::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> SurfaceReinforcement1_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_SurfaceReinforcement1.begin(), m_SurfaceReinforcement1.end(), std::back_inserter( SurfaceReinforcement1_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "SurfaceReinforcement1", SurfaceReinforcement1_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> SurfaceReinforcement2_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_SurfaceReinforcement2.begin(), m_SurfaceReinforcement2.end(), std::back_inserter( SurfaceReinforcement2_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "SurfaceReinforcement2", SurfaceReinforcement2_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "ShearReinforcement", m_ShearReinforcement ) );
+}
+void IfcSurfaceReinforcementArea::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSurfaceReinforcementArea::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

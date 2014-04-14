@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -68,6 +69,14 @@ void IfcLightSourceDirectional::readStepArguments( const std::vector<std::string
 	m_AmbientIntensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[2] );
 	m_Intensity = IfcNormalisedRatioMeasure::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_Orientation, map );
+}
+void IfcLightSourceDirectional::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcLightSource::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Orientation", m_Orientation ) );
+}
+void IfcLightSourceDirectional::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLightSourceDirectional::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -65,7 +65,6 @@
 #include "ifcpp/IFC4/include/IfcBooleanResult.h"
 #include "ifcpp/IFC4/include/IfcPresentationLayerWithStyle.h"
 
-
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/UnitConverter.h"
 #include "ifcpp/model/IfcPPException.h"
@@ -298,9 +297,7 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 	}
 }
 
-void RepresentationConverter::convertIfcGeometricRepresentationItem( const shared_ptr<IfcGeometricRepresentationItem>& geom_item,
-																	shared_ptr<ItemData> item_data,
-																	std::stringstream& strs_err )
+void RepresentationConverter::convertIfcGeometricRepresentationItem( const shared_ptr<IfcGeometricRepresentationItem>& geom_item, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
 	//ENTITY IfcGeometricRepresentationItem
 	//ABSTRACT SUPERTYPE OF(ONEOF(
@@ -341,14 +338,14 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	shared_ptr<IfcBooleanResult> boolean_result = dynamic_pointer_cast<IfcBooleanResult>(geom_item);
 	if( boolean_result )
 	{
-		m_solid_converter->convertIfcBooleanResult( boolean_result, carve::math::Matrix::IDENT(), item_data, strs_err );
+		m_solid_converter->convertIfcBooleanResult( boolean_result, item_data, strs_err );
 		return;
 	}
 
 	shared_ptr<IfcSolidModel> solid_model = dynamic_pointer_cast<IfcSolidModel>(geom_item);
 	if( solid_model )
 	{
-		m_solid_converter->convertIfcSolidModel( solid_model, carve::math::Matrix::IDENT(), item_data, strs_err );
+		m_solid_converter->convertIfcSolidModel( solid_model, item_data, strs_err );
 		return;
 	}
 
@@ -491,7 +488,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	shared_ptr<IfcSectionedSpine> sectioned_spine = dynamic_pointer_cast<IfcSectionedSpine>(geom_item);
 	if( sectioned_spine )
 	{
-		convertIfcSectionedSpine( sectioned_spine, carve::math::Matrix::IDENT(), item_data, strs_err );
+		convertIfcSectionedSpine( sectioned_spine, item_data, strs_err );
 		return;
 	}
 	
@@ -596,7 +593,7 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 						// do the subtraction
 						shared_ptr<carve::mesh::MeshSet<3> > result;
 						bool csg_op_ok = m_solid_converter->computeCSG( product_meshset.get(), opening_meshset.get(), carve::csg::CSG::A_MINUS_B, product_id, representation_id, strs_err, result );
-
+						item_data->m_csg_computed = true;
 						if( csg_op_ok )
 						{
 							product_meshset = result;

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -54,6 +55,15 @@ void IfcPcurve::readStepArguments( const std::vector<std::string>& args, const s
 	#endif
 	readEntityReference( args[0], m_BasisSurface, map );
 	readEntityReference( args[1], m_ReferenceCurve, map );
+}
+void IfcPcurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCurve::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "BasisSurface", m_BasisSurface ) );
+	vec_attributes.push_back( std::make_pair( "ReferenceCurve", m_ReferenceCurve ) );
+}
+void IfcPcurve::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPcurve::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

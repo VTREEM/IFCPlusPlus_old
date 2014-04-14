@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -87,6 +88,21 @@ void IfcApproval::readStepArguments( const std::vector<std::string>& args, const
 	m_Qualifier = IfcText::createObjectFromStepData( args[6] );
 	m_RequestingApproval = IfcActorSelect::createObjectFromStepData( args[7], map );
 	m_GivingApproval = IfcActorSelect::createObjectFromStepData( args[8], map );
+}
+void IfcApproval::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Identifier", m_Identifier ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "TimeOfApproval", m_TimeOfApproval ) );
+	vec_attributes.push_back( std::make_pair( "Status", m_Status ) );
+	vec_attributes.push_back( std::make_pair( "Level", m_Level ) );
+	vec_attributes.push_back( std::make_pair( "Qualifier", m_Qualifier ) );
+	vec_attributes.push_back( std::make_pair( "RequestingApproval", m_RequestingApproval ) );
+	vec_attributes.push_back( std::make_pair( "GivingApproval", m_GivingApproval ) );
+}
+void IfcApproval::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcApproval::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -62,6 +63,16 @@ void IfcRectangularPyramid::readStepArguments( const std::vector<std::string>& a
 	m_XLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
 	m_YLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
 	m_Height = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
+}
+void IfcRectangularPyramid::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCsgPrimitive3D::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "XLength", m_XLength ) );
+	vec_attributes.push_back( std::make_pair( "YLength", m_YLength ) );
+	vec_attributes.push_back( std::make_pair( "Height", m_Height ) );
+}
+void IfcRectangularPyramid::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRectangularPyramid::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

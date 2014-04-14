@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -60,6 +61,16 @@ void IfcOffsetCurve2D::readStepArguments( const std::vector<std::string>& args, 
 	m_Distance = IfcLengthMeasure::createObjectFromStepData( args[1] );
 	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
 	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+}
+void IfcOffsetCurve2D::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCurve::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "BasisCurve", m_BasisCurve ) );
+	vec_attributes.push_back( std::make_pair( "Distance", m_Distance ) );
+	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SelfIntersect ) ) ) );
+}
+void IfcOffsetCurve2D::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcOffsetCurve2D::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

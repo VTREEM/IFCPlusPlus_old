@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -77,6 +78,19 @@ void IfcConstraint::readStepArguments( const std::vector<std::string>& args, con
 	m_CreatingActor = IfcActorSelect::createObjectFromStepData( args[4], map );
 	m_CreationTime = IfcDateTime::createObjectFromStepData( args[5] );
 	m_UserDefinedGrade = IfcLabel::createObjectFromStepData( args[6] );
+}
+void IfcConstraint::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "ConstraintGrade", m_ConstraintGrade ) );
+	vec_attributes.push_back( std::make_pair( "ConstraintSource", m_ConstraintSource ) );
+	vec_attributes.push_back( std::make_pair( "CreatingActor", m_CreatingActor ) );
+	vec_attributes.push_back( std::make_pair( "CreationTime", m_CreationTime ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedGrade", m_UserDefinedGrade ) );
+}
+void IfcConstraint::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConstraint::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

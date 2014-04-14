@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -52,6 +53,14 @@ void IfcRepresentationContext::readStepArguments( const std::vector<std::string>
 	#endif
 	m_ContextIdentifier = IfcLabel::createObjectFromStepData( args[0] );
 	m_ContextType = IfcLabel::createObjectFromStepData( args[1] );
+}
+void IfcRepresentationContext::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "ContextIdentifier", m_ContextIdentifier ) );
+	vec_attributes.push_back( std::make_pair( "ContextType", m_ContextType ) );
+}
+void IfcRepresentationContext::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRepresentationContext::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

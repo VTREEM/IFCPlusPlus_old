@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -61,6 +62,14 @@ void IfcOrganizationRelationship::readStepArguments( const std::vector<std::stri
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_RelatingOrganization, map );
 	readEntityReferenceList( args[3], m_RelatedOrganizations, map );
+}
+void IfcOrganizationRelationship::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcResourceLevelRelationship::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingOrganization", m_RelatingOrganization ) );
+}
+void IfcOrganizationRelationship::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcOrganizationRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

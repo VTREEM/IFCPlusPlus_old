@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -93,6 +94,15 @@ void IfcRelConnectsPathElements::readStepArguments( const std::vector<std::strin
 	readIntList(  args[8], m_RelatedPriorities );
 	m_RelatedConnectionType = IfcConnectionTypeEnum::createObjectFromStepData( args[9] );
 	m_RelatingConnectionType = IfcConnectionTypeEnum::createObjectFromStepData( args[10] );
+}
+void IfcRelConnectsPathElements::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnectsElements::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatedConnectionType", m_RelatedConnectionType ) );
+	vec_attributes.push_back( std::make_pair( "RelatingConnectionType", m_RelatingConnectionType ) );
+}
+void IfcRelConnectsPathElements::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelConnectsPathElements::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

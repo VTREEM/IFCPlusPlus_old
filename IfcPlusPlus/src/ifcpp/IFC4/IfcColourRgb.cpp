@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -60,6 +61,16 @@ void IfcColourRgb::readStepArguments( const std::vector<std::string>& args, cons
 	m_Red = IfcNormalisedRatioMeasure::createObjectFromStepData( args[1] );
 	m_Green = IfcNormalisedRatioMeasure::createObjectFromStepData( args[2] );
 	m_Blue = IfcNormalisedRatioMeasure::createObjectFromStepData( args[3] );
+}
+void IfcColourRgb::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcColourSpecification::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Red", m_Red ) );
+	vec_attributes.push_back( std::make_pair( "Green", m_Green ) );
+	vec_attributes.push_back( std::make_pair( "Blue", m_Blue ) );
+}
+void IfcColourRgb::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcColourRgb::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

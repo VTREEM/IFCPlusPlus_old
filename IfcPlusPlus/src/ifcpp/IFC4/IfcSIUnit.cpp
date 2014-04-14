@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -62,6 +63,15 @@ void IfcSIUnit::readStepArguments( const std::vector<std::string>& args, const s
 	m_UnitType = IfcUnitEnum::createObjectFromStepData( args[1] );
 	m_Prefix = IfcSIPrefix::createObjectFromStepData( args[2] );
 	m_Name = IfcSIUnitName::createObjectFromStepData( args[3] );
+}
+void IfcSIUnit::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcNamedUnit::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Prefix", m_Prefix ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+}
+void IfcSIUnit::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSIUnit::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

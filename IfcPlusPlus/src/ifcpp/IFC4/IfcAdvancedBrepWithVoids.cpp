@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -53,6 +54,13 @@ void IfcAdvancedBrepWithVoids::readStepArguments( const std::vector<std::string>
 	#endif
 	readEntityReference( args[0], m_Outer, map );
 	readEntityReferenceList( args[1], m_Voids, map );
+}
+void IfcAdvancedBrepWithVoids::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcAdvancedBrep::getAttributes( vec_attributes );
+}
+void IfcAdvancedBrepWithVoids::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAdvancedBrepWithVoids::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

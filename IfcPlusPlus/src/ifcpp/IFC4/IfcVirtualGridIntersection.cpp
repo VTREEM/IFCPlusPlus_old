@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -52,6 +53,15 @@ void IfcVirtualGridIntersection::readStepArguments( const std::vector<std::strin
 	#endif
 	readEntityReferenceList( args[0], m_IntersectingAxes, map );
 	readTypeOfRealList( args[1], m_OffsetDistances );
+}
+void IfcVirtualGridIntersection::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	shared_ptr<IfcPPAttributeObjectVector> OffsetDistances_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_OffsetDistances.begin(), m_OffsetDistances.end(), std::back_inserter( OffsetDistances_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "OffsetDistances", OffsetDistances_vec_object ) );
+}
+void IfcVirtualGridIntersection::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcVirtualGridIntersection::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

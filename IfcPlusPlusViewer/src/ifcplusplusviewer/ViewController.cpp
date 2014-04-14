@@ -61,11 +61,11 @@ ViewController::ViewController()
 	m_material_default->setColorMode( osg::Material::SPECULAR );
 	//m_material_default->setEmission( osg::Material::FRONT, osg::Vec4f( 0.05f, 0.08f, 0.1f, 0.1f ) );
 	//m_material_default->setEmission( osg::Material::BACK, osg::Vec4f( 0.095f, 0.098f, 0.091f, 0.091f ) );
-	m_material_default->setTransparency( osg::Material::FRONT, 0.7f );
+	m_material_default->setTransparency( osg::Material::FRONT_AND_BACK, 0.7f );
 	
 	osg::LightModel* light_model = new osg::LightModel();  
 	light_model->setAmbientIntensity( osg::Vec4f( 0.2f, 0.25f, 0.3f, 0.3f ) );
-	light_model->setTwoSided(true); // TODO: fix triangle orientation and set TwoSided(false)
+	light_model->setTwoSided(true);
 	m_rootnode->getOrCreateStateSet()->setAttribute( light_model );
 
 	m_stateset_default = m_transform_model->getOrCreateStateSet();
@@ -84,7 +84,7 @@ ViewController::ViewController()
 	material_selected->setShininess( osg::Material::FRONT, m_shinyness );
 	material_selected->setColorMode( osg::Material::SPECULAR );
 	//m_material_selected->setEmission( osg::Material::FRONT, osg::Vec4f( 0.1f, 0.15f, 0.2f, 0.2f ) );
-	material_selected->setAlpha(osg::Material::FRONT, 0.8f);
+	//material_selected->setAlpha(osg::Material::FRONT, 0.8f);
 	m_stateset_selected = new osg::StateSet();
 	m_stateset_selected->setAttribute( material_selected, osg::StateAttribute::OVERRIDE|osg::StateAttribute::ON );
 

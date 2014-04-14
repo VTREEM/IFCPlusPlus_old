@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -74,6 +75,17 @@ void IfcPropertyBoundedValue::readStepArguments( const std::vector<std::string>&
 	m_LowerBoundValue = IfcValue::createObjectFromStepData( args[3], map );
 	m_Unit = IfcUnit::createObjectFromStepData( args[4], map );
 	m_SetPointValue = IfcValue::createObjectFromStepData( args[5], map );
+}
+void IfcPropertyBoundedValue::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSimpleProperty::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "UpperBoundValue", m_UpperBoundValue ) );
+	vec_attributes.push_back( std::make_pair( "LowerBoundValue", m_LowerBoundValue ) );
+	vec_attributes.push_back( std::make_pair( "Unit", m_Unit ) );
+	vec_attributes.push_back( std::make_pair( "SetPointValue", m_SetPointValue ) );
+}
+void IfcPropertyBoundedValue::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPropertyBoundedValue::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {
