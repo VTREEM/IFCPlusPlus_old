@@ -26,6 +26,8 @@ enum IfcPPTypeEnum;
 enum IfcPPEntityEnum;
 #endif
 
+enum LogicalEnum { LOGICAL_TRUE, LOGICAL_FALSE, LOGICAL_UNKNOWN };
+
 class IfcPPObject
 {
 public:

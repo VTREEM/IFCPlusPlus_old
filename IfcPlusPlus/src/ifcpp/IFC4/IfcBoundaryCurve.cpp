@@ -41,8 +41,9 @@ void IfcBoundaryCurve::getStepLine( std::stringstream& stream ) const
 	stream << "#" << m_id << "=IFCBOUNDARYCURVE" << "(";
 	writeEntityList( stream, m_Segments );
 	stream << ",";
-	if( m_SelfIntersect == false ) { stream << ".F."; }
-	else if( m_SelfIntersect == true ) { stream << ".T."; }
+	if( m_SelfIntersect == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_SelfIntersect == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_SelfIntersect == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ");";
 }
 void IfcBoundaryCurve::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
@@ -54,8 +55,9 @@ void IfcBoundaryCurve::readStepArguments( const std::vector<std::string>& args, 
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcBoundaryCurve, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_Segments, map );
-	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
-	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_SelfIntersect = LOGICAL_FALSE; }
+	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_SelfIntersect = LOGICAL_TRUE; }
+	else if( _stricmp( args[1].c_str(), ".U." ) == 0 ) { m_SelfIntersect = LOGICAL_UNKNOWN; }
 }
 void IfcBoundaryCurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {

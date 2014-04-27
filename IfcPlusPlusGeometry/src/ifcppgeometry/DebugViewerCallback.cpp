@@ -1135,7 +1135,8 @@ void createTest( osg::Group* group, osg::Group* root )
 	solid->m_Depth->m_value = 3.0;
 
 	shared_ptr<ItemData> item_data2( new ItemData() );
-	representation_converter->getSolidConverter()->convertIfcExtrudedAreaSolid( solid, carve::math::Matrix::TRANS(0.7, 0.0, 0.0), item_data2, strs_err );
+	representation_converter->getSolidConverter()->convertIfcExtrudedAreaSolid( solid, item_data2, strs_err );
+	item_data2->applyPosition( carve::math::Matrix::TRANS(0.7, 0.0, 0.0) );
 	item_data2->createMeshSetsFromClosedPolyhedrons();
 
 

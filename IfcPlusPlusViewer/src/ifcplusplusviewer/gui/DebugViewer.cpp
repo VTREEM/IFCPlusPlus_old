@@ -249,6 +249,9 @@ void DebugViewer::renderMeshset( const carve::mesh::MeshSet<3>* meshset, const o
 		return;
 	}
 
+	std::stringstream strs_err;
+	ConverterOSG::checkMeshSet( meshset, strs_err, -1 );
+	
 	osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 	if( wireframe )
 	{

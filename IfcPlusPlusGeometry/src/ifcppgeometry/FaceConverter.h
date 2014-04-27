@@ -29,9 +29,9 @@ public:
 	FaceConverter( shared_ptr<GeometrySettings>	geom_settings, shared_ptr<UnitConverter> unit_converter, shared_ptr<CurveConverter>	cc );
 	~FaceConverter();
 
-	void convertIfcFaceList(		const std::vector<shared_ptr<IfcFace> >& faces,						const carve::math::Matrix& pos,		shared_ptr<ItemData> item_data );
-	void convertIfcSurface(			const shared_ptr<IfcSurface>& surface,								const carve::math::Matrix& pos,		shared_ptr<carve::input::PolylineSetData>& polyline_data );
-	void convertIfcBSplineSurface(	const shared_ptr<IfcRationalBSplineSurfaceWithKnots>& ifc_surface,	const carve::math::Matrix& pos,		shared_ptr<carve::input::PolylineSetData>& polyline_data );
+	void convertIfcFaceList(		const std::vector<shared_ptr<IfcFace> >& faces,						shared_ptr<ItemData> item_data );
+	void convertIfcSurface(			const shared_ptr<IfcSurface>& surface,								shared_ptr<carve::input::PolylineSetData>& polyline_data );
+	void convertIfcBSplineSurface(	const shared_ptr<IfcRationalBSplineSurfaceWithKnots>& ifc_surface,	shared_ptr<carve::input::PolylineSetData>& polyline_data );
 
 protected:
 	shared_ptr<GeometrySettings>	m_geom_settings;

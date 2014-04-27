@@ -51,8 +51,9 @@ void IfcShapeAspect::getStepLine( std::stringstream& stream ) const
 	stream << ",";
 	if( m_Description ) { m_Description->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_ProductDefinitional == false ) { stream << ".F."; }
-	else if( m_ProductDefinitional == true ) { stream << ".T."; }
+	if( m_ProductDefinitional == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_ProductDefinitional == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_ProductDefinitional == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
 	if( m_PartOfProductDefinitionShape ) { m_PartOfProductDefinitionShape->getStepParameter( stream, true ); } else { stream << "$"; }
 	stream << ");";
@@ -68,15 +69,16 @@ void IfcShapeAspect::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReferenceList( args[0], m_ShapeRepresentations, map );
 	m_Name = IfcLabel::createObjectFromStepData( args[1] );
 	m_Description = IfcText::createObjectFromStepData( args[2] );
-	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_ProductDefinitional = false; }
-	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_ProductDefinitional = true; }
+	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_ProductDefinitional = LOGICAL_FALSE; }
+	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_ProductDefinitional = LOGICAL_TRUE; }
+	else if( _stricmp( args[3].c_str(), ".U." ) == 0 ) { m_ProductDefinitional = LOGICAL_UNKNOWN; }
 	m_PartOfProductDefinitionShape = IfcProductRepresentationSelect::createObjectFromStepData( args[4], map );
 }
 void IfcShapeAspect::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
 	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
-	vec_attributes.push_back( std::make_pair( "ProductDefinitional", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ProductDefinitional ) ) ) );
+	vec_attributes.push_back( std::make_pair( "ProductDefinitional", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_ProductDefinitional ) ) ) );
 	vec_attributes.push_back( std::make_pair( "PartOfProductDefinitionShape", m_PartOfProductDefinitionShape ) );
 }
 void IfcShapeAspect::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )

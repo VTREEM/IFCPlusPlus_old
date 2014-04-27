@@ -53,6 +53,6 @@ public:
 	// IfcCompositeCurve -----------------------------------------------------------
 	// attributes:
 	std::vector<shared_ptr<IfcCompositeCurveSegment> >	m_Segments;
-	bool													m_SelfIntersect;
+	LogicalEnum											m_SelfIntersect;
 };
 

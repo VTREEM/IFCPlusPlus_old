@@ -45,8 +45,9 @@ void IfcOffsetCurve2D::getStepLine( std::stringstream& stream ) const
 	stream << ",";
 	if( m_Distance ) { m_Distance->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_SelfIntersect == false ) { stream << ".F."; }
-	else if( m_SelfIntersect == true ) { stream << ".T."; }
+	if( m_SelfIntersect == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_SelfIntersect == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_SelfIntersect == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ");";
 }
 void IfcOffsetCurve2D::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
@@ -59,15 +60,16 @@ void IfcOffsetCurve2D::readStepArguments( const std::vector<std::string>& args, 
 	#endif
 	readEntityReference( args[0], m_BasisCurve, map );
 	m_Distance = IfcLengthMeasure::createObjectFromStepData( args[1] );
-	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
-	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SelfIntersect = LOGICAL_FALSE; }
+	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SelfIntersect = LOGICAL_TRUE; }
+	else if( _stricmp( args[2].c_str(), ".U." ) == 0 ) { m_SelfIntersect = LOGICAL_UNKNOWN; }
 }
 void IfcOffsetCurve2D::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 	IfcCurve::getAttributes( vec_attributes );
 	vec_attributes.push_back( std::make_pair( "BasisCurve", m_BasisCurve ) );
 	vec_attributes.push_back( std::make_pair( "Distance", m_Distance ) );
-	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SelfIntersect ) ) ) );
+	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_SelfIntersect ) ) ) );
 }
 void IfcOffsetCurve2D::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {

@@ -55,9 +55,9 @@ public:
 	//  int											m_VDegree;
 	//  std::vector<std::vector<shared_ptr<IfcCartesianPoint> > >	m_ControlPointsList;
 	//  shared_ptr<IfcBSplineSurfaceForm>			m_SurfaceForm;
-	//  bool											m_UClosed;
-	//  bool											m_VClosed;
-	//  bool											m_SelfIntersect;
+	//  LogicalEnum									m_UClosed;
+	//  LogicalEnum									m_VClosed;
+	//  LogicalEnum									m_SelfIntersect;
 
 	// IfcBSplineSurfaceWithKnots -----------------------------------------------------------
 	// attributes:

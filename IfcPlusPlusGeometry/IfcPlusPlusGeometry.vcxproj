@@ -306,7 +306,6 @@
     <ClInclude Include="src\ifcppgeometry\PlacementConverter.h" />
     <ClInclude Include="src\ifcppgeometry\ProfileConverter.h" />
     <ClInclude Include="src\ifcppgeometry\ReaderWriterIFC.h" />
-    <ClInclude Include="src\ifcppgeometry\RecursiveCallException.h" />
     <ClInclude Include="src\ifcppgeometry\RepresentationConverter.h" />
     <ClInclude Include="src\ifcppgeometry\SolidModelConverter.h" />
     <ClInclude Include="src\ifcppgeometry\StylesConverter.h" />

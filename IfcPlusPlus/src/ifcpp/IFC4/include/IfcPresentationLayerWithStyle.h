@@ -48,9 +48,9 @@ public:
 
 	// IfcPresentationLayerWithStyle -----------------------------------------------------------
 	// attributes:
-	bool												m_LayerOn;
-	bool												m_LayerFrozen;
-	bool												m_LayerBlocked;
+	LogicalEnum										m_LayerOn;
+	LogicalEnum										m_LayerFrozen;
+	LogicalEnum										m_LayerBlocked;
 	std::vector<shared_ptr<IfcPresentationStyle> >	m_LayerStyles;
 };
 

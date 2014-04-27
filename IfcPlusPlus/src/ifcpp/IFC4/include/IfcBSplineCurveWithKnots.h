@@ -56,8 +56,8 @@ public:
 	//  int											m_Degree;
 	//  std::vector<shared_ptr<IfcCartesianPoint> >	m_ControlPointsList;
 	//  shared_ptr<IfcBSplineCurveForm>				m_CurveForm;
-	//  bool											m_ClosedCurve;
-	//  bool											m_SelfIntersect;
+	//  LogicalEnum									m_ClosedCurve;
+	//  LogicalEnum									m_SelfIntersect;
 
 	// IfcBSplineCurveWithKnots -----------------------------------------------------------
 	// attributes:

@@ -31,12 +31,23 @@ void ItemData::createMeshSetsFromClosedPolyhedrons()
 	closed_polyhedrons.clear();
 }
 
+void ItemData::addItemData( shared_ptr<ItemData>& other )
+{
+	std::copy( other->closed_polyhedrons.begin(), other->closed_polyhedrons.end(), std::back_inserter( closed_polyhedrons ) );
+	std::copy( other->open_polyhedrons.begin(), other->open_polyhedrons.end(), std::back_inserter( open_polyhedrons ) );
+	std::copy( other->open_or_closed_polyhedrons.begin(), other->open_or_closed_polyhedrons.end(), std::back_inserter( open_or_closed_polyhedrons ) );
+	std::copy( other->polylines.begin(), other->polylines.end(), std::back_inserter( polylines ) );
+	std::copy( other->meshsets.begin(), other->meshsets.end(), std::back_inserter( meshsets ) );
+	std::copy( other->statesets.begin(), other->statesets.end(), std::back_inserter( statesets ) );
+	m_csg_computed = other->m_csg_computed || m_csg_computed;
+}
+
 bool isIdentity( const carve::math::Matrix& mat )
 {
-	if( abs(mat._11) -1.0 > 0.00001 )  return false;
-	if( abs(mat._22) -1.0 > 0.00001 )  return false;
-	if( abs(mat._33) -1.0 > 0.00001 )  return false;
-	if( abs(mat._44) -1.0 > 0.00001 )  return false;
+	if( abs(mat._11 -1.0) > 0.00001 )  return false;
+	if( abs(mat._22 -1.0) > 0.00001 )  return false;
+	if( abs(mat._33 -1.0) > 0.00001 )  return false;
+	if( abs(mat._44 -1.0) > 0.00001 )  return false;
 	
 	if( abs(mat._12) > 0.00001 )  return false;
 	if( abs(mat._13) > 0.00001 )  return false;
@@ -56,11 +67,13 @@ bool isIdentity( const carve::math::Matrix& mat )
 	return true;
 }
 
+
+
 void ItemData::applyPosition( const carve::math::Matrix& mat )
 {
 	if( isIdentity( mat ) )
 	{
-		return;
+		//return;
 	}
 	for( size_t i=0; i<open_polyhedrons.size(); ++i )
 	{

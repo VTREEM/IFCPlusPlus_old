@@ -28,7 +28,7 @@
 #include "ifcpp/IFC4/include/IfcMappedItem.h"
 #include "ifcpp/IFC4/include/IfcRepresentationMap.h"
 #include "ifcpp/IFC4/include/IfcCartesianTransformationOperator.h"
-#include "ifcpp/IFC4/include/IfcAxis2Placement.h"
+#include "ifcpp/IFC4/include/IfcAxis2Placement3D.h"
 #include "ifcpp/IFC4/include/IfcPlacement.h"
 
 #include "ifcpp/IFC4/include/IfcLabel.h"
@@ -169,30 +169,27 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 			}
 
 			carve::math::Matrix map_matrix_origin( carve::math::Matrix::IDENT() );
-			if( map_source->m_MappingOrigin )
+			shared_ptr<IfcAxis2Placement> mapping_origin = map_source->m_MappingOrigin;
+
+			shared_ptr<IfcPlacement> mapping_origin_placement = dynamic_pointer_cast<IfcPlacement>( mapping_origin );
+			if( mapping_origin_placement )
 			{
-				shared_ptr<IfcAxis2Placement> mapping_origin = map_source->m_MappingOrigin;
-				shared_ptr<IfcPlacement> mapping_origin_placement = dynamic_pointer_cast<IfcPlacement>( mapping_origin );
-				if( mapping_origin_placement )
-				{
-					PlacementConverter::convertIfcPlacement( mapping_origin_placement, map_matrix_origin, length_factor );
-				}
-				else
-				{
-					strs_err << "#" << mapping_origin_placement->getId() << " = IfcPlacement: !dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )";
-					continue;
-				}
+				PlacementConverter::convertIfcPlacement( mapping_origin_placement, map_matrix_origin, length_factor );
+			}
+			else
+			{
+				strs_err << "#" << mapping_origin_placement->getId() << " = IfcPlacement: !dynamic_pointer_cast<IfcPlacement>( mapping_origin ) )";
+				continue;
 			}
 
 			shared_ptr<ShapeInputData> mapped_input_data( new ShapeInputData() );
 			convertIfcRepresentation( mapped_representation, mapped_input_data, strs_err );
-			carve::math::Matrix mapped_pos( map_matrix_origin*map_matrix_target );
+			carve::math::Matrix mapped_pos( map_matrix_target*map_matrix_origin );
 			for( size_t i_item = 0; i_item < mapped_input_data->vec_item_data.size(); ++i_item )
 			{
 				mapped_input_data->vec_item_data[i_item]->applyPosition( mapped_pos );
 			}
 			input_data->addInputData( mapped_input_data );
-
 
 			continue;
 		}
@@ -328,7 +325,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 			std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = face_set->m_CfsFaces;
 
 			shared_ptr<ItemData> input_data_face_set( new ItemData );
-			m_face_converter->convertIfcFaceList( vec_ifc_faces, carve::math::Matrix::IDENT(), input_data_face_set );
+			m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data_face_set );
 			std::copy( input_data_face_set->open_or_closed_polyhedrons.begin(), input_data_face_set->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->open_polyhedrons) );
 		}
 		
@@ -382,7 +379,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 				std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = closed_shell->m_CfsFaces;
 
 				shared_ptr<ItemData> input_data( new ItemData() );
-				m_face_converter->convertIfcFaceList( vec_ifc_faces, carve::math::Matrix::IDENT(), input_data );
+				m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data );
 				std::copy( input_data->open_or_closed_polyhedrons.begin(), input_data->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->closed_polyhedrons) );
 			}
 			else if( dynamic_pointer_cast<IfcOpenShell>( shell_select ) )
@@ -391,7 +388,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 				std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = open_shell->m_CfsFaces;
 
 				shared_ptr<ItemData> input_data( new ItemData() );
-				m_face_converter->convertIfcFaceList( vec_ifc_faces, carve::math::Matrix::IDENT(), input_data );
+				m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data );
 
 				std::copy( input_data->open_or_closed_polyhedrons.begin(), input_data->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->open_polyhedrons) );
 			}
@@ -403,7 +400,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	if( surface )
 	{
 		shared_ptr<carve::input::PolylineSetData> polyline( new carve::input::PolylineSetData() );
-		m_face_converter->convertIfcSurface( surface, carve::math::Matrix::IDENT(), polyline );
+		m_face_converter->convertIfcSurface( surface, polyline );
 		if( polyline->getVertexCount() > 1 )
 		{
 			item_data->polylines.push_back( polyline );
@@ -465,13 +462,12 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 			if( select_surface )
 			{
 				shared_ptr<carve::input::PolylineSetData> polyline( new carve::input::PolylineSetData() );
-				m_face_converter->convertIfcSurface( select_surface, carve::math::Matrix::IDENT(), polyline );
+				m_face_converter->convertIfcSurface( select_surface, polyline );
 				if( polyline->getVertexCount() > 1 )
 				{
 					item_data->polylines.push_back( polyline );
 				}
 
-				//convertIfcSurface( select_surface, pos, input_data );
 				continue;
 			}
 		}

@@ -55,14 +55,17 @@ void IfcPresentationLayerWithStyle::getStepLine( std::stringstream& stream ) con
 	stream << ",";
 	if( m_Identifier ) { m_Identifier->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_LayerOn == false ) { stream << ".F."; }
-	else if( m_LayerOn == true ) { stream << ".T."; }
+	if( m_LayerOn == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_LayerOn == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_LayerOn == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
-	if( m_LayerFrozen == false ) { stream << ".F."; }
-	else if( m_LayerFrozen == true ) { stream << ".T."; }
+	if( m_LayerFrozen == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_LayerFrozen == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_LayerFrozen == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
-	if( m_LayerBlocked == false ) { stream << ".F."; }
-	else if( m_LayerBlocked == true ) { stream << ".T."; }
+	if( m_LayerBlocked == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_LayerBlocked == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_LayerBlocked == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
 	writeEntityList( stream, m_LayerStyles );
 	stream << ");";
@@ -79,20 +82,23 @@ void IfcPresentationLayerWithStyle::readStepArguments( const std::vector<std::st
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readSelectList( args[2], m_AssignedItems, map );
 	m_Identifier = IfcIdentifier::createObjectFromStepData( args[3] );
-	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_LayerOn = false; }
-	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_LayerOn = true; }
-	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_LayerFrozen = false; }
-	else if( _stricmp( args[5].c_str(), ".T." ) == 0 ) { m_LayerFrozen = true; }
-	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_LayerBlocked = false; }
-	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_LayerBlocked = true; }
+	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_LayerOn = LOGICAL_FALSE; }
+	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_LayerOn = LOGICAL_TRUE; }
+	else if( _stricmp( args[4].c_str(), ".U." ) == 0 ) { m_LayerOn = LOGICAL_UNKNOWN; }
+	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_LayerFrozen = LOGICAL_FALSE; }
+	else if( _stricmp( args[5].c_str(), ".T." ) == 0 ) { m_LayerFrozen = LOGICAL_TRUE; }
+	else if( _stricmp( args[5].c_str(), ".U." ) == 0 ) { m_LayerFrozen = LOGICAL_UNKNOWN; }
+	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_LayerBlocked = LOGICAL_FALSE; }
+	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_LayerBlocked = LOGICAL_TRUE; }
+	else if( _stricmp( args[6].c_str(), ".U." ) == 0 ) { m_LayerBlocked = LOGICAL_UNKNOWN; }
 	readEntityReferenceList( args[7], m_LayerStyles, map );
 }
 void IfcPresentationLayerWithStyle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 	IfcPresentationLayerAssignment::getAttributes( vec_attributes );
-	vec_attributes.push_back( std::make_pair( "LayerOn", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_LayerOn ) ) ) );
-	vec_attributes.push_back( std::make_pair( "LayerFrozen", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_LayerFrozen ) ) ) );
-	vec_attributes.push_back( std::make_pair( "LayerBlocked", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_LayerBlocked ) ) ) );
+	vec_attributes.push_back( std::make_pair( "LayerOn", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_LayerOn ) ) ) );
+	vec_attributes.push_back( std::make_pair( "LayerFrozen", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_LayerFrozen ) ) ) );
+	vec_attributes.push_back( std::make_pair( "LayerBlocked", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_LayerBlocked ) ) ) );
 }
 void IfcPresentationLayerWithStyle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {

@@ -25,11 +25,11 @@ class IfcLogical : public IfcSimpleValue
 {
 public:
 	IfcLogical();
-	IfcLogical( bool value );
+	IfcLogical( LogicalEnum value );
 	~IfcLogical();
 	virtual const char* classname() const { return "IfcLogical"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcLogical> createObjectFromStepData( const std::string& arg );
-	bool m_value;
+	LogicalEnum m_value;
 };
 

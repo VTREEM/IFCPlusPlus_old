@@ -711,7 +711,6 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 
 	// now insert points to polygon, avoiding points with same coordinates
 	std::map<double, std::map<double, int> > existing_vertices_coords;
-	std::map<double, std::map<double, int> >::iterator vert_it;
 	std::map<double, int>::iterator it_find_y;
 
 	std::map<int,int> map_merged_idx;
@@ -728,8 +727,7 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 #endif
 
 		//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
-		vert_it = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double,int>() ) ).first;
-		std::map<double, int>& map_y_index = vert_it->second;
+		std::map<double, int>& map_y_index = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double,int>() ) ).first->second;
 
 		it_find_y = map_y_index.find( vertex_y );
 		if( it_find_y != map_y_index.end() )
@@ -1387,3 +1385,11 @@ void GeomUtils::applyTranslate( osg::Group* grp, const osg::Vec3f& trans )
 	}
 }
 
+void GeomUtils::applyPosition( shared_ptr<carve::input::PolyhedronData>& poly_data, carve::math::Matrix& matrix )
+{
+	for( std::vector<carve::geom::vector<3> >::iterator it_points = poly_data->points.begin(); it_points != poly_data->points.end(); ++it_points )
+	{
+		carve::geom::vector<3>& vertex = (*it_points);
+		vertex = matrix*vertex;
+	}
+}

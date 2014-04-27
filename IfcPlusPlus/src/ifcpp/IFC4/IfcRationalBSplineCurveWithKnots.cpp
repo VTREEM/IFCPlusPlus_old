@@ -56,11 +56,13 @@ void IfcRationalBSplineCurveWithKnots::getStepLine( std::stringstream& stream ) 
 	stream << ",";
 	if( m_CurveForm ) { m_CurveForm->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_ClosedCurve == false ) { stream << ".F."; }
-	else if( m_ClosedCurve == true ) { stream << ".T."; }
+	if( m_ClosedCurve == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_ClosedCurve == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_ClosedCurve == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
-	if( m_SelfIntersect == false ) { stream << ".F."; }
-	else if( m_SelfIntersect == true ) { stream << ".T."; }
+	if( m_SelfIntersect == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_SelfIntersect == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_SelfIntersect == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
 	writeIntList( stream, m_KnotMultiplicities );
 	stream << ",";
@@ -82,10 +84,12 @@ void IfcRationalBSplineCurveWithKnots::readStepArguments( const std::vector<std:
 	readIntValue( args[0], m_Degree );
 	readEntityReferenceList( args[1], m_ControlPointsList, map );
 	m_CurveForm = IfcBSplineCurveForm::createObjectFromStepData( args[2] );
-	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_ClosedCurve = false; }
-	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_ClosedCurve = true; }
-	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
-	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_ClosedCurve = LOGICAL_FALSE; }
+	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_ClosedCurve = LOGICAL_TRUE; }
+	else if( _stricmp( args[3].c_str(), ".U." ) == 0 ) { m_ClosedCurve = LOGICAL_UNKNOWN; }
+	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_SelfIntersect = LOGICAL_FALSE; }
+	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_SelfIntersect = LOGICAL_TRUE; }
+	else if( _stricmp( args[4].c_str(), ".U." ) == 0 ) { m_SelfIntersect = LOGICAL_UNKNOWN; }
 	readIntList(  args[5], m_KnotMultiplicities );
 	readTypeOfRealList( args[6], m_Knots );
 	m_KnotSpec = IfcKnotType::createObjectFromStepData( args[7] );

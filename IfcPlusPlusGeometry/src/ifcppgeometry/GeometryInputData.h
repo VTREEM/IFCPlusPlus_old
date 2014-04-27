@@ -41,6 +41,9 @@ public:
 	void createMeshSetsFromClosedPolyhedrons();
 	void applyPosition( const carve::math::Matrix& mat );
 	shared_ptr<ItemData> getDeepCopy();
+	
+	/** copies the content of other instance and adds it to own content */
+	void addItemData( shared_ptr<ItemData>& other );
 };
 
 struct PlacementData

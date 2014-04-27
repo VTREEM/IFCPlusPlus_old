@@ -58,6 +58,6 @@ public:
 	shared_ptr<IfcElement>						m_RelatedElement;
 	shared_ptr<IfcConnectionGeometry>			m_InterferenceGeometry;		//optional
 	shared_ptr<IfcIdentifier>					m_InterferenceType;			//optional
-	bool											m_ImpliedOrder;
+	LogicalEnum									m_ImpliedOrder;
 };
 

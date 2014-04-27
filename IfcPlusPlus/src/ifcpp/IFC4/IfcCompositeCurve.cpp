@@ -41,8 +41,9 @@ void IfcCompositeCurve::getStepLine( std::stringstream& stream ) const
 	stream << "#" << m_id << "=IFCCOMPOSITECURVE" << "(";
 	writeEntityList( stream, m_Segments );
 	stream << ",";
-	if( m_SelfIntersect == false ) { stream << ".F."; }
-	else if( m_SelfIntersect == true ) { stream << ".T."; }
+	if( m_SelfIntersect == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_SelfIntersect == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_SelfIntersect == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ");";
 }
 void IfcCompositeCurve::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
@@ -54,13 +55,14 @@ void IfcCompositeCurve::readStepArguments( const std::vector<std::string>& args,
 	if( num_args>2 ){ std::cout << "Wrong parameter count for entity IfcCompositeCurve, expecting 2, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_Segments, map );
-	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
-	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_SelfIntersect = LOGICAL_FALSE; }
+	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_SelfIntersect = LOGICAL_TRUE; }
+	else if( _stricmp( args[1].c_str(), ".U." ) == 0 ) { m_SelfIntersect = LOGICAL_UNKNOWN; }
 }
 void IfcCompositeCurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 	IfcBoundedCurve::getAttributes( vec_attributes );
-	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SelfIntersect ) ) ) );
+	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_SelfIntersect ) ) ) );
 }
 void IfcCompositeCurve::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {

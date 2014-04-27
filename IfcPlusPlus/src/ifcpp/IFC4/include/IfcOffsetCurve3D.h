@@ -54,7 +54,7 @@ public:
 	// attributes:
 	shared_ptr<IfcCurve>							m_BasisCurve;
 	shared_ptr<IfcLengthMeasure>					m_Distance;
-	bool											m_SelfIntersect;
+	LogicalEnum									m_SelfIntersect;
 	shared_ptr<IfcDirection>						m_RefDirection;
 };
 

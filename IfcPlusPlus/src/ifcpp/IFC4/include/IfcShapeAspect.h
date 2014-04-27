@@ -46,7 +46,7 @@ public:
 	std::vector<shared_ptr<IfcShapeModel> >		m_ShapeRepresentations;
 	shared_ptr<IfcLabel>							m_Name;						//optional
 	shared_ptr<IfcText>							m_Description;				//optional
-	bool											m_ProductDefinitional;
+	LogicalEnum									m_ProductDefinitional;
 	shared_ptr<IfcProductRepresentationSelect>	m_PartOfProductDefinitionShape;	//optional
 };
 

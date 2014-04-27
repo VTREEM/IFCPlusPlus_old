@@ -55,7 +55,7 @@ FaceConverter::~FaceConverter()
 {
 }
 
-void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, const carve::math::Matrix& pos, shared_ptr<carve::input::PolylineSetData>& polyline_data )
+void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, shared_ptr<carve::input::PolylineSetData>& polyline_data )
 {
 	//ENTITY IfcSurface ABSTRACT SUPERTYPE OF(ONEOF(IfcBoundedSurface, IfcElementarySurface, IfcSweptSurface))
 
@@ -69,14 +69,14 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 			if( dynamic_pointer_cast<IfcRationalBSplineSurfaceWithKnots>(bounded_surface) )
 			{
 				shared_ptr<IfcRationalBSplineSurfaceWithKnots> nurbs_surface = dynamic_pointer_cast<IfcRationalBSplineSurfaceWithKnots>(bounded_surface);
-				convertIfcBSplineSurface( nurbs_surface, pos, polyline_data );
+				convertIfcBSplineSurface( nurbs_surface, polyline_data );
 			}
 		}
 		else if( dynamic_pointer_cast<IfcCurveBoundedPlane>(bounded_surface) )
 		{
 			// ENTITY IfcCurveBoundedPlane SUBTYPE OF IfcBoundedSurface;
 			shared_ptr<IfcCurveBoundedPlane> curve_bounded_plane = dynamic_pointer_cast<IfcCurveBoundedPlane>(bounded_surface);
-			carve::math::Matrix curve_bounded_plane_matrix( pos );
+			carve::math::Matrix curve_bounded_plane_matrix;
 			shared_ptr<IfcPlane>& basis_surface = curve_bounded_plane->m_BasisSurface;
 			if( basis_surface )
 			{
@@ -85,7 +85,7 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 				if( basis_surface_placement )
 				{
 					PlacementConverter::convertIfcAxis2Placement3D( basis_surface_placement, curve_bounded_plane_matrix, length_factor );
-					curve_bounded_plane_matrix = pos*curve_bounded_plane_matrix;
+					//curve_bounded_plane_matrix = pos*curve_bounded_plane_matrix;
 				}
 			}
 			shared_ptr<IfcCurve>& outer_boundary = curve_bounded_plane->m_OuterBoundary;
@@ -109,7 +109,7 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 			shared_ptr<IfcSurface>& basis_surface = curve_bounded_surface->m_BasisSurface;
 			if( basis_surface )
 			{
-				convertIfcSurface( basis_surface, pos, polyline_data );
+				convertIfcSurface( basis_surface, polyline_data );
 			}
 
 			std::vector<shared_ptr<IfcBoundaryCurve> >& vec_boundaries = curve_bounded_surface->m_Boundaries;
@@ -124,7 +124,7 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 			shared_ptr<IfcSurface>& basis_surface = rectengular_trimmed_surface->m_BasisSurface;
 			if( basis_surface )
 			{
-				convertIfcSurface( basis_surface, pos, polyline_data );
+				convertIfcSurface( basis_surface, polyline_data );
 			}
 
 			shared_ptr<IfcParameterValue>& u1 = rectengular_trimmed_surface->m_U1;
@@ -145,11 +145,11 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 		//ENTITY IfcElementarySurface	ABSTRACT SUPERTYPE OF(ONEOF(IfcCylindricalSurface, IfcPlane))
 		shared_ptr<IfcAxis2Placement3D>& elementary_surface_placement = elementary_surface->m_Position;
 
-		carve::math::Matrix elementary_surface_matrix( pos );
+		carve::math::Matrix elementary_surface_matrix;
 		if( elementary_surface_placement )
 		{
 			PlacementConverter::convertIfcAxis2Placement3D( elementary_surface_placement, elementary_surface_matrix, length_factor );
-			elementary_surface_matrix = pos*elementary_surface_matrix;
+			//elementary_surface_matrix = pos*elementary_surface_matrix;
 		}
 
 		shared_ptr<IfcPlane> elementary_surface_plane = dynamic_pointer_cast<IfcPlane>(elementary_surface);
@@ -212,11 +212,11 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 		shared_ptr<IfcProfileDef>& swept_surface_profile = swept_surface->m_SweptCurve;
 		shared_ptr<IfcAxis2Placement3D>& swept_surface_placement = swept_surface->m_Position;
 
-		carve::math::Matrix swept_surface_matrix( pos );
+		carve::math::Matrix swept_surface_matrix;
 		if( swept_surface_placement )
 		{
 			PlacementConverter::convertIfcAxis2Placement3D( swept_surface_placement, swept_surface_matrix, length_factor );
-			swept_surface_matrix = pos*swept_surface_matrix;
+			//swept_surface_matrix = pos*swept_surface_matrix;
 		}
 
 		shared_ptr<IfcSurfaceOfLinearExtrusion> linear_extrusion = dynamic_pointer_cast<IfcSurfaceOfLinearExtrusion>(swept_surface);
@@ -242,13 +242,11 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, co
 	throw UnhandledRepresentationException(surface);
 }
 
-void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >& faces, const carve::math::Matrix& pos, shared_ptr<ItemData> item_data )
+void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >& faces, shared_ptr<ItemData> item_data )
 {
 	std::stringstream err;
 	shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
 	std::map<double, std::map<double, std::map<double, int> > > existing_vertices_coords;
-	std::map<double, std::map<double, std::map<double, int> > >::iterator vert_it;
-	std::map<double, std::map<double, int> >::iterator it_find_y;
 	std::map<double, int>::iterator it_find_z;
 
 	std::vector<shared_ptr<IfcFace> >::const_iterator it_ifc_faces;
@@ -308,12 +306,12 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 				std::reverse( loop_points.begin(), loop_points.end() );
 			}
 
-			if( loop_points.size() == 3 )
+			if( loop_points.size() == 3 && vec_bounds.size() == 1 )
 			{
 				std::vector<int> triangle_indexes;
 				for( int point_i = 0; point_i < 3; ++point_i )
 				{
-					carve::geom::vector<3> v = pos*loop_points[point_i];
+					carve::geom::vector<3> v = loop_points[point_i];
 
 #ifdef ROUND_IFC_COORDINATES
 					const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
@@ -325,11 +323,8 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 					const double vertex_z = v.z;
 #endif
 					//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
-					vert_it = existing_vertices_coords.insert( std::make_pair( vertex_x, std::map<double, std::map<double, int> >() ) ).first;
-					std::map<double, std::map<double, int> >& map_y_index = vert_it->second;
-
-					it_find_y =	map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first;
-					std::map<double, int>& map_z_index = it_find_y->second;
+					std::map<double, std::map<double, int> >& map_y_index = existing_vertices_coords.insert( std::make_pair( vertex_x, std::map<double, std::map<double, int> >() ) ).first->second;
+					std::map<double, int>& map_z_index = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first->second;
 
 					it_find_z = map_z_index.find( vertex_z );
 					if( it_find_z != map_z_index.end() )
@@ -383,7 +378,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			}
 
 			// project face into 2d plane
-			std::vector<carve::geom2d::P2> path_loop;
+			std::vector<carve::geom2d::P2> path_loop_2d;
 			std::vector<double> path_loop_3rd_dim;
 
 			for( int i=0; i<loop_points.size(); ++i )
@@ -392,28 +387,79 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 
 				if( face_plane == XY_PLANE )
 				{
-					path_loop.push_back( carve::geom::VECTOR(point.x, point.y ));
+					path_loop_2d.push_back( carve::geom::VECTOR(point.x, point.y ));
 					path_loop_3rd_dim.push_back(point.z);
 				}
 				else if( face_plane == YZ_PLANE )
 				{
-					path_loop.push_back( carve::geom::VECTOR(point.y, point.z ));
+					path_loop_2d.push_back( carve::geom::VECTOR(point.y, point.z ));
 					path_loop_3rd_dim.push_back(point.x);
 				}
 				else if( face_plane == XZ_PLANE )
 				{
-					path_loop.push_back( carve::geom::VECTOR(point.x, point.z ));
+					path_loop_2d.push_back( carve::geom::VECTOR(point.x, point.z ));
 					path_loop_3rd_dim.push_back(point.y);
 				}
 			}
 
+			if( loop_points.size() == 4 && vec_bounds.size() == 1 )
+			{
+				if( carve::geom2d::quadIsConvex( path_loop_2d[0], path_loop_2d[1], path_loop_2d[2], path_loop_2d[3] ) )
+				{
+					// add 2 triangles for quad
+					std::vector<int> triangle_indexes;
+					for( int point_i = 0; point_i < 4; ++point_i )
+					{
+						carve::geom::vector<3> v = loop_points[point_i];
+
+#ifdef ROUND_IFC_COORDINATES
+						const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+						const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+						const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
+#else
+						const double vertex_x = v.x;
+						const double vertex_y = v.y;
+						const double vertex_z = v.z;
+#endif
+						//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
+						std::map<double, std::map<double, int> >& map_y_index = existing_vertices_coords.insert( std::make_pair( vertex_x, std::map<double, std::map<double, int> >() ) ).first->second;
+						std::map<double, int>& map_z_index = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first->second;
+
+						it_find_z = map_z_index.find( vertex_z );
+						if( it_find_z != map_z_index.end() )
+						{
+							// vertex already exists in polygon. remember its index for triangles
+							int vertex_index = it_find_z->second;
+							map_merged_idx[point_i] = vertex_index;
+							triangle_indexes.push_back( vertex_index );
+							continue;
+						}
+					
+						int vertex_id = poly_data->addVertex( v );
+						map_z_index[vertex_z] = vertex_id;
+						map_merged_idx[point_i] = vertex_id;
+						triangle_indexes.push_back( vertex_id );
+					}
+
+					if( triangle_indexes.size() != 4 )
+					{
+						std::cout << __FUNC__ << ": triangle_indexes.size() != 4" << std::endl;
+						continue;
+					}
+
+					poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
+					poly_data->addFace( triangle_indexes[2], triangle_indexes[3], triangle_indexes[0] );
+					continue;
+				}
+			}
+
 			// check winding order
-			carve::geom3d::Vector normal_2d = GeomUtils::computePolygon2DNormal( path_loop );
+			carve::geom3d::Vector normal_2d = GeomUtils::computePolygon2DNormal( path_loop_2d );
 			if( it_bounds == vec_bounds.begin() )
 			{
 				if( normal_2d.z < 0 )
 				{
-					std::reverse( path_loop.begin(), path_loop.end() );
+					std::reverse( path_loop_2d.begin(), path_loop_2d.end() );
 					face_loop_reversed = true;
 				}
 			}
@@ -421,23 +467,23 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			{
 				if( normal_2d.z > 0 )
 				{
-					std::reverse( path_loop.begin(), path_loop.end() );
+					std::reverse( path_loop_2d.begin(), path_loop_2d.end() );
 				}
 			}
 
-			if( path_loop.size() < 3 )
+			if( path_loop_2d.size() < 3 )
 			{
 				//std::cout << __FUNC__ << ": #" << face_id <<  "=IfcFace: path_loop.size() < 3" << std::endl;
 				continue;
 			}
 
-			face_loops_2d.push_back(path_loop);
+			face_loops_2d.push_back(path_loop_2d);
 			face_loop_3rd_dim.push_back(path_loop_3rd_dim);
 		}
 
 		if( face_loops_2d.size() == 0 )
 		{
-			//std::cout << __FUNC__ << ": #" << face_id << "=IfcFace: face_loops_2d.size() == 0" << std::endl;
+			// only triangles, noting to triangulate
 			continue;
 		}
 
@@ -479,7 +525,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 					double y = face_loop_3rd_dim[loop_number][index_in_loop];
 					v = carve::geom::VECTOR(        loop_point.x,   y,      loop_point.y);
 				}
-				merged_3d.push_back( pos * v );
+				merged_3d.push_back( v );
 			}
 			carve::triangulate::triangulate(merged, triangulated);
 			carve::triangulate::improve(merged, triangulated);
@@ -507,11 +553,8 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 #endif
 
 			//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
-			vert_it = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double, std::map<double, int> >() ) ).first;
-			std::map<double, std::map<double, int> >& map_y_index = vert_it->second;
-
-			it_find_y = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first;
-			std::map<double, int>& map_z_index = it_find_y->second;
+			std::map<double, std::map<double, int> >& map_y_index = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double, std::map<double, int> >() ) ).first->second;
+			std::map<double, int>& map_z_index = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first->second;
 
 			it_find_z = map_z_index.find( vertex_z );
 			if( it_find_z != map_z_index.end() )
@@ -607,7 +650,7 @@ void convertIfcCartesianPointVector2D( std::vector<std::vector<shared_ptr<IfcCar
 }
 
 
-void FaceConverter::convertIfcBSplineSurface( const shared_ptr<IfcRationalBSplineSurfaceWithKnots>& ifc_surface, const carve::math::Matrix& pos, shared_ptr<carve::input::PolylineSetData>& polyline_data )
+void FaceConverter::convertIfcBSplineSurface( const shared_ptr<IfcRationalBSplineSurfaceWithKnots>& ifc_surface, shared_ptr<carve::input::PolylineSetData>& polyline_data )
 {
 	std::vector<shared_ptr<IfcParameterValue> >& ifc_u_knots = ifc_surface->m_UKnots;
 	std::vector<shared_ptr<IfcParameterValue> >& ifc_v_knots = ifc_surface->m_VKnots;
@@ -630,5 +673,6 @@ void FaceConverter::convertIfcBSplineSurface( const shared_ptr<IfcRationalBSplin
 	const unsigned int zeta = ifc_control_points[0].size();
 
 	const int num_points_per_section = eta*zeta;
+	// TODO: implement
 }
 
