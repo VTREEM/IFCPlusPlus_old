@@ -549,8 +549,8 @@ carve::geom::vector<3> GeomUtils::computePolygon2DNormal( const std::vector<carv
 	carve::geom::vector<3> polygon_normal( carve::geom::VECTOR(0, 0, 0) );
 	for( int k=0; k<num_points; ++k )
 	{
-		const carve::geom::vector<2>& vertex_current = polygon.at(k);
-		const carve::geom::vector<2>& vertex_next = polygon.at((k+1)%num_points);
+		const carve::geom::vector<2>& vertex_current = polygon[k];
+		const carve::geom::vector<2>& vertex_next = polygon[(k+1)%num_points];
 		polygon_normal[2] += (vertex_current.x-vertex_next.x )*(vertex_current.y+vertex_next.y );
 	}
 	polygon_normal.normalize();
@@ -867,6 +867,312 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 			poly_data->addFace( vertex_id_a_top,	vertex_id_c_top,	vertex_id_b_top );	// top cap, flipped outward
 		}
 	}
+}
+
+void GeomUtils::sweepDisc( std::vector<carve::geom::vector<3> >& basis_curve_points, shared_ptr<carve::input::PolyhedronData>& pipe_data, const int nvc, const double radius, const double radius_inner )
+{
+	carve::geom::vector<3> local_z( carve::geom::VECTOR( 0, 0, 1 ) );
+	const int num_curve_points = basis_curve_points.size();
+	if( num_curve_points < 2 )
+	{
+		std::cout << "IfcSweptDiskSolid: num curve points < 2" << std::endl;
+		return;
+	}
+
+#ifdef _DEBUG
+	if( num_curve_points == 2 )
+	{
+		std::cout << "IfcSweptDiskSolid: 2" << std::endl;
+		;
+	}
+#endif
+
+	carve::geom::vector<3>  curve_point_first = basis_curve_points[0];
+	carve::geom::vector<3>  curve_point_second = basis_curve_points[1];
+
+	bool bend_found = false;
+	if( num_curve_points > 3 )
+	{
+		// compute local z vector by dot product of the first bend of the reference line
+		carve::geom::vector<3> vertex_back2 = curve_point_first;
+		carve::geom::vector<3> vertex_back1 = curve_point_second;
+		for( int i=2; i<num_curve_points; ++i )
+		{
+			carve::geom::vector<3>& vertex_current = basis_curve_points[i];
+			carve::geom::vector<3> section1 = vertex_back1 - vertex_back2;
+			carve::geom::vector<3> section2 = vertex_current - vertex_back1;
+			section1.normalize();
+			section2.normalize();
+
+			double dot_product = dot( section1, section2 );
+			double dot_product_abs = abs(dot_product);
+
+			// if dot == 1 or -1, then points are colinear
+			if( dot_product_abs < (1.0-0.0001) || dot_product_abs > (1.0+0.0001) )
+			{
+				// bend found, compute cross product
+				carve::geom::vector<3> lateral_vec = cross( section1, section2 );
+				local_z = cross( lateral_vec, section1 );
+				local_z.normalize();
+				bend_found = true;
+				break;
+			}
+		}
+	}
+
+	if( !bend_found )
+	{
+		// sweeping curve is linear. assume any local z vector
+		carve::geom::vector<3> sweep_dir = curve_point_second - curve_point_first;
+		sweep_dir.normalize();
+		local_z = cross( carve::geom::VECTOR( 0, 0, 1 ), sweep_dir );
+		if( local_z.length2() < 0.001 )
+		{
+			local_z = cross( carve::geom::VECTOR( 0, 1, 0 ), sweep_dir );
+			local_z.normalize();
+		}
+		else
+		{
+			local_z.normalize();
+		}
+		double dot_normal_local_z = dot( sweep_dir, local_z );
+		if( abs(dot_normal_local_z-1.0) < 0.0001 )
+		{
+			local_z = cross( carve::geom::VECTOR( 0, 1, 0 ), sweep_dir );
+			local_z.normalize();
+
+			dot_normal_local_z = dot( sweep_dir, local_z );
+			if( abs(dot_normal_local_z-1.0) < 0.0001 )
+			{
+				local_z = cross( carve::geom::VECTOR( 1, 0, 0 ), sweep_dir );
+				local_z.normalize();
+			}
+		}
+	}
+
+	// rotate disc into first direction
+	carve::geom::vector<3>  section_local_y = local_z;
+	carve::geom::vector<3>  section_local_z = curve_point_first - curve_point_second;
+	carve::geom::vector<3>  section_local_x = carve::geom::cross( section_local_y, section_local_z );
+	section_local_y = carve::geom::cross( section_local_x, section_local_z );
+	std::vector<carve::geom::vector<3> > inner_shape_points;
+
+	
+	section_local_x.normalize();
+	section_local_y.normalize();
+	section_local_z.normalize();
+
+	carve::math::Matrix matrix_first_direction = carve::math::Matrix(
+		section_local_x.x,		section_local_y.x,		section_local_z.x,	0,
+		section_local_x.y,		section_local_y.y,		section_local_z.y,	0,
+		section_local_x.z,		section_local_y.z,		section_local_z.z,	0,
+		0,				0,				0,			1 );
+
+	double angle = 0;
+	double delta_angle = 2.0*M_PI/double(nvc);	// TODO: adapt to model size and complexity
+	std::vector<carve::geom::vector<3> > circle_points;
+	std::vector<carve::geom::vector<3> > circle_points_inner;
+	for( int i = 0; i < nvc; ++i )
+	{
+		// cross section (circle) is defined in XY plane
+		double x = sin(angle);
+		double y = cos(angle);
+		carve::geom::vector<3> vertex( carve::geom::VECTOR( x*radius, y*radius, 0.0 ) );
+		vertex = matrix_first_direction*vertex + curve_point_first;
+		circle_points.push_back( vertex );
+
+		if( radius_inner > 0 )
+		{
+			carve::geom::vector<3> vertex_inner( carve::geom::VECTOR( x*radius_inner, y*radius_inner, 0.0 ) );
+			vertex_inner = matrix_first_direction*vertex_inner + curve_point_first;
+			circle_points_inner.push_back( vertex_inner );
+		}
+		angle += delta_angle;
+	}
+
+	for( int ii=0; ii<num_curve_points; ++ii )
+	{
+		carve::geom::vector<3> vertex_current = basis_curve_points[ii];
+		carve::geom::vector<3> vertex_next;
+		carve::geom::vector<3> vertex_before;
+		if( ii == 0 )
+		{
+			// first point
+			vertex_next	= basis_curve_points[ii+1];
+			carve::geom::vector<3> delta_element = vertex_next - vertex_current;
+			vertex_before = vertex_current - (delta_element);
+		}
+		else if( ii == num_curve_points-1 )
+		{
+			// last point
+			vertex_before	= basis_curve_points[ii-1];
+			carve::geom::vector<3> delta_element = vertex_current - vertex_before;
+			vertex_next = vertex_before + (delta_element);
+		}
+		else
+		{
+			// inner point
+			vertex_next		= basis_curve_points[ii+1];
+			vertex_before	= basis_curve_points[ii-1];
+		}
+
+		carve::geom::vector<3> bisecting_normal;
+		GeomUtils::bisectingPlane( vertex_before, vertex_current, vertex_next, bisecting_normal );
+
+		carve::geom::vector<3> section1 = vertex_current - vertex_before;
+		carve::geom::vector<3> section2 = vertex_next - vertex_current;
+		section1.normalize();
+		section2.normalize();
+		double dot_product = dot( section1, section2 );
+		double dot_product_abs = abs(dot_product);
+
+		if( dot_product_abs < (1.0-0.0001) || dot_product_abs > (1.0+0.0001) )
+		{
+			// bend found, compute next local z vector
+			carve::geom::vector<3> lateral_vec = cross( section1, section2 );
+			local_z = cross( lateral_vec, section1 );
+			local_z.normalize();
+		}
+		if( ii == num_curve_points -1 )
+		{
+			bisecting_normal *= -1.0;
+		}
+
+		carve::geom::plane<3> bisecting_plane( bisecting_normal, vertex_current );
+		for( int jj = 0; jj < nvc; ++jj )
+		{
+			carve::geom::vector<3>& vertex = circle_points[jj];
+
+			carve::geom::vector<3> v;
+			double t;
+			carve::IntersectionClass intersect = carve::geom3d::rayPlaneIntersection( bisecting_plane, vertex, vertex + section1, v, t);
+			if( intersect > 0 )
+			{
+				vertex = v;
+			}
+			else
+			{
+				std::cout << "no intersection found" << std::endl;
+			}
+
+			pipe_data->addVertex( vertex );
+		}
+
+		if( radius_inner > 0 )
+		{
+			for( int jj = 0; jj < nvc; ++jj )
+			{
+				carve::geom::vector<3>& vertex = circle_points_inner[jj];
+					
+				carve::geom::vector<3> v;
+				double t;
+				carve::IntersectionClass intersect = carve::geom3d::rayPlaneIntersection( bisecting_plane, vertex, vertex + section1, v, t);
+				if( intersect > 0 )
+				{
+					vertex = v;
+				}
+				else
+				{
+					std::cout << "no intersection found" << std::endl;
+				}
+
+				inner_shape_points.push_back( vertex );
+			}
+		}
+	}
+
+	// outer shape
+	size_t num_vertices_outer = pipe_data->getVertexCount();
+	for( size_t i=0; i<num_curve_points- 1; ++i )
+	{
+		int i_offset = i*nvc;
+		int i_offset_next = (i+1)*nvc;
+		for( int jj = 0; jj < nvc; ++jj )
+		{
+			int current_loop_pt = jj + i_offset;
+			int current_loop_pt_next = (jj + 1)%nvc + i_offset;
+
+			int next_loop_pt = jj + i_offset_next;
+			int next_loop_pt_next = (jj + 1)%nvc + i_offset_next;
+			pipe_data->addFace( current_loop_pt, next_loop_pt, next_loop_pt_next, current_loop_pt_next );  
+		}
+	}
+
+	if( radius_inner > 0 )
+	{
+		if( inner_shape_points.size() != num_vertices_outer )
+		{
+			std::cout << "IfcSweptDiskSolid: inner_shape_points.size() != num_vertices_outer" << std::endl;
+		}
+
+		// add points for inner shape
+		for( size_t i=0; i<inner_shape_points.size(); ++i )
+		{
+			pipe_data->addVertex( inner_shape_points[i] );
+		}
+
+		// faces of inner shape
+		for( size_t i=0; i<num_curve_points- 1; ++i )
+		{
+			int i_offset = i*nvc + num_vertices_outer;
+			int i_offset_next = (i+1)*nvc + num_vertices_outer;
+			for( int jj = 0; jj < nvc; ++jj )
+			{
+				int current_loop_pt = jj + i_offset;
+				int current_loop_pt_next = (jj + 1)%nvc + i_offset;
+
+				int next_loop_pt = jj + i_offset_next;
+				int next_loop_pt_next = (jj + 1)%nvc + i_offset_next;
+				//pipe_data->addFace( current_loop_pt, next_loop_pt, next_loop_pt_next, current_loop_pt_next );  
+				pipe_data->addFace( current_loop_pt, current_loop_pt_next, next_loop_pt_next, next_loop_pt );  
+			}
+		}
+
+		// front cap
+		for( int jj = 0; jj < nvc; ++jj )
+		{
+			int outer_rim_next = (jj+1)%nvc;
+			int inner_rim_next = outer_rim_next + num_vertices_outer;
+			pipe_data->addFace( jj, outer_rim_next, num_vertices_outer + jj );
+			pipe_data->addFace( outer_rim_next, inner_rim_next, num_vertices_outer + jj );
+		}
+
+		// back cap
+		int back_offset = (num_curve_points - 1)*nvc;
+		for( int jj = 0; jj < nvc; ++jj )
+		{
+			int outer_rim_next = (jj+1)%nvc + back_offset;
+			int inner_rim_next = outer_rim_next + num_vertices_outer;
+			pipe_data->addFace( jj + back_offset, num_vertices_outer + jj + back_offset, outer_rim_next );
+			pipe_data->addFace( outer_rim_next, num_vertices_outer + jj + back_offset, inner_rim_next );
+		}
+	}
+	else
+	{
+		// front cap, full pipe, create triangle fan
+		for( int jj = 0; jj < nvc - 2; ++jj )
+		{
+			pipe_data->addFace( 0, jj+1, jj+2 );
+		}
+
+		// back cap
+		int back_offset = (num_curve_points - 1)*nvc;
+		for( int jj = 0; jj < nvc - 2; ++jj )
+		{
+			pipe_data->addFace( back_offset, back_offset + jj+2, back_offset + jj+1 );
+		}
+	}
+
+#ifdef _DEBUG
+	std::stringstream strs_err;
+	shared_ptr<carve::mesh::MeshSet<3> > meshset( pipe_data->createMesh(carve::input::opts()) );
+	bool poly_ok = ConverterOSG::checkMeshSet( meshset.get(), strs_err, -1 );
+
+	if( !poly_ok )
+	{
+		std::cout << strs_err.str().c_str() << std::endl;
+	}
+#endif
 }
 
 void GeomUtils::computeInverse( const carve::math::Matrix& matrix_a, carve::math::Matrix& inv ) 

@@ -22,6 +22,7 @@
 #include <osgDB/ReaderWriter>
 #include <osgDB/FileNameUtils>
 #include <osg/CullFace>
+#include <osgText/Text>
 
 #include <ifcpp/IFC4/include/IfcProduct.h>
 #include <ifcpp/IFC4/include/IfcProject.h>
@@ -114,7 +115,7 @@ void ReaderWriterIFC::deleteInputCache()
 
 void ReaderWriterIFC::resetNumVerticesPerCircle()
 {
-	m_geom_settings->m_num_vertices_per_circle = 20;
+	m_geom_settings->m_num_vertices_per_circle = m_geom_settings->m_num_vertices_per_circle_default;
 }
 
 void ReaderWriterIFC::setModel( shared_ptr<IfcPPModel> model )
@@ -675,6 +676,26 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 			ConverterOSG::drawPolyline( polyline_data.get(), geode );
 			item_group->addChild(geode);
+		}
+
+		for( int text_literal_i = 0; text_literal_i < item_data->vec_text_literals.size(); ++text_literal_i )
+		{
+			shared_ptr<TextItemData>& text_data = item_data->vec_text_literals[text_literal_i];
+			carve::math::Matrix& text_pos = text_data->m_text_position;
+			// TODO: handle rotation
+			
+			osgText::Text* txt = new osgText::Text();
+			txt->setFont("fonts/arial.ttf");
+			txt->setColor( osg::Vec4f( 0, 0, 0, 1 ) );
+			txt->setCharacterSize( 0.1f );
+			txt->setAutoRotateToScreen( true );
+			txt->setPosition( osg::Vec3( text_pos._14, text_pos._24, text_pos._34 ) );
+			txt->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
+
+			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+			geode->addDrawable( txt );
+			item_group->addChild( geode );
+
 		}
 
 		// apply statesets if there are any

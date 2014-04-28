@@ -28,7 +28,6 @@ class QPushButton;
 class QSplitter;
 class QTreeWidgetItem;
 class StoreyWidget;
-//class IfcTreeWidget;
 
 class ViewerWidget;
 class IfcPPEntity;
@@ -53,7 +52,7 @@ public slots:
 	void slotTxtOutWarning( QString txt );
 	void slotTxtOutError( QString txt );
 	
-	void slotLoadIfcFile( std::string& path );
+	void slotLoadIfcFile( QString& path );
 	void slotRecentFilesIndexChanged(int);
 	void updateRecentFilesCombo();
 	
@@ -74,7 +73,6 @@ private:
 	QWidget*		m_io_widget;
 
 	StoreyWidget*	m_storey_widget;
-	//IfcTreeWidget*	m_ifc_tree_widget;
 
 	QLineEdit*		m_le_path_write;
 	QSplitter*		m_io_splitter;

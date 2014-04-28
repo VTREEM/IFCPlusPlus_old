@@ -28,6 +28,7 @@
 #include "ifcpp/IFC4/include/IfcMappedItem.h"
 #include "ifcpp/IFC4/include/IfcRepresentationMap.h"
 #include "ifcpp/IFC4/include/IfcCartesianTransformationOperator.h"
+#include "ifcpp/IFC4/include/IfcAxis2Placement2D.h"
 #include "ifcpp/IFC4/include/IfcAxis2Placement3D.h"
 #include "ifcpp/IFC4/include/IfcPlacement.h"
 
@@ -39,6 +40,9 @@
 #include "ifcpp/IFC4/include/IfcSimpleProperty.h"
 #include "ifcpp/IFC4/include/IfcPropertySingleValue.h"
 #include "ifcpp/IFC4/include/IfcIdentifier.h"
+#include "ifcpp/IFC4/include/IfcTextLiteral.h"
+#include "ifcpp/IFC4/include/IfcPresentableText.h"
+#include "ifcpp/IFC4/include/IfcTextPath.h"
 
 #include "ifcpp/IFC4/include/IfcLengthMeasure.h"
 #include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
@@ -454,7 +458,21 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 			shared_ptr<IfcCurve> select_curve = dynamic_pointer_cast<IfcCurve>(geom_select);
 			if( select_curve )
 			{
-				//convertIfcCurve( select_curve )
+				
+				std::vector<carve::geom::vector<3> > loops;
+				std::vector<carve::geom::vector<3> > segment_start_points;
+				m_curve_converter->convertIfcCurve( select_curve, loops, segment_start_points );
+
+				shared_ptr<carve::input::PolylineSetData> polyline_data( new carve::input::PolylineSetData() );
+				polyline_data->beginPolyline();
+				for( int i=0; i<loops.size(); ++i )
+				{
+					carve::geom::vector<3> point = loops.at(i);
+					polyline_data->addVertex( point );
+					polyline_data->addPolylineIndex(i);
+				}
+				item_data->polylines.push_back( polyline_data );
+
 				continue;
 			}
 
@@ -475,7 +493,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 		shared_ptr<IfcGeometricCurveSet> geometric_curve_set = dynamic_pointer_cast<IfcGeometricCurveSet>(geometric_set);
 		if( geometric_curve_set )
 		{
-			std::cout << "IfcGeometricCurveSet not implemented" << std::endl;	
+			// no additional attributes
 			return;
 		}
 		return;
@@ -485,6 +503,46 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	if( sectioned_spine )
 	{
 		convertIfcSectionedSpine( sectioned_spine, item_data, strs_err );
+		return;
+	}
+
+	shared_ptr<IfcTextLiteral> text_literal = dynamic_pointer_cast<IfcTextLiteral>(geom_item);
+	if( text_literal )
+	{
+		//Literal	 : 	IfcPresentableText;
+		//Placement	 : 	IfcAxis2Placement;
+		//Path	 : 	IfcTextPath;
+		if( m_geom_settings->m_show_text_literals )
+		{
+			shared_ptr<IfcPresentableText>& ifc_literal = text_literal->m_Literal;
+			std::string& literal_text = ifc_literal->m_value;
+			shared_ptr<IfcAxis2Placement>& text_placement = text_literal->m_Placement;
+			
+			carve::math::Matrix text_position_matrix( carve::math::Matrix::IDENT() );
+			double length_factor = m_unit_converter->getLengthInMeterFactor();
+			shared_ptr<IfcAxis2Placement3D> placement_3d = dynamic_pointer_cast<IfcAxis2Placement3D>( text_placement );
+			if( placement_3d )
+			{
+				PlacementConverter::convertIfcAxis2Placement3D( placement_3d, text_position_matrix, length_factor );
+			}
+			else
+			{
+				shared_ptr<IfcAxis2Placement2D> placement_2d = dynamic_pointer_cast<IfcAxis2Placement2D>( text_placement );
+				if( placement_2d )
+				{
+					PlacementConverter::convertIfcAxis2Placement2D( placement_2d, text_position_matrix, length_factor );
+				}
+			}
+
+			shared_ptr<IfcTextPath>& path = text_literal->m_Path;
+
+			shared_ptr<TextItemData> text_item_data( new TextItemData() );
+			text_item_data->m_text_position = text_position_matrix;
+			text_item_data->m_text = literal_text;
+
+			item_data->vec_text_literals.push_back( text_item_data );
+			
+		}
 		return;
 	}
 	

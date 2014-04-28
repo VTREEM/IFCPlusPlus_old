@@ -23,6 +23,13 @@
 #include <osg/StateSet>
 #include <osg/Switch>
 
+class TextItemData
+{
+public:
+	std::string m_text;
+	carve::math::Matrix m_text_position;
+};
+
 //\brief Class to hold input data of one IFC geometric representation item.
 class ItemData
 {
@@ -34,8 +41,8 @@ public:
 	std::vector<shared_ptr<carve::input::PolyhedronData> >	open_or_closed_polyhedrons;
 	std::vector<shared_ptr<carve::input::PolylineSetData> > polylines;
 	std::vector<shared_ptr<carve::mesh::MeshSet<3> > >		meshsets;
-	//std::vector<shared_ptr<carve::mesh::MeshSet<3> > >	meshsets_open;
 	std::vector<osg::ref_ptr<osg::StateSet> >				statesets;
+	std::vector<shared_ptr<TextItemData> >					vec_text_literals;
 	bool													m_csg_computed;
 
 	void createMeshSetsFromClosedPolyhedrons();
@@ -71,4 +78,14 @@ public:
 	std::vector<shared_ptr<ItemData> >			vec_item_data;
 	std::vector<osg::ref_ptr<osg::StateSet> >	vec_statesets;
 	bool added_to_storey;
+};
+
+class PolyInputCache3D
+{
+public:
+	PolyInputCache3D();
+	int addPoint( const carve::geom::vector<3>& v );
+	shared_ptr<carve::input::PolyhedronData> m_poly_data;
+	std::map<double, std::map<double, std::map<double, int> > > existing_vertices_coords;
+	std::map<double, int>::iterator it_find_z;
 };

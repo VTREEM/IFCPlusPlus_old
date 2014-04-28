@@ -88,32 +88,6 @@ public:
 	QVBoxLayout* m_vbox;
 };
 
-
-
-class MyFileDialog : public QFileDialog
-{
-public:
-	MyFileDialog( QWidget* parent, const QString& caption ) : QFileDialog( parent, caption )
-	{
-		QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
-		QStringList keys = settings.allKeys();
-		if( keys.contains( "MyFileDialogState" ) )
-		{
-			restoreState(settings.value(QLatin1String("MyFileDialogState")).toByteArray());
-			restoreGeometry(settings.value(QLatin1String("MyFileDialogGeometry")).toByteArray());
-		}
-		setFileMode( QFileDialog::ExistingFile );
-	}
-	~MyFileDialog()
-	{
-		QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
-		settings.setValue(QLatin1String("MyFileDialogState"), saveState());
-		settings.setValue(QLatin1String("MyFileDialogGeometry"), saveGeometry());
-	}
-};
-
-
-
 TabReadWrite::TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidget* parent ) : m_system(sys), m_viewer(viewer), QWidget( parent )
 {
 	//m_block_selection_signals = false;
@@ -279,10 +253,10 @@ void TabReadWrite::slotRecentFilesIndexChanged(int)
 	m_btn_load->setFocus();
 }
 
-void TabReadWrite::slotLoadIfcFile( std::string& path_in )
+void TabReadWrite::slotLoadIfcFile( QString& path_in )
 {
 	m_system->getIfcModel()->clearIfcModel();
-	slotTxtOut( QString( "loading file: " ) + path_in.c_str() );
+	slotTxtOut( QString( "loading file: " ) + path_in );
 	QApplication::processEvents();
 	
 	clock_t millisecs = clock();
@@ -292,9 +266,9 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 	m_txt_out->clear();
 	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
 
-	if( !QFile::exists(path_in.c_str()) )
+	if( !QFile::exists(path_in) )
 	{
-		slotTxtOutError( QString("file ") + path_in.c_str() + QString(" does not exist\n") );
+		slotTxtOutError( QString("file ") + path_in + QString(" does not exist\n") );
 
 		// remove all non-existing files from recent files combo
 		for( int i=0; i<m_recent_files.size(); )
@@ -316,7 +290,7 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 	else
 	{
 		// move to top of recent files list
-		int i = m_recent_files.indexOf( path_in.c_str() );
+		int i = m_recent_files.indexOf( path_in );
 		if( i > 0 )
 		{
 			QString current_path = m_recent_files.takeAt( i );
@@ -327,7 +301,7 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 		}
 		else
 		{
-			m_recent_files.insert( 0, path_in.c_str() );
+			m_recent_files.insert( 0, path_in );
 			m_recent_files.removeDuplicates();
 			settings.setValue("recentFiles",m_recent_files );
 			updateRecentFilesCombo();
@@ -343,7 +317,8 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 		m_system->getReaderWriterIFC()->setMessageCallBack( this, &TabReadWrite::slotMessageWrapper );
 		m_system->getReaderWriterIFC()->setErrorCallBack( this, &TabReadWrite::slotErrorWrapper );
 
-		cmd_load->setFilePath( path_in );
+		std::string path_str = path_in.toLocal8Bit();
+		cmd_load->setFilePath( path_str );
 		m_system->getCommandManager()->executeCommand( cmd_load );
 	}
 	catch( IfcPPException& e )
@@ -376,8 +351,6 @@ void TabReadWrite::slotLoadIfcFile( std::string& path_in )
 	slotTxtOut( tr("File loaded: ") + QString::number(num_entities) + " entities in " + QString::number( round(time_diff*0.1)*0.01 ) + " sec."  );
 
 	m_system->notifyModelLoadingDone();
-
-
 
 	shared_ptr<IfcGeometricRepresentationContext> geom_context = m_system->getIfcModel()->getIfcGeometricRepresentationContext3D();
 	if( geom_context )
@@ -443,7 +416,7 @@ void TabReadWrite::slotLoadRecentIfcFileClicked()
 	
 	if( row < m_recent_files.size() )
 	{
-		std::string file_name = m_recent_files.at( row ).toStdString();
+		QString file_name = m_recent_files.at( row );
 		slotLoadIfcFile( file_name );
 	}
 	m_io_widget->setDisabled(false);
@@ -459,20 +432,16 @@ void TabReadWrite::slotClearRecentIfcFiles()
 
 void TabReadWrite::slotAddOtherIfcFileClicked()
 {
-	MyFileDialog dialog( this, "Choose IFC file" );
+	QSettings settings(QSettings::UserScope, QLatin1String("IfcPlusPlus"));
+	QString default_dir = settings.value("defaultDir").toString();
+	QString selected_file = QFileDialog::getOpenFileName(this, "Choose IFC file", default_dir );
 	
-	QStringList fileNames;
-	if( dialog.exec() )
+	if( !selected_file.isEmpty() )
 	{
-		fileNames = dialog.selectedFiles();
+		QDir current_dir;
+		settings.setValue( "defaultDir", current_dir.absoluteFilePath(selected_file) );
+		slotLoadIfcFile( selected_file );
 	}
-
-	if( fileNames.size() > 0 )
-	{
-		QString path_in = fileNames[0];
-		std::string path_in_std = path_in.toStdString();
-		slotLoadIfcFile( path_in_std );
-	}	
 }
 
 void TabReadWrite::slotSetWritePathClicked()
@@ -515,6 +484,3 @@ void TabReadWrite::slotWriteFileClicked()
 	slotTxtOut( "file written (" + QString::number( time_diff*0.001 ) + " sec)" );
 	slotProgressValue( 1.0 );
 }
-
-
-

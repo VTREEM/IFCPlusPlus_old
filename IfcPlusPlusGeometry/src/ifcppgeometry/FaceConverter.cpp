@@ -245,9 +245,7 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, sh
 void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >& faces, shared_ptr<ItemData> item_data )
 {
 	std::stringstream err;
-	shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData() );
-	std::map<double, std::map<double, std::map<double, int> > > existing_vertices_coords;
-	std::map<double, int>::iterator it_find_z;
+	PolyInputCache3D poly_cache;
 
 	std::vector<shared_ptr<IfcFace> >::const_iterator it_ifc_faces;
 	for( it_ifc_faces=faces.begin(); it_ifc_faces!=faces.end(); ++it_ifc_faces )
@@ -312,34 +310,9 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 				for( int point_i = 0; point_i < 3; ++point_i )
 				{
 					carve::geom::vector<3> v = loop_points[point_i];
-
-#ifdef ROUND_IFC_COORDINATES
-					const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-					const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-					const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-#else
-					const double vertex_x = v.x;
-					const double vertex_y = v.y;
-					const double vertex_z = v.z;
-#endif
-					//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
-					std::map<double, std::map<double, int> >& map_y_index = existing_vertices_coords.insert( std::make_pair( vertex_x, std::map<double, std::map<double, int> >() ) ).first->second;
-					std::map<double, int>& map_z_index = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first->second;
-
-					it_find_z = map_z_index.find( vertex_z );
-					if( it_find_z != map_z_index.end() )
-					{
-						// vertex already exists in polygon. remember its index for triangles
-						int vertex_index = it_find_z->second;
-						map_merged_idx[point_i] = vertex_index;
-						triangle_indexes.push_back( vertex_index );
-						continue;
-					}
-					
-					int vertex_id = poly_data->addVertex( v );
-					map_z_index[vertex_z] = vertex_id;
-					map_merged_idx[point_i] = vertex_id;
+					int vertex_id = poly_cache.addPoint( v );
 					triangle_indexes.push_back( vertex_id );
+					map_merged_idx[point_i] = vertex_id;
 				}
 
 				if( triangle_indexes.size() != 3 )
@@ -348,7 +321,7 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 					continue;
 				}
 
-				poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
+				poly_cache.m_poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
 				continue;
 			}
 
@@ -412,33 +385,9 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 					{
 						carve::geom::vector<3> v = loop_points[point_i];
 
-#ifdef ROUND_IFC_COORDINATES
-						const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-						const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-						const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-#else
-						const double vertex_x = v.x;
-						const double vertex_y = v.y;
-						const double vertex_z = v.z;
-#endif
-						//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
-						std::map<double, std::map<double, int> >& map_y_index = existing_vertices_coords.insert( std::make_pair( vertex_x, std::map<double, std::map<double, int> >() ) ).first->second;
-						std::map<double, int>& map_z_index = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first->second;
-
-						it_find_z = map_z_index.find( vertex_z );
-						if( it_find_z != map_z_index.end() )
-						{
-							// vertex already exists in polygon. remember its index for triangles
-							int vertex_index = it_find_z->second;
-							map_merged_idx[point_i] = vertex_index;
-							triangle_indexes.push_back( vertex_index );
-							continue;
-						}
-					
-						int vertex_id = poly_data->addVertex( v );
-						map_z_index[vertex_z] = vertex_id;
-						map_merged_idx[point_i] = vertex_id;
-						triangle_indexes.push_back( vertex_id );
+						int vertex_index = poly_cache.addPoint( v );
+						map_merged_idx[point_i] = vertex_index;
+						triangle_indexes.push_back( vertex_index );
 					}
 
 					if( triangle_indexes.size() != 4 )
@@ -447,8 +396,8 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 						continue;
 					}
 
-					poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
-					poly_data->addFace( triangle_indexes[2], triangle_indexes[3], triangle_indexes[0] );
+					poly_cache.m_poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
+					poly_cache.m_poly_data->addFace( triangle_indexes[2], triangle_indexes[3], triangle_indexes[0] );
 					continue;
 				}
 			}
@@ -542,32 +491,8 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 		{
 			const carve::geom::vector<3>& v = merged_3d[i];
 			
-#ifdef ROUND_IFC_COORDINATES
-			const double vertex_x = round(v.x*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-			const double vertex_y = round(v.y*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-			const double vertex_z = round(v.z*ROUND_IFC_COORDINATES_UP)*ROUND_IFC_COORDINATES_DOWN;
-#else
-			const double vertex_x = v.x;
-			const double vertex_y = v.y;
-			const double vertex_z = v.z;
-#endif
-
-			//  return a pair, with its member pair::first set to an iterator pointing to either the newly inserted element or to the element with an equivalent key in the map
-			std::map<double, std::map<double, int> >& map_y_index = existing_vertices_coords.insert( std::make_pair(vertex_x, std::map<double, std::map<double, int> >() ) ).first->second;
-			std::map<double, int>& map_z_index = map_y_index.insert( std::make_pair( vertex_y, std::map<double, int>() ) ).first->second;
-
-			it_find_z = map_z_index.find( vertex_z );
-			if( it_find_z != map_z_index.end() )
-			{
-				// vertex already exists in polygon. remember its index for triangles
-				int vertex_index = it_find_z->second;
-				map_merged_idx[i] = vertex_index;
-				continue;
-			}
-					
-			int vertex_id = poly_data->addVertex( v );
-			map_z_index[vertex_z] = vertex_id;
-			map_merged_idx[i] = vertex_id;
+			int vertex_index = poly_cache.addPoint( v );
+			map_merged_idx[i] = vertex_index;
 		}
 		for( size_t i = 0; i != triangulated.size(); ++i )
 		{
@@ -581,8 +506,8 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 			int vertex_id_c = map_merged_idx[c];
 
 #ifdef _DEBUG
-			const carve::poly::Vertex<3>& v_a = poly_data->getVertex(vertex_id_a);
-			const carve::poly::Vertex<3>& v_b = poly_data->getVertex(vertex_id_b);
+			const carve::poly::Vertex<3>& v_a = poly_cache.m_poly_data->getVertex(vertex_id_a);
+			const carve::poly::Vertex<3>& v_b = poly_cache.m_poly_data->getVertex(vertex_id_b);
 
 			double dx = v_a.v[0] - v_b.v[0];
 			if( abs(dx) < 0.0000001 )
@@ -601,18 +526,18 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 
 			if( face_loop_reversed )
 			{
-				poly_data->addFace( vertex_id_a, vertex_id_c, vertex_id_b );
+				poly_cache.m_poly_data->addFace( vertex_id_a, vertex_id_c, vertex_id_b );
 			}
 			else
 			{
-				poly_data->addFace( vertex_id_a, vertex_id_b, vertex_id_c );
+				poly_cache.m_poly_data->addFace( vertex_id_a, vertex_id_b, vertex_id_c );
 			}
 		}
 		
 	}
 
 	// IfcFaceList can be a closed or open shell, so let the calling function decide where to put it
-	item_data->open_or_closed_polyhedrons.push_back( poly_data );
+	item_data->open_or_closed_polyhedrons.push_back( poly_cache.m_poly_data );
 
 	if( err.tellp() > 0 )
 	{
