@@ -20,6 +20,7 @@
 #include <osgViewer/Viewer>
 #include <ifcpp/model/shared_ptr.h>
 #include "GeometrySettings.h"
+#include "GeometryInputData.h"
 #include "IncludeCarveHeaders.h"
 
 enum ProjectionPlane
@@ -62,7 +63,8 @@ public:
 	static void closestPointOnLine( const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction, osg::Vec3d& closest );
 	static bool isPointOnLineSegment( double& lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction );
 	static void extrude(	const std::vector<std::vector<carve::geom::vector<2> > >& paths, const carve::geom::vector<3> dir, shared_ptr<carve::input::PolyhedronData>& poly_data, std::stringstream& err );
-	static void sweepDisc( std::vector<carve::geom::vector<3> >& basis_curve_points, shared_ptr<carve::input::PolyhedronData>& pipe_data, const int nvc, const double radius, const double radius_inner = -1 );
+	static void sweepDisk( std::vector<carve::geom::vector<3> >& curve_points, shared_ptr<ItemData>& item_data, const int nvc, const double radius, const double radius_inner = -1 );
+	static void sweepArea( std::vector<carve::geom::vector<3> >& curve_points, shared_ptr<ItemData>& item_data, const std::vector<std::vector<carve::geom::vector<2> > >& profile_paths );
 	static void makeLookAt(const carve::geom::vector<3>& eye,const carve::geom::vector<3>& center,const carve::geom::vector<3>& up, carve::math::Matrix& m );
 	static bool bisectingPlane( const carve::geom::vector<3>& v1, const carve::geom::vector<3>& v2, const carve::geom::vector<3>& v3, carve::geom::vector<3>& normal );
 	static void convertPlane2Matrix( const carve::geom::vector<3>& plane_normal, const carve::geom::vector<3>& plane_position, 

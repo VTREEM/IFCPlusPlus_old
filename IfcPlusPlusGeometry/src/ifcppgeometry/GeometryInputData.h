@@ -17,10 +17,10 @@
 #include <ifcpp/model/shared_ptr.h>
 #include <ifcpp/IFC4/include/IfcProduct.h>
 #include <ifcpp/IFC4/include/IfcRepresentation.h>
+#include <ifcpp/IFC4/include/IfcTextStyle.h>
 #include "IncludeCarveHeaders.h"
 
 #include <osg/ref_ptr>
-#include <osg/StateSet>
 #include <osg/Switch>
 
 class TextItemData
@@ -28,6 +28,28 @@ class TextItemData
 public:
 	std::string m_text;
 	carve::math::Matrix m_text_position;
+};
+
+class AppearanceData
+{
+public:
+	AppearanceData()
+	{
+		set_transparent = false;
+		shininess = 10.f;
+		transparency = 1.f;
+		specular_exponent = 0.f;
+		specular_roughness = 0.f;
+	}
+	carve::geom::vector<4> color_ambient;
+	carve::geom::vector<4> color_diffuse;
+	carve::geom::vector<4> color_specular;
+	float shininess;
+	float transparency;
+	float specular_exponent;
+	float specular_roughness;
+	bool set_transparent;
+	shared_ptr<IfcTextStyle> text_style;
 };
 
 //\brief Class to hold input data of one IFC geometric representation item.
@@ -41,10 +63,11 @@ public:
 	std::vector<shared_ptr<carve::input::PolyhedronData> >	open_or_closed_polyhedrons;
 	std::vector<shared_ptr<carve::input::PolylineSetData> > polylines;
 	std::vector<shared_ptr<carve::mesh::MeshSet<3> > >		meshsets;
-	std::vector<osg::ref_ptr<osg::StateSet> >				statesets;
+	std::vector<shared_ptr<AppearanceData> >				appearances;
 	std::vector<shared_ptr<TextItemData> >					vec_text_literals;
 	bool													m_csg_computed;
 
+	bool isEmpty();
 	void createMeshSetsFromClosedPolyhedrons();
 	void applyPosition( const carve::math::Matrix& mat );
 	shared_ptr<ItemData> getDeepCopy();
@@ -72,11 +95,11 @@ public:
 	shared_ptr<IfcRepresentation> representation;
 	shared_ptr<IfcObjectPlacement> object_placement;
 	osg::ref_ptr<osg::Switch> product_switch;
-	osg::ref_ptr<osg::Group> space_group;
+	osg::ref_ptr<osg::Switch> space_switch;
 	//std::vector<shared_ptr<IfcProduct> > vec_openings;
 	
 	std::vector<shared_ptr<ItemData> >			vec_item_data;
-	std::vector<osg::ref_ptr<osg::StateSet> >	vec_statesets;
+	std::vector<shared_ptr<AppearanceData> >	vec_appearances;
 	bool added_to_storey;
 };
 

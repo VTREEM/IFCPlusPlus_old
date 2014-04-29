@@ -102,6 +102,7 @@ void ReaderWriterIFC::resetModel()
 
 	deleteInputCache();
 	//m_processed_products.clear();
+	AppearanceManagerOSG::clearAppearanceCache();
 
 	m_group_result->removeChildren( 0, m_group_result->getNumChildren() );
 	m_recent_progress = 0.0;
@@ -111,6 +112,7 @@ void ReaderWriterIFC::resetModel()
 void ReaderWriterIFC::deleteInputCache()
 {
 	m_shape_input_data.clear();
+	AppearanceManagerOSG::clearAppearanceCache();
 }
 
 void ReaderWriterIFC::resetNumVerticesPerCircle()
@@ -678,48 +680,56 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 			item_group->addChild(geode);
 		}
 
-		for( int text_literal_i = 0; text_literal_i < item_data->vec_text_literals.size(); ++text_literal_i )
+		if( m_geom_settings->m_show_text_literals )
 		{
-			shared_ptr<TextItemData>& text_data = item_data->vec_text_literals[text_literal_i];
-			carve::math::Matrix& text_pos = text_data->m_text_position;
-			// TODO: handle rotation
-			
-			osgText::Text* txt = new osgText::Text();
-			txt->setFont("fonts/arial.ttf");
-			txt->setColor( osg::Vec4f( 0, 0, 0, 1 ) );
-			txt->setCharacterSize( 0.1f );
-			txt->setAutoRotateToScreen( true );
-			txt->setPosition( osg::Vec3( text_pos._14, text_pos._24, text_pos._34 ) );
-			txt->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
-
-			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
-			geode->addDrawable( txt );
-			item_group->addChild( geode );
-
-		}
-
-		// apply statesets if there are any
-		if( item_data->statesets.size() > 0 )
-		{
-			for( int i=0; i<item_data->statesets.size(); ++i )
+			for( int text_literal_i = 0; text_literal_i < item_data->vec_text_literals.size(); ++text_literal_i )
 			{
-				osg::StateSet* next_item_stateset = item_data->statesets[i];
-				if( !next_item_stateset )
+				shared_ptr<TextItemData>& text_data = item_data->vec_text_literals[text_literal_i];
+				if( !text_data )
 				{
 					continue;
 				}
+				carve::math::Matrix& text_pos = text_data->m_text_position;
+				// TODO: handle rotation
+			
+				osg::Vec3 pos2( text_pos._41, text_pos._42, text_pos._43 );
+
+				osgText::Text* txt = new osgText::Text();
+				txt->setFont("fonts/arial.ttf");
+				txt->setColor( osg::Vec4f( 0, 0, 0, 1 ) );
+				txt->setCharacterSize( 0.1f );
+				txt->setAutoRotateToScreen( true );
+				txt->setPosition( pos2 );
+				txt->setText( text_data->m_text.c_str() );
+				txt->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::OFF );
+
+				osg::ref_ptr<osg::Geode> geode = new osg::Geode();
+				geode->addDrawable( txt );
+				item_group->addChild( geode );
+			}
+		}
+
+		// apply statesets if there are any
+		if( item_data->appearances.size() > 0 )
+		{
+			for( int i_appearance=0; i_appearance<item_data->appearances.size(); ++i_appearance )
+			{
+				shared_ptr<AppearanceData>& appearance = item_data->appearances[i_appearance];
+				
+				osg::StateSet* item_stateset =  AppearanceManagerOSG::convertToStateSet( appearance );
+				item_group->setStateSet( item_stateset );
 
 				osg::StateSet* existing_item_stateset = item_group->getStateSet();
 
 				if( existing_item_stateset )
 				{
 					osg::StateSet* merged_product_stateset = new osg::StateSet( *existing_item_stateset );
-					merged_product_stateset->merge( *next_item_stateset );
+					merged_product_stateset->merge( *item_stateset );
 					item_group->setStateSet( merged_product_stateset );
 				}
 				else
 				{
-					item_group->setStateSet( next_item_stateset );
+					item_group->setStateSet( item_stateset );
 				}
 			}
 		}
@@ -776,18 +786,42 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 	}
 
 	// Simplify the OSG statesets
-	for( int i=0; i<product_shape->vec_statesets.size(); ++i )
+	//for( int i=0; i<product_shape->vec_statesets.size(); ++i )
+	//{
+	//	osg::StateSet* next_product_stateset = product_shape->vec_statesets[i];
+	//	if( !next_product_stateset )
+	//	{
+	//		continue;
+	//	}
+
+	//	osg::StateSet* existing_item_stateset = product_switch->getStateSet();
+	//	if( existing_item_stateset )
+	//	{
+	//		osg::StateSet* merged_product_stateset = new osg::StateSet( *existing_item_stateset );
+	//		merged_product_stateset->merge( *next_product_stateset );
+	//		product_switch->setStateSet( merged_product_stateset );
+	//	}
+	//	else
+	//	{
+	//		product_switch->setStateSet( next_product_stateset );
+	//	}
+	//}
+
+	for( int i=0; i<product_shape->vec_appearances.size(); ++i )
 	{
-		osg::StateSet* next_product_stateset = product_shape->vec_statesets[i];
-		if( !next_product_stateset )
+		shared_ptr<AppearanceData>& appearance = product_shape->vec_appearances[i];
+		if( !appearance )
 		{
 			continue;
 		}
+
+		osg::StateSet* next_product_stateset = AppearanceManagerOSG::convertToStateSet( appearance );
 
 		osg::StateSet* existing_item_stateset = product_switch->getStateSet();
 		if( existing_item_stateset )
 		{
 			osg::StateSet* merged_product_stateset = new osg::StateSet( *existing_item_stateset );
+			
 			merged_product_stateset->merge( *next_product_stateset );
 			product_switch->setStateSet( merged_product_stateset );
 		}
@@ -796,6 +830,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 			product_switch->setStateSet( next_product_stateset );
 		}
 	}
+
 
 	// enable transparency for certain objects
 	if( dynamic_pointer_cast<IfcSpace>(product) )

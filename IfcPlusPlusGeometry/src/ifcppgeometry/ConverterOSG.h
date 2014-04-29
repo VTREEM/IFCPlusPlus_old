@@ -18,12 +18,11 @@
 #include <ifcpp/model/shared_ptr.h>
 #include "IncludeCarveHeaders.h"
 
+class AppearanceData;
+
 class ConverterOSG
 {
 public:
-	ConverterOSG();
-	~ConverterOSG();
-
 	static void drawFace(		const carve::mesh::Face<3>* face,					osg::Geode* geode, bool add_color_array = false );
 	static void drawMesh(		const carve::mesh::Mesh<3>* mesh,					osg::Geode* geode, bool add_color_array = false );
 	static void drawOpenMesh(	const carve::input::PolyhedronData* poly_data,		osg::Geode* geode, bool add_color_array = false );
@@ -32,4 +31,14 @@ public:
 	static void drawPolyline(	const carve::input::PolylineSetData* polyline_data, osg::Geode* geode, bool add_color_array = false );
 	static bool checkMeshSet(	const carve::mesh::MeshSet<3>* mesh_set, std::stringstream& err_poly, int entity_id );
 	static double computeSurfaceAreaOfGroup( const osg::Group* grp );
+};
+
+class AppearanceManagerOSG
+{
+public:
+	//AppearanceManagerOSG();
+	//~AppearanceManagerOSG();
+	static void clearAppearanceCache();
+	static osg::StateSet* convertToStateSet( shared_ptr<AppearanceData>& appearence );
+	
 };

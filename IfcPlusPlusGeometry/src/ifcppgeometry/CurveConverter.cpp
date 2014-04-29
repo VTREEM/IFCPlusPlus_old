@@ -161,6 +161,8 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 		if( bspline_curve )
 		{
 			std::vector<shared_ptr<IfcCartesianPoint> >&	points = bspline_curve->m_ControlPointsList;
+
+
 			// TODO: compute bspline curve
 			convertIfcCartesianPointVector( points, target_vec );
 			return;

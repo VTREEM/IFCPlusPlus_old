@@ -33,13 +33,26 @@ void ItemData::createMeshSetsFromClosedPolyhedrons()
 
 void ItemData::addItemData( shared_ptr<ItemData>& other )
 {
-	std::copy( other->closed_polyhedrons.begin(), other->closed_polyhedrons.end(), std::back_inserter( closed_polyhedrons ) );
-	std::copy( other->open_polyhedrons.begin(), other->open_polyhedrons.end(), std::back_inserter( open_polyhedrons ) );
-	std::copy( other->open_or_closed_polyhedrons.begin(), other->open_or_closed_polyhedrons.end(), std::back_inserter( open_or_closed_polyhedrons ) );
-	std::copy( other->polylines.begin(), other->polylines.end(), std::back_inserter( polylines ) );
-	std::copy( other->meshsets.begin(), other->meshsets.end(), std::back_inserter( meshsets ) );
-	std::copy( other->statesets.begin(), other->statesets.end(), std::back_inserter( statesets ) );
+	std::copy( other->closed_polyhedrons.begin(),			other->closed_polyhedrons.end(),			std::back_inserter( closed_polyhedrons ) );
+	std::copy( other->open_polyhedrons.begin(),				other->open_polyhedrons.end(),				std::back_inserter( open_polyhedrons ) );
+	std::copy( other->open_or_closed_polyhedrons.begin(),	other->open_or_closed_polyhedrons.end(),	std::back_inserter( open_or_closed_polyhedrons ) );
+	std::copy( other->polylines.begin(),					other->polylines.end(),						std::back_inserter( polylines ) );
+	std::copy( other->meshsets.begin(),						other->meshsets.end(),						std::back_inserter( meshsets ) );
+	std::copy( other->appearances.begin(),					other->appearances.end(),					std::back_inserter( appearances ) );
 	m_csg_computed = other->m_csg_computed || m_csg_computed;
+}
+
+bool ItemData::isEmpty()
+{
+	if( closed_polyhedrons.size() > 0 )			{ return false; }
+	if( open_polyhedrons.size() > 0 )			{ return false; }
+	if( open_or_closed_polyhedrons.size() > 0 ) { return false; }
+	if( polylines.size() > 0 )					{ return false; }
+	if( meshsets.size() > 0 )					{ return false; }
+	if( appearances.size() > 0 )				{ return false; }
+	if( vec_text_literals.size() > 0 )			{ return false; }
+
+	return true;
 }
 
 bool isIdentity( const carve::math::Matrix& mat )
@@ -118,7 +131,7 @@ void ItemData::applyPosition( const carve::math::Matrix& mat )
 		}
 		for (size_t i = 0; i < item_meshset->meshes.size(); ++i)
 		{
-          item_meshset->meshes[i]->recalc();
+			item_meshset->meshes[i]->recalc();
         }
 	}
 
@@ -130,6 +143,12 @@ void ItemData::applyPosition( const carve::math::Matrix& mat )
 			carve::geom::vector<3>& point = polyline_data->points[j];
 			point = mat*point;
 		}
+	}
+
+	for( int text_i = 0; text_i < vec_text_literals.size(); ++text_i )
+	{
+		shared_ptr<TextItemData>& text_literals = vec_text_literals[text_i];
+		text_literals->m_text_position = mat*text_literals->m_text_position;
 	}
 }
 
@@ -168,7 +187,8 @@ shared_ptr<ItemData> ItemData::getDeepCopy()
 		copy_item->polylines.push_back( shared_ptr<carve::input::PolylineSetData>( new carve::input::PolylineSetData( *(polyline_data.get()) ) ) );
 	}
 
-	std::copy( statesets.begin(), statesets.end(), std::back_inserter( copy_item->statesets ) );
+	std::copy( appearances.begin(),			appearances.end(),			std::back_inserter( copy_item->appearances ) );
+	std::copy( vec_text_literals.begin(),	vec_text_literals.end(),	std::back_inserter( copy_item->vec_text_literals ) );
 
 	return copy_item;
 }
@@ -176,20 +196,20 @@ shared_ptr<ItemData> ItemData::getDeepCopy()
 void ShapeInputData::addInputData( shared_ptr<ShapeInputData>& other )
 {
 	std::copy( other->vec_item_data.begin(), other->vec_item_data.end(), std::back_inserter( vec_item_data ) );
-	std::copy( other->vec_statesets.begin(), other->vec_statesets.end(), std::back_inserter( vec_statesets ) );
+	std::copy( other->vec_appearances.begin(), other->vec_appearances.end(), std::back_inserter( vec_appearances ) );
 }
 
 void ShapeInputData::deepCopyFrom( shared_ptr<ShapeInputData>& other )
 {
 	vec_item_data.clear();
-	vec_statesets.clear();
+	vec_appearances.clear();
 
 	for( int item_i = 0; item_i < other->vec_item_data.size(); ++item_i )
 	{
 		shared_ptr<ItemData>& item_data = other->vec_item_data[item_i];
 		vec_item_data.push_back( shared_ptr<ItemData>( item_data->getDeepCopy() ) );
 	}
-	std::copy( other->vec_statesets.begin(), other->vec_statesets.end(), std::back_inserter( vec_statesets ) );
+	std::copy( other->vec_appearances.begin(), other->vec_appearances.end(), std::back_inserter( vec_appearances ) );
 	//addInputData( other );
 }
 

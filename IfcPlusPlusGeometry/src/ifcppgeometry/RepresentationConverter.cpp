@@ -115,17 +115,13 @@ void RepresentationConverter::convertStyledItem( const shared_ptr<IfcRepresentat
 #ifdef IFCPP_OPENMP
 		ScopedLock lock(m_writelock_styles_converter);
 #endif
-		osg::StateSet* stateset = m_styles_converter->convertIfcStyledItem( styled_item );
-		if( stateset != NULL )
-		{
-			item_data->statesets.push_back(stateset);
-		}
+		shared_ptr<AppearanceData> appearance_data;
+		m_styles_converter->convertIfcStyledItem( styled_item, appearance_data );
+		item_data->appearances.push_back( appearance_data );
 	}
 }
 
-void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRepresentation>& representation,
-													   shared_ptr<ShapeInputData>& input_data,
-													   std::stringstream& strs_err )
+void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRepresentation>& representation, shared_ptr<ShapeInputData>& input_data, std::stringstream& strs_err )
 {
 	const double length_factor = m_unit_converter->getLengthInMeterFactor();
 
@@ -287,11 +283,16 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 #ifdef IFCPP_OPENMP
 					ScopedLock lock( m_writelock_styles_converter );
 #endif
-					osg::StateSet* stateset = m_styles_converter->convertIfcPresentationStyle( presentation_style );
-					if( stateset != NULL )
-					{
-						input_data->vec_statesets.push_back(stateset);
-					}
+					shared_ptr<AppearanceData> appearance_data;
+					input_data->vec_appearances.push_back( appearance_data );
+
+					m_styles_converter->convertIfcPresentationStyle( presentation_style, appearance_data );
+
+					//osg::StateSet* stateset = m_styles_converter->convertIfcPresentationStyle( presentation_style, item_data );
+					//if( stateset != NULL )
+					//{
+					//	input_data->vec_statesets.push_back(stateset);
+					//}
 				}
 			}
 		}
@@ -509,9 +510,9 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 	shared_ptr<IfcTextLiteral> text_literal = dynamic_pointer_cast<IfcTextLiteral>(geom_item);
 	if( text_literal )
 	{
-		//Literal	 : 	IfcPresentableText;
-		//Placement	 : 	IfcAxis2Placement;
-		//Path	 : 	IfcTextPath;
+		// Literal		: 	IfcPresentableText;
+		// Placement	: 	IfcAxis2Placement;
+		// Path			: 	IfcTextPath;
 		if( m_geom_settings->m_show_text_literals )
 		{
 			shared_ptr<IfcPresentableText>& ifc_literal = text_literal->m_Literal;
@@ -535,13 +536,11 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 			}
 
 			shared_ptr<IfcTextPath>& path = text_literal->m_Path;
-
 			shared_ptr<TextItemData> text_item_data( new TextItemData() );
 			text_item_data->m_text_position = text_position_matrix;
 			text_item_data->m_text = literal_text;
 
 			item_data->vec_text_literals.push_back( text_item_data );
-			
 		}
 		return;
 	}
@@ -696,7 +695,10 @@ void RepresentationConverter::convertIfcPropertySet( const shared_ptr<IfcPropert
 #ifdef IFCPP_OPENMP
 				ScopedLock lock( m_writelock_styles_converter );
 #endif
-				osg::ref_ptr<osg::StateSet> stateset = m_styles_converter->convertIfcComplexPropertyColor( complex_property );
+				shared_ptr<AppearanceData> appearance_data;
+				m_styles_converter->convertIfcComplexPropertyColor( complex_property, appearance_data );
+
+				osg::ref_ptr<osg::StateSet> stateset = AppearanceManagerOSG::convertToStateSet( appearance_data );
 
 				if( stateset.valid() )
 				{

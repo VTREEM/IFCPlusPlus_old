@@ -13,7 +13,6 @@
 
 #pragma once
 
-#include <osg/StateSet>
 #include "ifcpp/model/shared_ptr.h"
 
 class IfcStyledItem;
@@ -21,6 +20,7 @@ class IfcPresentationStyle;
 class IfcPresentationStyleSelect;
 class IfcCurveStyle;
 class IfcSurfaceStyle;
+class AppearanceData;
 
 class StylesConverter
 {
@@ -28,12 +28,13 @@ public:
 	StylesConverter();
 	~StylesConverter();
 	
-	osg::StateSet* convertIfcStyledItem( weak_ptr<IfcStyledItem> item );
-	osg::StateSet* convertIfcComplexPropertyColor( shared_ptr<IfcComplexProperty> complex_property );
-	osg::StateSet* convertIfcSurfaceStyle( shared_ptr<IfcSurfaceStyle> surface_style );
-	osg::StateSet* convertIfcPresentationStyle( shared_ptr<IfcPresentationStyle> presentation_style );
-	osg::StateSet* convertIfcPresentationStyleSelect( shared_ptr<IfcPresentationStyleSelect> presentation_style );
-	osg::StateSet* convertIfcCurveStyle( shared_ptr<IfcCurveStyle> curve_style );
+	void convertIfcStyledItem( weak_ptr<IfcStyledItem> item, shared_ptr<AppearanceData>& appearance_data );
+	void convertIfcComplexPropertyColor( shared_ptr<IfcComplexProperty> complex_property, shared_ptr<AppearanceData>& appearance_data );
+	void convertIfcSurfaceStyle( shared_ptr<IfcSurfaceStyle> surface_style, shared_ptr<AppearanceData>& appearance_data );
+	void convertIfcPresentationStyle( shared_ptr<IfcPresentationStyle> presentation_style, shared_ptr<AppearanceData>& appearance_data );
+	void convertIfcPresentationStyleSelect( shared_ptr<IfcPresentationStyleSelect> presentation_style, shared_ptr<AppearanceData>& appearance_data );
+	void convertIfcCurveStyle( shared_ptr<IfcCurveStyle> curve_style, shared_ptr<AppearanceData>& appearance_data );
 	
-	std::map<int,osg::ref_ptr<osg::StateSet> > m_map_ifc_styles;
+	//std::map<int,osg::ref_ptr<osg::StateSet> > m_map_ifc_styles;
+	std::map<int, shared_ptr<AppearanceData> > m_map_ifc_styles;
 };

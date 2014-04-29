@@ -85,6 +85,8 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 		//END_ENTITY;
 
 		shared_ptr<IfcProfileDef>& swept_area = swept_area_solid->m_SweptArea;
+		shared_ptr<ProfileConverter> profile_converter = m_profile_cache->getProfileConverter( swept_area );
+		const std::vector<std::vector<carve::geom::vector<2> > >& profile_paths = profile_converter->getCoordinates();
 
 		// check if local coordinate system is specified for extrusion
 		carve::math::Matrix swept_area_pos;
@@ -113,8 +115,27 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			//EndParam	 : OPTIONAL IfcParameterValue;
 			//FixedReference	 : IfcDirection;
 
+			shared_ptr<IfcCurve>& directrix_curve = fixed_reference_swept_area_solid->m_Directrix;
 
-			std::cout << "IfcFixedReferenceSweptAreaSolid not implemented" << std::endl;
+			shared_ptr<IfcParameterValue>& start_param = fixed_reference_swept_area_solid->m_StartParam;				//optional
+			shared_ptr<IfcParameterValue>& end_param = fixed_reference_swept_area_solid->m_EndParam;					//optional
+			shared_ptr<IfcDirection>& fixed_reference = fixed_reference_swept_area_solid->m_FixedReference;
+
+			const int nvc = m_geom_settings->m_num_vertices_per_circle;
+			double length_in_meter = m_unit_converter->getLengthInMeterFactor();
+
+			std::vector<carve::geom::vector<3> > segment_start_points;
+			std::vector<carve::geom::vector<3> > basis_curve_points;
+			m_curve_converter->convertIfcCurve( directrix_curve, basis_curve_points, segment_start_points );
+
+
+			//shared_ptr<carve::input::PolyhedronData> solid_data( new carve::input::PolyhedronData() );
+			shared_ptr<ItemData> item_data_solid( new ItemData() );
+			GeomUtils::sweepArea( basis_curve_points, item_data_solid, profile_paths );
+			item_data_solid->applyPosition( swept_area_pos );
+			item_data->addItemData( item_data_solid );
+
+
 			return;
 		}
 
@@ -134,11 +155,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			//  shared_ptr<IfcProfileDef>					m_SweptArea;
 			//  shared_ptr<IfcAxis2Placement3D>				m_Position;					//optional
 
-			shared_ptr<ProfileConverter> profile_converter = m_profile_cache->getProfileConverter( swept_area );
-			const std::vector<std::vector<carve::geom::vector<2> > >& paths = profile_converter->getCoordinates();
 			shared_ptr<carve::input::PolyhedronData> poly_data( new carve::input::PolyhedronData );
-
-
 			shared_ptr<IfcCurve>& directrix_curve = surface_curve_swept_area_solid->m_Directrix;
 			const int nvc = m_geom_settings->m_num_vertices_per_circle;
 			double length_in_meter = m_unit_converter->getLengthInMeterFactor();
@@ -280,9 +297,14 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 		std::vector<carve::geom::vector<3> > basis_curve_points;
 		m_curve_converter->convertIfcCurve( directrix_curve, basis_curve_points, segment_start_points );
 
-		shared_ptr<carve::input::PolyhedronData> pipe_data( new carve::input::PolyhedronData() );
-		item_data->closed_polyhedrons.push_back(pipe_data);
-		GeomUtils::sweepDisc( basis_curve_points, pipe_data, nvc, radius, radius_inner );
+		//shared_ptr<carve::input::PolyhedronData> pipe_data( new carve::input::PolyhedronData() );
+		//item_data->closed_polyhedrons.push_back(pipe_data);
+		//GeomUtils::sweepDisk( basis_curve_points, pipe_data, nvc, radius, radius_inner );
+
+		shared_ptr<ItemData> item_data_solid( new ItemData() );
+		GeomUtils::sweepDisk( basis_curve_points, item_data_solid, nvc, radius, radius_inner );
+		//item_data_solid->applyPosition( swept_area_pos );
+		item_data->addItemData( item_data_solid );
 
 		return;
 	}
