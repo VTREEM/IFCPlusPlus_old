@@ -558,6 +558,9 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 					applyBackwardCompatibility( m_model, entity_enum, arguments );
 				}
 			}
+#ifdef _DEBUG
+			int entity_id = entity->getId();
+#endif
 
 			try
 			{

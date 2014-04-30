@@ -63,6 +63,7 @@
 #include "ifcpp/IFC4/include/IfcGeometricCurveSet.h"
 #include "ifcpp/IFC4/include/IfcCurve.h"
 #include "ifcpp/IFC4/include/IfcSurface.h"
+#include "ifcpp/IFC4/include/IfcAnnotationFillArea.h"
 
 #include "ifcpp/IFC4/include/IfcSolidModel.h"
 #include "ifcpp/IFC4/include/IfcSectionedSpine.h"
@@ -330,7 +331,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 			std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = face_set->m_CfsFaces;
 
 			shared_ptr<ItemData> input_data_face_set( new ItemData );
-			m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data_face_set );
+			m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data_face_set, strs_err );
 			std::copy( input_data_face_set->open_or_closed_polyhedrons.begin(), input_data_face_set->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->open_polyhedrons) );
 		}
 		
@@ -362,7 +363,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 		polyline_data->beginPolyline();
 		for( int i=0; i<loops.size(); ++i )
 		{
-			carve::geom::vector<3> point = loops.at(i);
+			carve::geom::vector<3> point = loops[i];
 			polyline_data->addVertex( point );
 			polyline_data->addPolylineIndex(i);
 		}
@@ -384,7 +385,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 				std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = closed_shell->m_CfsFaces;
 
 				shared_ptr<ItemData> input_data( new ItemData() );
-				m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data );
+				m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data, strs_err );
 				std::copy( input_data->open_or_closed_polyhedrons.begin(), input_data->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->closed_polyhedrons) );
 			}
 			else if( dynamic_pointer_cast<IfcOpenShell>( shell_select ) )
@@ -393,7 +394,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 				std::vector<shared_ptr<IfcFace> >& vec_ifc_faces = open_shell->m_CfsFaces;
 
 				shared_ptr<ItemData> input_data( new ItemData() );
-				m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data );
+				m_face_converter->convertIfcFaceList( vec_ifc_faces, input_data, strs_err );
 
 				std::copy( input_data->open_or_closed_polyhedrons.begin(), input_data->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->open_polyhedrons) );
 			}
@@ -427,7 +428,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 		// apply position
 		for( unsigned int i=0; i<num_points; ++i )
 		{
-			carve::geom::vector<3>& vertex = poly_vertices.at(i);
+			carve::geom::vector<3>& vertex = poly_vertices[i];
 			//vertex = vertex;
 
 			polyline_data->addVertex(vertex);
@@ -468,7 +469,7 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 				polyline_data->beginPolyline();
 				for( int i=0; i<loops.size(); ++i )
 				{
-					carve::geom::vector<3> point = loops.at(i);
+					carve::geom::vector<3> point = loops[i];
 					polyline_data->addVertex( point );
 					polyline_data->addPolylineIndex(i);
 				}
@@ -542,6 +543,35 @@ void RepresentationConverter::convertIfcGeometricRepresentationItem( const share
 
 			item_data->vec_text_literals.push_back( text_item_data );
 		}
+		return;
+	}
+
+	shared_ptr<IfcAnnotationFillArea> annotation_fill_area = dynamic_pointer_cast<IfcAnnotationFillArea>(geom_item);
+	if( annotation_fill_area )
+	{
+		// convert outer boundary
+		shared_ptr<IfcCurve>& outer_boundary = annotation_fill_area->m_OuterBoundary;
+		std::vector<std::vector<carve::geom::vector<3> > > face_loops;
+		face_loops.push_back( std::vector<carve::geom::vector<3> >() );
+		std::vector<carve::geom::vector<3> >& outer_boundary_loop = face_loops.back();
+		std::vector<carve::geom::vector<3> > segment_start_points;
+		m_curve_converter->convertIfcCurve( outer_boundary, outer_boundary_loop, segment_start_points );
+
+		// convert inner boundaries
+		std::vector<shared_ptr<IfcCurve> >& vec_inner_boundaries = annotation_fill_area->m_InnerBoundaries;			//optional
+		for( std::vector<shared_ptr<IfcCurve> >::iterator it = vec_inner_boundaries.begin(); it != vec_inner_boundaries.end(); ++it )
+		{
+			shared_ptr<IfcCurve>& inner_boundary = *it;
+			face_loops.push_back( std::vector<carve::geom::vector<3> >() );
+			std::vector<carve::geom::vector<3> >& inner_boundary_loop = face_loops.back();
+			std::vector<carve::geom::vector<3> > segment_start_points;
+			m_curve_converter->convertIfcCurve( inner_boundary, inner_boundary_loop, segment_start_points );
+		}
+		
+		PolyInputCache3D poly_cache;
+		GeomUtils::createFace( face_loops, poly_cache, strs_err );
+		item_data->open_polyhedrons.push_back( poly_cache.m_poly_data );
+		
 		return;
 	}
 	

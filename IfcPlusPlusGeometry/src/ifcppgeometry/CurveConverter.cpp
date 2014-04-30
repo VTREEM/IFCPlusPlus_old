@@ -297,7 +297,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				// apply position
 				for( unsigned int i=0; i<circle_points.size(); ++i )
 				{
-					carve::geom::vector<2>&  point = circle_points.at(i);
+					carve::geom::vector<2>&  point = circle_points[i];
 					carve::geom::vector<3>  point3d( carve::geom::VECTOR( point.x, point.y, 0 ) );
 					point3d = conic_position_matrix * point3d;
 					point.x = point3d.x;
@@ -305,7 +305,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 				}
 
 				GeomUtils::appendPointsToCurve( circle_points, target_vec );
-				segment_start_points.push_back( carve::geom::VECTOR( circle_points.at(0).x, circle_points.at(0).y, 0 ) );
+				segment_start_points.push_back( carve::geom::VECTOR( circle_points[0].x, circle_points[0].y, 0 ) );
 			}
 
 			return;
@@ -337,14 +337,14 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 					// apply position
 					for( unsigned int i=0; i<circle_points.size(); ++i )
 					{
-						carve::geom::vector<3>& point = circle_points.at(i);
+						carve::geom::vector<3>& point = circle_points[i];
 						point = conic_position_matrix * point;
 					}
 					GeomUtils::appendPointsToCurve( circle_points, target_vec );
 
 					//if( segment_start_points != NULL )
 					{
-						carve::geom::vector<3> pt0 = circle_points.at(0);
+						carve::geom::vector<3> pt0 = circle_points[0];
 						segment_start_points.push_back( pt0 );
 					}
 				}

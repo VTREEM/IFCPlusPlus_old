@@ -58,6 +58,7 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments );
 IfcPPTypeEnum findTypeEnumForString( const std::string& type_name );
 IfcPPEntityEnum findEntityEnumForString( const std::string& entity_name );
 void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
+void readInlineTypeOrEntity( const std::string& keyword, const std::string& inline_arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 
 template<typename T>
 void readTypeOfIntList( const std::string& str, std::vector<shared_ptr<T> >& vec )

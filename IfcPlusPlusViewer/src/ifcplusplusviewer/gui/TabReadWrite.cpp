@@ -273,7 +273,7 @@ void TabReadWrite::slotLoadIfcFile( QString& path_in )
 		// remove all non-existing files from recent files combo
 		for( int i=0; i<m_recent_files.size(); )
 		{
-			QString recent_file = m_recent_files.at(i);
+			QString recent_file = m_recent_files[i];
 			if( !QFile::exists(recent_file) )
 			{
 				m_recent_files.takeAt( i );

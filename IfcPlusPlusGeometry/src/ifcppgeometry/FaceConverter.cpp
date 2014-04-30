@@ -194,7 +194,7 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, sh
 			polyline_data->beginPolyline();
 			for( int i=0; i<circle_points.size(); ++i )
 			{
-				carve::geom::vector<2>& point = circle_points.at(i);
+				carve::geom::vector<2>& point = circle_points[i];
 				carve::geom::vector<3> point3d( carve::geom::VECTOR( point.x, point.y, 0 ) );
 				polyline_data->addVertex( elementary_surface_matrix*point3d );
 				polyline_data->addPolylineIndex(i);
@@ -242,30 +242,16 @@ void FaceConverter::convertIfcSurface( const shared_ptr<IfcSurface>& surface, sh
 	throw UnhandledRepresentationException(surface);
 }
 
-void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >& faces, shared_ptr<ItemData> item_data )
+void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >& faces, shared_ptr<ItemData> item_data, std::stringstream& strs_err )
 {
-	std::stringstream err;
 	PolyInputCache3D poly_cache;
-
-	std::vector<shared_ptr<IfcFace> >::const_iterator it_ifc_faces;
-	for( it_ifc_faces=faces.begin(); it_ifc_faces!=faces.end(); ++it_ifc_faces )
+	for( std::vector<shared_ptr<IfcFace> >::const_iterator it_ifc_faces=faces.begin(); it_ifc_faces!=faces.end(); ++it_ifc_faces )
 	{
-		const shared_ptr<IfcFace>& face = (*it_ifc_faces);
-		
+		const shared_ptr<IfcFace>& face = *it_ifc_faces;
 		std::vector<shared_ptr<IfcFaceBound> >& vec_bounds = face->m_Bounds;
-		const int face_id = face->getId();
-
-		std::vector<std::vector<carve::geom2d::P2> > face_loops_2d;
 		std::vector<std::vector<carve::geom::vector<3> > > face_loops;
-		std::vector<std::vector<double> > face_loop_3rd_dim;
-		std::map<int,int> map_merged_idx;
-		bool face_loop_reversed = false;
 
-		int i_bound = 0;
-		ProjectionPlane face_plane = UNDEFINED;
-
-		std::vector<shared_ptr<IfcFaceBound> >::iterator it_bounds;
-		for( it_bounds=vec_bounds.begin(); it_bounds!=vec_bounds.end(); ++it_bounds, ++i_bound )
+		for( std::vector<shared_ptr<IfcFaceBound> >::iterator it_bounds=vec_bounds.begin(); it_bounds!=vec_bounds.end(); ++it_bounds )
 		{
 			shared_ptr<IfcFaceBound> face_bound = (*it_bounds);
 
@@ -283,7 +269,8 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 				}
 			}
 
-			std::vector<carve::geom::vector<3> > loop_points;
+			face_loops.push_back( std::vector<carve::geom::vector<3> >() );
+			std::vector<carve::geom::vector<3> >& loop_points = face_loops.back();
 			m_curve_converter->convertIfcLoop( loop, loop_points );
 
 			if( loop_points.size() < 3 )
@@ -304,245 +291,11 @@ void FaceConverter::convertIfcFaceList( const std::vector<shared_ptr<IfcFace> >&
 				std::reverse( loop_points.begin(), loop_points.end() );
 			}
 
-			if( loop_points.size() == 3 && vec_bounds.size() == 1 )
-			{
-				std::vector<int> triangle_indexes;
-				for( int point_i = 0; point_i < 3; ++point_i )
-				{
-					carve::geom::vector<3> v = loop_points[point_i];
-					int vertex_id = poly_cache.addPoint( v );
-					triangle_indexes.push_back( vertex_id );
-					map_merged_idx[point_i] = vertex_id;
-				}
-
-				if( triangle_indexes.size() != 3 )
-				{
-					std::cout << __FUNC__ << ": triangle_indexes.size() != 3" << std::endl;
-					continue;
-				}
-
-				poly_cache.m_poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
-				continue;
-			}
-
-			carve::geom3d::Vector normal = GeomUtils::computePolygonNormal( loop_points );
-			if( it_bounds == vec_bounds.begin() )
-			{
-				double nx = abs(normal.x);
-				double ny = abs(normal.y);
-				double nz = abs(normal.z);
-				if( nz > nx && nz >= ny )
-				{
-					face_plane = XY_PLANE;
-				}
-				else if( nx >= ny && nx >= nz )
-				{
-					face_plane = YZ_PLANE;
-				}
-				else if( ny > nx && ny >= nz )
-				{
-					face_plane = XZ_PLANE;
-				}
-				else
-				{
-					err << "#" << loop->getId() << " = IfcPolyLoop: " << loop->getId() << " unable to project to plane: nx" << nx << " ny " << ny << " nz " << nz << std::endl;
-					continue;
-				}
-			}
-
-			// project face into 2d plane
-			std::vector<carve::geom2d::P2> path_loop_2d;
-			std::vector<double> path_loop_3rd_dim;
-
-			for( int i=0; i<loop_points.size(); ++i )
-			{
-				carve::geom3d::Vector& point = loop_points.at(i);
-
-				if( face_plane == XY_PLANE )
-				{
-					path_loop_2d.push_back( carve::geom::VECTOR(point.x, point.y ));
-					path_loop_3rd_dim.push_back(point.z);
-				}
-				else if( face_plane == YZ_PLANE )
-				{
-					path_loop_2d.push_back( carve::geom::VECTOR(point.y, point.z ));
-					path_loop_3rd_dim.push_back(point.x);
-				}
-				else if( face_plane == XZ_PLANE )
-				{
-					path_loop_2d.push_back( carve::geom::VECTOR(point.x, point.z ));
-					path_loop_3rd_dim.push_back(point.y);
-				}
-			}
-
-			if( loop_points.size() == 4 && vec_bounds.size() == 1 )
-			{
-				if( carve::geom2d::quadIsConvex( path_loop_2d[0], path_loop_2d[1], path_loop_2d[2], path_loop_2d[3] ) )
-				{
-					// add 2 triangles for quad
-					std::vector<int> triangle_indexes;
-					for( int point_i = 0; point_i < 4; ++point_i )
-					{
-						carve::geom::vector<3> v = loop_points[point_i];
-
-						int vertex_index = poly_cache.addPoint( v );
-						map_merged_idx[point_i] = vertex_index;
-						triangle_indexes.push_back( vertex_index );
-					}
-
-					if( triangle_indexes.size() != 4 )
-					{
-						std::cout << __FUNC__ << ": triangle_indexes.size() != 4" << std::endl;
-						continue;
-					}
-
-					poly_cache.m_poly_data->addFace( triangle_indexes[0], triangle_indexes[1], triangle_indexes[2] );
-					poly_cache.m_poly_data->addFace( triangle_indexes[2], triangle_indexes[3], triangle_indexes[0] );
-					continue;
-				}
-			}
-
-			// check winding order
-			carve::geom3d::Vector normal_2d = GeomUtils::computePolygon2DNormal( path_loop_2d );
-			if( it_bounds == vec_bounds.begin() )
-			{
-				if( normal_2d.z < 0 )
-				{
-					std::reverse( path_loop_2d.begin(), path_loop_2d.end() );
-					face_loop_reversed = true;
-				}
-			}
-			else
-			{
-				if( normal_2d.z > 0 )
-				{
-					std::reverse( path_loop_2d.begin(), path_loop_2d.end() );
-				}
-			}
-
-			if( path_loop_2d.size() < 3 )
-			{
-				//std::cout << __FUNC__ << ": #" << face_id <<  "=IfcFace: path_loop.size() < 3" << std::endl;
-				continue;
-			}
-
-			face_loops_2d.push_back(path_loop_2d);
-			face_loop_3rd_dim.push_back(path_loop_3rd_dim);
 		}
-
-		if( face_loops_2d.size() == 0 )
-		{
-			// only triangles, noting to triangulate
-			continue;
-		}
-
-		std::vector<std::pair<size_t, size_t> > result; // first is loop index, second is vertex index in loop
-		std::vector<carve::geom2d::P2> merged;
-		std::vector<carve::geom3d::Vector> merged_3d;
-		std::vector<carve::triangulate::tri_idx> triangulated;
-
-		try
-		{
-			result = carve::triangulate::incorporateHolesIntoPolygon(face_loops_2d);
-			merged.reserve(result.size());
-			for( size_t i = 0; i < result.size(); ++i )
-			{
-				int loop_number = result[i].first;
-				int index_in_loop = result[i].second;
-				carve::geom2d::P2& loop_point = face_loops_2d[loop_number][index_in_loop];
-				merged.push_back( loop_point );
-
-				// restore 3rd dimension
-				if( face_loop_reversed )
-				{
-					index_in_loop = face_loops_2d[loop_number].size() - index_in_loop - 1;
-				}
-
-				carve::geom3d::Vector v;
-				if( face_plane == XY_PLANE )
-				{
-					double z = face_loop_3rd_dim[loop_number][index_in_loop];
-					v = carve::geom::VECTOR(        loop_point.x,   loop_point.y,   z);
-				}
-				else if( face_plane == YZ_PLANE )
-				{
-					double x = face_loop_3rd_dim[loop_number][index_in_loop];
-					v = carve::geom::VECTOR(        x,      loop_point.x,   loop_point.y);
-				}
-				else if( face_plane == XZ_PLANE )
-				{
-					double y = face_loop_3rd_dim[loop_number][index_in_loop];
-					v = carve::geom::VECTOR(        loop_point.x,   y,      loop_point.y);
-				}
-				merged_3d.push_back( v );
-			}
-			carve::triangulate::triangulate(merged, triangulated);
-			carve::triangulate::improve(merged, triangulated);
-
-		}
-		catch(...)
-		{
-			err << __FUNC__ << ": #" << face_id << "=IfcFace: carve::triangulate::incorporateHolesIntoPolygon failed " << std::endl;
-			continue;
-		}
-
-		// now insert points to polygon, avoiding points with same coordinates
-		for( size_t i = 0; i != merged.size(); ++i )
-		{
-			const carve::geom::vector<3>& v = merged_3d[i];
-			
-			int vertex_index = poly_cache.addPoint( v );
-			map_merged_idx[i] = vertex_index;
-		}
-		for( size_t i = 0; i != triangulated.size(); ++i )
-		{
-			carve::triangulate::tri_idx triangle = triangulated[i];
-			int a = triangle.a;
-			int b = triangle.b;
-			int c = triangle.c;
-
-			int vertex_id_a = map_merged_idx[a];
-			int vertex_id_b = map_merged_idx[b];
-			int vertex_id_c = map_merged_idx[c];
-
-#ifdef _DEBUG
-			const carve::poly::Vertex<3>& v_a = poly_cache.m_poly_data->getVertex(vertex_id_a);
-			const carve::poly::Vertex<3>& v_b = poly_cache.m_poly_data->getVertex(vertex_id_b);
-
-			double dx = v_a.v[0] - v_b.v[0];
-			if( abs(dx) < 0.0000001 )
-			{
-				double dy = v_a.v[1] - v_b.v[1];
-				if( abs(dy) < 0.0000001 )
-				{
-					double dz = v_a.v[2] - v_b.v[2];
-					if( abs(dz) < 0.0000001 )
-					{
-						std::cerr << "abs(dx) < 0.00001 && abs(dy) < 0.00001 && abs(dz) < 0.00001\n";
-					}
-				}
-			}
-#endif
-
-			if( face_loop_reversed )
-			{
-				poly_cache.m_poly_data->addFace( vertex_id_a, vertex_id_c, vertex_id_b );
-			}
-			else
-			{
-				poly_cache.m_poly_data->addFace( vertex_id_a, vertex_id_b, vertex_id_c );
-			}
-		}
-		
+		GeomUtils::createFace( face_loops, poly_cache, strs_err );
 	}
-
 	// IfcFaceList can be a closed or open shell, so let the calling function decide where to put it
 	item_data->open_or_closed_polyhedrons.push_back( poly_cache.m_poly_data );
-
-	if( err.tellp() > 0 )
-	{
-		throw IfcPPException( err.str().c_str(), __func__ );
-	}
 }
 
 void convertIfcCartesianPointVector2D( std::vector<std::vector<shared_ptr<IfcCartesianPoint> > >& points, double length_factor, osg::Vec3Array* vertices )

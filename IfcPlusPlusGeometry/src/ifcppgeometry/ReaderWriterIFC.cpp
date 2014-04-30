@@ -674,7 +674,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 		// create shape for polylines
 		for( int polyline_i = 0; polyline_i < item_data->polylines.size(); ++polyline_i )
 		{
-			shared_ptr<carve::input::PolylineSetData>& polyline_data = item_data->polylines.at(polyline_i);
+			shared_ptr<carve::input::PolylineSetData>& polyline_data = item_data->polylines[polyline_i];
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode();
 			ConverterOSG::drawPolyline( polyline_data.get(), geode );
 			item_group->addChild(geode);

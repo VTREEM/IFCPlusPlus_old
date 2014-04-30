@@ -29,7 +29,6 @@
 #include "ifcpp/IFC4/include/IfcPresentationStyleAssignment.h"
 #include "ifcpp/IFC4/include/IfcPresentationStyleSelect.h"
 #include "ifcpp/IFC4/include/IfcPresentationStyle.h"
-#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
 #include "ifcpp/IFC4/include/IfcProperty.h"
 #include "ifcpp/IFC4/include/IfcComplexProperty.h"
 #include "ifcpp/IFC4/include/IfcIdentifier.h"
@@ -63,16 +62,10 @@ void convertIfcSpecularHighlightSelect(shared_ptr<IfcSpecularHighlightSelect> hi
 	{
 		shared_ptr<IfcSpecularExponent> spec = dynamic_pointer_cast<IfcSpecularExponent>(highlight_select);
 		appearance_data->specular_exponent = spec->m_value;
-		//osg::ref_ptr<osgFX::SpecularHighlights> spec_highlights = new osgFX::SpecularHighlights();
-		//spec_highlights->setSpecularExponent( spec->m_value );
-		// todo: add to scenegraph
-
 	}
 	else if( dynamic_pointer_cast<IfcSpecularRoughness>(highlight_select) )
 	{
 		shared_ptr<IfcSpecularRoughness> specRough = dynamic_pointer_cast<IfcSpecularRoughness>(highlight_select);
-		//shininess = (float) specRough->m_value*128;
-		//if (shininess<=1.0) shininess=1.0;
 		appearance_data->specular_roughness = specRough->m_value;
 	}
 }
@@ -207,12 +200,6 @@ void StylesConverter::convertIfcSurfaceStyle( shared_ptr<IfcSurfaceStyle> surfac
 		shared_ptr<IfcSurfaceStyleShading> surface_style_shading = dynamic_pointer_cast<IfcSurfaceStyleShading>(surf_style_element_select);
 		if( surface_style_shading )
 		{
-
-			//m_material_default->setAmbient( osg::Material::FRONT, osg::Vec4f( 0.2f, 0.25f, 0.3f, 0.3f ) );
-			//m_material_default->setDiffuse( osg::Material::FRONT, osg::Vec4( 0.8, 0.82, 0.84, 0.3f ) );
-			//m_material_default->setSpecular( osg::Material::FRONT, osg::Vec4f( 0.02f, 0.025f, 0.03f, 0.03f ) );
-			//m_material_default->setShininess( osg::Material::FRONT, m_shinyness );
-
 			carve::geom::vector<4> color = carve::geom::VECTOR( 0.8, 0.82, 0.84, 1.f );
 			if( surface_style_shading->m_SurfaceColour)
 			{
@@ -396,6 +383,11 @@ void StylesConverter::convertIfcComplexPropertyColor( shared_ptr<IfcComplexPrope
 		return;
 	}
 
+	if( !appearance_data )
+	{
+		appearance_data = shared_ptr<AppearanceData>( new AppearanceData() );
+	}
+
 	if( complex_property->m_HasProperties.size() > 2 )
 	{
 		shared_ptr<IfcPropertySingleValue> prop1 = dynamic_pointer_cast<IfcPropertySingleValue>(complex_property->m_HasProperties[0]);
@@ -439,6 +431,15 @@ void StylesConverter::convertIfcComplexPropertyColor( shared_ptr<IfcComplexPrope
 
 void StylesConverter::convertIfcPresentationStyle( shared_ptr<IfcPresentationStyle> presentation_style, shared_ptr<AppearanceData>& appearance_data )
 {
+	int complex_property_id = presentation_style->getId();
+	std::map<int, shared_ptr<AppearanceData> >::iterator it_styles = m_map_ifc_styles.find(complex_property_id);
+	if( it_styles != m_map_ifc_styles.end() )
+	{
+		// use existing appearance
+		appearance_data = it_styles->second;
+		return;
+	}
+
 	if( !appearance_data )
 	{
 		appearance_data = shared_ptr<AppearanceData>( new AppearanceData() );

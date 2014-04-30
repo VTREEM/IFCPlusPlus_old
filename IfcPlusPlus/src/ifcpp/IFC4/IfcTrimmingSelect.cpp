@@ -55,7 +55,7 @@ shared_ptr<IfcTrimmingSelect> IfcTrimmingSelect::createObjectFromStepData( const
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
 		shared_ptr<IfcPPObject> result_object( NULL );
-		readInlineTypeOrEntity( arg, result_object, map );
+		readInlineTypeOrEntity( keyword, inline_arg, result_object, map );
 		if( result_object )
 		{
 			shared_ptr<IfcPPObject> result_ptr( result_object );

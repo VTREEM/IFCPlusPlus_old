@@ -830,15 +830,15 @@ void tokenizeInlineArgument( std::string arg, std::string& keyword, std::string&
 	{
 		throw IfcPPException( "arg.size() == 0", __func__ );
 	}
-	if( arg.compare("$") == 0 )
+	if( arg[0] == '$' )
 	{
 		return;
 	}
-	if( arg.compare("*") == 0 )
+	if( arg[0] == '*' )
 	{
 		return;
 	}
-	if( arg.at(0) == '#' )
+	if( arg[0] == '#' )
 	{
 		throw IfcPPException( "tokenizeInlineArgument: argument begins with #, so it is not inline", __func__ );
 	}
@@ -887,22 +887,31 @@ void tokenizeInlineArgument( std::string arg, std::string& keyword, std::string&
 		{
 			++stream_pos;
 			// inside string
-			char look_back = ' ';
 			while( *stream_pos != '\0' )
 			{
 				if( *stream_pos == '\'' )
 				{
-					if( look_back == '\\' )
+					// check if tick is escaped
+					char* tick_pos = stream_pos;
+					bool tick_escaped = false;
+					while( tick_pos != begin_keyword )
 					{
-						// tick is escaped
-						look_back = *stream_pos;
+						--tick_pos;
+						if( *tick_pos == '\\' )
+						{
+							tick_escaped = !tick_escaped;
+							continue;
+						}
+						break;
+					}
+					if( tick_escaped )
+					{
 						++stream_pos;
 						continue;
 					}
 					// else tick marks the end of argument
 					break;
 				}
-				look_back = *stream_pos;
 				++stream_pos;
 			}
 		}
@@ -950,6 +959,44 @@ void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& re
 	std::string inline_arg;
 	tokenizeInlineArgument( arg, keyword, inline_arg );
 
+	if( keyword.size() == 0 )
+	{
+		return;
+	}
+
+	IfcPPTypeEnum type_enum = findTypeEnumForString( keyword );
+	if( type_enum != IfcPPTypeEnum::IFC_TYPE_UNDEFINED )
+	{
+		shared_ptr<IfcPPObject> type_instance = createIfcPPType( type_enum, inline_arg, map_entities );
+		if( type_instance )
+		{
+			//type_instance->m_type_enum = type_enum;
+			result = type_instance;
+			return;
+		}
+	}
+
+	IfcPPEntityEnum entity_enum = findEntityEnumForString( keyword );
+	if( entity_enum != IfcPPEntityEnum::IFC_ENTITY_UNDEFINED )
+	{
+		shared_ptr<IfcPPEntity> entity_instance( createIfcPPEntity( entity_enum ) );
+		if( entity_instance )
+		{
+			entity_instance->setId( -1 );
+			entity_instance->m_entity_enum = entity_enum;
+			entity_instance->m_entity_argument_str.assign( inline_arg );
+			std::vector<std::string> args;
+			args.push_back( inline_arg );
+			entity_instance->readStepArguments( args, map_entities );
+
+			result = entity_instance;
+			return;
+		}
+	}
+}
+
+void readInlineTypeOrEntity( const std::string& keyword, const std::string& inline_arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
+{
 	if( keyword.size() == 0 )
 	{
 		return;

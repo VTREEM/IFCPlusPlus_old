@@ -137,7 +137,7 @@ void ItemData::applyPosition( const carve::math::Matrix& mat )
 
 	for( int polyline_i = 0; polyline_i < polylines.size(); ++polyline_i )
 	{
-		shared_ptr<carve::input::PolylineSetData>& polyline_data = polylines.at(polyline_i);
+		shared_ptr<carve::input::PolylineSetData>& polyline_data = polylines[polyline_i];
 		for( size_t j=0; j<polyline_data->points.size(); ++j )
 		{
 			carve::geom::vector<3>& point = polyline_data->points[j];
@@ -183,7 +183,7 @@ shared_ptr<ItemData> ItemData::getDeepCopy()
 
 	for( int polyline_i = 0; polyline_i < polylines.size(); ++polyline_i )
 	{
-		shared_ptr<carve::input::PolylineSetData>& polyline_data = polylines.at(polyline_i);
+		shared_ptr<carve::input::PolylineSetData>& polyline_data = polylines[polyline_i];
 		copy_item->polylines.push_back( shared_ptr<carve::input::PolylineSetData>( new carve::input::PolylineSetData( *(polyline_data.get()) ) ) );
 	}
 

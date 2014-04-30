@@ -131,7 +131,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 
 			//shared_ptr<carve::input::PolyhedronData> solid_data( new carve::input::PolyhedronData() );
 			shared_ptr<ItemData> item_data_solid( new ItemData() );
-			GeomUtils::sweepArea( basis_curve_points, item_data_solid, profile_paths );
+			GeomUtils::sweepArea( basis_curve_points, profile_paths, item_data_solid );
 			item_data_solid->applyPosition( swept_area_pos );
 			item_data->addItemData( item_data_solid );
 
@@ -201,7 +201,7 @@ void SolidModelConverter::convertIfcSolidModel( const shared_ptr<IfcSolidModel>&
 			// first convert outer shell
 			std::vector<shared_ptr<IfcFace> >& vec_faces_outer_shell = outer_shell->m_CfsFaces;
 			shared_ptr<ItemData> input_data_outer_shell( new ItemData() );
-			m_face_converter->convertIfcFaceList( vec_faces_outer_shell, input_data_outer_shell );
+			m_face_converter->convertIfcFaceList( vec_faces_outer_shell, input_data_outer_shell, strs_err );
 			std::copy( input_data_outer_shell->open_or_closed_polyhedrons.begin(), input_data_outer_shell->open_or_closed_polyhedrons.end(), std::back_inserter(item_data->closed_polyhedrons) );
 		}
 
@@ -403,7 +403,7 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 			const std::vector<carve::geom::vector<2> >& loop = paths[0]; 
 			for( int i=0; i<loop.size(); ++i )
 			{
-				const carve::geom::vector<2>& point = loop.at(i);
+				const carve::geom::vector<2>& point = loop[i];
 				carve::geom::vector<3> point3d( carve::geom::VECTOR( point.x, point.y, 0 ) );
 				polyline_data->addVertex( point3d );
 				polyline_data->addPolylineIndex(i);
@@ -487,14 +487,14 @@ void SolidModelConverter::convertIfcRevolvedAreaSolid( const shared_ptr<IfcRevol
 
 			if( loop_number >= profile_coords_2d.size() )
 			{
-				std::cout << __FUNC__ << ": loop_number >= face_loops_projected.size()" << std::endl;
+				std::cout << __FUNC__ << ": loop_number >= profile_coords_2d.size()" << std::endl;
 				continue;
 			}
 
-			std::vector<carve::geom2d::P2>& loop_projected = profile_coords_2d[loop_number];
+			std::vector<carve::geom2d::P2>& loop_2d = profile_coords_2d[loop_number];
 
-			carve::geom2d::P2& point_projected = loop_projected[index_in_loop];
-			merged.push_back( point_projected );
+			carve::geom2d::P2& point_2d = loop_2d[index_in_loop];
+			merged.push_back( point_2d );
 		}
 		carve::triangulate::triangulate(merged, triangulated);
 		carve::triangulate::improve(merged, triangulated);
