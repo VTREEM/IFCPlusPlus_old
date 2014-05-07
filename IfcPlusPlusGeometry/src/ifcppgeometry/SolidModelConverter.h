@@ -40,16 +40,13 @@ public:
 	void convertIfcBooleanOperand(		const shared_ptr<IfcBooleanOperand>& operand,			shared_ptr<ItemData> item_data, const shared_ptr<ItemData>& other_operand, std::stringstream& err );
 	void convertIfcSolidModel(			const shared_ptr<IfcSolidModel>& solid_model,			shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcExtrudedAreaSolid(	const shared_ptr<IfcExtrudedAreaSolid>& extruded_area,	shared_ptr<ItemData> item_data, std::stringstream& err );
-	void convertIfcRevolvedAreaSolid(	const shared_ptr<IfcRevolvedAreaSolid>& revolved_area,	const carve::math::Matrix& pos,	shared_ptr<ItemData> item_data, std::stringstream& err );
+	void convertIfcRevolvedAreaSolid(	const shared_ptr<IfcRevolvedAreaSolid>& revolved_area,	shared_ptr<ItemData> item_data, std::stringstream& err );
 	void convertIfcCsgPrimitive3D(		const shared_ptr<IfcCsgPrimitive3D>& csg_primitive,		shared_ptr<ItemData> item_data, std::stringstream& err );
-	void simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& meshset );
-	bool computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh::MeshSet<3>* op2, const carve::csg::CSG::OP operation, 
-				const int entity1, const int entity2, std::stringstream& err, shared_ptr<carve::mesh::MeshSet<3> >& result );
 
 protected:
-	shared_ptr<GeometrySettings>			m_geom_settings;
-	shared_ptr<UnitConverter>				m_unit_converter;
-	shared_ptr<CurveConverter>				m_curve_converter;
-	shared_ptr<FaceConverter>				m_face_converter;
-	shared_ptr<ProfileCache>				m_profile_cache;
+	shared_ptr<GeometrySettings>		m_geom_settings;
+	shared_ptr<UnitConverter>			m_unit_converter;
+	shared_ptr<CurveConverter>			m_curve_converter;
+	shared_ptr<FaceConverter>			m_face_converter;
+	shared_ptr<ProfileCache>			m_profile_cache;
 };

@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "ifcpp/model/shared_ptr.h"
+#include <ifcpp/model/shared_ptr.h>
 
 class IfcStyledItem;
 class IfcPresentationStyle;

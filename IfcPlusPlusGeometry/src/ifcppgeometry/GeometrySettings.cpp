@@ -11,6 +11,8 @@
  * OpenSceneGraph Public License for more details.
 */
 
+#define _USE_MATH_DEFINES 
+#include <math.h>
 #include "GeometrySettings.h"
 
 GeometrySettings::GeometrySettings()
@@ -25,7 +27,7 @@ GeometrySettings::GeometrySettings()
 	m_min_normal_angle = M_PI/180.0;
 	m_min_length = 0.0002;
 
-	m_classify_type = carve::csg::CSG::CLASSIFY_EDGE;
+//	m_classify_type = carve::csg::CSG::CLASSIFY_EDGE;
 }
 
 GeometrySettings::~GeometrySettings()

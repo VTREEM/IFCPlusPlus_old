@@ -60,6 +60,9 @@
     <ClCompile Include="src\ifcppgeometry\GeometryInputData.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\ifcppgeometry\CSG_Adapter.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ifcppgeometry\ConverterOSG.h">
@@ -108,6 +111,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\ifcppgeometry\IncludeCarveHeaders.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ifcppgeometry\CSG_Adapter.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

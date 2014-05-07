@@ -213,6 +213,10 @@ void ShapeInputData::deepCopyFrom( shared_ptr<ShapeInputData>& other )
 	//addInputData( other );
 }
 
+
+#define ROUND_IFC_COORDINATES_UP 10000.0
+#define ROUND_IFC_COORDINATES_DOWN 0.0001
+
 // PolyInputCache
 PolyInputCache3D::PolyInputCache3D()
 {

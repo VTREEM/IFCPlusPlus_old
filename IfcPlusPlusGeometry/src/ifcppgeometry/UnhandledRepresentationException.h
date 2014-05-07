@@ -15,8 +15,8 @@
 
 #include <exception>
 #include <string>
-#include "ifcpp/model/shared_ptr.h"
-#include "ifcpp/IFC4/include/IfcRepresentation.h"
+#include <ifcpp/model/shared_ptr.h>
+#include <ifcpp/IFC4/include/IfcRepresentation.h>
 
 class UnhandledRepresentationException : public std::exception
 {

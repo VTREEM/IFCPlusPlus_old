@@ -13,8 +13,6 @@
 
 #pragma once
 
-#include "IncludeCarveHeaders.h"
-
 #define GEOM_TOLERANCE  0.0000001
 #ifdef _DEBUG
 	#define HALF_SPACE_BOX_SIZE 100
@@ -44,5 +42,4 @@ public:
 	double m_min_delta_v;
 	double m_min_normal_angle;
 	double m_min_length;
-	carve::csg::CSG::CLASSIFY_TYPE m_classify_type;
 };

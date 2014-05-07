@@ -68,4 +68,23 @@ public:
 							 const carve::geom::vector<3>& local_z, carve::math::Matrix& resulting_matrix );
 	static void applyTranslate( osg::Group* grp, const osg::Vec3f& translate );
 	static void applyPosition( shared_ptr<carve::input::PolyhedronData>& poly_data, carve::math::Matrix& matrix );
+
+	class Ray : public osg::Referenced
+	{
+	public:
+		void setRay( Ray* other )
+		{
+			origin = other->origin;
+			direction = other->direction;
+		}
+		osg::Vec3d origin;
+		osg::Vec3d direction;
+	};
+	class Plane : public osg::Referenced
+	{
+	public:
+		bool intersetRay( const Ray* ray, osg::Vec3d& intersect_point );
+		osg::Vec3d position;
+		osg::Vec3d normal;
+	};
 };

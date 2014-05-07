@@ -1060,13 +1060,13 @@ void GeomUtils::extrude( const std::vector<std::vector<carve::geom::vector<2> > 
 			}
 			if( flip_faces )
 			{
-				poly_data->addFace( point_idx, point_idx_next, point_idx_next_up );
-				poly_data->addFace( point_idx_next_up, point_idx_up, point_idx );
+				poly_data->addFace( point_idx,			point_idx_next,		point_idx_next_up );
+				poly_data->addFace( point_idx_next_up,	point_idx_up,		point_idx );
 			}
 			else
 			{
-				poly_data->addFace( point_idx, point_idx_up, point_idx_next_up );
-				poly_data->addFace( point_idx_next_up, point_idx_next, point_idx );
+				poly_data->addFace( point_idx,			point_idx_up,		point_idx_next_up );
+				poly_data->addFace( point_idx_next_up,	point_idx_next,		point_idx );
 			}
 		}
 	}
@@ -1335,12 +1335,14 @@ void GeomUtils::sweepDisk( std::vector<carve::geom::vector<3> >& basis_curve_poi
 		int i_offset_next = (i+1)*nvc;
 		for( int jj = 0; jj < nvc; ++jj )
 		{
-			int current_loop_pt = jj + i_offset;
-			int current_loop_pt_next = (jj + 1)%nvc + i_offset;
+			int current_loop_pt1 = jj + i_offset;
+			int current_loop_pt2 = (jj + 1)%nvc + i_offset;
 
-			int next_loop_pt = jj + i_offset_next;
-			int next_loop_pt_next = (jj + 1)%nvc + i_offset_next;
-			pipe_data->addFace( current_loop_pt, next_loop_pt, next_loop_pt_next, current_loop_pt_next );  
+			int next_loop_pt1 = jj + i_offset_next;
+			int next_loop_pt2 = (jj + 1)%nvc + i_offset_next;
+			//pipe_data->addFace( current_loop_pt1, next_loop_pt1, next_loop_pt2, current_loop_pt2 );
+			pipe_data->addFace( current_loop_pt1,	next_loop_pt1,		next_loop_pt2 );
+			pipe_data->addFace( next_loop_pt2,		current_loop_pt2,	current_loop_pt1  );
 		}
 	}
 
@@ -1364,13 +1366,14 @@ void GeomUtils::sweepDisk( std::vector<carve::geom::vector<3> >& basis_curve_poi
 			int i_offset_next = (i+1)*nvc + num_vertices_outer;
 			for( int jj = 0; jj < nvc; ++jj )
 			{
-				int current_loop_pt = jj + i_offset;
-				int current_loop_pt_next = (jj + 1)%nvc + i_offset;
+				int current_loop_pt1 = jj + i_offset;
+				int current_loop_pt2 = (jj + 1)%nvc + i_offset;
 
-				int next_loop_pt = jj + i_offset_next;
-				int next_loop_pt_next = (jj + 1)%nvc + i_offset_next;
-				//pipe_data->addFace( current_loop_pt, next_loop_pt, next_loop_pt_next, current_loop_pt_next );  
-				pipe_data->addFace( current_loop_pt, current_loop_pt_next, next_loop_pt_next, next_loop_pt );  
+				int next_loop_pt1 = jj + i_offset_next;
+				int next_loop_pt2 = (jj + 1)%nvc + i_offset_next;
+				//pipe_data->addFace( current_loop_pt1, current_loop_pt2, next_loop_pt2, next_loop_pt1 );  
+				pipe_data->addFace( current_loop_pt1,	current_loop_pt2,	next_loop_pt2 );
+				pipe_data->addFace( next_loop_pt2,		next_loop_pt1,		current_loop_pt1  );
 			}
 		}
 
@@ -1379,8 +1382,8 @@ void GeomUtils::sweepDisk( std::vector<carve::geom::vector<3> >& basis_curve_poi
 		{
 			int outer_rim_next = (jj+1)%nvc;
 			int inner_rim_next = outer_rim_next + num_vertices_outer;
-			pipe_data->addFace( jj, outer_rim_next, num_vertices_outer + jj );
-			pipe_data->addFace( outer_rim_next, inner_rim_next, num_vertices_outer + jj );
+			pipe_data->addFace( jj,					outer_rim_next,		num_vertices_outer+jj );
+			pipe_data->addFace( outer_rim_next,		inner_rim_next,		num_vertices_outer+jj );
 		}
 
 		// back cap
@@ -1389,8 +1392,8 @@ void GeomUtils::sweepDisk( std::vector<carve::geom::vector<3> >& basis_curve_poi
 		{
 			int outer_rim_next = (jj+1)%nvc + back_offset;
 			int inner_rim_next = outer_rim_next + num_vertices_outer;
-			pipe_data->addFace( jj + back_offset, num_vertices_outer + jj + back_offset, outer_rim_next );
-			pipe_data->addFace( outer_rim_next, num_vertices_outer + jj + back_offset, inner_rim_next );
+			pipe_data->addFace( jj+back_offset,		num_vertices_outer+jj+back_offset,	outer_rim_next );
+			pipe_data->addFace( outer_rim_next,		num_vertices_outer+jj+back_offset,	inner_rim_next );
 		}
 	}
 	else
@@ -1405,7 +1408,7 @@ void GeomUtils::sweepDisk( std::vector<carve::geom::vector<3> >& basis_curve_poi
 		int back_offset = (num_curve_points - 1)*nvc;
 		for( int jj = 0; jj < nvc - 2; ++jj )
 		{
-			pipe_data->addFace( back_offset, back_offset + jj+2, back_offset + jj+1 );
+			pipe_data->addFace( back_offset, back_offset+jj+2, back_offset+jj+1 );
 		}
 	}
 
@@ -1919,12 +1922,12 @@ void GeomUtils::sweepArea( const std::vector<carve::geom::vector<3> >& curve_poi
 				}
 				if( flip_faces )
 				{
-					poly_cache.m_poly_data->addFace( point_idx, point_idx_next, point_idx_next_up );
-					poly_cache.m_poly_data->addFace( point_idx_next_up, point_idx_up, point_idx );
+					poly_cache.m_poly_data->addFace( point_idx,			point_idx_next, point_idx_next_up );
+					poly_cache.m_poly_data->addFace( point_idx_next_up, point_idx_up,	point_idx );
 				}
 				else
 				{
-					poly_cache.m_poly_data->addFace( point_idx, point_idx_up, point_idx_next_up );
+					poly_cache.m_poly_data->addFace( point_idx,			point_idx_up,	point_idx_next_up );
 					poly_cache.m_poly_data->addFace( point_idx_next_up, point_idx_next, point_idx );
 				}
 			}
@@ -2584,4 +2587,57 @@ void GeomUtils::applyPosition( shared_ptr<carve::input::PolyhedronData>& poly_da
 		carve::geom::vector<3>& vertex = (*it_points);
 		vertex = matrix*vertex;
 	}
+}
+
+bool GeomUtils::Plane::intersetRay( const GeomUtils::Ray* ray, osg::Vec3d& intersect_point )
+{
+	carve::geom::vector<3>  location(		carve::geom::VECTOR( position.x(), position.y(), position.z()) );
+	carve::geom::vector<3>  local_z(		carve::geom::VECTOR( normal.x(), normal.y(), normal.z() ) );
+	//carve::geom::vector<3>  local_y(		carve::geom::VECTOR(0.0, 1.0, 0.0) );
+	//carve::geom::vector<3>  local_z(		carve::geom::VECTOR(0.0, 0.0, 1.0) );
+	//carve::geom::vector<3>  ref_direction(	carve::geom::VECTOR(1.0, 0.0, 0.0) );
+
+
+	
+	//local_z = carve::geom::VECTOR( axis[0], axis[1], axis[2] );
+	//local_z.normalize();
+
+	carve::geom::plane<3> plane( local_z, location );
+	//plane.d = p.d;
+	//plane.N = local_z;
+	//translate = location;
+
+	carve::geom::vector<3>  v1 = carve::geom::VECTOR( ray->origin.x(), ray->origin.y(), ray->origin.z() );
+	carve::geom::vector<3>  v2 = v1 + carve::geom::VECTOR( ray->direction.x(), ray->direction.y(), ray->direction.z() );
+	carve::geom::vector<3>  v_intersect;
+	double t;
+
+	carve::IntersectionClass intersect_result = carve::geom3d::rayPlaneIntersection( plane, v1, v2, v_intersect, t );
+ //                                          Vector &v,
+ //                                          double &t) 
+
+	if( intersect_result == carve::INTERSECT_BAD || intersect_result == carve::INTERSECT_NONE )
+	{
+		return false;
+	}
+
+	intersect_point.set( v_intersect.x, v_intersect.y, v_intersect.z );
+	return true;
+
+    //  Vector Rd = v2 - v1;
+    //  double Vd = dot(p.N, Rd);
+    //  double V0 = dot(p.N, v1) + p.d;
+
+    //  if (carve::math::ZERO(Vd)) {
+    //    if (carve::math::ZERO(V0)) {
+    //      return INTERSECT_BAD;
+    //    } else {
+    //      return INTERSECT_NONE;
+    //    }
+    //  }
+
+    //  t = -V0 / Vd;
+    //  v = v1 + t * Rd;
+    //  return INTERSECT_PLANE;
+    //}
 }

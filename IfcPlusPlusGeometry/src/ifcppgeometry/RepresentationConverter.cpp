@@ -16,64 +16,63 @@
 #include <iterator>
 #include <osg/Group>
 
+#include <ifcpp/IFC4/include/IfcProduct.h>
+#include <ifcpp/IFC4/include/IfcProductRepresentation.h>
+#include <ifcpp/IFC4/include/IfcRepresentation.h>
+#include <ifcpp/IFC4/include/IfcRepresentationItem.h>
+#include <ifcpp/IFC4/include/IfcRelVoidsElement.h>
+#include <ifcpp/IFC4/include/IfcFeatureElementSubtraction.h>
+#include <ifcpp/IFC4/include/IfcElement.h>
+#include <ifcpp/IFC4/include/IfcMappedItem.h>
+#include <ifcpp/IFC4/include/IfcRepresentationMap.h>
+#include <ifcpp/IFC4/include/IfcCartesianTransformationOperator.h>
+#include <ifcpp/IFC4/include/IfcAxis2Placement2D.h>
+#include <ifcpp/IFC4/include/IfcAxis2Placement3D.h>
+#include <ifcpp/IFC4/include/IfcPlacement.h>
+
+#include <ifcpp/IFC4/include/IfcLabel.h>
+#include <ifcpp/IFC4/include/IfcStyledItem.h>
+#include <ifcpp/IFC4/include/IfcProperty.h>
+#include <ifcpp/IFC4/include/IfcPropertySet.h>
+#include <ifcpp/IFC4/include/IfcComplexProperty.h>
+#include <ifcpp/IFC4/include/IfcSimpleProperty.h>
+#include <ifcpp/IFC4/include/IfcPropertySingleValue.h>
+#include <ifcpp/IFC4/include/IfcIdentifier.h>
+#include <ifcpp/IFC4/include/IfcTextLiteral.h>
+#include <ifcpp/IFC4/include/IfcPresentableText.h>
+#include <ifcpp/IFC4/include/IfcTextPath.h>
+
+#include <ifcpp/IFC4/include/IfcLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcPositiveLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcPlaneAngleMeasure.h>
+#include <ifcpp/IFC4/include/IfcCartesianPoint.h>
+#include <ifcpp/IFC4/include/IfcPolyline.h>
+#include <ifcpp/IFC4/include/IfcBoundingBox.h>
+#include <ifcpp/IFC4/include/IfcEdge.h>
+#include <ifcpp/IFC4/include/IfcClosedShell.h>
+#include <ifcpp/IFC4/include/IfcFaceBasedSurfaceModel.h>
+#include <ifcpp/IFC4/include/IfcConnectedFaceSet.h>
+#include <ifcpp/IFC4/include/IfcShellBasedSurfaceModel.h>
+#include <ifcpp/IFC4/include/IfcOpenShell.h>
+#include <ifcpp/IFC4/include/IfcFace.h>
+#include <ifcpp/IFC4/include/IfcVertexPoint.h>
+#include <ifcpp/IFC4/include/IfcVertex.h>
+#include <ifcpp/IFC4/include/IfcGeometricSet.h>
+#include <ifcpp/IFC4/include/IfcGeometricCurveSet.h>
+#include <ifcpp/IFC4/include/IfcCurve.h>
+#include <ifcpp/IFC4/include/IfcSurface.h>
+#include <ifcpp/IFC4/include/IfcAnnotationFillArea.h>
+
+#include <ifcpp/IFC4/include/IfcSolidModel.h>
+#include <ifcpp/IFC4/include/IfcSectionedSpine.h>
+#include <ifcpp/IFC4/include/IfcBooleanResult.h>
+#include <ifcpp/IFC4/include/IfcPresentationLayerWithStyle.h>
+
+#include <ifcpp/model/IfcPPModel.h>
+#include <ifcpp/model/UnitConverter.h>
+#include <ifcpp/model/IfcPPException.h>
+
 #include "IncludeCarveHeaders.h"
-
-#include "ifcpp/IFC4/include/IfcProduct.h"
-#include "ifcpp/IFC4/include/IfcProductRepresentation.h"
-#include "ifcpp/IFC4/include/IfcRepresentation.h"
-#include "ifcpp/IFC4/include/IfcRepresentationItem.h"
-#include "ifcpp/IFC4/include/IfcRelVoidsElement.h"
-#include "ifcpp/IFC4/include/IfcFeatureElementSubtraction.h"
-#include "ifcpp/IFC4/include/IfcElement.h"
-#include "ifcpp/IFC4/include/IfcMappedItem.h"
-#include "ifcpp/IFC4/include/IfcRepresentationMap.h"
-#include "ifcpp/IFC4/include/IfcCartesianTransformationOperator.h"
-#include "ifcpp/IFC4/include/IfcAxis2Placement2D.h"
-#include "ifcpp/IFC4/include/IfcAxis2Placement3D.h"
-#include "ifcpp/IFC4/include/IfcPlacement.h"
-
-#include "ifcpp/IFC4/include/IfcLabel.h"
-#include "ifcpp/IFC4/include/IfcStyledItem.h"
-#include "ifcpp/IFC4/include/IfcProperty.h"
-#include "ifcpp/IFC4/include/IfcPropertySet.h"
-#include "ifcpp/IFC4/include/IfcComplexProperty.h"
-#include "ifcpp/IFC4/include/IfcSimpleProperty.h"
-#include "ifcpp/IFC4/include/IfcPropertySingleValue.h"
-#include "ifcpp/IFC4/include/IfcIdentifier.h"
-#include "ifcpp/IFC4/include/IfcTextLiteral.h"
-#include "ifcpp/IFC4/include/IfcPresentableText.h"
-#include "ifcpp/IFC4/include/IfcTextPath.h"
-
-#include "ifcpp/IFC4/include/IfcLengthMeasure.h"
-#include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
-#include "ifcpp/IFC4/include/IfcPlaneAngleMeasure.h"
-#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
-#include "ifcpp/IFC4/include/IfcPolyline.h"
-#include "ifcpp/IFC4/include/IfcBoundingBox.h"
-#include "ifcpp/IFC4/include/IfcEdge.h"
-#include "ifcpp/IFC4/include/IfcClosedShell.h"
-#include "ifcpp/IFC4/include/IfcFaceBasedSurfaceModel.h"
-#include "ifcpp/IFC4/include/IfcConnectedFaceSet.h"
-#include "ifcpp/IFC4/include/IfcShellBasedSurfaceModel.h"
-#include "ifcpp/IFC4/include/IfcOpenShell.h"
-#include "ifcpp/IFC4/include/IfcFace.h"
-#include "ifcpp/IFC4/include/IfcVertexPoint.h"
-#include "ifcpp/IFC4/include/IfcVertex.h"
-#include "ifcpp/IFC4/include/IfcGeometricSet.h"
-#include "ifcpp/IFC4/include/IfcGeometricCurveSet.h"
-#include "ifcpp/IFC4/include/IfcCurve.h"
-#include "ifcpp/IFC4/include/IfcSurface.h"
-#include "ifcpp/IFC4/include/IfcAnnotationFillArea.h"
-
-#include "ifcpp/IFC4/include/IfcSolidModel.h"
-#include "ifcpp/IFC4/include/IfcSectionedSpine.h"
-#include "ifcpp/IFC4/include/IfcBooleanResult.h"
-#include "ifcpp/IFC4/include/IfcPresentationLayerWithStyle.h"
-
-#include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/model/UnitConverter.h"
-#include "ifcpp/model/IfcPPException.h"
-
 #include "GeomUtils.h"
 #include "ConverterOSG.h"
 #include "GeometrySettings.h"
@@ -86,6 +85,7 @@
 #include "SolidModelConverter.h"
 #include "FaceConverter.h"
 #include "DebugViewerCallback.h"
+#include "CSG_Adapter.h"
 #include "RepresentationConverter.h"
 
 RepresentationConverter::RepresentationConverter( shared_ptr<GeometrySettings> geom_settings, shared_ptr<UnitConverter> unit_converter ) 
@@ -675,7 +675,7 @@ void RepresentationConverter::subtractOpenings( const shared_ptr<IfcElement>& if
 
 						// do the subtraction
 						shared_ptr<carve::mesh::MeshSet<3> > result;
-						bool csg_op_ok = m_solid_converter->computeCSG( product_meshset.get(), opening_meshset.get(), carve::csg::CSG::A_MINUS_B, product_id, representation_id, strs_err, result );
+						bool csg_op_ok = CSG_Adapter::computeCSG( product_meshset.get(), opening_meshset.get(), carve::csg::CSG::A_MINUS_B, product_id, representation_id, strs_err, result );
 						item_data->m_csg_computed = true;
 						if( csg_op_ok )
 						{

@@ -33,6 +33,10 @@ void ProfileCache::clearProfileCache()
 
 shared_ptr<ProfileConverter> ProfileCache::getProfileConverter( shared_ptr<IfcProfileDef>& ifc_profile )
 {
+	if( !ifc_profile )
+	{
+		return shared_ptr<ProfileConverter>(NULL);
+	}
 	const int profile_id = ifc_profile->getId();
 	
 	std::map<int,shared_ptr<ProfileConverter> >::iterator it_profile_cache = m_profile_cache.find(profile_id);

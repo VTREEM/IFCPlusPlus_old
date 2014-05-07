@@ -62,6 +62,7 @@
 #include "SolidModelConverter.h"
 #include "ProfileCache.h"
 #include "ConverterOSG.h"
+#include "CSG_Adapter.h"
 #include "ReaderWriterIFC.h"
 
 ReaderWriterIFC::ReaderWriterIFC()
@@ -472,14 +473,14 @@ void ReaderWriterIFC::resolveProjectStructure( const shared_ptr<IfcPPObject>& ob
 		}
 		osg::Switch* switch_building_storey = new osg::Switch();
 		std::stringstream storey_switch_name;
-		storey_switch_name << "#" << building_storey_id << " IfcBuildingStorey switch";
+		storey_switch_name << "#" << building_storey_id << "=IfcBuildingStorey switch";
 		switch_building_storey->setName( storey_switch_name.str().c_str() );
 
 		osg::ref_ptr<osg::MatrixTransform> transform_building_storey = new osg::MatrixTransform( osg::Matrix::translate( 0, 0, elevation ) );
 		switch_building_storey->addChild( transform_building_storey );
 				
 		std::stringstream storey_name;
-		storey_name << "#" << building_storey_id << " IfcBuildingStorey transform";
+		storey_name << "#" << building_storey_id << "=IfcBuildingStorey transform";
 		transform_building_storey->setName( storey_name.str().c_str() );
 
 		item_grp = transform_building_storey;
@@ -578,7 +579,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 	std::stringstream strs_err;
 	osg::ref_ptr<osg::Switch> product_switch = new osg::Switch();
 	std::stringstream group_name;
-	group_name << "#" << product_id << " IfcProduct group";
+	group_name << "#" << product_id << "=IfcProduct group";
 	product_switch->setName( group_name.str().c_str() );
 
 	// evaluate IFC geometry
@@ -664,7 +665,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 			shared_ptr<carve::mesh::MeshSet<3> >& item_meshset = (*it_meshsets);
 			if( item_data->m_csg_computed )
 			{
-				m_representation_converter->getSolidConverter()->simplifyMesh( item_meshset );
+				CSG_Adapter::simplifyMesh( item_meshset );
 			}
 			osg::ref_ptr<osg::Geode> geode_result = new osg::Geode();
 			ConverterOSG::drawMeshSet( item_meshset.get(), geode_result );
@@ -717,19 +718,22 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 				shared_ptr<AppearanceData>& appearance = item_data->appearances[i_appearance];
 				
 				osg::StateSet* item_stateset =  AppearanceManagerOSG::convertToStateSet( appearance );
-				item_group->setStateSet( item_stateset );
-
-				osg::StateSet* existing_item_stateset = item_group->getStateSet();
-
-				if( existing_item_stateset )
-				{
-					osg::StateSet* merged_product_stateset = new osg::StateSet( *existing_item_stateset );
-					merged_product_stateset->merge( *item_stateset );
-					item_group->setStateSet( merged_product_stateset );
-				}
-				else
+				if( item_stateset != NULL )
 				{
 					item_group->setStateSet( item_stateset );
+
+					osg::StateSet* existing_item_stateset = item_group->getStateSet();
+
+					if( existing_item_stateset )
+					{
+						osg::StateSet* merged_product_stateset = new osg::StateSet( *existing_item_stateset );
+						merged_product_stateset->merge( *item_stateset );
+						item_group->setStateSet( merged_product_stateset );
+					}
+					else
+					{
+						item_group->setStateSet( item_stateset );
+					}
 				}
 			}
 		}
@@ -846,7 +850,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 	else if( dynamic_pointer_cast<IfcSite>(product) )
 	{
 		std::stringstream group_name;
-		group_name << "#" << product_id << " IfcSite";
+		group_name << "#" << product_id << "=IfcSite";
 		product_switch->setName( group_name.str().c_str() );
 	}
 	// TODO: if no color or material is given, set color 231/219/169 for walls, 140/140/140 for slabs 

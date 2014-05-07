@@ -773,7 +773,7 @@ std::vector<osg::ref_ptr<osg::StateSet> > global_vec_existing_statesets;
 
 void AppearanceManagerOSG::clearAppearanceCache()
 {
-	#ifdef IFCPP_OPENMP
+#ifdef IFCPP_OPENMP
 	ScopedLock lock( writelock_appearance_cache );
 #endif
 	global_vec_existing_statesets.clear();
@@ -781,7 +781,11 @@ void AppearanceManagerOSG::clearAppearanceCache()
 
 osg::StateSet* AppearanceManagerOSG::convertToStateSet( shared_ptr<AppearanceData>& appearence )
 {
-	const float shininess = appearence->shininess;;
+	if( !appearence )
+	{
+		return NULL;
+	}
+	const float shininess = appearence->shininess;
 	const float transparency = appearence->transparency;
 	const bool set_transparent = appearence->set_transparent;
 
