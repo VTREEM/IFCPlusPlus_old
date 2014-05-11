@@ -291,7 +291,7 @@ void StylesConverter::convertIfcSurfaceStyle( shared_ptr<IfcSurfaceStyle> surfac
 	}
 }
 
-void StylesConverter::convertIfcStyledItem( weak_ptr<IfcStyledItem> styled_item_weak, shared_ptr<AppearanceData>& appearance_data )
+void StylesConverter::convertIfcStyledItem( weak_ptr<IfcStyledItem> styled_item_weak, std::vector<shared_ptr<AppearanceData> >& vec_appearance_data )
 {
 	shared_ptr<IfcStyledItem> styled_item( styled_item_weak );
 	const int style_id = styled_item->getId();
@@ -299,9 +299,12 @@ void StylesConverter::convertIfcStyledItem( weak_ptr<IfcStyledItem> styled_item_
 	std::map<int, shared_ptr<AppearanceData> >::iterator it_styles = m_map_ifc_styles.find(style_id);
 	if( it_styles != m_map_ifc_styles.end() )
 	{
-		appearance_data = it_styles->second;
+		vec_appearance_data.push_back( it_styles->second );
+		//appearance_data = it_styles->second;
 		return;
 	}
+
+	
 
 	std::vector<shared_ptr<IfcStyleAssignmentSelect> >& vec_style_assigns = styled_item->m_Styles;
 	std::vector<shared_ptr<IfcStyleAssignmentSelect> >::iterator it_style_assigns;
@@ -320,7 +323,10 @@ void StylesConverter::convertIfcStyledItem( weak_ptr<IfcStyledItem> styled_item_
 			{
 				// TYPE IfcPresentationStyleSelect = SELECT	(IfcCurveStyle	,IfcFillAreaStyle	,IfcNullStyle	,IfcSurfaceStyle	,IfcSymbolStyle	,IfcTextStyle);
 				shared_ptr<IfcPresentationStyleSelect> pres_style_select = (*it_presentation_styles);
-				convertIfcPresentationStyleSelect( pres_style_select, appearance_data );
+
+				shared_ptr<AppearanceData> new_appearance( new AppearanceData() );
+				convertIfcPresentationStyleSelect( pres_style_select, new_appearance );
+				vec_appearance_data.push_back( new_appearance );
 				
 				//if( presentation_style_stateset != NULL )
 				//{
@@ -342,7 +348,9 @@ void StylesConverter::convertIfcStyledItem( weak_ptr<IfcStyledItem> styled_item_
 		shared_ptr<IfcPresentationStyle> presentation_style = dynamic_pointer_cast<IfcPresentationStyle>(style_assign_select);
 		if( presentation_style )
 		{
-			convertIfcPresentationStyle( presentation_style, appearance_data );
+			shared_ptr<AppearanceData> new_appearance( new AppearanceData() );
+			convertIfcPresentationStyle( presentation_style, new_appearance );
+			vec_appearance_data.push_back( new_appearance );
 			//if( presentation_style_stateset != NULL )
 			//{
 			//	if( !resulting_stateset.valid() )

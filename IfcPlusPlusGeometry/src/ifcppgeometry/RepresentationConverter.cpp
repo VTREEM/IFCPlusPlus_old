@@ -116,9 +116,10 @@ void RepresentationConverter::convertStyledItem( const shared_ptr<IfcRepresentat
 #ifdef IFCPP_OPENMP
 		ScopedLock lock(m_writelock_styles_converter);
 #endif
-		shared_ptr<AppearanceData> appearance_data;
-		m_styles_converter->convertIfcStyledItem( styled_item, appearance_data );
-		item_data->appearances.push_back( appearance_data );
+		std::vector<shared_ptr<AppearanceData> > vec_appearance_data;
+		m_styles_converter->convertIfcStyledItem( styled_item, vec_appearance_data );
+		std::copy( vec_appearance_data.begin(), vec_appearance_data.end(), std::back_inserter( item_data->appearances ) );
+		//item_data->appearances.push_back( appearance_data );
 	}
 }
 

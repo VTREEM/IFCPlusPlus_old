@@ -1208,14 +1208,15 @@ void SolidModelConverter::convertIfcBooleanOperand( const shared_ptr<IfcBooleanO
 				shared_ptr<carve::mesh::MeshSet<3> >& meshset = other_operand->meshsets[ii];
 				if( ii == 0 )
 				{
-					aabb =	meshset->getAABB();
+					aabb.pos	=	meshset->getAABB().pos;
+					aabb.extent =	meshset->getAABB().extent;
 				}
 				else
 				{
 					aabb.unionAABB( meshset->getAABB() );
 				}
 			}
-			aabb.max();
+
 			carve::geom::vector<3>& aabb_extent = aabb.extent;
 			double max_extent = std::max( aabb_extent.x, std::max( aabb_extent.y, aabb_extent.z ) );
 			extrusion_depth = 2.0*max_extent;

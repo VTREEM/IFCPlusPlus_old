@@ -28,7 +28,7 @@ public:
 	StylesConverter();
 	~StylesConverter();
 	
-	void convertIfcStyledItem( weak_ptr<IfcStyledItem> item, shared_ptr<AppearanceData>& appearance_data );
+	void convertIfcStyledItem( weak_ptr<IfcStyledItem> item, std::vector<shared_ptr<AppearanceData> >& vec_appearance_data );
 	void convertIfcComplexPropertyColor( shared_ptr<IfcComplexProperty> complex_property, shared_ptr<AppearanceData>& appearance_data );
 	void convertIfcSurfaceStyle( shared_ptr<IfcSurfaceStyle> surface_style, shared_ptr<AppearanceData>& appearance_data );
 	void convertIfcPresentationStyle( shared_ptr<IfcPresentationStyle> presentation_style, shared_ptr<AppearanceData>& appearance_data );

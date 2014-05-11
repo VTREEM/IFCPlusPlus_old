@@ -55,6 +55,7 @@ void readIntValue( const std::string& str, int& value );
 void readRealValue( const std::string& str, double& value );
 void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source );
 void decodeArgumentStrings( std::vector<std::string>& entity_arguments );
+void decodeArgumentStrings( std::vector<std::string>& entity_arguments, std::vector<std::wstring>& args_out );
 IfcPPTypeEnum findTypeEnumForString( const std::string& type_name );
 IfcPPEntityEnum findEntityEnumForString( const std::string& entity_name );
 void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );

@@ -162,6 +162,14 @@ void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entit
 //////////////////////////////////////////////////////////////////////////////////////////////////
 IfcStepReader::IfcStepReader()
 {
+#ifdef _DEBUG
+	// TODO: use std::wstring for unicode chars 
+	std::vector<std::string> vec_in;
+	std::vector<std::wstring> vec_out;
+	vec_in.push_back( "\\X2\\041A0416\\X0\\-\\X2\\041F041B0418\\X0\\-\\X2\\041F04150420\\X0\\-\\X2\\041104150422041E041D\\X0\\;" );
+	decodeArgumentStrings( vec_in );
+	decodeArgumentStrings( vec_in, vec_out );
+#endif
 }
 IfcStepReader::~IfcStepReader()
 {

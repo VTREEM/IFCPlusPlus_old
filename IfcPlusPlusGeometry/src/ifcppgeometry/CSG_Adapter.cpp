@@ -220,7 +220,7 @@ void removeThinCSGRemainings( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 	PolyInputCache3D poly_cache;
 	double volume_check = 0;
 
-	carve::geom::aabb<3>& meshset_aabb = meshset->getAABB();
+	const carve::geom::aabb<3>& meshset_aabb = meshset->getAABB();
 	double round_distance = std::min( meshset_aabb.extent.x, std::min( meshset_aabb.extent.y, meshset_aabb.extent.z ) )*0.1;
 
 	for( size_t i_mesh = 0; i_mesh < meshset->meshes.size(); ++i_mesh )
@@ -263,7 +263,7 @@ void removeThinCSGRemainings( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 				//set_faces_done.insert( face );
 				carve::mesh::Face<3>* face = vec_same_distance_faces[i_same_distance];
 				bool face_processed = false;
-				//carve::geom::aabb<3>& face_aabb = face->getAABB();
+				//const carve::geom::aabb<3>& face_aabb = face->getAABB();
 				const carve::geom::vector<3>& face_normal = face->plane.N;
 
 				// within set of same distance, find the faces that have opposite orientation
@@ -924,7 +924,7 @@ void CSG_Adapter::simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 #endif
 	
 		//simplifier.removeFins(meshset.get());
-		removeThinCSGRemainings( meshset );
+		//removeThinCSGRemainings( meshset );
 	}
 }
 
@@ -953,10 +953,10 @@ bool CSG_Adapter::computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh::MeshSet
 
 		// check if meshset aabb is far away from origin. if so, move to origin, compute, move back
 		carve::geom::vector<3> translate_avoid_large_numbers;
-		carve::geom::aabb<3>& aabb_op1 = op1->getAABB();
+		const carve::geom::aabb<3>& aabb_op1 = op1->getAABB();
 		if( aabb_op1.pos.length2() > 10000 )
 		{
-			carve::geom::aabb<3>& aabb_op2 = op2->getAABB();
+			const carve::geom::aabb<3>& aabb_op2 = op2->getAABB();
 
 			if( aabb_op2.pos.length2() > 10000 )
 			{
