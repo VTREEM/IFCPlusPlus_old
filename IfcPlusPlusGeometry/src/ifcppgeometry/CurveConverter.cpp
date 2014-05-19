@@ -342,7 +342,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 					}
 					GeomUtils::appendPointsToCurve( circle_points, target_vec );
 
-					//if( segment_start_points != NULL )
+					//if( segment_start_points != nullptr )
 					{
 						carve::geom::vector<3> pt0 = circle_points[0];
 						segment_start_points.push_back( pt0 );
@@ -446,7 +446,7 @@ void CurveConverter::convertIfcCurve( const shared_ptr<IfcCurve>& ifc_curve, std
 
 		GeomUtils::appendPointsToCurve( points_vec, target_vec );
 
-		//if( segment_start_points != NULL )
+		//if( segment_start_points != nullptr )
 		{
 			segment_start_points.push_back( line_origin );
 		}

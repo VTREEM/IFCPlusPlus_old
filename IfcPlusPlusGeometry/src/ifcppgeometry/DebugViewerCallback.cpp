@@ -52,14 +52,14 @@
 #include <ifcppgeometry/GeomUtils.h>
 
 
-void* obj_call_on_render_polyhedron = NULL;
-void* obj_call_on_render_meshset = NULL;
-void* obj_call_on_render_polyline = NULL;
-void* obj_call_on_render_paths = NULL;
-void (*func_call_on_render_polyhedron)(void*, const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe) = NULL;
-void (*func_call_on_render_meshset)(void*, const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe) = NULL;
-void (*func_call_on_render_polyline)(void*, const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color) = NULL;
-void (*func_call_on_render_paths)(void*, const std::vector<std::vector<carve::geom::vector<2> > >& paths ) = NULL;
+void* obj_call_on_render_polyhedron = nullptr;
+void* obj_call_on_render_meshset = nullptr;
+void* obj_call_on_render_polyline = nullptr;
+void* obj_call_on_render_paths = nullptr;
+void (*func_call_on_render_polyhedron)(void*, const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe) = nullptr;
+void (*func_call_on_render_meshset)(void*, const carve::mesh::MeshSet<3>* meshset, const osg::Vec4f& color, const bool wireframe) = nullptr;
+void (*func_call_on_render_polyline)(void*, const carve::input::PolylineSetData* poly_line, const osg::Vec4f& color) = nullptr;
+void (*func_call_on_render_paths)(void*, const std::vector<std::vector<carve::geom::vector<2> > >& paths ) = nullptr;
 
 void setRenderPolyhedronCallBack( void* obj_ptr, void (*func)(void*, const carve::input::PolyhedronData* poly, const osg::Vec4f& color, const bool wireframe ) )
 {
@@ -840,7 +840,7 @@ void createTest( osg::Group* group, osg::Group* root )
 
 		carve::mesh::MeshSet<3>* meshset1 = poly_data1->createMesh(carve::input::opts());
 		carve::mesh::MeshSet<3>* meshset2 = poly_data2->createMesh(carve::input::opts());
-		carve::mesh::MeshSet<3>* meshset3 = NULL;//poly_data3->createMesh(carve::input::opts());
+		carve::mesh::MeshSet<3>* meshset3 = nullptr;//poly_data3->createMesh(carve::input::opts());
 
 		std::stringstream err;
 		bool meshset1_ok = ConverterOSG::checkMeshSet( meshset1, err, -1 );
@@ -927,11 +927,11 @@ void createTest( osg::Group* group, osg::Group* root )
 		csg.hooks.registerHook(new carve::csg::CarveTriangulator(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 		//csg.hooks.registerHook(new carve::csg::CarveHoleResolver(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 
-		carve::mesh::MeshSet<3>* result1 = NULL;
+		carve::mesh::MeshSet<3>* result1 = nullptr;
 		bool failed = false;
 		try
 		{
-			result1 = csg.compute( meshset1, meshset2, carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE );
+			result1 = csg.compute( meshset1, meshset2, carve::csg::CSG::A_MINUS_B, nullptr, carve::csg::CSG::CLASSIFY_EDGE );
 
 			bool result1_ok = ConverterOSG::checkMeshSet( result1, err, -1 );
 
@@ -960,12 +960,12 @@ void createTest( osg::Group* group, osg::Group* root )
 			failed = true;
 		}
 
-		carve::mesh::MeshSet<3>* result2 = NULL;
+		carve::mesh::MeshSet<3>* result2 = nullptr;
 		if( meshset3 )
 		{
 			try
 			{
-				result2 = csg.compute( result1, meshset3, carve::csg::CSG::A_MINUS_B, NULL, carve::csg::CSG::CLASSIFY_EDGE );
+				result2 = csg.compute( result1, meshset3, carve::csg::CSG::A_MINUS_B, nullptr, carve::csg::CSG::CLASSIFY_EDGE );
 			}
 			catch(...)
 			{

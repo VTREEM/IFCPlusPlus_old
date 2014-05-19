@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFontWeight = STRING;
-class IfcFontWeight : public IfcPPObject
+class IfcFontWeight : public IfcPPString
 {
 public:
 	IfcFontWeight();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcFontWeight"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcFontWeight> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

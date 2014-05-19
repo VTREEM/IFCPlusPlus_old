@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcKinematicViscosityMeasure = REAL;
-class IfcKinematicViscosityMeasure : public IfcDerivedMeasureValue
+class IfcKinematicViscosityMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcKinematicViscosityMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcKinematicViscosityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcKinematicViscosityMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

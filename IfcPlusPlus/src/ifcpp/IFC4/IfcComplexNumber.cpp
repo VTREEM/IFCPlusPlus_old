@@ -27,7 +27,6 @@ IfcComplexNumber::~IfcComplexNumber() {}
 void IfcComplexNumber::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCCOMPLEXNUMBER("; }
-	//supertype as attribute: std::vector<double> m_vec
 	writeDoubleList( stream, m_vec );
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,7 +35,6 @@ shared_ptr<IfcComplexNumber> IfcComplexNumber::createObjectFromStepData( const s
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcComplexNumber>(); }
 	auto type_object = std::make_shared<IfcComplexNumber>();
-	//supertype as attribute: std::vector<double> m_vec
 	readDoubleList( arg, type_object->m_vec );
 	return type_object;
 }

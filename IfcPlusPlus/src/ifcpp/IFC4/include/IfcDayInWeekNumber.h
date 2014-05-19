@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDayInWeekNumber = INTEGER;
-class IfcDayInWeekNumber : public IfcPPObject
+class IfcDayInWeekNumber : public IfcPPInt
 {
 public:
 	IfcDayInWeekNumber();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcDayInWeekNumber"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcDayInWeekNumber> createObjectFromStepData( const std::string& arg );
-	int m_value;
 };
 

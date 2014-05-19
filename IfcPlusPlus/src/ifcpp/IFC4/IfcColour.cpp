@@ -54,7 +54,7 @@ shared_ptr<IfcColour> IfcColour::createObjectFromStepData( const std::string& ar
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		shared_ptr<IfcPPObject> result_object( NULL );
+		shared_ptr<IfcPPObject> result_object( nullptr );
 		readInlineTypeOrEntity( keyword, inline_arg, result_object, map );
 		if( result_object )
 		{

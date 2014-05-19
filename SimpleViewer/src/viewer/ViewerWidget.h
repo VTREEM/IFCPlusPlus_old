@@ -33,7 +33,7 @@ public:
 		PROJECTION_PERSPECTIVE
 	};
 
-    ViewerWidget( QWidget* parent = NULL );
+    ViewerWidget( QWidget* parent = nullptr );
 	~ViewerWidget();
 		
 	QSize minimumSizeHint() const;

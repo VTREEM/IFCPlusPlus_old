@@ -556,7 +556,7 @@ void removeThinCSGRemainings( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 
 						//}
 
-						//std::vector<carve::geom::vector<3>* > intersected_points( 3, NULL );
+						//std::vector<carve::geom::vector<3>* > intersected_points( 3, nullptr );
 						//int num_intersected = 0;
 						//for( int i_triangle = 0; i_triangle < 3; ++i_triangle )
 						//{
@@ -568,7 +568,7 @@ void removeThinCSGRemainings( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 						//	//bool intersected1;
 						//	//bool intersected1 = face_check->simpleLineSegmentIntersection( line, intersect_point1 );
 
-						//	//intersected_points[i_triangle] = NULL;
+						//	//intersected_points[i_triangle] = nullptr;
 
 						//	carve::mesh::MeshSet<3>::vertex_t::vector_t p;
 						//	//carve::IntersectionClass intersects =	carve::geom3d::lineSegmentPlaneIntersection(face_check_plane, line, p);
@@ -578,7 +578,7 @@ void removeThinCSGRemainings( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 						//	
 						//	if (intersects == carve::INTERSECT_NONE || intersects == carve::INTERSECT_BAD)
 						//	{
-						//		//intersected_points[i_triangle] = NULL;
+						//		//intersected_points[i_triangle] = nullptr;
 						//		//intersected1 = false;
 						//	}
 						//	else
@@ -900,7 +900,7 @@ void CSG_Adapter::simplifyMesh( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 	//{
 	//	carve::mesh::Mesh<3>* mesh = meshset->meshes[ii];
 	//	std::vector<carve::mesh::Face<3>* >& vec_faces = mesh->faces;
-	//	carve::mesh::Face<3>* face_orig = NULL;
+	//	carve::mesh::Face<3>* face_orig = nullptr;
 	//	triang.processOutputFace( vec_faces, face_orig, false );
 	//}
 	
@@ -1005,7 +1005,7 @@ bool CSG_Adapter::computeCSG( carve::mesh::MeshSet<3>* op1, carve::mesh::MeshSet
 			//csg.hooks.registerHook(new carve::csg::CarveHoleResolver(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 			
 			//carve::csg::CSG::CLASSIFY_TYPE m_classify_type;
-			result = shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( op1, op2, operation, NULL, carve::csg::CSG::CLASSIFY_EDGE ) );
+			result = shared_ptr<carve::mesh::MeshSet<3> >( csg.compute( op1, op2, operation, nullptr, carve::csg::CSG::CLASSIFY_EDGE ) );
 			bool result_meshset_ok = ConverterOSG::checkMeshSet( result.get(), err, -1 );
 			if( result_meshset_ok )
 			{

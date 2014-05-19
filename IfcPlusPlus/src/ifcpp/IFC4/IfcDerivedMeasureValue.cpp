@@ -125,7 +125,7 @@ shared_ptr<IfcDerivedMeasureValue> IfcDerivedMeasureValue::createObjectFromStepD
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		shared_ptr<IfcPPObject> result_object( NULL );
+		shared_ptr<IfcPPObject> result_object( nullptr );
 		readInlineTypeOrEntity( keyword, inline_arg, result_object, map );
 		if( result_object )
 		{

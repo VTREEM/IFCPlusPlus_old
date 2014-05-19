@@ -17,7 +17,7 @@ class Orbit3DManipulator : public osgGA::StandardManipulator
 		// inherited from osg::Object
 		virtual osg::Object* cloneType() const { return new Orbit3DManipulator( m_system ); }
         virtual osg::Object* clone(const osg::CopyOp& copyop) const { return new Orbit3DManipulator( *this,copyop ); }
-        virtual bool isSameKindAs(const osg::Object* obj) const { return dynamic_cast<const Orbit3DManipulator*>(obj)!=NULL; }
+        virtual bool isSameKindAs(const osg::Object* obj) const { return dynamic_cast<const Orbit3DManipulator*>(obj)!=nullptr; }
 		virtual const char* libraryName() const { return ""; }
         virtual const char* className() const { return "Orbit3DManipulator"; }
 
@@ -71,7 +71,7 @@ class Orbit3DManipulator : public osgGA::StandardManipulator
 		bool intersectSceneRotateCenter( const osgGA::GUIEventAdapter& ea, osgViewer::View* view );
 		bool intersectSceneSelect( const osgGA::GUIEventAdapter& ea, osgViewer::View* view );
 		bool performMovement( const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa );
-        double getMinimumDistance( bool *relativeToModelSize = NULL ) const;
+        double getMinimumDistance( bool *relativeToModelSize = nullptr ) const;
 		void setMinimumDistance( const double& minimumDistance, bool relativeToModelSize = false );
 		void panCamera( const float dx, const float dy, const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa );//const float dx, const float dy, const float dz = 0.f );
         void zoomCamera( const float dy );

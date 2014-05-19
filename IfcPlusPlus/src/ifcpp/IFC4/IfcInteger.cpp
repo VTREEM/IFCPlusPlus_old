@@ -28,7 +28,6 @@ IfcInteger::~IfcInteger() {}
 void IfcInteger::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCINTEGER("; }
-	//supertype as attribute: int m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,7 +36,6 @@ shared_ptr<IfcInteger> IfcInteger::createObjectFromStepData( const std::string& 
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcInteger>(); }
 	auto type_object = std::make_shared<IfcInteger>();
-	//supertype as attribute: int m_value
-	type_object->m_value = atoi( arg.c_str() );
+	type_object->readArgument( arg );
 	return type_object;
 }

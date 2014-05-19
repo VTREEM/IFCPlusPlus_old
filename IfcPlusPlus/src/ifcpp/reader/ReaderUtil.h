@@ -84,7 +84,7 @@ void readTypeOfIntList( const std::string& str, std::vector<shared_ptr<T> >& vec
 	{
 		vec.push_back( shared_ptr<T>(new T( atoi( ch ) ) ) );
 		ch = strchr( ch, ',' );
-		if( ch == NULL )
+		if( ch == nullptr )
 		{
 			break;
 		}
@@ -114,14 +114,14 @@ void readTypeOfRealList( const char* str, std::vector<shared_ptr<T> >& vec )
 	while( *ch != '\0' )
 	{
 #ifdef _DEBUG
-		if( strchr(ch, '$') != NULL )
+		if( strchr(ch, '$') != nullptr )
 		{
 			throw IfcPPException("unexpected $");
 		}
 #endif
 		vec.push_back( shared_ptr<T>(new T( atof( ch ) ) ) );
 		ch = strchr( ch, ',' );
-		if( ch == NULL )
+		if( ch == nullptr )
 		{
 			break;
 		}
@@ -235,11 +235,11 @@ template<typename T>
 void readTypeList( const std::string arg_complete, std::vector<shared_ptr<T> >& vec )
 {
 	//(IfcLabel('label'),'',IfcLengthMeasure(2.0),#299)
-	char* pos_opening = NULL;
-	char* pos_closing = NULL;
+	char* pos_opening = nullptr;
+	char* pos_closing = nullptr;
 	char* ch = (char*)arg_complete.c_str();
 	findLeadingTrailingParanthesis( ch, pos_opening, pos_closing );
-	if( pos_opening == NULL || pos_closing == NULL )
+	if( pos_opening == nullptr || pos_closing == nullptr )
 	{
 		if( arg_complete.compare("$") == 0 )
 		{
@@ -267,11 +267,11 @@ template<typename T>
 void readSelectList( const std::string& arg_complete, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(#287,#291,#295,#299)
-	char* pos_opening = NULL;
-	char* pos_closing = NULL;
+	char* pos_opening = nullptr;
+	char* pos_closing = nullptr;
 	char* ch = (char*)arg_complete.c_str();
 	findLeadingTrailingParanthesis( ch, pos_opening, pos_closing );
-	if( pos_opening == NULL || pos_closing == NULL )
+	if( pos_opening == nullptr || pos_closing == nullptr )
 	{
 		if( arg_complete.compare("$") == 0 )
 		{
@@ -340,13 +340,13 @@ template<typename T>
 void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(#287,#291,#295,#299)
-	char* pos_opening = NULL;
-	char* pos_closing = NULL;
+	char* pos_opening = nullptr;
+	char* pos_closing = nullptr;
 	char* ch = (char*)arg_complete;
 	findLeadingTrailingParanthesis( ch, pos_opening, pos_closing );
-	if( pos_opening == NULL || pos_closing == NULL )
+	if( pos_opening == nullptr || pos_closing == nullptr )
 	{
-		if( arg_complete != NULL )
+		if( arg_complete != nullptr )
 		{
 			if( *arg_complete == '$' )
 			{ 

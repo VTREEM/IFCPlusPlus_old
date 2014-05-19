@@ -16,10 +16,54 @@
 #include "IfcPPObject.h"
 
 
+void IfcPPBool::readArgument( const std::string& attribute_value )
+{
+	if( _stricmp( attribute_value.c_str(), ".F." ) == 0 )
+	{
+		m_value = false;
+	}
+	else if( _stricmp( attribute_value.c_str(), ".T." ) == 0 )
+	{
+		m_value = true;;
+	}
+}
+
+void IfcPPLogical::readArgument( const std::string& attribute_value )
+{
+	if( _stricmp( attribute_value.c_str(), ".F." ) == 0 )
+	{
+		m_value = LOGICAL_FALSE;
+	}
+	else if( _stricmp( attribute_value.c_str(), ".T." ) == 0 )
+	{
+		m_value = LOGICAL_TRUE;
+	}
+	else if( _stricmp( attribute_value.c_str(), ".U." ) == 0 )
+	{
+		m_value = LOGICAL_UNKNOWN;;
+	}
+}
+
+void IfcPPInt::readArgument( const std::string& attribute_value )
+{
+	m_value = atoi( attribute_value.c_str() );
+}
+
+void IfcPPReal::readArgument( const std::string& attribute_value )
+{
+	m_value = atof( attribute_value.c_str() );
+}
+
+void IfcPPString::readArgument( const std::string& attribute_value )
+{
+	m_value = attribute_value.c_str();
+}
+
 // ENTITY
 IfcPPEntity::IfcPPEntity() : m_id(-1)
 {
 }
+
 IfcPPEntity::IfcPPEntity( int id ) : m_id(id)
 {
 }
@@ -27,6 +71,7 @@ IfcPPEntity::IfcPPEntity( int id ) : m_id(id)
 IfcPPEntity::~IfcPPEntity()
 {
 }
+
 void IfcPPEntity::setId( int id )
 {
 	m_id = id;

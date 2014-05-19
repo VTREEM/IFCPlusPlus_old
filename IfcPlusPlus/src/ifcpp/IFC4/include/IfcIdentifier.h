@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcIdentifier = STRING(255);
-class IfcIdentifier : public IfcSimpleValue
+class IfcIdentifier : public IfcSimpleValue, public IfcPPString
 {
 public:
 	IfcIdentifier();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcIdentifier"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcIdentifier> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

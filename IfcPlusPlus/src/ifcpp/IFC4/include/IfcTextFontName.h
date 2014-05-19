@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTextFontName = STRING;
-class IfcTextFontName : public IfcPPObject
+class IfcTextFontName : public IfcPPString
 {
 public:
 	IfcTextFontName();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcTextFontName"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcTextFontName> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

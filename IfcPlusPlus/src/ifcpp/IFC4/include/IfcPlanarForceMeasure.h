@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcPlanarForceMeasure = REAL;
-class IfcPlanarForceMeasure : public IfcDerivedMeasureValue
+class IfcPlanarForceMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcPlanarForceMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcPlanarForceMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcPlanarForceMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

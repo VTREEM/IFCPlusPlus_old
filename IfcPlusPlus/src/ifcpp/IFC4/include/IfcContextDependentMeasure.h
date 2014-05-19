@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcContextDependentMeasure = REAL;
-class IfcContextDependentMeasure : public IfcMeasureValue
+class IfcContextDependentMeasure : public IfcMeasureValue, public IfcPPReal
 {
 public:
 	IfcContextDependentMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcContextDependentMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcContextDependentMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

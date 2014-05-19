@@ -361,7 +361,7 @@ bool Orbit3DManipulator::handleMouseRelease( const osgGA::GUIEventAdapter& ea, o
 		if( !intersection_geometry_found )
 		{
 			// click to background -> unselect all
-			if( m_system != NULL )
+			if( m_system != nullptr )
 			{
 				m_system->clearSelection();
 			}
@@ -419,7 +419,7 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 	osgUtil::IntersectionVisitor iv( picker.get() );
 	osg::Camera* cam = view->getCamera();
 
-	osg::Group* root_node = NULL;
+	osg::Group* root_node = nullptr;
 	if( m_system )
 	{
 		root_node = m_system->getViewController()->getRootNode();
@@ -429,7 +429,7 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 		root_node = (osg::Group*)view->getSceneData();
 	}
 
-	if( root_node == NULL )
+	if( root_node == nullptr )
 	{
 		return false;
 	}
@@ -480,7 +480,7 @@ bool Orbit3DManipulator::intersectSceneRotateCenter( const osgGA::GUIEventAdapte
 
 bool Orbit3DManipulator::intersectSceneSelect( const osgGA::GUIEventAdapter& ea, osgViewer::View* view )
 {
-	if( m_system == NULL )
+	if( m_system == nullptr )
 	{
 		return false;
 	}
@@ -633,7 +633,7 @@ bool Orbit3DManipulator::handleMouseDrag( const osgGA::GUIEventAdapter& ea, osgG
 bool Orbit3DManipulator::performMovement( const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa )
 {
 	// return if less then two events have been added
-	if( _ga_t0.get() == NULL || _ga_t1.get() == NULL )
+	if( _ga_t0.get() == nullptr || _ga_t1.get() == nullptr )
 	{
 		return false;
 	}
@@ -830,7 +830,7 @@ void Orbit3DManipulator::setAnimationTime( const double t )
     if( t <= 0. )
     {
         finishAnimation();
-		m_animation_data = NULL;
+		m_animation_data = nullptr;
         return;
     }
 

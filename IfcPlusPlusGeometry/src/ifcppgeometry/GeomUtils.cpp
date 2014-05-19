@@ -53,7 +53,7 @@ void GeomUtils::WireFrameModeOn( osg::StateSet* state )
 
 void GeomUtils::WireFrameModeOn( osg::Node* node )
 {
-	if( node == NULL )
+	if( node == nullptr )
 		return;
 
 	osg::StateSet* state = node->getOrCreateStateSet();
@@ -74,7 +74,7 @@ void GeomUtils::WireFrameModeOff( osg::StateSet* state )
 }
 void GeomUtils::WireFrameModeOff( osg::Node *srisdNode )
 {
-	if( srisdNode == NULL )
+	if( srisdNode == nullptr )
 		return;
 
 	osg::StateSet *state = srisdNode->getOrCreateStateSet();
@@ -555,6 +555,47 @@ carve::geom::vector<3> GeomUtils::computePolygon2DNormal( const std::vector<carv
 	}
 	polygon_normal.normalize();
 	return polygon_normal;
+}
+
+bool GeomUtils::checkOpenPolygonConvexity( const std::vector<carve::geom::vector<2> >& polygon )
+{
+	if( polygon.size() < 3 )
+	{
+		return true;
+	}
+	const int num_points = polygon.size();
+	double zcrossproduct_previous = 0;
+	for( int k=0; k<num_points-2; ++k )
+	{
+		const carve::geom::vector<2>& vertex_current = polygon[k];
+		const carve::geom::vector<2>& vertex_next1 = polygon[k+1];
+		const carve::geom::vector<2>& vertex_next2 = polygon[k+2];
+
+		double dx1 = vertex_next1.x - vertex_current.x;
+		double dy1 = vertex_next1.y - vertex_current.y;
+
+		double dx2 = vertex_next2.x - vertex_next1.x;
+		double dy2 = vertex_next2.y - vertex_next1.y;
+
+		double zcrossproduct = dx1*dy2 - dy1*dx2;
+
+		if( k > 0 )
+		{
+			if( abs(zcrossproduct) > 0.0001 )
+			{
+				if( abs(zcrossproduct_previous) > 0.0001 )
+				{
+					if( zcrossproduct*zcrossproduct_previous < 0 )
+					{
+						// there is a change in direction -> not convex
+						return false;
+					}
+				}
+			}
+		}
+		zcrossproduct_previous = zcrossproduct;
+	}
+	return true;
 }
 
 void GeomUtils::createFace( const std::vector<std::vector<carve::geom::vector<3> > >& vec_bounds, PolyInputCache3D& poly_cache, std::stringstream& err )
@@ -2204,49 +2245,16 @@ void GeomUtils::closestPointOnLine( const carve::geom::vector<3>& point, const c
 	closest = carve::geom::VECTOR(line_origin.x+lambda*line_direction.x, line_origin.y+lambda*line_direction.y, line_origin.z+lambda*line_direction.z);
 }
 
-
-void GeomUtils::closestPointOnLine( const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_direction, osg::Vec3d& closest )
+void GeomUtils::closestPointOnLine( const carve::geom::vector<2>& point, const carve::geom::vector<2>& line_origin, const carve::geom::vector<2>& line_direction, carve::geom::vector<2>& closest )
 {
-	double denom = point.x()*line_direction.x() + point.y()*line_direction.y() + point.z()*line_direction.z() - line_direction.x()*line_origin.x() - line_direction.y()*line_origin.y() - line_direction.z()*line_origin.z();
-	double numer = line_direction.x()*line_direction.x() + line_direction.y()*line_direction.y() + line_direction.z()*line_direction.z();
+	double denom = point.x*line_direction.x + point.y*line_direction.y + - line_direction.x*line_origin.x - line_direction.y*line_origin.y;
+	double numer = line_direction.x*line_direction.x + line_direction.y*line_direction.y;
 	if(numer == 0)
 	{
 		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!", __func__);
 	}
 	double lambda = denom/numer;
-	closest.set(line_origin.x()+lambda*line_direction.x(), line_origin.y()+lambda*line_direction.y(), line_origin.z()+lambda*line_direction.z());
-}
-
-//void closestPointOnLineSegment( osg::Vec3d& closest, osg::Vec3d& point, osg::Vec3d& line_origin, osg::Vec3d& line_end )
-bool GeomUtils::isPointOnLineSegment( double& target_lambda, const osg::Vec3d& point, const osg::Vec3d& line_origin, const osg::Vec3d& line_end )
-{
-	const osg::Vec3d line_direction = line_end - line_origin;
-	const double denom = point.x()*line_direction.x() + point.y()*line_direction.y() + point.z()*line_direction.z() - line_direction.x()*line_origin.x() - line_direction.y()*line_origin.y() - line_direction.z()*line_origin.z();
-	const double numer = line_direction.x()*line_direction.x() + line_direction.y()*line_direction.y() + line_direction.z()*line_direction.z();
-	if(numer == 0)
-	{
-		throw IfcPPException("Line is degenerated: the line's direction vector is a null vector!", __func__);
-	}
-	const double lambda = denom/numer;
-	osg::Vec3d closest( line_origin.x()+lambda*line_direction.x(), line_origin.y()+lambda*line_direction.y(), line_origin.z()+lambda*line_direction.z() );
-	const double length2 = (closest-point).length2();
-	if(  length2 > 0.0001 )
-	{
-		// point is not on line
-		return false;
-	}
-	if( lambda < -0.0001 )
-	{
-		// point is not on line
-		return false;
-	}
-	if( lambda > 1.0001 )
-	{
-		// point is not on line
-		return false;
-	}
-	target_lambda = lambda;
-	return true;
+	closest = carve::geom::VECTOR(line_origin.x+lambda*line_direction.x, line_origin.y+lambda*line_direction.y);
 }
 
 bool LineToLineIntersectionHelper(carve::geom::vector<2>& v1, carve::geom::vector<2>& v2, carve::geom::vector<2>& v3, carve::geom::vector<2>& v4, double & r, double & s)

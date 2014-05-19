@@ -142,12 +142,12 @@ void TabReadWrite::closeEvent( QCloseEvent* )
 	settings.setValue("IOsplitterSizes", m_io_splitter->saveState());
 }
 
-void TabReadWrite::slotProgressValueWrapper( void* ptr, double value )
+void TabReadWrite::slotProgressValueWrapper( void* ptr, double value, const std::string& progress_type )
 {
 	TabReadWrite* myself = (TabReadWrite*)ptr;
 	if( myself )
 	{
-		myself->slotProgressValue( value );
+		myself->slotProgressValue( value, progress_type );
 	}
 }
 void TabReadWrite::slotMessageWrapper( void* ptr, const std::string& str )
@@ -195,7 +195,7 @@ void TabReadWrite::updateRecentFilesCombo()
 
 void TabReadWrite::slotRecentFilesIndexChanged(int)
 {
-	slotProgressValue(0);
+	slotProgressValue(0,"");
 	m_btn_load->setFocus();
 }
 
@@ -319,7 +319,7 @@ void TabReadWrite::slotLoadIfcFile( QString& path_in )
 		}
 	}
 
-	slotProgressValue( 1.0 );
+	slotProgressValue( 1.0, "" );
 }
 
 void TabReadWrite::slotTxtOut( QString txt )
@@ -336,8 +336,17 @@ void TabReadWrite::slotTxtOutError( QString txt )
 	m_txt_out->append( "<div style=\"color:red;\">Error: " + txt.replace( "\n", "<br/>" ) + "</div><br/>" );
 }
 
-void TabReadWrite::slotProgressValue( double progress )
+void TabReadWrite::slotProgressValue( double progress, const std::string& str )
 {
+	if( str.compare( "parse" ) == 0 )
+	{
+		progress = progress*0.5;
+	}
+	else if( str.compare( "geometry" ) == 0 )
+	{
+		progress = 0.5 + progress*0.5;
+	}
+
 	m_progress_bar->setValue( (int)(progress*1000) );
 	QApplication::processEvents();
 }
@@ -422,5 +431,5 @@ void TabReadWrite::slotWriteFileClicked()
 	
 	int time_diff = clock() - millisecs;
 	slotTxtOut( "file written (" + QString::number( time_diff*0.001 ) + " sec)" );
-	slotProgressValue( 1.0 );
+	slotProgressValue( 1.0, "" );
 }

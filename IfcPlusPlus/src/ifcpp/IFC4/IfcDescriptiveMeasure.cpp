@@ -29,7 +29,6 @@ IfcDescriptiveMeasure::~IfcDescriptiveMeasure() {}
 void IfcDescriptiveMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCDESCRIPTIVEMEASURE("; }
-	//supertype as attribute: std::string m_value
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
@@ -38,14 +37,6 @@ shared_ptr<IfcDescriptiveMeasure> IfcDescriptiveMeasure::createObjectFromStepDat
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDescriptiveMeasure>(); }
 	auto type_object = std::make_shared<IfcDescriptiveMeasure>();
-	//supertype as attribute: std::string m_value
-	if( arg.at(0) == '\'' && arg.at(arg.size()-1) == '\'' )
-	{
-		type_object->m_value = arg.substr(1,arg.length()-2);
-	}
-	else
-	{
-		type_object->m_value = arg;
-	}
+	type_object->readArgument( arg );
 	return type_object;
 }

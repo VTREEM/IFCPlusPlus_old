@@ -28,7 +28,6 @@ IfcLuminousFluxMeasure::~IfcLuminousFluxMeasure() {}
 void IfcLuminousFluxMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCLUMINOUSFLUXMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,7 +36,6 @@ shared_ptr<IfcLuminousFluxMeasure> IfcLuminousFluxMeasure::createObjectFromStepD
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLuminousFluxMeasure>(); }
 	auto type_object = std::make_shared<IfcLuminousFluxMeasure>();
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	type_object->readArgument( arg );
 	return type_object;
 }

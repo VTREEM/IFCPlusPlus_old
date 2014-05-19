@@ -120,9 +120,9 @@ void IfcTreeWidget::slotModelLoadingStart()
 {
 }
 
-QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::map<int,shared_ptr<IfcObjectDefinition> >& map_visited )
+QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::set<int>& set_visited )
 {
-	QTreeWidgetItem* item = NULL;
+	QTreeWidgetItem* item = nullptr;
 
 	std::vector<shared_ptr<IfcObjectDefinition> >::iterator it_object_def;
 	std::vector<shared_ptr<IfcProduct> >::iterator it_product;
@@ -130,11 +130,11 @@ QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::map<int,sha
 	shared_ptr<IfcObjectDefinition> obj_def = dynamic_pointer_cast<IfcObjectDefinition>(obj);
 	if( obj_def )
 	{
-		if( map_visited.find( obj_def->getId() ) != map_visited.end() )
+		if( set_visited.find( obj_def->getId() ) != set_visited.end() )
 		{
-			return NULL;
+			return nullptr;
 		}
-		map_visited[obj_def->getId()] = obj_def;
+		set_visited.insert( obj_def->getId() );
 
 
 		item = new QTreeWidgetItem();
@@ -161,8 +161,8 @@ QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::map<int,sha
 				for( it_object_def=vec.begin(); it_object_def!=vec.end(); ++it_object_def )
 				{
 					shared_ptr<IfcObjectDefinition> child_obj_def = (*it_object_def);
-					QTreeWidgetItem* child_tree_item = resolveTreeItems( child_obj_def, map_visited );
-					if( child_tree_item != NULL )
+					QTreeWidgetItem* child_tree_item = resolveTreeItems( child_obj_def, set_visited );
+					if( child_tree_item != nullptr )
 					{
 						item->addChild( child_tree_item );
 					}
@@ -189,7 +189,7 @@ QTreeWidgetItem* resolveTreeItems( shared_ptr<IfcPPObject> obj, std::map<int,sha
 					{
 						shared_ptr<IfcProduct> related_product = (*it);
 				
-						QTreeWidgetItem* child_tree_item = resolveTreeItems( related_product, map_visited );
+						QTreeWidgetItem* child_tree_item = resolveTreeItems( related_product, set_visited );
 						if( child_tree_item != NULL )
 						{
 							item->addChild( child_tree_item );
@@ -208,8 +208,8 @@ void IfcTreeWidget::slotModelLoadingDone()
 	shared_ptr<IfcProject> project = m_system->getIfcModel()->getIfcProject();
 	if( project )
 	{
-		std::map<int,shared_ptr<IfcObjectDefinition> > map_visited;
-		QTreeWidgetItem* project_item = resolveTreeItems( project, map_visited );
+		std::set<int> set_visited;
+		QTreeWidgetItem* project_item = resolveTreeItems( project, set_visited );
 		if( project_item != NULL )
 		{
 			blockSignals(true);

@@ -49,7 +49,7 @@ DebugViewer::DebugViewer() : QMainWindow()
 	m_view_controller = new ViewController();
 	m_viewer_widget = new ViewerWidget();
 	m_viewer_widget->setParent( this );
-	Orbit3DManipulator* camera_manip = new Orbit3DManipulator( NULL );
+	Orbit3DManipulator* camera_manip = new Orbit3DManipulator( nullptr );
 	m_viewer_widget->getMainView()->setCameraManipulator( camera_manip );
 	m_viewer_widget->setRootNode( m_view_controller->getRootNode() );
 

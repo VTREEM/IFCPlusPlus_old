@@ -22,7 +22,7 @@
 #include "IfcTrimmingSelect.h"
 
 // TYPE IfcParameterValue = REAL;
-class IfcParameterValue : public IfcMeasureValue, public IfcTrimmingSelect
+class IfcParameterValue : public IfcMeasureValue, public IfcTrimmingSelect, public IfcPPReal
 {
 public:
 	IfcParameterValue();
@@ -31,6 +31,5 @@ public:
 	virtual const char* classname() const { return "IfcParameterValue"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcParameterValue> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

@@ -34,6 +34,46 @@ public:
 	virtual const char* classname() const { return "IfcPPObject"; }
 };
 
+class IfcPPBool : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPBool"; }
+	void readArgument( const std::string& attribute_value );
+	bool m_value;
+};
+
+class IfcPPLogical : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPLogical"; }
+	void readArgument( const std::string& attribute_value );
+	LogicalEnum m_value;
+};
+
+class IfcPPInt : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPInt"; }
+	void readArgument( const std::string& attribute_value );
+	int m_value;
+};
+
+class IfcPPReal : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPReal"; }
+	void readArgument( const std::string& attribute_value );
+	double m_value;
+};
+
+class IfcPPString : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPString"; }
+	void readArgument( const std::string& attribute_value );
+	std::string m_value;
+};
+
 
 // ENTITY
 class IfcPPEntity : virtual public IfcPPObject

@@ -41,10 +41,10 @@ public:
 	TabReadWrite( IfcPlusPlusSystem* sys, ViewerWidget* viewer, QWidget* parent = 0 );
 	~TabReadWrite();
 
-	static void slotProgressValueWrapper( void* obj_ptr, double value );
+	static void slotProgressValueWrapper( void* obj_ptr, double value, const std::string& type );
 	static void slotMessageWrapper( void* obj_ptr, const std::string& str );
 	static void slotErrorWrapper( void* obj_ptr, const std::string& str );
-	void slotProgressValue( double value );
+	void slotProgressValue( double value, const std::string& str );
 	void closeEvent( QCloseEvent *event );
 
 public slots:

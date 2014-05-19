@@ -28,7 +28,6 @@ IfcLogical::~IfcLogical() {}
 void IfcLogical::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCLOGICAL("; }
-	//supertype as attribute: LogicalEnum m_value
 	if( m_value == LOGICAL_FALSE )
 	{
 		stream << ".F.";
@@ -48,18 +47,6 @@ shared_ptr<IfcLogical> IfcLogical::createObjectFromStepData( const std::string& 
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLogical>(); }
 	auto type_object = std::make_shared<IfcLogical>();
-	//supertype as attribute: LogicalEnum m_value
-	if( _stricmp( arg.c_str(), ".F." ) == 0 )
-	{
-		type_object->m_value = LOGICAL_FALSE;
-	}
-	else if( _stricmp( arg.c_str(), ".T." ) == 0 )
-	{
-		type_object->m_value = LOGICAL_TRUE;
-	}
-	else if( _stricmp( arg.c_str(), ".U." ) == 0 )
-	{
-		type_object->m_value = LOGICAL_UNKNOWN;
-	}
+	type_object->readArgument( arg );
 	return type_object;
 }

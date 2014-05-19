@@ -28,7 +28,6 @@ IfcVolumeMeasure::~IfcVolumeMeasure() {}
 void IfcVolumeMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCVOLUMEMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,7 +36,6 @@ shared_ptr<IfcVolumeMeasure> IfcVolumeMeasure::createObjectFromStepData( const s
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcVolumeMeasure>(); }
 	auto type_object = std::make_shared<IfcVolumeMeasure>();
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	type_object->readArgument( arg );
 	return type_object;
 }

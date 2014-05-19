@@ -107,6 +107,7 @@ void ReaderWriterIFC::resetModel()
 
 	m_group_result->removeChildren( 0, m_group_result->getNumChildren() );
 	m_recent_progress = 0.0;
+	progressCallback( 0.0, "parse" );
 	progressTextCallback( "Unloading model done" );
 }
 
@@ -374,7 +375,7 @@ void ReaderWriterIFC::createGeometry()
 				if( progress - m_recent_progress > 0.02 )
 				{
 					// leave 10% of progress to openscenegraph internals
-					progressCallback( progress*0.9 );
+					progressCallback( progress*0.9, "geometry" );
 					m_recent_progress = progress;
 				}
 			}
@@ -436,7 +437,7 @@ void ReaderWriterIFC::createGeometry()
 
 	m_representation_converter->getProfileCache()->clearProfileCache();
 
-	progressCallback( 1.0 );
+	progressCallback( 1.0, "geometry" );
 	progressTextCallback( "Loading file done" );
 
 	if( err.tellp() > 0 )
@@ -460,7 +461,7 @@ void ReaderWriterIFC::resolveProjectStructure( const shared_ptr<IfcPPObject>& ob
 	}
 	m_map_visited[entity_id] = obj_def;
 
-	osg::Group* item_grp = NULL;
+	osg::Group* item_grp = nullptr;
 
 	shared_ptr<IfcBuildingStorey> building_storey = dynamic_pointer_cast<IfcBuildingStorey>(obj_def);
 	if( building_storey )
@@ -499,7 +500,7 @@ void ReaderWriterIFC::resolveProjectStructure( const shared_ptr<IfcPPObject>& ob
 			if( product_switch.valid() )
 			{
 				//item_grp->addChild( product_switch );
-				if( item_grp == NULL )
+				if( item_grp == nullptr )
 				{
 					item_grp = product_switch;
 				}
@@ -512,7 +513,7 @@ void ReaderWriterIFC::resolveProjectStructure( const shared_ptr<IfcPPObject>& ob
 		}
 	}
 
-	if( item_grp == NULL )
+	if( item_grp == nullptr )
 	{
 		item_grp = new osg::Switch();
 		parent_group->addChild( item_grp );
@@ -718,7 +719,7 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 				shared_ptr<AppearanceData>& appearance = item_data->appearances[i_appearance];
 				
 				osg::StateSet* item_stateset =  AppearanceManagerOSG::convertToStateSet( appearance );
-				if( item_stateset != NULL )
+				if( item_stateset != nullptr )
 				{
 					item_group->setStateSet( item_stateset );
 
@@ -866,11 +867,10 @@ void ReaderWriterIFC::convertIfcProduct( const shared_ptr<IfcProduct>& product, 
 	}
 }
 
-void ReaderWriterIFC::slotProgressValueWrapper( void* ptr, double progress_value )
+void ReaderWriterIFC::slotProgressValueWrapper( void* ptr, double progress_value, const std::string& progress_type )
 {
 	ReaderWriterIFC* myself = (ReaderWriterIFC*)ptr;
-
-	myself->progressCallback( progress_value );
+	myself->progressCallback( progress_value, progress_type );
 }
 
 void ReaderWriterIFC::slotProgressTextWrapper( void* ptr, const std::string& str )

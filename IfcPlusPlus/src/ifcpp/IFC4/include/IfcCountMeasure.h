@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcCountMeasure = NUMBER;
-class IfcCountMeasure : public IfcMeasureValue
+class IfcCountMeasure : public IfcMeasureValue, public IfcPPInt
 {
 public:
 	IfcCountMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcCountMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcCountMeasure> createObjectFromStepData( const std::string& arg );
-	int m_value;
 };
 

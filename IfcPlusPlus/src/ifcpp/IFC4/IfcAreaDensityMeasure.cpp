@@ -28,7 +28,6 @@ IfcAreaDensityMeasure::~IfcAreaDensityMeasure() {}
 void IfcAreaDensityMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCAREADENSITYMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,7 +36,6 @@ shared_ptr<IfcAreaDensityMeasure> IfcAreaDensityMeasure::createObjectFromStepDat
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAreaDensityMeasure>(); }
 	auto type_object = std::make_shared<IfcAreaDensityMeasure>();
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	type_object->readArgument( arg );
 	return type_object;
 }

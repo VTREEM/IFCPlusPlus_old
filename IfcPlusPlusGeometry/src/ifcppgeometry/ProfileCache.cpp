@@ -35,7 +35,7 @@ shared_ptr<ProfileConverter> ProfileCache::getProfileConverter( shared_ptr<IfcPr
 {
 	if( !ifc_profile )
 	{
-		return shared_ptr<ProfileConverter>(NULL);
+		return shared_ptr<ProfileConverter>(nullptr);
 	}
 	const int profile_id = ifc_profile->getId();
 	

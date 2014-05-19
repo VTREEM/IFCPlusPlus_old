@@ -28,7 +28,6 @@ IfcElectricVoltageMeasure::~IfcElectricVoltageMeasure() {}
 void IfcElectricVoltageMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCELECTRICVOLTAGEMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,7 +36,6 @@ shared_ptr<IfcElectricVoltageMeasure> IfcElectricVoltageMeasure::createObjectFro
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricVoltageMeasure>(); }
 	auto type_object = std::make_shared<IfcElectricVoltageMeasure>();
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	type_object->readArgument( arg );
 	return type_object;
 }

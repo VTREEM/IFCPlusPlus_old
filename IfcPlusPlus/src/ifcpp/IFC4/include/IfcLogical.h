@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcLogical = LOGICAL;
-class IfcLogical : public IfcSimpleValue
+class IfcLogical : public IfcSimpleValue, public IfcPPLogical
 {
 public:
 	IfcLogical();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcLogical"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcLogical> createObjectFromStepData( const std::string& arg );
-	LogicalEnum m_value;
 };
 

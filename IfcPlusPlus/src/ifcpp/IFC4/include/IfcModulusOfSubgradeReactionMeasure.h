@@ -22,7 +22,7 @@
 #include "IfcModulusOfSubgradeReactionSelect.h"
 
 // TYPE IfcModulusOfSubgradeReactionMeasure = REAL;
-class IfcModulusOfSubgradeReactionMeasure : public IfcDerivedMeasureValue, public IfcModulusOfSubgradeReactionSelect
+class IfcModulusOfSubgradeReactionMeasure : public IfcDerivedMeasureValue, public IfcModulusOfSubgradeReactionSelect, public IfcPPReal
 {
 public:
 	IfcModulusOfSubgradeReactionMeasure();
@@ -31,6 +31,5 @@ public:
 	virtual const char* classname() const { return "IfcModulusOfSubgradeReactionMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcModulusOfSubgradeReactionMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

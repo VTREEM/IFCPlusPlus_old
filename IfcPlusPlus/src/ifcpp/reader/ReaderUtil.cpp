@@ -169,7 +169,7 @@ void tokenizeList( std::string& list_str, std::vector<std::string>& list_items )
 		++stream_pos;
 	}
 	// pick up last element
-	if( last_token != NULL )
+	if( last_token != nullptr )
 	{
 		if( last_token != stream_pos )
 		{
@@ -681,7 +681,7 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 								{
 									//we got a multibyte character here
 									char buf[2];
-									int len = WideCharToMultiByte(CP_UTF8, 0, &wc, 1, buf, 2, NULL, NULL);
+									int len = WideCharToMultiByte(CP_UTF8, 0, &wc, 1, buf, 2, nullptr, nullptr);
 									arg_str_new+= buf[0];
 									arg_str_new+= buf[1];
 								}
@@ -720,7 +720,7 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 										{
 											//we got a multibyte character here
 											char buf[2];
-											int len = WideCharToMultiByte(CP_UTF8, 0, &wc, 1, buf, 2, NULL, NULL);
+											int len = WideCharToMultiByte(CP_UTF8, 0, &wc, 1, buf, 2, nullptr, nullptr);
 											arg_str_new+= buf[0];
 											arg_str_new+= buf[1];
 										}

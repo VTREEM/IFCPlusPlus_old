@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCardinalPointReference = INTEGER;
-class IfcCardinalPointReference : public IfcPPObject
+class IfcCardinalPointReference : public IfcPPInt
 {
 public:
 	IfcCardinalPointReference();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcCardinalPointReference"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcCardinalPointReference> createObjectFromStepData( const std::string& arg );
-	int m_value;
 };
 

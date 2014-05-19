@@ -291,7 +291,7 @@ void RepresentationConverter::convertIfcRepresentation(  const shared_ptr<IfcRep
 					m_styles_converter->convertIfcPresentationStyle( presentation_style, appearance_data );
 
 					//osg::StateSet* stateset = m_styles_converter->convertIfcPresentationStyle( presentation_style, item_data );
-					//if( stateset != NULL )
+					//if( stateset != nullptr )
 					//{
 					//	input_data->vec_statesets.push_back(stateset);
 					//}

@@ -328,7 +328,7 @@ void StylesConverter::convertIfcStyledItem( weak_ptr<IfcStyledItem> styled_item_
 				convertIfcPresentationStyleSelect( pres_style_select, new_appearance );
 				vec_appearance_data.push_back( new_appearance );
 				
-				//if( presentation_style_stateset != NULL )
+				//if( presentation_style_stateset != nullptr )
 				//{
 				//	if( !resulting_stateset.valid() )
 				//	{
@@ -351,7 +351,7 @@ void StylesConverter::convertIfcStyledItem( weak_ptr<IfcStyledItem> styled_item_
 			shared_ptr<AppearanceData> new_appearance( new AppearanceData() );
 			convertIfcPresentationStyle( presentation_style, new_appearance );
 			vec_appearance_data.push_back( new_appearance );
-			//if( presentation_style_stateset != NULL )
+			//if( presentation_style_stateset != nullptr )
 			//{
 			//	if( !resulting_stateset.valid() )
 			//	{

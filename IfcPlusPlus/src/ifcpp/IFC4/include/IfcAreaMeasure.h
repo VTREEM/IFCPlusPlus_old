@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcAreaMeasure = REAL;
-class IfcAreaMeasure : public IfcMeasureValue
+class IfcAreaMeasure : public IfcMeasureValue, public IfcPPReal
 {
 public:
 	IfcAreaMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcAreaMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcAreaMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

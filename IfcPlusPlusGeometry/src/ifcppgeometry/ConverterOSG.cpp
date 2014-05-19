@@ -783,7 +783,7 @@ osg::StateSet* AppearanceManagerOSG::convertToStateSet( shared_ptr<AppearanceDat
 {
 	if( !appearence )
 	{
-		return NULL;
+		return nullptr;
 	}
 	const float shininess = appearence->shininess;
 	const float transparency = appearence->transparency;

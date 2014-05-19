@@ -141,7 +141,7 @@ bool IfcPlusPlusSystem::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 			}
 			case osgGA::GUIEventAdapter::RELEASE :
 			{
-				//if( m_ga_t0 != NULL  )
+				//if( m_ga_t0 != nullptr  )
 				//{
 				//	if( !m_drag )
 				//	{

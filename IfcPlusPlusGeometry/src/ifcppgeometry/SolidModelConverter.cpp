@@ -404,7 +404,7 @@ void SolidModelConverter::convertIfcExtrudedAreaSolid( const shared_ptr<IfcExtru
 		std::cout << strs_err_meshset.str().c_str() << std::endl;
 
 		renderMeshsetInDebugViewer( mesh_set.get(), osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f), true );
-		dumpMeshsets( mesh_set.get(), NULL, NULL, extruded_area->getId(), 0 );
+		dumpMeshsets( mesh_set.get(), nullptr, nullptr, extruded_area->getId(), 0 );
 
 		shared_ptr<carve::input::PolylineSetData> polyline_data( new carve::input::PolylineSetData() );
 		polyline_data->beginPolyline();

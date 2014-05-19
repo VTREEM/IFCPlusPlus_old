@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcSoundPowerMeasure = REAL;
-class IfcSoundPowerMeasure : public IfcDerivedMeasureValue
+class IfcSoundPowerMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcSoundPowerMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcSoundPowerMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcSoundPowerMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

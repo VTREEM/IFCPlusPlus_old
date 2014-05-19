@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcURIReference = STRING;
-class IfcURIReference : public IfcPPObject
+class IfcURIReference : public IfcPPString
 {
 public:
 	IfcURIReference();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcURIReference"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcURIReference> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

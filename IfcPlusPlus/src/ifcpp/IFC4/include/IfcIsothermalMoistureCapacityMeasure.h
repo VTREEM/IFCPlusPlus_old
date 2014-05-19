@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcIsothermalMoistureCapacityMeasure = REAL;
-class IfcIsothermalMoistureCapacityMeasure : public IfcDerivedMeasureValue
+class IfcIsothermalMoistureCapacityMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcIsothermalMoistureCapacityMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcIsothermalMoistureCapacityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcIsothermalMoistureCapacityMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

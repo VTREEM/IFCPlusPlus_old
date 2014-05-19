@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcLuminousIntensityMeasure = REAL;
-class IfcLuminousIntensityMeasure : public IfcMeasureValue
+class IfcLuminousIntensityMeasure : public IfcMeasureValue, public IfcPPReal
 {
 public:
 	IfcLuminousIntensityMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcLuminousIntensityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcLuminousIntensityMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

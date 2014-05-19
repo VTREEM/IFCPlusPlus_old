@@ -28,7 +28,6 @@ IfcAngularVelocityMeasure::~IfcAngularVelocityMeasure() {}
 void IfcAngularVelocityMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCANGULARVELOCITYMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,7 +36,6 @@ shared_ptr<IfcAngularVelocityMeasure> IfcAngularVelocityMeasure::createObjectFro
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAngularVelocityMeasure>(); }
 	auto type_object = std::make_shared<IfcAngularVelocityMeasure>();
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	type_object->readArgument( arg );
 	return type_object;
 }
