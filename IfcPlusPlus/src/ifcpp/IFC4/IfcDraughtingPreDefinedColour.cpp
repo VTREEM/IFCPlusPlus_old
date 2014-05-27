@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcLabel.h"
 
 // ENTITY IfcDraughtingPreDefinedColour 
-IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour() { m_entity_enum = IFCDRAUGHTINGPREDEFINEDCOLOUR; }
-IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour( int id ) { m_id = id; m_entity_enum = IFCDRAUGHTINGPREDEFINEDCOLOUR; }
+IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour() {}
+IfcDraughtingPreDefinedColour::IfcDraughtingPreDefinedColour( int id ) { m_id = id; }
 IfcDraughtingPreDefinedColour::~IfcDraughtingPreDefinedColour() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -47,6 +48,13 @@ void IfcDraughtingPreDefinedColour::readStepArguments( const std::vector<std::st
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcDraughtingPreDefinedColour, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+}
+void IfcDraughtingPreDefinedColour::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedColour::getAttributes( vec_attributes );
+}
+void IfcDraughtingPreDefinedColour::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDraughtingPreDefinedColour::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

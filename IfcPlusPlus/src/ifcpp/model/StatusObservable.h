@@ -23,7 +23,7 @@ public:
 	virtual const char* className() { return "StatusObservable"; }
 
 	//! @brief progress callback mechanism to update progress bar or similar
-	void setProgressCallBack( void* obj_ptr, void (*func)(void*, double) );
+	void setProgressCallBack( void* obj_ptr, void (*func)(void*, double, const std::string& progress_type) );
 	void unsetProgressCallBack();
 
 	//! @brief this callback can be connected to set a message in the status bar
@@ -41,8 +41,8 @@ public:
 protected:
 	// progress callback
 	void* m_obj_call_on_progress;
-	void (*m_func_call_on_progress)(void*, double);
-	void progressCallback(double progress);
+	void (*m_func_call_on_progress)(void*, double, const std::string& progress_type);
+	void progressCallback(double progress, const std::string& progress_type);
 
 	void* m_obj_call_on_progress_text;
 	void (*m_func_call_on_progress_text)(void*, const std::string& message);

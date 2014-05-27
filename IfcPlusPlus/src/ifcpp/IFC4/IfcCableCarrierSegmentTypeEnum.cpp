@@ -56,7 +56,7 @@ shared_ptr<IfcCableCarrierSegmentTypeEnum> IfcCableCarrierSegmentTypeEnum::creat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCableCarrierSegmentTypeEnum>(); }
-	shared_ptr<IfcCableCarrierSegmentTypeEnum> type_object( new IfcCableCarrierSegmentTypeEnum() );
+	auto type_object = std::make_shared<IfcCableCarrierSegmentTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CABLELADDERSEGMENT." ) == 0 )
 	{
 		type_object->m_enum = IfcCableCarrierSegmentTypeEnum::ENUM_CABLELADDERSEGMENT;

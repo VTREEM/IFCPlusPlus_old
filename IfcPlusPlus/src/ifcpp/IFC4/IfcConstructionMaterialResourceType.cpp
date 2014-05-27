@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -36,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcConstructionMaterialResourceType 
-IfcConstructionMaterialResourceType::IfcConstructionMaterialResourceType() { m_entity_enum = IFCCONSTRUCTIONMATERIALRESOURCETYPE; }
-IfcConstructionMaterialResourceType::IfcConstructionMaterialResourceType( int id ) { m_id = id; m_entity_enum = IFCCONSTRUCTIONMATERIALRESOURCETYPE; }
+IfcConstructionMaterialResourceType::IfcConstructionMaterialResourceType() {}
+IfcConstructionMaterialResourceType::IfcConstructionMaterialResourceType( int id ) { m_id = id; }
 IfcConstructionMaterialResourceType::~IfcConstructionMaterialResourceType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcConstructionMaterialResourceType::readStepArguments( const std::vector<s
 	readEntityReferenceList( args[9], m_BaseCosts, map );
 	readEntityReference( args[10], m_BaseQuantity, map );
 	m_PredefinedType = IfcConstructionMaterialResourceTypeEnum::createObjectFromStepData( args[11] );
+}
+void IfcConstructionMaterialResourceType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConstructionResourceType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcConstructionMaterialResourceType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConstructionMaterialResourceType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -28,7 +28,6 @@ IfcSpecularExponent::~IfcSpecularExponent() {}
 void IfcSpecularExponent::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCSPECULAREXPONENT("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcSpecularExponent> IfcSpecularExponent::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSpecularExponent>(); }
-	shared_ptr<IfcSpecularExponent> type_object( new IfcSpecularExponent() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcSpecularExponent>();
+	type_object->readArgument( arg );
 	return type_object;
 }

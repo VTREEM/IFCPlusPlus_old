@@ -112,7 +112,7 @@ shared_ptr<IfcDoorTypeOperationEnum> IfcDoorTypeOperationEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDoorTypeOperationEnum>(); }
-	shared_ptr<IfcDoorTypeOperationEnum> type_object( new IfcDoorTypeOperationEnum() );
+	auto type_object = std::make_shared<IfcDoorTypeOperationEnum>();
 	if( _stricmp( arg.c_str(), ".SINGLE_SWING_LEFT." ) == 0 )
 	{
 		type_object->m_enum = IfcDoorTypeOperationEnum::ENUM_SINGLE_SWING_LEFT;

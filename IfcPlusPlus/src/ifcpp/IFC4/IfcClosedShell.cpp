@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcClosedShell 
-IfcClosedShell::IfcClosedShell() { m_entity_enum = IFCCLOSEDSHELL; }
-IfcClosedShell::IfcClosedShell( int id ) { m_id = id; m_entity_enum = IFCCLOSEDSHELL; }
+IfcClosedShell::IfcClosedShell() {}
+IfcClosedShell::IfcClosedShell( int id ) { m_id = id; }
 IfcClosedShell::~IfcClosedShell() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,13 @@ void IfcClosedShell::readStepArguments( const std::vector<std::string>& args, co
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcClosedShell, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_CfsFaces, map );
+}
+void IfcClosedShell::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConnectedFaceSet::getAttributes( vec_attributes );
+}
+void IfcClosedShell::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcClosedShell::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

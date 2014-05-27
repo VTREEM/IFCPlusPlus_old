@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcGlobalOrLocalEnum = ENUMERATION OF	(GLOBAL_COORDS	,LOCAL_COORDS);
-class IfcGlobalOrLocalEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcGlobalOrLocalEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcGlobalOrLocalEnumEnum

@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcRotationalFrequencyMeasure = REAL;
-class IfcRotationalFrequencyMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcRotationalFrequencyMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcRotationalFrequencyMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcRotationalFrequencyMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcRotationalFrequencyMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

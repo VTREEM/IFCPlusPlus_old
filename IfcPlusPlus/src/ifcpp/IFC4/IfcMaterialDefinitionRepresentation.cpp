@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMaterialDefinitionRepresentation 
-IfcMaterialDefinitionRepresentation::IfcMaterialDefinitionRepresentation() { m_entity_enum = IFCMATERIALDEFINITIONREPRESENTATION; }
-IfcMaterialDefinitionRepresentation::IfcMaterialDefinitionRepresentation( int id ) { m_id = id; m_entity_enum = IFCMATERIALDEFINITIONREPRESENTATION; }
+IfcMaterialDefinitionRepresentation::IfcMaterialDefinitionRepresentation() {}
+IfcMaterialDefinitionRepresentation::IfcMaterialDefinitionRepresentation( int id ) { m_id = id; }
 IfcMaterialDefinitionRepresentation::~IfcMaterialDefinitionRepresentation() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -62,6 +63,14 @@ void IfcMaterialDefinitionRepresentation::readStepArguments( const std::vector<s
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReferenceList( args[2], m_Representations, map );
 	readEntityReference( args[3], m_RepresentedMaterial, map );
+}
+void IfcMaterialDefinitionRepresentation::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProductRepresentation::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RepresentedMaterial", m_RepresentedMaterial ) );
+}
+void IfcMaterialDefinitionRepresentation::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialDefinitionRepresentation::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

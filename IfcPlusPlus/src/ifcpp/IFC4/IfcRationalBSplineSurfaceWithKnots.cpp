@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcRationalBSplineSurfaceWithKnots 
-IfcRationalBSplineSurfaceWithKnots::IfcRationalBSplineSurfaceWithKnots() { m_entity_enum = IFCRATIONALBSPLINESURFACEWITHKNOTS; }
-IfcRationalBSplineSurfaceWithKnots::IfcRationalBSplineSurfaceWithKnots( int id ) { m_id = id; m_entity_enum = IFCRATIONALBSPLINESURFACEWITHKNOTS; }
+IfcRationalBSplineSurfaceWithKnots::IfcRationalBSplineSurfaceWithKnots() {}
+IfcRationalBSplineSurfaceWithKnots::IfcRationalBSplineSurfaceWithKnots( int id ) { m_id = id; }
 IfcRationalBSplineSurfaceWithKnots::~IfcRationalBSplineSurfaceWithKnots() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -62,14 +63,17 @@ void IfcRationalBSplineSurfaceWithKnots::getStepLine( std::stringstream& stream 
 	stream << ",";
 	if( m_SurfaceForm ) { m_SurfaceForm->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_UClosed == false ) { stream << ".F."; }
-	else if( m_UClosed == true ) { stream << ".T."; }
+	if( m_UClosed == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_UClosed == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_UClosed == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
-	if( m_VClosed == false ) { stream << ".F."; }
-	else if( m_VClosed == true ) { stream << ".T."; }
+	if( m_VClosed == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_VClosed == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_VClosed == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
-	if( m_SelfIntersect == false ) { stream << ".F."; }
-	else if( m_SelfIntersect == true ) { stream << ".T."; }
+	if( m_SelfIntersect == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_SelfIntersect == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_SelfIntersect == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
 	writeIntList( stream, m_UMultiplicities );
 	stream << ",";
@@ -96,18 +100,28 @@ void IfcRationalBSplineSurfaceWithKnots::readStepArguments( const std::vector<st
 	readIntValue( args[1], m_VDegree );
 	readEntityReferenceList2D( args[2], m_ControlPointsList, map );
 	m_SurfaceForm = IfcBSplineSurfaceForm::createObjectFromStepData( args[3] );
-	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_UClosed = false; }
-	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_UClosed = true; }
-	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_VClosed = false; }
-	else if( _stricmp( args[5].c_str(), ".T." ) == 0 ) { m_VClosed = true; }
-	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
-	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_UClosed = LOGICAL_FALSE; }
+	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_UClosed = LOGICAL_TRUE; }
+	else if( _stricmp( args[4].c_str(), ".U." ) == 0 ) { m_UClosed = LOGICAL_UNKNOWN; }
+	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_VClosed = LOGICAL_FALSE; }
+	else if( _stricmp( args[5].c_str(), ".T." ) == 0 ) { m_VClosed = LOGICAL_TRUE; }
+	else if( _stricmp( args[5].c_str(), ".U." ) == 0 ) { m_VClosed = LOGICAL_UNKNOWN; }
+	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_SelfIntersect = LOGICAL_FALSE; }
+	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_SelfIntersect = LOGICAL_TRUE; }
+	else if( _stricmp( args[6].c_str(), ".U." ) == 0 ) { m_SelfIntersect = LOGICAL_UNKNOWN; }
 	readIntList(  args[7], m_UMultiplicities );
 	readIntList(  args[8], m_VMultiplicities );
 	readTypeOfRealList( args[9], m_UKnots );
 	readTypeOfRealList( args[10], m_VKnots );
 	m_KnotSpec = IfcKnotType::createObjectFromStepData( args[11] );
 	readDoubleList2D( args[12], m_WeightsData );
+}
+void IfcRationalBSplineSurfaceWithKnots::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBSplineSurfaceWithKnots::getAttributes( vec_attributes );
+}
+void IfcRationalBSplineSurfaceWithKnots::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRationalBSplineSurfaceWithKnots::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

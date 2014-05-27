@@ -29,7 +29,6 @@ IfcParameterValue::~IfcParameterValue() {}
 void IfcParameterValue::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCPARAMETERVALUE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,8 +36,7 @@ shared_ptr<IfcParameterValue> IfcParameterValue::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcParameterValue>(); }
-	shared_ptr<IfcParameterValue> type_object( new IfcParameterValue() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcParameterValue>();
+	type_object->readArgument( arg );
 	return type_object;
 }

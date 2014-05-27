@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRailing 
-IfcRailing::IfcRailing() { m_entity_enum = IFCRAILING; }
-IfcRailing::IfcRailing( int id ) { m_id = id; m_entity_enum = IFCRAILING; }
+IfcRailing::IfcRailing() {}
+IfcRailing::IfcRailing( int id ) { m_id = id; }
 IfcRailing::~IfcRailing() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -105,6 +106,14 @@ void IfcRailing::readStepArguments( const std::vector<std::string>& args, const 
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcRailingTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcRailing::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcRailing::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRailing::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTaskDurationEnum = ENUMERATION OF	(ELAPSEDTIME	,WORKTIME	,NOTDEFINED);
-class IfcTaskDurationEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTaskDurationEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTaskDurationEnumEnum

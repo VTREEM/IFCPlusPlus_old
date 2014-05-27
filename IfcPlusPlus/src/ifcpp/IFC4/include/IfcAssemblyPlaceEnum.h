@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAssemblyPlaceEnum = ENUMERATION OF	(SITE	,FACTORY	,NOTDEFINED);
-class IfcAssemblyPlaceEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAssemblyPlaceEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAssemblyPlaceEnumEnum

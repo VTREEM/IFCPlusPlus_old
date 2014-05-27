@@ -28,7 +28,6 @@ IfcSpecularRoughness::~IfcSpecularRoughness() {}
 void IfcSpecularRoughness::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCSPECULARROUGHNESS("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcSpecularRoughness> IfcSpecularRoughness::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSpecularRoughness>(); }
-	shared_ptr<IfcSpecularRoughness> type_object( new IfcSpecularRoughness() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcSpecularRoughness>();
+	type_object->readArgument( arg );
 	return type_object;
 }

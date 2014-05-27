@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBenchmarkEnum = ENUMERATION OF	(GREATERTHAN	,GREATERTHANOREQUALTO	,LESSTHAN	,LESSTHANOREQUALTO	,EQUALTO	,NOTEQUALTO	,INCLUDES	,NOTINCLUDES	,INCLUDEDIN	,NOTINCLUDEDIN);
-class IfcBenchmarkEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcBenchmarkEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcBenchmarkEnumEnum

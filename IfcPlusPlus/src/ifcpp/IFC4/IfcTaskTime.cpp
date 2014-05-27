@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcTaskTime.h"
 
 // ENTITY IfcTaskTime 
-IfcTaskTime::IfcTaskTime() { m_entity_enum = IFCTASKTIME; }
-IfcTaskTime::IfcTaskTime( int id ) { m_id = id; m_entity_enum = IFCTASKTIME; }
+IfcTaskTime::IfcTaskTime() {}
+IfcTaskTime::IfcTaskTime( int id ) { m_id = id; }
 IfcTaskTime::~IfcTaskTime() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -130,6 +131,30 @@ void IfcTaskTime::readStepArguments( const std::vector<std::string>& args, const
 	m_ActualFinish = IfcDateTime::createObjectFromStepData( args[17] );
 	m_RemainingTime = IfcDuration::createObjectFromStepData( args[18] );
 	m_Completion = IfcPositiveRatioMeasure::createObjectFromStepData( args[19] );
+}
+void IfcTaskTime::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSchedulingTime::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "DurationType", m_DurationType ) );
+	vec_attributes.push_back( std::make_pair( "ScheduleDuration", m_ScheduleDuration ) );
+	vec_attributes.push_back( std::make_pair( "ScheduleStart", m_ScheduleStart ) );
+	vec_attributes.push_back( std::make_pair( "ScheduleFinish", m_ScheduleFinish ) );
+	vec_attributes.push_back( std::make_pair( "EarlyStart", m_EarlyStart ) );
+	vec_attributes.push_back( std::make_pair( "EarlyFinish", m_EarlyFinish ) );
+	vec_attributes.push_back( std::make_pair( "LateStart", m_LateStart ) );
+	vec_attributes.push_back( std::make_pair( "LateFinish", m_LateFinish ) );
+	vec_attributes.push_back( std::make_pair( "FreeFloat", m_FreeFloat ) );
+	vec_attributes.push_back( std::make_pair( "TotalFloat", m_TotalFloat ) );
+	vec_attributes.push_back( std::make_pair( "IsCritical", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_IsCritical ) ) ) );
+	vec_attributes.push_back( std::make_pair( "StatusTime", m_StatusTime ) );
+	vec_attributes.push_back( std::make_pair( "ActualDuration", m_ActualDuration ) );
+	vec_attributes.push_back( std::make_pair( "ActualStart", m_ActualStart ) );
+	vec_attributes.push_back( std::make_pair( "ActualFinish", m_ActualFinish ) );
+	vec_attributes.push_back( std::make_pair( "RemainingTime", m_RemainingTime ) );
+	vec_attributes.push_back( std::make_pair( "Completion", m_Completion ) );
+}
+void IfcTaskTime::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTaskTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

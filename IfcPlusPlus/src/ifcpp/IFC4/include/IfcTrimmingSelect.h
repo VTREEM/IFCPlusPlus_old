@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTrimmingSelect = SELECT	(IfcCartesianPoint	,IfcParameterValue);
-class IfcTrimmingSelect : public IfcPPAbstractSelect
+class IfcTrimmingSelect : virtual public IfcPPObject
 {
 public:
 	IfcTrimmingSelect();
 	~IfcTrimmingSelect();
 	virtual const char* classname() const { return "IfcTrimmingSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcTrimmingSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

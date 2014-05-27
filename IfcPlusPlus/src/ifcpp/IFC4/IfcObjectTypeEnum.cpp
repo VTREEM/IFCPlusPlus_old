@@ -64,7 +64,7 @@ shared_ptr<IfcObjectTypeEnum> IfcObjectTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcObjectTypeEnum>(); }
-	shared_ptr<IfcObjectTypeEnum> type_object( new IfcObjectTypeEnum() );
+	auto type_object = std::make_shared<IfcObjectTypeEnum>();
 	if( _stricmp( arg.c_str(), ".PRODUCT." ) == 0 )
 	{
 		type_object->m_enum = IfcObjectTypeEnum::ENUM_PRODUCT;

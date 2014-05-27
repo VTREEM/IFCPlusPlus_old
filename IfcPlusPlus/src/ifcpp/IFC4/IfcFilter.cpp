@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFilter 
-IfcFilter::IfcFilter() { m_entity_enum = IFCFILTER; }
-IfcFilter::IfcFilter( int id ) { m_id = id; m_entity_enum = IFCFILTER; }
+IfcFilter::IfcFilter() {}
+IfcFilter::IfcFilter( int id ) { m_id = id; }
 IfcFilter::~IfcFilter() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcFilter::readStepArguments( const std::vector<std::string>& args, const s
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcFilterTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcFilter::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowTreatmentDevice::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcFilter::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFilter::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

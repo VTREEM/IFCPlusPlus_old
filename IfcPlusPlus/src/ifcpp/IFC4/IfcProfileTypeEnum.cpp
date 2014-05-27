@@ -40,7 +40,7 @@ shared_ptr<IfcProfileTypeEnum> IfcProfileTypeEnum::createObjectFromStepData( con
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcProfileTypeEnum>(); }
-	shared_ptr<IfcProfileTypeEnum> type_object( new IfcProfileTypeEnum() );
+	auto type_object = std::make_shared<IfcProfileTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CURVE." ) == 0 )
 	{
 		type_object->m_enum = IfcProfileTypeEnum::ENUM_CURVE;

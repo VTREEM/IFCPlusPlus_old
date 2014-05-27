@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -36,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFurnitureType 
-IfcFurnitureType::IfcFurnitureType() { m_entity_enum = IFCFURNITURETYPE; }
-IfcFurnitureType::IfcFurnitureType( int id ) { m_id = id; m_entity_enum = IFCFURNITURETYPE; }
+IfcFurnitureType::IfcFurnitureType() {}
+IfcFurnitureType::IfcFurnitureType( int id ) { m_id = id; }
 IfcFurnitureType::~IfcFurnitureType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -102,6 +103,15 @@ void IfcFurnitureType::readStepArguments( const std::vector<std::string>& args, 
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_AssemblyPlace = IfcAssemblyPlaceEnum::createObjectFromStepData( args[9] );
 	m_PredefinedType = IfcFurnitureTypeEnum::createObjectFromStepData( args[10] );
+}
+void IfcFurnitureType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFurnishingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "AssemblyPlace", m_AssemblyPlace ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcFurnitureType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFurnitureType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

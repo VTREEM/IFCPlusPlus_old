@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTransformerTypeEnum = ENUMERATION OF	(CURRENT	,FREQUENCY	,INVERTER	,RECTIFIER	,VOLTAGE	,USERDEFINED	,NOTDEFINED);
-class IfcTransformerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTransformerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTransformerTypeEnumEnum

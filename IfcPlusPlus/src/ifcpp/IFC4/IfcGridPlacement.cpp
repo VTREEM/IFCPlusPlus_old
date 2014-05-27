@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcVirtualGridIntersection.h"
 
 // ENTITY IfcGridPlacement 
-IfcGridPlacement::IfcGridPlacement() { m_entity_enum = IFCGRIDPLACEMENT; }
-IfcGridPlacement::IfcGridPlacement( int id ) { m_id = id; m_entity_enum = IFCGRIDPLACEMENT; }
+IfcGridPlacement::IfcGridPlacement() {}
+IfcGridPlacement::IfcGridPlacement( int id ) { m_id = id; }
 IfcGridPlacement::~IfcGridPlacement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -54,6 +55,15 @@ void IfcGridPlacement::readStepArguments( const std::vector<std::string>& args, 
 	#endif
 	readEntityReference( args[0], m_PlacementLocation, map );
 	m_PlacementRefDirection = IfcGridPlacementDirectionSelect::createObjectFromStepData( args[1], map );
+}
+void IfcGridPlacement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcObjectPlacement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PlacementLocation", m_PlacementLocation ) );
+	vec_attributes.push_back( std::make_pair( "PlacementRefDirection", m_PlacementRefDirection ) );
+}
+void IfcGridPlacement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcGridPlacement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

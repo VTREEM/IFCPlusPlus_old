@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPlacement 
-IfcPlacement::IfcPlacement() { m_entity_enum = IFCPLACEMENT; }
-IfcPlacement::IfcPlacement( int id ) { m_id = id; m_entity_enum = IFCPLACEMENT; }
+IfcPlacement::IfcPlacement() {}
+IfcPlacement::IfcPlacement( int id ) { m_id = id; }
 IfcPlacement::~IfcPlacement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,14 @@ void IfcPlacement::readStepArguments( const std::vector<std::string>& args, cons
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcPlacement, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Location, map );
+}
+void IfcPlacement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Location", m_Location ) );
+}
+void IfcPlacement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPlacement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

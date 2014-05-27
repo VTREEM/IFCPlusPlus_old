@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSequenceEnum = ENUMERATION OF	(START_START	,START_FINISH	,FINISH_START	,FINISH_FINISH	,USERDEFINED	,NOTDEFINED);
-class IfcSequenceEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSequenceEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSequenceEnumEnum

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProfileTypeEnum = ENUMERATION OF	(CURVE	,AREA);
-class IfcProfileTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcProfileTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcProfileTypeEnumEnum

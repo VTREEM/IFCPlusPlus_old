@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcFillAreaStyleHatching 
-IfcFillAreaStyleHatching::IfcFillAreaStyleHatching() { m_entity_enum = IFCFILLAREASTYLEHATCHING; }
-IfcFillAreaStyleHatching::IfcFillAreaStyleHatching( int id ) { m_id = id; m_entity_enum = IFCFILLAREASTYLEHATCHING; }
+IfcFillAreaStyleHatching::IfcFillAreaStyleHatching() {}
+IfcFillAreaStyleHatching::IfcFillAreaStyleHatching( int id ) { m_id = id; }
 IfcFillAreaStyleHatching::~IfcFillAreaStyleHatching() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -68,6 +69,18 @@ void IfcFillAreaStyleHatching::readStepArguments( const std::vector<std::string>
 	readEntityReference( args[2], m_PointOfReferenceHatchLine, map );
 	readEntityReference( args[3], m_PatternStart, map );
 	m_HatchLineAngle = IfcPlaneAngleMeasure::createObjectFromStepData( args[4] );
+}
+void IfcFillAreaStyleHatching::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "HatchLineAppearance", m_HatchLineAppearance ) );
+	vec_attributes.push_back( std::make_pair( "StartOfNextHatchLine", m_StartOfNextHatchLine ) );
+	vec_attributes.push_back( std::make_pair( "PointOfReferenceHatchLine", m_PointOfReferenceHatchLine ) );
+	vec_attributes.push_back( std::make_pair( "PatternStart", m_PatternStart ) );
+	vec_attributes.push_back( std::make_pair( "HatchLineAngle", m_HatchLineAngle ) );
+}
+void IfcFillAreaStyleHatching::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFillAreaStyleHatching::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

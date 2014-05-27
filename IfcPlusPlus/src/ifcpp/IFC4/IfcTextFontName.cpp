@@ -27,7 +27,6 @@ IfcTextFontName::~IfcTextFontName() {}
 void IfcTextFontName::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCTEXTFONTNAME("; }
-	//supertype as attribute: std::string m_value
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
@@ -35,8 +34,7 @@ shared_ptr<IfcTextFontName> IfcTextFontName::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextFontName>(); }
-	shared_ptr<IfcTextFontName> type_object( new IfcTextFontName() );
-	//supertype as attribute: std::string m_value
-	type_object->m_value = arg;
+	auto type_object = std::make_shared<IfcTextFontName>();
+	type_object->readArgument( arg );
 	return type_object;
 }

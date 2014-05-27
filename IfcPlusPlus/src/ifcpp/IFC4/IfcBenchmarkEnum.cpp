@@ -72,7 +72,7 @@ shared_ptr<IfcBenchmarkEnum> IfcBenchmarkEnum::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBenchmarkEnum>(); }
-	shared_ptr<IfcBenchmarkEnum> type_object( new IfcBenchmarkEnum() );
+	auto type_object = std::make_shared<IfcBenchmarkEnum>();
 	if( _stricmp( arg.c_str(), ".GREATERTHAN." ) == 0 )
 	{
 		type_object->m_enum = IfcBenchmarkEnum::ENUM_GREATERTHAN;

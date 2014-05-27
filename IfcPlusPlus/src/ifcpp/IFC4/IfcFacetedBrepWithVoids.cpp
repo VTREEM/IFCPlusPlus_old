@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcFacetedBrepWithVoids 
-IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids() { m_entity_enum = IFCFACETEDBREPWITHVOIDS; }
-IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids( int id ) { m_id = id; m_entity_enum = IFCFACETEDBREPWITHVOIDS; }
+IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids() {}
+IfcFacetedBrepWithVoids::IfcFacetedBrepWithVoids( int id ) { m_id = id; }
 IfcFacetedBrepWithVoids::~IfcFacetedBrepWithVoids() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -53,6 +54,13 @@ void IfcFacetedBrepWithVoids::readStepArguments( const std::vector<std::string>&
 	#endif
 	readEntityReference( args[0], m_Outer, map );
 	readEntityReferenceList( args[1], m_Voids, map );
+}
+void IfcFacetedBrepWithVoids::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFacetedBrep::getAttributes( vec_attributes );
+}
+void IfcFacetedBrepWithVoids::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFacetedBrepWithVoids::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

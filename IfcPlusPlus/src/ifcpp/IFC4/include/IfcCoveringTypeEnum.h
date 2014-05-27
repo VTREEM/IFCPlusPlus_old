@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCoveringTypeEnum = ENUMERATION OF	(CEILING	,FLOORING	,CLADDING	,ROOFING	,MOLDING	,SKIRTINGBOARD	,INSULATION	,MEMBRANE	,SLEEVING	,WRAPPING	,USERDEFINED	,NOTDEFINED);
-class IfcCoveringTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCoveringTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCoveringTypeEnumEnum

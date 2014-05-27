@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcWarpingStiffnessSelect.h"
 
 // ENTITY IfcBoundaryNodeConditionWarping 
-IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping() { m_entity_enum = IFCBOUNDARYNODECONDITIONWARPING; }
-IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYNODECONDITIONWARPING; }
+IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping() {}
+IfcBoundaryNodeConditionWarping::IfcBoundaryNodeConditionWarping( int id ) { m_id = id; }
 IfcBoundaryNodeConditionWarping::~IfcBoundaryNodeConditionWarping() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -78,6 +79,14 @@ void IfcBoundaryNodeConditionWarping::readStepArguments( const std::vector<std::
 	m_RotationalStiffnessY = IfcRotationalStiffnessSelect::createObjectFromStepData( args[5], map );
 	m_RotationalStiffnessZ = IfcRotationalStiffnessSelect::createObjectFromStepData( args[6], map );
 	m_WarpingStiffness = IfcWarpingStiffnessSelect::createObjectFromStepData( args[7], map );
+}
+void IfcBoundaryNodeConditionWarping::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundaryNodeCondition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "WarpingStiffness", m_WarpingStiffness ) );
+}
+void IfcBoundaryNodeConditionWarping::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBoundaryNodeConditionWarping::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

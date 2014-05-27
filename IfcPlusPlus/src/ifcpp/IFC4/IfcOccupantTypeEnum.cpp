@@ -68,7 +68,7 @@ shared_ptr<IfcOccupantTypeEnum> IfcOccupantTypeEnum::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcOccupantTypeEnum>(); }
-	shared_ptr<IfcOccupantTypeEnum> type_object( new IfcOccupantTypeEnum() );
+	auto type_object = std::make_shared<IfcOccupantTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ASSIGNEE." ) == 0 )
 	{
 		type_object->m_enum = IfcOccupantTypeEnum::ENUM_ASSIGNEE;

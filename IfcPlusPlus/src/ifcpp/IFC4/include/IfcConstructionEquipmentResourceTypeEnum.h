@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcConstructionEquipmentResourceTypeEnum = ENUMERATION OF	(DEMOLISHING	,EARTHMOVING	,ERECTING	,HEATING	,LIGHTING	,PAVING	,PUMPING	,TRANSPORTING	,USERDEFINED	,NOTDEFINED);
-class IfcConstructionEquipmentResourceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcConstructionEquipmentResourceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcConstructionEquipmentResourceTypeEnumEnum

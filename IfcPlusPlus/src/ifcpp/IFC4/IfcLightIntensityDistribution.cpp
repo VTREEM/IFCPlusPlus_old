@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcLightIntensityDistribution.h"
 
 // ENTITY IfcLightIntensityDistribution 
-IfcLightIntensityDistribution::IfcLightIntensityDistribution() { m_entity_enum = IFCLIGHTINTENSITYDISTRIBUTION; }
-IfcLightIntensityDistribution::IfcLightIntensityDistribution( int id ) { m_id = id; m_entity_enum = IFCLIGHTINTENSITYDISTRIBUTION; }
+IfcLightIntensityDistribution::IfcLightIntensityDistribution() {}
+IfcLightIntensityDistribution::IfcLightIntensityDistribution( int id ) { m_id = id; }
 IfcLightIntensityDistribution::~IfcLightIntensityDistribution() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -52,6 +53,13 @@ void IfcLightIntensityDistribution::readStepArguments( const std::vector<std::st
 	#endif
 	m_LightDistributionCurve = IfcLightDistributionCurveEnum::createObjectFromStepData( args[0] );
 	readEntityReferenceList( args[1], m_DistributionData, map );
+}
+void IfcLightIntensityDistribution::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "LightDistributionCurve", m_LightDistributionCurve ) );
+}
+void IfcLightIntensityDistribution::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLightIntensityDistribution::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

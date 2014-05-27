@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcRoundedRectangleProfileDef.h"
 
 // ENTITY IfcRoundedRectangleProfileDef 
-IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef() { m_entity_enum = IFCROUNDEDRECTANGLEPROFILEDEF; }
-IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef( int id ) { m_id = id; m_entity_enum = IFCROUNDEDRECTANGLEPROFILEDEF; }
+IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef() {}
+IfcRoundedRectangleProfileDef::IfcRoundedRectangleProfileDef( int id ) { m_id = id; }
 IfcRoundedRectangleProfileDef::~IfcRoundedRectangleProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -72,6 +73,14 @@ void IfcRoundedRectangleProfileDef::readStepArguments( const std::vector<std::st
 	m_XDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
 	m_YDim = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
 	m_RoundingRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[5] );
+}
+void IfcRoundedRectangleProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRectangleProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RoundingRadius", m_RoundingRadius ) );
+}
+void IfcRoundedRectangleProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRoundedRectangleProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

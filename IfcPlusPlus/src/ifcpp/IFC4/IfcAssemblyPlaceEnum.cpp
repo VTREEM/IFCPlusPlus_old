@@ -44,7 +44,7 @@ shared_ptr<IfcAssemblyPlaceEnum> IfcAssemblyPlaceEnum::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAssemblyPlaceEnum>(); }
-	shared_ptr<IfcAssemblyPlaceEnum> type_object( new IfcAssemblyPlaceEnum() );
+	auto type_object = std::make_shared<IfcAssemblyPlaceEnum>();
 	if( _stricmp( arg.c_str(), ".SITE." ) == 0 )
 	{
 		type_object->m_enum = IfcAssemblyPlaceEnum::ENUM_SITE;

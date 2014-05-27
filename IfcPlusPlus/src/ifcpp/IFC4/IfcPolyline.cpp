@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPolyline 
-IfcPolyline::IfcPolyline() { m_entity_enum = IFCPOLYLINE; }
-IfcPolyline::IfcPolyline( int id ) { m_id = id; m_entity_enum = IFCPOLYLINE; }
+IfcPolyline::IfcPolyline() {}
+IfcPolyline::IfcPolyline( int id ) { m_id = id; }
 IfcPolyline::~IfcPolyline() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,13 @@ void IfcPolyline::readStepArguments( const std::vector<std::string>& args, const
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcPolyline, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_Points, map );
+}
+void IfcPolyline::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundedCurve::getAttributes( vec_attributes );
+}
+void IfcPolyline::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPolyline::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

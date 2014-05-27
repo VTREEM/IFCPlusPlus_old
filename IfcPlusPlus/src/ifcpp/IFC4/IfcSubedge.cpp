@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcVertex.h"
 
 // ENTITY IfcSubedge 
-IfcSubedge::IfcSubedge() { m_entity_enum = IFCSUBEDGE; }
-IfcSubedge::IfcSubedge( int id ) { m_id = id; m_entity_enum = IFCSUBEDGE; }
+IfcSubedge::IfcSubedge() {}
+IfcSubedge::IfcSubedge( int id ) { m_id = id; }
 IfcSubedge::~IfcSubedge() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,14 @@ void IfcSubedge::readStepArguments( const std::vector<std::string>& args, const 
 	readEntityReference( args[0], m_EdgeStart, map );
 	readEntityReference( args[1], m_EdgeEnd, map );
 	readEntityReference( args[2], m_ParentEdge, map );
+}
+void IfcSubedge::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEdge::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ParentEdge", m_ParentEdge ) );
+}
+void IfcSubedge::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSubedge::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

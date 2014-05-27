@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcIntegerCountRateMeasure = INTEGER;
-class IfcIntegerCountRateMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcIntegerCountRateMeasure : public IfcDerivedMeasureValue, public IfcPPInt
 {
 public:
 	IfcIntegerCountRateMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcIntegerCountRateMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcIntegerCountRateMeasure> createObjectFromStepData( const std::string& arg );
-	int m_value;
 };
 

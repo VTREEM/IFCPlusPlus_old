@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPipeFitting 
-IfcPipeFitting::IfcPipeFitting() { m_entity_enum = IFCPIPEFITTING; }
-IfcPipeFitting::IfcPipeFitting( int id ) { m_id = id; m_entity_enum = IFCPIPEFITTING; }
+IfcPipeFitting::IfcPipeFitting() {}
+IfcPipeFitting::IfcPipeFitting( int id ) { m_id = id; }
 IfcPipeFitting::~IfcPipeFitting() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcPipeFitting::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcPipeFittingTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcPipeFitting::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowFitting::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcPipeFitting::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPipeFitting::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

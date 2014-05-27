@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcGloballyUniqueId = STRING(22) FIXED;
-class IfcGloballyUniqueId : public IfcPPType
+class IfcGloballyUniqueId : public IfcPPString
 {
 public:
 	IfcGloballyUniqueId();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcGloballyUniqueId"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcGloballyUniqueId> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

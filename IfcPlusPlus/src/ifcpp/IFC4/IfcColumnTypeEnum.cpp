@@ -48,7 +48,7 @@ shared_ptr<IfcColumnTypeEnum> IfcColumnTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcColumnTypeEnum>(); }
-	shared_ptr<IfcColumnTypeEnum> type_object( new IfcColumnTypeEnum() );
+	auto type_object = std::make_shared<IfcColumnTypeEnum>();
 	if( _stricmp( arg.c_str(), ".COLUMN." ) == 0 )
 	{
 		type_object->m_enum = IfcColumnTypeEnum::ENUM_COLUMN;

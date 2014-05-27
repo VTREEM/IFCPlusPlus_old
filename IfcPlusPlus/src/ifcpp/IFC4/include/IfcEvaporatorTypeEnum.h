@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcEvaporatorTypeEnum = ENUMERATION OF	(DIRECTEXPANSION	,DIRECTEXPANSIONSHELLANDTUBE	,DIRECTEXPANSIONTUBEINTUBE	,DIRECTEXPANSIONBRAZEDPLATE	,FLOODEDSHELLANDTUBE	,SHELLANDCOIL	,USERDEFINED	,NOTDEFINED);
-class IfcEvaporatorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcEvaporatorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcEvaporatorTypeEnumEnum

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcResourceTime.h"
 
 // ENTITY IfcResourceTime 
-IfcResourceTime::IfcResourceTime() { m_entity_enum = IFCRESOURCETIME; }
-IfcResourceTime::IfcResourceTime( int id ) { m_id = id; m_entity_enum = IFCRESOURCETIME; }
+IfcResourceTime::IfcResourceTime() {}
+IfcResourceTime::IfcResourceTime( int id ) { m_id = id; }
 IfcResourceTime::~IfcResourceTime() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -121,6 +122,28 @@ void IfcResourceTime::readStepArguments( const std::vector<std::string>& args, c
 	m_RemainingWork = IfcDuration::createObjectFromStepData( args[15] );
 	m_RemainingUsage = IfcPositiveRatioMeasure::createObjectFromStepData( args[16] );
 	m_Completion = IfcPositiveRatioMeasure::createObjectFromStepData( args[17] );
+}
+void IfcResourceTime::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSchedulingTime::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ScheduleWork", m_ScheduleWork ) );
+	vec_attributes.push_back( std::make_pair( "ScheduleUsage", m_ScheduleUsage ) );
+	vec_attributes.push_back( std::make_pair( "ScheduleStart", m_ScheduleStart ) );
+	vec_attributes.push_back( std::make_pair( "ScheduleFinish", m_ScheduleFinish ) );
+	vec_attributes.push_back( std::make_pair( "ScheduleContour", m_ScheduleContour ) );
+	vec_attributes.push_back( std::make_pair( "LevelingDelay", m_LevelingDelay ) );
+	vec_attributes.push_back( std::make_pair( "IsOverAllocated", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_IsOverAllocated ) ) ) );
+	vec_attributes.push_back( std::make_pair( "StatusTime", m_StatusTime ) );
+	vec_attributes.push_back( std::make_pair( "ActualWork", m_ActualWork ) );
+	vec_attributes.push_back( std::make_pair( "ActualUsage", m_ActualUsage ) );
+	vec_attributes.push_back( std::make_pair( "ActualStart", m_ActualStart ) );
+	vec_attributes.push_back( std::make_pair( "ActualFinish", m_ActualFinish ) );
+	vec_attributes.push_back( std::make_pair( "RemainingWork", m_RemainingWork ) );
+	vec_attributes.push_back( std::make_pair( "RemainingUsage", m_RemainingUsage ) );
+	vec_attributes.push_back( std::make_pair( "Completion", m_Completion ) );
+}
+void IfcResourceTime::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcResourceTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

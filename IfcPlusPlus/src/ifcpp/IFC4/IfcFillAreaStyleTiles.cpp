@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcVector.h"
 
 // ENTITY IfcFillAreaStyleTiles 
-IfcFillAreaStyleTiles::IfcFillAreaStyleTiles() { m_entity_enum = IFCFILLAREASTYLETILES; }
-IfcFillAreaStyleTiles::IfcFillAreaStyleTiles( int id ) { m_id = id; m_entity_enum = IFCFILLAREASTYLETILES; }
+IfcFillAreaStyleTiles::IfcFillAreaStyleTiles() {}
+IfcFillAreaStyleTiles::IfcFillAreaStyleTiles( int id ) { m_id = id; }
 IfcFillAreaStyleTiles::~IfcFillAreaStyleTiles() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,14 @@ void IfcFillAreaStyleTiles::readStepArguments( const std::vector<std::string>& a
 	readEntityReferenceList( args[0], m_TilingPattern, map );
 	readEntityReferenceList( args[1], m_Tiles, map );
 	m_TilingScale = IfcPositiveRatioMeasure::createObjectFromStepData( args[2] );
+}
+void IfcFillAreaStyleTiles::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TilingScale", m_TilingScale ) );
+}
+void IfcFillAreaStyleTiles::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFillAreaStyleTiles::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

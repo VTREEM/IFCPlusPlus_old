@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTendonAnchorTypeEnum = ENUMERATION OF	(COUPLER	,FIXED_END	,TENSIONING_END	,USERDEFINED	,NOTDEFINED);
-class IfcTendonAnchorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTendonAnchorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTendonAnchorTypeEnumEnum

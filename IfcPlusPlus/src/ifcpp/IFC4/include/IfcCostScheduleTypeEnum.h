@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCostScheduleTypeEnum = ENUMERATION OF	(BUDGET	,COSTPLAN	,ESTIMATE	,TENDER	,PRICEDBILLOFQUANTITIES	,UNPRICEDBILLOFQUANTITIES	,SCHEDULEOFRATES	,USERDEFINED	,NOTDEFINED);
-class IfcCostScheduleTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCostScheduleTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCostScheduleTypeEnumEnum

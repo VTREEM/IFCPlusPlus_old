@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcPositiveLengthMeasure.h"
 
 // ENTITY IfcCurveStyleFontPattern 
-IfcCurveStyleFontPattern::IfcCurveStyleFontPattern() { m_entity_enum = IFCCURVESTYLEFONTPATTERN; }
-IfcCurveStyleFontPattern::IfcCurveStyleFontPattern( int id ) { m_id = id; m_entity_enum = IFCCURVESTYLEFONTPATTERN; }
+IfcCurveStyleFontPattern::IfcCurveStyleFontPattern() {}
+IfcCurveStyleFontPattern::IfcCurveStyleFontPattern( int id ) { m_id = id; }
 IfcCurveStyleFontPattern::~IfcCurveStyleFontPattern() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -52,6 +53,15 @@ void IfcCurveStyleFontPattern::readStepArguments( const std::vector<std::string>
 	#endif
 	m_VisibleSegmentLength = IfcLengthMeasure::createObjectFromStepData( args[0] );
 	m_InvisibleSegmentLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
+}
+void IfcCurveStyleFontPattern::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "VisibleSegmentLength", m_VisibleSegmentLength ) );
+	vec_attributes.push_back( std::make_pair( "InvisibleSegmentLength", m_InvisibleSegmentLength ) );
+}
+void IfcCurveStyleFontPattern::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCurveStyleFontPattern::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -52,7 +52,7 @@ shared_ptr<IfcShadingDeviceTypeEnum> IfcShadingDeviceTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcShadingDeviceTypeEnum>(); }
-	shared_ptr<IfcShadingDeviceTypeEnum> type_object( new IfcShadingDeviceTypeEnum() );
+	auto type_object = std::make_shared<IfcShadingDeviceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".JALOUSIE." ) == 0 )
 	{
 		type_object->m_enum = IfcShadingDeviceTypeEnum::ENUM_JALOUSIE;

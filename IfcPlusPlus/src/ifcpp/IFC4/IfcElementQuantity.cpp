@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -30,8 +31,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcElementQuantity 
-IfcElementQuantity::IfcElementQuantity() { m_entity_enum = IFCELEMENTQUANTITY; }
-IfcElementQuantity::IfcElementQuantity( int id ) { m_id = id; m_entity_enum = IFCELEMENTQUANTITY; }
+IfcElementQuantity::IfcElementQuantity() {}
+IfcElementQuantity::IfcElementQuantity( int id ) { m_id = id; }
 IfcElementQuantity::~IfcElementQuantity() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -76,6 +77,14 @@ void IfcElementQuantity::readStepArguments( const std::vector<std::string>& args
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	m_MethodOfMeasurement = IfcLabel::createObjectFromStepData( args[4] );
 	readEntityReferenceList( args[5], m_Quantities, map );
+}
+void IfcElementQuantity::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcQuantitySet::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "MethodOfMeasurement", m_MethodOfMeasurement ) );
+}
+void IfcElementQuantity::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcElementQuantity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

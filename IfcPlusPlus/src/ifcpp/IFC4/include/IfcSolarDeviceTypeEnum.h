@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSolarDeviceTypeEnum = ENUMERATION OF	(SOLARCOLLECTOR	,SOLARPANEL	,USERDEFINED	,NOTDEFINED);
-class IfcSolarDeviceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSolarDeviceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSolarDeviceTypeEnumEnum

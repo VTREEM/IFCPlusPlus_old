@@ -30,7 +30,6 @@ IfcRatioMeasure::~IfcRatioMeasure() {}
 void IfcRatioMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCRATIOMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -38,8 +37,7 @@ shared_ptr<IfcRatioMeasure> IfcRatioMeasure::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRatioMeasure>(); }
-	shared_ptr<IfcRatioMeasure> type_object( new IfcRatioMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcRatioMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -27,8 +28,8 @@
 #include "include/IfcRectangleHollowProfileDef.h"
 
 // ENTITY IfcRectangleHollowProfileDef 
-IfcRectangleHollowProfileDef::IfcRectangleHollowProfileDef() { m_entity_enum = IFCRECTANGLEHOLLOWPROFILEDEF; }
-IfcRectangleHollowProfileDef::IfcRectangleHollowProfileDef( int id ) { m_id = id; m_entity_enum = IFCRECTANGLEHOLLOWPROFILEDEF; }
+IfcRectangleHollowProfileDef::IfcRectangleHollowProfileDef() {}
+IfcRectangleHollowProfileDef::IfcRectangleHollowProfileDef( int id ) { m_id = id; }
 IfcRectangleHollowProfileDef::~IfcRectangleHollowProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -81,6 +82,16 @@ void IfcRectangleHollowProfileDef::readStepArguments( const std::vector<std::str
 	m_WallThickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[5] );
 	m_InnerFilletRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[6] );
 	m_OuterFilletRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[7] );
+}
+void IfcRectangleHollowProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRectangleProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "WallThickness", m_WallThickness ) );
+	vec_attributes.push_back( std::make_pair( "InnerFilletRadius", m_InnerFilletRadius ) );
+	vec_attributes.push_back( std::make_pair( "OuterFilletRadius", m_OuterFilletRadius ) );
+}
+void IfcRectangleHollowProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRectangleHollowProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

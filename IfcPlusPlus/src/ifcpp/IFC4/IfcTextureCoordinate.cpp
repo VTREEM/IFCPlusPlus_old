@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcTextureCoordinate.h"
 
 // ENTITY IfcTextureCoordinate 
-IfcTextureCoordinate::IfcTextureCoordinate() { m_entity_enum = IFCTEXTURECOORDINATE; }
-IfcTextureCoordinate::IfcTextureCoordinate( int id ) { m_id = id; m_entity_enum = IFCTEXTURECOORDINATE; }
+IfcTextureCoordinate::IfcTextureCoordinate() {}
+IfcTextureCoordinate::IfcTextureCoordinate( int id ) { m_id = id; }
 IfcTextureCoordinate::~IfcTextureCoordinate() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -47,6 +48,13 @@ void IfcTextureCoordinate::readStepArguments( const std::vector<std::string>& ar
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcTextureCoordinate, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_Maps, map );
+}
+void IfcTextureCoordinate::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+}
+void IfcTextureCoordinate::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTextureCoordinate::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

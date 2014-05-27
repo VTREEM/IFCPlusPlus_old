@@ -52,7 +52,7 @@ shared_ptr<IfcElectricTimeControlTypeEnum> IfcElectricTimeControlTypeEnum::creat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricTimeControlTypeEnum>(); }
-	shared_ptr<IfcElectricTimeControlTypeEnum> type_object( new IfcElectricTimeControlTypeEnum() );
+	auto type_object = std::make_shared<IfcElectricTimeControlTypeEnum>();
 	if( _stricmp( arg.c_str(), ".TIMECLOCK." ) == 0 )
 	{
 		type_object->m_enum = IfcElectricTimeControlTypeEnum::ENUM_TIMECLOCK;

@@ -48,7 +48,7 @@ shared_ptr<IfcEngineTypeEnum> IfcEngineTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcEngineTypeEnum>(); }
-	shared_ptr<IfcEngineTypeEnum> type_object( new IfcEngineTypeEnum() );
+	auto type_object = std::make_shared<IfcEngineTypeEnum>();
 	if( _stricmp( arg.c_str(), ".EXTERNALCOMBUSTION." ) == 0 )
 	{
 		type_object->m_enum = IfcEngineTypeEnum::ENUM_EXTERNALCOMBUSTION;

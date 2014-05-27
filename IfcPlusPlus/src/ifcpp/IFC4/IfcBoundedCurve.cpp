@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBoundedCurve 
-IfcBoundedCurve::IfcBoundedCurve() { m_entity_enum = IFCBOUNDEDCURVE; }
-IfcBoundedCurve::IfcBoundedCurve( int id ) { m_id = id; m_entity_enum = IFCBOUNDEDCURVE; }
+IfcBoundedCurve::IfcBoundedCurve() {}
+IfcBoundedCurve::IfcBoundedCurve( int id ) { m_id = id; }
 IfcBoundedCurve::~IfcBoundedCurve() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -39,6 +40,13 @@ void IfcBoundedCurve::getStepLine( std::stringstream& stream ) const
 }
 void IfcBoundedCurve::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcBoundedCurve::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcBoundedCurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCurve::getAttributes( vec_attributes );
+}
+void IfcBoundedCurve::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcBoundedCurve::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

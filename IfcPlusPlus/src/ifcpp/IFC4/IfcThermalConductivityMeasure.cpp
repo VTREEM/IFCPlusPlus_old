@@ -28,7 +28,6 @@ IfcThermalConductivityMeasure::~IfcThermalConductivityMeasure() {}
 void IfcThermalConductivityMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCTHERMALCONDUCTIVITYMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcThermalConductivityMeasure> IfcThermalConductivityMeasure::createO
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcThermalConductivityMeasure>(); }
-	shared_ptr<IfcThermalConductivityMeasure> type_object( new IfcThermalConductivityMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcThermalConductivityMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

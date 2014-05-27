@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBlock 
-IfcBlock::IfcBlock() { m_entity_enum = IFCBLOCK; }
-IfcBlock::IfcBlock( int id ) { m_id = id; m_entity_enum = IFCBLOCK; }
+IfcBlock::IfcBlock() {}
+IfcBlock::IfcBlock( int id ) { m_id = id; }
 IfcBlock::~IfcBlock() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -62,6 +63,16 @@ void IfcBlock::readStepArguments( const std::vector<std::string>& args, const st
 	m_XLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
 	m_YLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
 	m_ZLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
+}
+void IfcBlock::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCsgPrimitive3D::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "XLength", m_XLength ) );
+	vec_attributes.push_back( std::make_pair( "YLength", m_YLength ) );
+	vec_attributes.push_back( std::make_pair( "ZLength", m_ZLength ) );
+}
+void IfcBlock::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBlock::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

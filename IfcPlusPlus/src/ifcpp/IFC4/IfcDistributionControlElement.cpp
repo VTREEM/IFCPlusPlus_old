@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDistributionControlElement 
-IfcDistributionControlElement::IfcDistributionControlElement() { m_entity_enum = IFCDISTRIBUTIONCONTROLELEMENT; }
-IfcDistributionControlElement::IfcDistributionControlElement( int id ) { m_id = id; m_entity_enum = IFCDISTRIBUTIONCONTROLELEMENT; }
+IfcDistributionControlElement::IfcDistributionControlElement() {}
+IfcDistributionControlElement::IfcDistributionControlElement( int id ) { m_id = id; }
 IfcDistributionControlElement::~IfcDistributionControlElement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -101,6 +102,13 @@ void IfcDistributionControlElement::readStepArguments( const std::vector<std::st
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
+}
+void IfcDistributionControlElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDistributionElement::getAttributes( vec_attributes );
+}
+void IfcDistributionControlElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDistributionControlElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

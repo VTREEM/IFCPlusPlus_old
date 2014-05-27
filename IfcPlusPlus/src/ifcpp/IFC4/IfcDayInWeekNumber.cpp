@@ -27,7 +27,6 @@ IfcDayInWeekNumber::~IfcDayInWeekNumber() {}
 void IfcDayInWeekNumber::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCDAYINWEEKNUMBER("; }
-	//supertype as attribute: int m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -35,8 +34,7 @@ shared_ptr<IfcDayInWeekNumber> IfcDayInWeekNumber::createObjectFromStepData( con
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDayInWeekNumber>(); }
-	shared_ptr<IfcDayInWeekNumber> type_object( new IfcDayInWeekNumber() );
-	//supertype as attribute: int m_value
-	type_object->m_value = atoi( arg.c_str() );
+	auto type_object = std::make_shared<IfcDayInWeekNumber>();
+	type_object->readArgument( arg );
 	return type_object;
 }

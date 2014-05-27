@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcAudioVisualApplianceTypeEnum = ENUMERATION OF	(AMPLIFIER	,CAMERA	,DISPLAY	,MICROPHONE	,PLAYER	,PROJECTOR	,RECEIVER	,SPEAKER	,SWITCHER	,TELEPHONE	,TUNER	,USERDEFINED	,NOTDEFINED);
-class IfcAudioVisualApplianceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcAudioVisualApplianceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcAudioVisualApplianceTypeEnumEnum

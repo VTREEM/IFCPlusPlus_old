@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcElementCompositionEnum = ENUMERATION OF	(COMPLEX	,ELEMENT	,PARTIAL);
-class IfcElementCompositionEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcElementCompositionEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcElementCompositionEnumEnum

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcPersonAndOrganization.h"
 
 // ENTITY IfcPerson 
-IfcPerson::IfcPerson() { m_entity_enum = IFCPERSON; }
-IfcPerson::IfcPerson( int id ) { m_id = id; m_entity_enum = IFCPERSON; }
+IfcPerson::IfcPerson() {}
+IfcPerson::IfcPerson( int id ) { m_id = id; }
 IfcPerson::~IfcPerson() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -79,6 +80,24 @@ void IfcPerson::readStepArguments( const std::vector<std::string>& args, const s
 	readTypeList( args[5], m_SuffixTitles );
 	readEntityReferenceList( args[6], m_Roles, map );
 	readEntityReferenceList( args[7], m_Addresses, map );
+}
+void IfcPerson::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Identification", m_Identification ) );
+	vec_attributes.push_back( std::make_pair( "FamilyName", m_FamilyName ) );
+	vec_attributes.push_back( std::make_pair( "GivenName", m_GivenName ) );
+	shared_ptr<IfcPPAttributeObjectVector> MiddleNames_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_MiddleNames.begin(), m_MiddleNames.end(), std::back_inserter( MiddleNames_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "MiddleNames", MiddleNames_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> PrefixTitles_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_PrefixTitles.begin(), m_PrefixTitles.end(), std::back_inserter( PrefixTitles_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "PrefixTitles", PrefixTitles_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> SuffixTitles_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_SuffixTitles.begin(), m_SuffixTitles.end(), std::back_inserter( SuffixTitles_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "SuffixTitles", SuffixTitles_vec_object ) );
+}
+void IfcPerson::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPerson::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

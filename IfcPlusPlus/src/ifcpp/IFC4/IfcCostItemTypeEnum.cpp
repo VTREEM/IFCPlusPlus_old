@@ -40,7 +40,7 @@ shared_ptr<IfcCostItemTypeEnum> IfcCostItemTypeEnum::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCostItemTypeEnum>(); }
-	shared_ptr<IfcCostItemTypeEnum> type_object( new IfcCostItemTypeEnum() );
+	auto type_object = std::make_shared<IfcCostItemTypeEnum>();
 	if( _stricmp( arg.c_str(), ".USERDEFINED." ) == 0 )
 	{
 		type_object->m_enum = IfcCostItemTypeEnum::ENUM_USERDEFINED;

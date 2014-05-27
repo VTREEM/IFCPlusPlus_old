@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcShadingDeviceType 
-IfcShadingDeviceType::IfcShadingDeviceType() { m_entity_enum = IFCSHADINGDEVICETYPE; }
-IfcShadingDeviceType::IfcShadingDeviceType( int id ) { m_id = id; m_entity_enum = IFCSHADINGDEVICETYPE; }
+IfcShadingDeviceType::IfcShadingDeviceType() {}
+IfcShadingDeviceType::IfcShadingDeviceType( int id ) { m_id = id; }
 IfcShadingDeviceType::~IfcShadingDeviceType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcShadingDeviceType::readStepArguments( const std::vector<std::string>& ar
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcShadingDeviceTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcShadingDeviceType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcShadingDeviceType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcShadingDeviceType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

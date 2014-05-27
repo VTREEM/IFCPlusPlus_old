@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcVertexLoop.h"
 
 // ENTITY IfcVertexLoop 
-IfcVertexLoop::IfcVertexLoop() { m_entity_enum = IFCVERTEXLOOP; }
-IfcVertexLoop::IfcVertexLoop( int id ) { m_id = id; m_entity_enum = IFCVERTEXLOOP; }
+IfcVertexLoop::IfcVertexLoop() {}
+IfcVertexLoop::IfcVertexLoop( int id ) { m_id = id; }
 IfcVertexLoop::~IfcVertexLoop() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,14 @@ void IfcVertexLoop::readStepArguments( const std::vector<std::string>& args, con
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcVertexLoop, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_LoopVertex, map );
+}
+void IfcVertexLoop::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcLoop::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LoopVertex", m_LoopVertex ) );
+}
+void IfcVertexLoop::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcVertexLoop::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

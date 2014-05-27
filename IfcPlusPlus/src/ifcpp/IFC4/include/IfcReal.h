@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcReal = REAL;
-class IfcReal : public IfcSimpleValue, public IfcPPType
+class IfcReal : public IfcSimpleValue, public IfcPPReal
 {
 public:
 	IfcReal();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcReal"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcReal> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

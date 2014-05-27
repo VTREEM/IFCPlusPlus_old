@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcLoop 
-IfcLoop::IfcLoop() { m_entity_enum = IFCLOOP; }
-IfcLoop::IfcLoop( int id ) { m_id = id; m_entity_enum = IFCLOOP; }
+IfcLoop::IfcLoop() {}
+IfcLoop::IfcLoop( int id ) { m_id = id; }
 IfcLoop::~IfcLoop() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -39,6 +40,13 @@ void IfcLoop::getStepLine( std::stringstream& stream ) const
 }
 void IfcLoop::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcLoop::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcLoop::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTopologicalRepresentationItem::getAttributes( vec_attributes );
+}
+void IfcLoop::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcLoop::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

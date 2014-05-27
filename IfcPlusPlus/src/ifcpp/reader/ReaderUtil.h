@@ -55,9 +55,11 @@ void readIntValue( const std::string& str, int& value );
 void readRealValue( const std::string& str, double& value );
 void copyToEndOfStepString( char*& stream_pos, char*& stream_pos_source );
 void decodeArgumentStrings( std::vector<std::string>& entity_arguments );
+void decodeArgumentStrings( std::vector<std::string>& entity_arguments, std::vector<std::wstring>& args_out );
 IfcPPTypeEnum findTypeEnumForString( const std::string& type_name );
 IfcPPEntityEnum findEntityEnumForString( const std::string& entity_name );
 void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
+void readInlineTypeOrEntity( const std::string& keyword, const std::string& inline_arg, shared_ptr<IfcPPObject>& result, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 
 template<typename T>
 void readTypeOfIntList( const std::string& str, std::vector<shared_ptr<T> >& vec )
@@ -82,7 +84,7 @@ void readTypeOfIntList( const std::string& str, std::vector<shared_ptr<T> >& vec
 	{
 		vec.push_back( shared_ptr<T>(new T( atoi( ch ) ) ) );
 		ch = strchr( ch, ',' );
-		if( ch == NULL )
+		if( ch == nullptr )
 		{
 			break;
 		}
@@ -112,14 +114,14 @@ void readTypeOfRealList( const char* str, std::vector<shared_ptr<T> >& vec )
 	while( *ch != '\0' )
 	{
 #ifdef _DEBUG
-		if( strchr(ch, '$') != NULL )
+		if( strchr(ch, '$') != nullptr )
 		{
 			throw IfcPPException("unexpected $");
 		}
 #endif
 		vec.push_back( shared_ptr<T>(new T( atof( ch ) ) ) );
 		ch = strchr( ch, ',' );
-		if( ch == NULL )
+		if( ch == nullptr )
 		{
 			break;
 		}
@@ -233,11 +235,11 @@ template<typename T>
 void readTypeList( const std::string arg_complete, std::vector<shared_ptr<T> >& vec )
 {
 	//(IfcLabel('label'),'',IfcLengthMeasure(2.0),#299)
-	char* pos_opening = NULL;
-	char* pos_closing = NULL;
+	char* pos_opening = nullptr;
+	char* pos_closing = nullptr;
 	char* ch = (char*)arg_complete.c_str();
 	findLeadingTrailingParanthesis( ch, pos_opening, pos_closing );
-	if( pos_opening == NULL || pos_closing == NULL )
+	if( pos_opening == nullptr || pos_closing == nullptr )
 	{
 		if( arg_complete.compare("$") == 0 )
 		{
@@ -256,6 +258,8 @@ void readTypeList( const std::string arg_complete, std::vector<shared_ptr<T> >& 
 	{
 		std::string& item = list_items[i];
 		vec.push_back( T::createObjectFromStepData( item ) );
+		//shared_ptr<T> ptr_type( new T() );
+		//createTypeObject( item, ptr_type );
 	}
 }
 
@@ -263,11 +267,11 @@ template<typename T>
 void readSelectList( const std::string& arg_complete, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(#287,#291,#295,#299)
-	char* pos_opening = NULL;
-	char* pos_closing = NULL;
+	char* pos_opening = nullptr;
+	char* pos_closing = nullptr;
 	char* ch = (char*)arg_complete.c_str();
 	findLeadingTrailingParanthesis( ch, pos_opening, pos_closing );
-	if( pos_opening == NULL || pos_closing == NULL )
+	if( pos_opening == nullptr || pos_closing == nullptr )
 	{
 		if( arg_complete.compare("$") == 0 )
 		{
@@ -301,7 +305,32 @@ void readSelectList( const std::string& arg_complete, std::vector<shared_ptr<T> 
 		else
 		{
 			// could be type like IFCPARAMETERVALUE(90)
-			vec.push_back( T::createObjectFromStepData( item, map_entities ) );
+			//vec.push_back( T::createObjectFromStepData( item, map_entities ) );
+			//shared_ptr<IfcPPObject> ptr( new IfcPPObject() );
+			//createTypeObject( item, map_entities, ptr );
+			//shared_ptr<T> ptr_t = dynamic_pointer_cast<T>( ptr );
+			//if( ptr_t )
+			//{
+			//	vec.push_back( ptr_t );
+			//}
+			std::string keyword;
+			std::string inline_arg;
+			tokenizeInlineArgument( item, keyword, inline_arg );
+			shared_ptr<IfcPPObject> result_object;
+			readInlineTypeOrEntity( item, result_object, map_entities );
+			if( result_object )
+			{
+				shared_ptr<T> ptr_t = dynamic_pointer_cast<T>( result_object );
+				if( ptr_t )
+				{
+					vec.push_back( ptr_t );
+					continue;
+				}
+			}
+			std::stringstream strs;
+			strs << "unhandled inline argument: " << item << " in function IfcAppliedValueSelect::readStepData" << std::endl;
+			throw IfcPPException( strs.str() );
+
 		}
 	}
 	return;
@@ -311,13 +340,13 @@ template<typename T>
 void readEntityReferenceList( const char* arg_complete, std::vector<shared_ptr<T> >& vec, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities )
 {
 	//(#287,#291,#295,#299)
-	char* pos_opening = NULL;
-	char* pos_closing = NULL;
+	char* pos_opening = nullptr;
+	char* pos_closing = nullptr;
 	char* ch = (char*)arg_complete;
 	findLeadingTrailingParanthesis( ch, pos_opening, pos_closing );
-	if( pos_opening == NULL || pos_closing == NULL )
+	if( pos_opening == nullptr || pos_closing == nullptr )
 	{
-		if( arg_complete != NULL )
+		if( arg_complete != nullptr )
 		{
 			if( *arg_complete == '$' )
 			{ 

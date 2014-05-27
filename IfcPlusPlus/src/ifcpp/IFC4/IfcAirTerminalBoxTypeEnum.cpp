@@ -52,7 +52,7 @@ shared_ptr<IfcAirTerminalBoxTypeEnum> IfcAirTerminalBoxTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAirTerminalBoxTypeEnum>(); }
-	shared_ptr<IfcAirTerminalBoxTypeEnum> type_object( new IfcAirTerminalBoxTypeEnum() );
+	auto type_object = std::make_shared<IfcAirTerminalBoxTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONSTANTFLOW." ) == 0 )
 	{
 		type_object->m_enum = IfcAirTerminalBoxTypeEnum::ENUM_CONSTANTFLOW;

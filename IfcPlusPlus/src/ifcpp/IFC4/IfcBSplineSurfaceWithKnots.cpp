@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBSplineSurfaceWithKnots 
-IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots() { m_entity_enum = IFCBSPLINESURFACEWITHKNOTS; }
-IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots( int id ) { m_id = id; m_entity_enum = IFCBSPLINESURFACEWITHKNOTS; }
+IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots() {}
+IfcBSplineSurfaceWithKnots::IfcBSplineSurfaceWithKnots( int id ) { m_id = id; }
 IfcBSplineSurfaceWithKnots::~IfcBSplineSurfaceWithKnots() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -61,14 +62,17 @@ void IfcBSplineSurfaceWithKnots::getStepLine( std::stringstream& stream ) const
 	stream << ",";
 	if( m_SurfaceForm ) { m_SurfaceForm->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_UClosed == false ) { stream << ".F."; }
-	else if( m_UClosed == true ) { stream << ".T."; }
+	if( m_UClosed == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_UClosed == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_UClosed == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
-	if( m_VClosed == false ) { stream << ".F."; }
-	else if( m_VClosed == true ) { stream << ".T."; }
+	if( m_VClosed == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_VClosed == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_VClosed == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
-	if( m_SelfIntersect == false ) { stream << ".F."; }
-	else if( m_SelfIntersect == true ) { stream << ".T."; }
+	if( m_SelfIntersect == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_SelfIntersect == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_SelfIntersect == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
 	writeIntList( stream, m_UMultiplicities );
 	stream << ",";
@@ -93,17 +97,34 @@ void IfcBSplineSurfaceWithKnots::readStepArguments( const std::vector<std::strin
 	readIntValue( args[1], m_VDegree );
 	readEntityReferenceList2D( args[2], m_ControlPointsList, map );
 	m_SurfaceForm = IfcBSplineSurfaceForm::createObjectFromStepData( args[3] );
-	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_UClosed = false; }
-	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_UClosed = true; }
-	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_VClosed = false; }
-	else if( _stricmp( args[5].c_str(), ".T." ) == 0 ) { m_VClosed = true; }
-	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
-	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_UClosed = LOGICAL_FALSE; }
+	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_UClosed = LOGICAL_TRUE; }
+	else if( _stricmp( args[4].c_str(), ".U." ) == 0 ) { m_UClosed = LOGICAL_UNKNOWN; }
+	if( _stricmp( args[5].c_str(), ".F." ) == 0 ) { m_VClosed = LOGICAL_FALSE; }
+	else if( _stricmp( args[5].c_str(), ".T." ) == 0 ) { m_VClosed = LOGICAL_TRUE; }
+	else if( _stricmp( args[5].c_str(), ".U." ) == 0 ) { m_VClosed = LOGICAL_UNKNOWN; }
+	if( _stricmp( args[6].c_str(), ".F." ) == 0 ) { m_SelfIntersect = LOGICAL_FALSE; }
+	else if( _stricmp( args[6].c_str(), ".T." ) == 0 ) { m_SelfIntersect = LOGICAL_TRUE; }
+	else if( _stricmp( args[6].c_str(), ".U." ) == 0 ) { m_SelfIntersect = LOGICAL_UNKNOWN; }
 	readIntList(  args[7], m_UMultiplicities );
 	readIntList(  args[8], m_VMultiplicities );
 	readTypeOfRealList( args[9], m_UKnots );
 	readTypeOfRealList( args[10], m_VKnots );
 	m_KnotSpec = IfcKnotType::createObjectFromStepData( args[11] );
+}
+void IfcBSplineSurfaceWithKnots::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBSplineSurface::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> UKnots_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_UKnots.begin(), m_UKnots.end(), std::back_inserter( UKnots_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "UKnots", UKnots_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> VKnots_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_VKnots.begin(), m_VKnots.end(), std::back_inserter( VKnots_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "VKnots", VKnots_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "KnotSpec", m_KnotSpec ) );
+}
+void IfcBSplineSurfaceWithKnots::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBSplineSurfaceWithKnots::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -27,7 +27,6 @@ IfcTextTransformation::~IfcTextTransformation() {}
 void IfcTextTransformation::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCTEXTTRANSFORMATION("; }
-	//supertype as attribute: std::string m_value
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
@@ -35,8 +34,7 @@ shared_ptr<IfcTextTransformation> IfcTextTransformation::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTextTransformation>(); }
-	shared_ptr<IfcTextTransformation> type_object( new IfcTextTransformation() );
-	//supertype as attribute: std::string m_value
-	type_object->m_value = arg;
+	auto type_object = std::make_shared<IfcTextTransformation>();
+	type_object->readArgument( arg );
 	return type_object;
 }

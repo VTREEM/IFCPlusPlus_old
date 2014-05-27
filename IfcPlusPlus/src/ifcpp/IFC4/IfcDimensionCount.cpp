@@ -27,7 +27,6 @@ IfcDimensionCount::~IfcDimensionCount() {}
 void IfcDimensionCount::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCDIMENSIONCOUNT("; }
-	//supertype as attribute: int m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -35,8 +34,7 @@ shared_ptr<IfcDimensionCount> IfcDimensionCount::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDimensionCount>(); }
-	shared_ptr<IfcDimensionCount> type_object( new IfcDimensionCount() );
-	//supertype as attribute: int m_value
-	type_object->m_value = atoi( arg.c_str() );
+	auto type_object = std::make_shared<IfcDimensionCount>();
+	type_object->readArgument( arg );
 	return type_object;
 }

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -28,8 +29,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcLShapeProfileDef 
-IfcLShapeProfileDef::IfcLShapeProfileDef() { m_entity_enum = IFCLSHAPEPROFILEDEF; }
-IfcLShapeProfileDef::IfcLShapeProfileDef( int id ) { m_id = id; m_entity_enum = IFCLSHAPEPROFILEDEF; }
+IfcLShapeProfileDef::IfcLShapeProfileDef() {}
+IfcLShapeProfileDef::IfcLShapeProfileDef( int id ) { m_id = id; }
 IfcLShapeProfileDef::~IfcLShapeProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -86,6 +87,19 @@ void IfcLShapeProfileDef::readStepArguments( const std::vector<std::string>& arg
 	m_FilletRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[6] );
 	m_EdgeRadius = IfcNonNegativeLengthMeasure::createObjectFromStepData( args[7] );
 	m_LegSlope = IfcPlaneAngleMeasure::createObjectFromStepData( args[8] );
+}
+void IfcLShapeProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcParameterizedProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Depth", m_Depth ) );
+	vec_attributes.push_back( std::make_pair( "Width", m_Width ) );
+	vec_attributes.push_back( std::make_pair( "Thickness", m_Thickness ) );
+	vec_attributes.push_back( std::make_pair( "FilletRadius", m_FilletRadius ) );
+	vec_attributes.push_back( std::make_pair( "EdgeRadius", m_EdgeRadius ) );
+	vec_attributes.push_back( std::make_pair( "LegSlope", m_LegSlope ) );
+}
+void IfcLShapeProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcLShapeProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

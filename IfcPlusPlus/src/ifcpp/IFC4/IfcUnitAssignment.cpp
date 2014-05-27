@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcUnitAssignment.h"
 
 // ENTITY IfcUnitAssignment 
-IfcUnitAssignment::IfcUnitAssignment() { m_entity_enum = IFCUNITASSIGNMENT; }
-IfcUnitAssignment::IfcUnitAssignment( int id ) { m_id = id; m_entity_enum = IFCUNITASSIGNMENT; }
+IfcUnitAssignment::IfcUnitAssignment() {}
+IfcUnitAssignment::IfcUnitAssignment( int id ) { m_id = id; }
 IfcUnitAssignment::~IfcUnitAssignment() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -47,6 +48,15 @@ void IfcUnitAssignment::readStepArguments( const std::vector<std::string>& args,
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcUnitAssignment, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readSelectList( args[0], m_Units, map );
+}
+void IfcUnitAssignment::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	shared_ptr<IfcPPAttributeObjectVector> Units_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Units.begin(), m_Units.end(), std::back_inserter( Units_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Units", Units_vec_object ) );
+}
+void IfcUnitAssignment::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcUnitAssignment::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

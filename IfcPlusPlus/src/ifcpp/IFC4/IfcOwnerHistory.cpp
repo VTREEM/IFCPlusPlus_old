@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcTimeStamp.h"
 
 // ENTITY IfcOwnerHistory 
-IfcOwnerHistory::IfcOwnerHistory() { m_entity_enum = IFCOWNERHISTORY; }
-IfcOwnerHistory::IfcOwnerHistory( int id ) { m_id = id; m_entity_enum = IFCOWNERHISTORY; }
+IfcOwnerHistory::IfcOwnerHistory() {}
+IfcOwnerHistory::IfcOwnerHistory( int id ) { m_id = id; }
 IfcOwnerHistory::~IfcOwnerHistory() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -79,6 +80,20 @@ void IfcOwnerHistory::readStepArguments( const std::vector<std::string>& args, c
 	readEntityReference( args[5], m_LastModifyingUser, map );
 	readEntityReference( args[6], m_LastModifyingApplication, map );
 	m_CreationDate = IfcTimeStamp::createObjectFromStepData( args[7] );
+}
+void IfcOwnerHistory::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "OwningUser", m_OwningUser ) );
+	vec_attributes.push_back( std::make_pair( "OwningApplication", m_OwningApplication ) );
+	vec_attributes.push_back( std::make_pair( "State", m_State ) );
+	vec_attributes.push_back( std::make_pair( "ChangeAction", m_ChangeAction ) );
+	vec_attributes.push_back( std::make_pair( "LastModifiedDate", m_LastModifiedDate ) );
+	vec_attributes.push_back( std::make_pair( "LastModifyingUser", m_LastModifyingUser ) );
+	vec_attributes.push_back( std::make_pair( "LastModifyingApplication", m_LastModifyingApplication ) );
+	vec_attributes.push_back( std::make_pair( "CreationDate", m_CreationDate ) );
+}
+void IfcOwnerHistory::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcOwnerHistory::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

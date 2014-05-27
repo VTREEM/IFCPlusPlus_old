@@ -14,14 +14,15 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
 #include "include/IfcExternalInformation.h"
 
 // ENTITY IfcExternalInformation 
-IfcExternalInformation::IfcExternalInformation() { m_entity_enum = IFCEXTERNALINFORMATION; }
-IfcExternalInformation::IfcExternalInformation( int id ) { m_id = id; m_entity_enum = IFCEXTERNALINFORMATION; }
+IfcExternalInformation::IfcExternalInformation() {}
+IfcExternalInformation::IfcExternalInformation( int id ) { m_id = id; }
 IfcExternalInformation::~IfcExternalInformation() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -37,6 +38,12 @@ void IfcExternalInformation::getStepLine( std::stringstream& stream ) const
 }
 void IfcExternalInformation::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcExternalInformation::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcExternalInformation::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+}
+void IfcExternalInformation::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcExternalInformation::setInverseCounterparts( shared_ptr<IfcPPEntity> )

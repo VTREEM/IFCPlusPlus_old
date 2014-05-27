@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -40,8 +41,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralCurveAction 
-IfcStructuralCurveAction::IfcStructuralCurveAction() { m_entity_enum = IFCSTRUCTURALCURVEACTION; }
-IfcStructuralCurveAction::IfcStructuralCurveAction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALCURVEACTION; }
+IfcStructuralCurveAction::IfcStructuralCurveAction() {}
+IfcStructuralCurveAction::IfcStructuralCurveAction( int id ) { m_id = id; }
 IfcStructuralCurveAction::~IfcStructuralCurveAction() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -112,6 +113,15 @@ void IfcStructuralCurveAction::readStepArguments( const std::vector<std::string>
 	else if( _stricmp( args[9].c_str(), ".T." ) == 0 ) { m_DestabilizingLoad = true; }
 	m_ProjectedOrTrue = IfcProjectedOrTrueLengthEnum::createObjectFromStepData( args[10] );
 	m_PredefinedType = IfcStructuralCurveActivityTypeEnum::createObjectFromStepData( args[11] );
+}
+void IfcStructuralCurveAction::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralAction::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ProjectedOrTrue", m_ProjectedOrTrue ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcStructuralCurveAction::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralCurveAction::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

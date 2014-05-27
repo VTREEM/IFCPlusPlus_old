@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -27,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelSequence 
-IfcRelSequence::IfcRelSequence() { m_entity_enum = IFCRELSEQUENCE; }
-IfcRelSequence::IfcRelSequence( int id ) { m_id = id; m_entity_enum = IFCRELSEQUENCE; }
+IfcRelSequence::IfcRelSequence() {}
+IfcRelSequence::IfcRelSequence( int id ) { m_id = id; }
 IfcRelSequence::~IfcRelSequence() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -85,6 +86,18 @@ void IfcRelSequence::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReference( args[6], m_TimeLag, map );
 	m_SequenceType = IfcSequenceEnum::createObjectFromStepData( args[7] );
 	m_UserDefinedSequenceType = IfcLabel::createObjectFromStepData( args[8] );
+}
+void IfcRelSequence::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingProcess", m_RelatingProcess ) );
+	vec_attributes.push_back( std::make_pair( "RelatedProcess", m_RelatedProcess ) );
+	vec_attributes.push_back( std::make_pair( "TimeLag", m_TimeLag ) );
+	vec_attributes.push_back( std::make_pair( "SequenceType", m_SequenceType ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedSequenceType", m_UserDefinedSequenceType ) );
+}
+void IfcRelSequence::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelSequence::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

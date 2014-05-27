@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcChiller 
-IfcChiller::IfcChiller() { m_entity_enum = IFCCHILLER; }
-IfcChiller::IfcChiller( int id ) { m_id = id; m_entity_enum = IFCCHILLER; }
+IfcChiller::IfcChiller() {}
+IfcChiller::IfcChiller( int id ) { m_id = id; }
 IfcChiller::~IfcChiller() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcChiller::readStepArguments( const std::vector<std::string>& args, const 
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcChillerTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcChiller::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEnergyConversionDevice::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcChiller::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcChiller::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

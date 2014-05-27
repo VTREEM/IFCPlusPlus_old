@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -39,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralAnalysisModel 
-IfcStructuralAnalysisModel::IfcStructuralAnalysisModel() { m_entity_enum = IFCSTRUCTURALANALYSISMODEL; }
-IfcStructuralAnalysisModel::IfcStructuralAnalysisModel( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALANALYSISMODEL; }
+IfcStructuralAnalysisModel::IfcStructuralAnalysisModel() {}
+IfcStructuralAnalysisModel::IfcStructuralAnalysisModel( int id ) { m_id = id; }
 IfcStructuralAnalysisModel::~IfcStructuralAnalysisModel() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -101,6 +102,16 @@ void IfcStructuralAnalysisModel::readStepArguments( const std::vector<std::strin
 	readEntityReferenceList( args[7], m_LoadedBy, map );
 	readEntityReferenceList( args[8], m_HasResults, map );
 	readEntityReference( args[9], m_SharedPlacement, map );
+}
+void IfcStructuralAnalysisModel::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSystem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "OrientationOf2DPlane", m_OrientationOf2DPlane ) );
+	vec_attributes.push_back( std::make_pair( "SharedPlacement", m_SharedPlacement ) );
+}
+void IfcStructuralAnalysisModel::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralAnalysisModel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

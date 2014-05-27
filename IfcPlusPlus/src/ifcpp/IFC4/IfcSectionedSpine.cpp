@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcSectionedSpine 
-IfcSectionedSpine::IfcSectionedSpine() { m_entity_enum = IFCSECTIONEDSPINE; }
-IfcSectionedSpine::IfcSectionedSpine( int id ) { m_id = id; m_entity_enum = IFCSECTIONEDSPINE; }
+IfcSectionedSpine::IfcSectionedSpine() {}
+IfcSectionedSpine::IfcSectionedSpine( int id ) { m_id = id; }
 IfcSectionedSpine::~IfcSectionedSpine() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -59,6 +60,14 @@ void IfcSectionedSpine::readStepArguments( const std::vector<std::string>& args,
 	readEntityReference( args[0], m_SpineCurve, map );
 	readEntityReferenceList( args[1], m_CrossSections, map );
 	readEntityReferenceList( args[2], m_CrossSectionPositions, map );
+}
+void IfcSectionedSpine::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "SpineCurve", m_SpineCurve ) );
+}
+void IfcSectionedSpine::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSectionedSpine::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

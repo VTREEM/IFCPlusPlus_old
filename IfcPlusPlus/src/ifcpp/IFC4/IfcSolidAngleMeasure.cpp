@@ -28,7 +28,6 @@ IfcSolidAngleMeasure::~IfcSolidAngleMeasure() {}
 void IfcSolidAngleMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCSOLIDANGLEMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcSolidAngleMeasure> IfcSolidAngleMeasure::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSolidAngleMeasure>(); }
-	shared_ptr<IfcSolidAngleMeasure> type_object( new IfcSolidAngleMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcSolidAngleMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

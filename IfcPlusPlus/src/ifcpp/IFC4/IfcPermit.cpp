@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPermit 
-IfcPermit::IfcPermit() { m_entity_enum = IFCPERMIT; }
-IfcPermit::IfcPermit( int id ) { m_id = id; m_entity_enum = IFCPERMIT; }
+IfcPermit::IfcPermit() {}
+IfcPermit::IfcPermit( int id ) { m_id = id; }
 IfcPermit::~IfcPermit() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -93,6 +94,16 @@ void IfcPermit::readStepArguments( const std::vector<std::string>& args, const s
 	m_PredefinedType = IfcPermitTypeEnum::createObjectFromStepData( args[6] );
 	m_Status = IfcLabel::createObjectFromStepData( args[7] );
 	m_LongDescription = IfcText::createObjectFromStepData( args[8] );
+}
+void IfcPermit::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcControl::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "Status", m_Status ) );
+	vec_attributes.push_back( std::make_pair( "LongDescription", m_LongDescription ) );
+}
+void IfcPermit::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPermit::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

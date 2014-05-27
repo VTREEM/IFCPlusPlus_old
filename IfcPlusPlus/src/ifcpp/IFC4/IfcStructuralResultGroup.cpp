@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -36,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralResultGroup 
-IfcStructuralResultGroup::IfcStructuralResultGroup() { m_entity_enum = IFCSTRUCTURALRESULTGROUP; }
-IfcStructuralResultGroup::IfcStructuralResultGroup( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALRESULTGROUP; }
+IfcStructuralResultGroup::IfcStructuralResultGroup() {}
+IfcStructuralResultGroup::IfcStructuralResultGroup( int id ) { m_id = id; }
 IfcStructuralResultGroup::~IfcStructuralResultGroup() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -92,6 +93,16 @@ void IfcStructuralResultGroup::readStepArguments( const std::vector<std::string>
 	readEntityReference( args[6], m_ResultForLoadGroup, map );
 	if( _stricmp( args[7].c_str(), ".F." ) == 0 ) { m_IsLinear = false; }
 	else if( _stricmp( args[7].c_str(), ".T." ) == 0 ) { m_IsLinear = true; }
+}
+void IfcStructuralResultGroup::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGroup::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TheoryType", m_TheoryType ) );
+	vec_attributes.push_back( std::make_pair( "ResultForLoadGroup", m_ResultForLoadGroup ) );
+	vec_attributes.push_back( std::make_pair( "IsLinear", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_IsLinear ) ) ) );
+}
+void IfcStructuralResultGroup::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralResultGroup::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

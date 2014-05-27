@@ -64,7 +64,7 @@ shared_ptr<IfcRecurrenceTypeEnum> IfcRecurrenceTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRecurrenceTypeEnum>(); }
-	shared_ptr<IfcRecurrenceTypeEnum> type_object( new IfcRecurrenceTypeEnum() );
+	auto type_object = std::make_shared<IfcRecurrenceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DAILY." ) == 0 )
 	{
 		type_object->m_enum = IfcRecurrenceTypeEnum::ENUM_DAILY;

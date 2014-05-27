@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBooleanResult 
-IfcBooleanResult::IfcBooleanResult() { m_entity_enum = IFCBOOLEANRESULT; }
-IfcBooleanResult::IfcBooleanResult( int id ) { m_id = id; m_entity_enum = IFCBOOLEANRESULT; }
+IfcBooleanResult::IfcBooleanResult() {}
+IfcBooleanResult::IfcBooleanResult( int id ) { m_id = id; }
 IfcBooleanResult::~IfcBooleanResult() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,16 @@ void IfcBooleanResult::readStepArguments( const std::vector<std::string>& args, 
 	m_Operator = IfcBooleanOperator::createObjectFromStepData( args[0] );
 	m_FirstOperand = IfcBooleanOperand::createObjectFromStepData( args[1], map );
 	m_SecondOperand = IfcBooleanOperand::createObjectFromStepData( args[2], map );
+}
+void IfcBooleanResult::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Operator", m_Operator ) );
+	vec_attributes.push_back( std::make_pair( "FirstOperand", m_FirstOperand ) );
+	vec_attributes.push_back( std::make_pair( "SecondOperand", m_SecondOperand ) );
+}
+void IfcBooleanResult::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBooleanResult::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

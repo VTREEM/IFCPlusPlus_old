@@ -28,7 +28,6 @@ IfcMagneticFluxDensityMeasure::~IfcMagneticFluxDensityMeasure() {}
 void IfcMagneticFluxDensityMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCMAGNETICFLUXDENSITYMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcMagneticFluxDensityMeasure> IfcMagneticFluxDensityMeasure::createO
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMagneticFluxDensityMeasure>(); }
-	shared_ptr<IfcMagneticFluxDensityMeasure> type_object( new IfcMagneticFluxDensityMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcMagneticFluxDensityMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

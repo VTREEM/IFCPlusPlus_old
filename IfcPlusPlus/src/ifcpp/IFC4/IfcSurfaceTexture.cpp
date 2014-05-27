@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcTextureCoordinate.h"
 
 // ENTITY IfcSurfaceTexture 
-IfcSurfaceTexture::IfcSurfaceTexture() { m_entity_enum = IFCSURFACETEXTURE; }
-IfcSurfaceTexture::IfcSurfaceTexture( int id ) { m_id = id; m_entity_enum = IFCSURFACETEXTURE; }
+IfcSurfaceTexture::IfcSurfaceTexture() {}
+IfcSurfaceTexture::IfcSurfaceTexture( int id ) { m_id = id; }
 IfcSurfaceTexture::~IfcSurfaceTexture() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -70,6 +71,20 @@ void IfcSurfaceTexture::readStepArguments( const std::vector<std::string>& args,
 	m_Mode = IfcIdentifier::createObjectFromStepData( args[2] );
 	readEntityReference( args[3], m_TextureTransform, map );
 	readTypeList( args[4], m_Parameter );
+}
+void IfcSurfaceTexture::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RepeatS", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_RepeatS ) ) ) );
+	vec_attributes.push_back( std::make_pair( "RepeatT", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_RepeatT ) ) ) );
+	vec_attributes.push_back( std::make_pair( "Mode", m_Mode ) );
+	vec_attributes.push_back( std::make_pair( "TextureTransform", m_TextureTransform ) );
+	shared_ptr<IfcPPAttributeObjectVector> Parameter_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Parameter.begin(), m_Parameter.end(), std::back_inserter( Parameter_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Parameter", Parameter_vec_object ) );
+}
+void IfcSurfaceTexture::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSurfaceTexture::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

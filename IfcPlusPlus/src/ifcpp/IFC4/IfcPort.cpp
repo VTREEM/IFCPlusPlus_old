@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -37,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPort 
-IfcPort::IfcPort() { m_entity_enum = IFCPORT; }
-IfcPort::IfcPort( int id ) { m_id = id; m_entity_enum = IFCPORT; }
+IfcPort::IfcPort() {}
+IfcPort::IfcPort( int id ) { m_id = id; }
 IfcPort::~IfcPort() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -87,6 +88,13 @@ void IfcPort::readStepArguments( const std::vector<std::string>& args, const std
 	m_ObjectType = IfcLabel::createObjectFromStepData( args[4] );
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
+}
+void IfcPort::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProduct::getAttributes( vec_attributes );
+}
+void IfcPort::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPort::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

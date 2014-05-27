@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcReal.h"
 
 // ENTITY IfcMapConversion 
-IfcMapConversion::IfcMapConversion() { m_entity_enum = IFCMAPCONVERSION; }
-IfcMapConversion::IfcMapConversion( int id ) { m_id = id; m_entity_enum = IFCMAPCONVERSION; }
+IfcMapConversion::IfcMapConversion() {}
+IfcMapConversion::IfcMapConversion( int id ) { m_id = id; }
 IfcMapConversion::~IfcMapConversion() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -78,6 +79,19 @@ void IfcMapConversion::readStepArguments( const std::vector<std::string>& args, 
 	m_XAxisAbscissa = IfcReal::createObjectFromStepData( args[5] );
 	m_XAxisOrdinate = IfcReal::createObjectFromStepData( args[6] );
 	m_Scale = IfcReal::createObjectFromStepData( args[7] );
+}
+void IfcMapConversion::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCoordinateOperation::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Eastings", m_Eastings ) );
+	vec_attributes.push_back( std::make_pair( "Northings", m_Northings ) );
+	vec_attributes.push_back( std::make_pair( "OrthogonalHeight", m_OrthogonalHeight ) );
+	vec_attributes.push_back( std::make_pair( "XAxisAbscissa", m_XAxisAbscissa ) );
+	vec_attributes.push_back( std::make_pair( "XAxisOrdinate", m_XAxisOrdinate ) );
+	vec_attributes.push_back( std::make_pair( "Scale", m_Scale ) );
+}
+void IfcMapConversion::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMapConversion::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

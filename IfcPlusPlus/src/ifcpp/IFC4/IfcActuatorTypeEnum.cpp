@@ -60,7 +60,7 @@ shared_ptr<IfcActuatorTypeEnum> IfcActuatorTypeEnum::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcActuatorTypeEnum>(); }
-	shared_ptr<IfcActuatorTypeEnum> type_object( new IfcActuatorTypeEnum() );
+	auto type_object = std::make_shared<IfcActuatorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ELECTRICACTUATOR." ) == 0 )
 	{
 		type_object->m_enum = IfcActuatorTypeEnum::ENUM_ELECTRICACTUATOR;

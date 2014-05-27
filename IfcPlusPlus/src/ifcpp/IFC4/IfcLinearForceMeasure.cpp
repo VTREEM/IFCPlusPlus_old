@@ -28,7 +28,6 @@ IfcLinearForceMeasure::~IfcLinearForceMeasure() {}
 void IfcLinearForceMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCLINEARFORCEMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcLinearForceMeasure> IfcLinearForceMeasure::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLinearForceMeasure>(); }
-	shared_ptr<IfcLinearForceMeasure> type_object( new IfcLinearForceMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcLinearForceMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

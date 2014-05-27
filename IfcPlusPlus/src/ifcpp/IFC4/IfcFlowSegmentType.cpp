@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -34,8 +35,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcFlowSegmentType 
-IfcFlowSegmentType::IfcFlowSegmentType() { m_entity_enum = IFCFLOWSEGMENTTYPE; }
-IfcFlowSegmentType::IfcFlowSegmentType( int id ) { m_id = id; m_entity_enum = IFCFLOWSEGMENTTYPE; }
+IfcFlowSegmentType::IfcFlowSegmentType() {}
+IfcFlowSegmentType::IfcFlowSegmentType( int id ) { m_id = id; }
 IfcFlowSegmentType::~IfcFlowSegmentType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -92,6 +93,13 @@ void IfcFlowSegmentType::readStepArguments( const std::vector<std::string>& args
 	readEntityReferenceList( args[6], m_RepresentationMaps, map );
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
+}
+void IfcFlowSegmentType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDistributionFlowElementType::getAttributes( vec_attributes );
+}
+void IfcFlowSegmentType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFlowSegmentType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

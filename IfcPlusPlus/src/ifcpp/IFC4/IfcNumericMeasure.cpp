@@ -28,7 +28,6 @@ IfcNumericMeasure::~IfcNumericMeasure() {}
 void IfcNumericMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCNUMERICMEASURE("; }
-	//supertype as attribute: int m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcNumericMeasure> IfcNumericMeasure::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcNumericMeasure>(); }
-	shared_ptr<IfcNumericMeasure> type_object( new IfcNumericMeasure() );
-	//supertype as attribute: int m_value
-	type_object->m_value = atoi( arg.c_str() );
+	auto type_object = std::make_shared<IfcNumericMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

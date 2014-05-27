@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcAxis2Placement2D 
-IfcAxis2Placement2D::IfcAxis2Placement2D() { m_entity_enum = IFCAXIS2PLACEMENT2D; }
-IfcAxis2Placement2D::IfcAxis2Placement2D( int id ) { m_id = id; m_entity_enum = IFCAXIS2PLACEMENT2D; }
+IfcAxis2Placement2D::IfcAxis2Placement2D() {}
+IfcAxis2Placement2D::IfcAxis2Placement2D( int id ) { m_id = id; }
 IfcAxis2Placement2D::~IfcAxis2Placement2D() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -54,6 +55,14 @@ void IfcAxis2Placement2D::readStepArguments( const std::vector<std::string>& arg
 	#endif
 	readEntityReference( args[0], m_Location, map );
 	readEntityReference( args[1], m_RefDirection, map );
+}
+void IfcAxis2Placement2D::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPlacement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RefDirection", m_RefDirection ) );
+}
+void IfcAxis2Placement2D::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAxis2Placement2D::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

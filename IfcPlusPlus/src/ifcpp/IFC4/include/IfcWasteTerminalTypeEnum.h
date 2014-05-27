@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcWasteTerminalTypeEnum = ENUMERATION OF	(FLOORTRAP	,FLOORWASTE	,GULLYSUMP	,GULLYTRAP	,ROOFDRAIN	,WASTEDISPOSALUNIT	,WASTETRAP	,USERDEFINED	,NOTDEFINED);
-class IfcWasteTerminalTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcWasteTerminalTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcWasteTerminalTypeEnumEnum

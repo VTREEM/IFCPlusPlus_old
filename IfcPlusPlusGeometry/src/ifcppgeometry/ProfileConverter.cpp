@@ -14,43 +14,43 @@
 #define _USE_MATH_DEFINES 
 #include <cmath>
 
-#include "ifcpp/IFC4/include/IfcProfileDef.h"
-#include "ifcpp/IFC4/include/IfcCartesianPoint.h"
-#include "ifcpp/IFC4/include/IfcParameterizedProfileDef.h"
-#include "ifcpp/IFC4/include/IfcArbitraryOpenProfileDef.h"
-#include "ifcpp/IFC4/include/IfcArbitraryClosedProfileDef.h"
-#include "ifcpp/IFC4/include/IfcCompositeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcDerivedProfileDef.h"
-#include "ifcpp/IFC4/include/IfcCurve.h"
-#include "ifcpp/IFC4/include/IfcArbitraryProfileDefWithVoids.h"
-#include "ifcpp/IFC4/include/IfcBoundedCurve.h"
-#include "ifcpp/IFC4/include/IfcCartesianTransformationOperator2D.h"
-#include "ifcpp/IFC4/include/IfcRectangleProfileDef.h"
-#include "ifcpp/IFC4/include/IfcCircleProfileDef.h"
-#include "ifcpp/IFC4/include/IfcCircleHollowProfileDef.h"
-#include "ifcpp/IFC4/include/IfcTrapeziumProfileDef.h"
-#include "ifcpp/IFC4/include/IfcCenterLineProfileDef.h"
-#include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
-#include "ifcpp/IFC4/include/IfcRectangleHollowProfileDef.h"
-#include "ifcpp/IFC4/include/IfcRoundedRectangleProfileDef.h"
-#include "ifcpp/IFC4/include/IfcPositiveLengthMeasure.h"
-#include "ifcpp/IFC4/include/IfcLengthMeasure.h"
-#include "ifcpp/IFC4/include/IfcNonNegativeLengthMeasure.h"
-#include "ifcpp/IFC4/include/IfcEllipseProfileDef.h"
-#include "ifcpp/IFC4/include/IfcIShapeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcAsymmetricIShapeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcLShapeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcUShapeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcCShapeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcZShapeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcPlaneAngleMeasure.h"
-#include "ifcpp/IFC4/include/IfcTShapeProfileDef.h"
-#include "ifcpp/IFC4/include/IfcAxis2Placement2D.h"
-#include "ifcpp/IFC4/include/IfcRationalBSplineSurfaceWithKnots.h"
+#include <ifcpp/IFC4/include/IfcProfileDef.h>
+#include <ifcpp/IFC4/include/IfcCartesianPoint.h>
+#include <ifcpp/IFC4/include/IfcParameterizedProfileDef.h>
+#include <ifcpp/IFC4/include/IfcArbitraryOpenProfileDef.h>
+#include <ifcpp/IFC4/include/IfcArbitraryClosedProfileDef.h>
+#include <ifcpp/IFC4/include/IfcCompositeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcDerivedProfileDef.h>
+#include <ifcpp/IFC4/include/IfcCurve.h>
+#include <ifcpp/IFC4/include/IfcArbitraryProfileDefWithVoids.h>
+#include <ifcpp/IFC4/include/IfcBoundedCurve.h>
+#include <ifcpp/IFC4/include/IfcCartesianTransformationOperator2D.h>
+#include <ifcpp/IFC4/include/IfcRectangleProfileDef.h>
+#include <ifcpp/IFC4/include/IfcCircleProfileDef.h>
+#include <ifcpp/IFC4/include/IfcCircleHollowProfileDef.h>
+#include <ifcpp/IFC4/include/IfcTrapeziumProfileDef.h>
+#include <ifcpp/IFC4/include/IfcCenterLineProfileDef.h>
+#include <ifcpp/IFC4/include/IfcPositiveLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcRectangleHollowProfileDef.h>
+#include <ifcpp/IFC4/include/IfcRoundedRectangleProfileDef.h>
+#include <ifcpp/IFC4/include/IfcPositiveLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcNonNegativeLengthMeasure.h>
+#include <ifcpp/IFC4/include/IfcEllipseProfileDef.h>
+#include <ifcpp/IFC4/include/IfcIShapeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcAsymmetricIShapeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcLShapeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcUShapeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcCShapeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcZShapeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcPlaneAngleMeasure.h>
+#include <ifcpp/IFC4/include/IfcTShapeProfileDef.h>
+#include <ifcpp/IFC4/include/IfcAxis2Placement2D.h>
+#include <ifcpp/IFC4/include/IfcRationalBSplineSurfaceWithKnots.h>
 
-#include "ifcpp/model/IfcPPModel.h"
-#include "ifcpp/model/UnitConverter.h"
-#include "ifcpp/model/IfcPPException.h"
+#include <ifcpp/model/IfcPPModel.h>
+#include <ifcpp/model/UnitConverter.h>
+#include <ifcpp/model/IfcPPException.h>
 
 #include "GeometrySettings.h"
 #include "GeomUtils.h"
@@ -161,11 +161,11 @@ void ProfileConverter::addAvoidingDuplicates( const std::vector<carve::geom::vec
 	}
 
 	std::vector<carve::geom::vector<2> > polygon_add;
-	polygon_add.push_back( polygon.at(0) );
+	polygon_add.push_back( polygon[0] );
 	for( int i=1; i<polygon.size(); ++i )
 	{
-		const carve::geom::vector<2> & point = polygon.at(i);
-		const carve::geom::vector<2> & point_previous = polygon.at(i-1);
+		const carve::geom::vector<2> & point = polygon[i];
+		const carve::geom::vector<2> & point_previous = polygon[i-1];
 		
 		// omit duplicate points
 		if( std::abs(point.x - point_previous.x) > 0.00001 )
@@ -256,28 +256,28 @@ void ProfileConverter::convertIfcArbitraryOpenProfileDef( const shared_ptr<IfcAr
 
 			for( int ii=0; ii<num_base_points; ++ii )
 			{
-				carve::geom::vector<3> vertex_current = basis_curve_points.at(ii);
+				carve::geom::vector<3> vertex_current = basis_curve_points[ii];
 				carve::geom::vector<3> vertex_next;
 				carve::geom::vector<3> vertex_before;
 				if( ii == 0 )
 				{
 					// first point
-					vertex_next	= basis_curve_points.at(ii+1);
+					vertex_next	= basis_curve_points[ii+1];
 					carve::geom::vector<3> delta_element = vertex_next - vertex_current;
 					vertex_before = vertex_current - (delta_element);
 				}
 				else if( ii == num_base_points-1 )
 				{
 					// last point
-					vertex_before	= basis_curve_points.at(ii-1);
+					vertex_before	= basis_curve_points[ii-1];
 					carve::geom::vector<3> delta_element = vertex_current - vertex_before;
 					vertex_next = vertex_before + (delta_element);
 				}
 				else
 				{
 					// inner point
-					vertex_next		= basis_curve_points.at(ii+1);
-					vertex_before	= basis_curve_points.at(ii-1);
+					vertex_next		= basis_curve_points[ii+1];
+					vertex_before	= basis_curve_points[ii-1];
 				}
 
 				carve::geom::vector<3> bisecting_normal;
@@ -392,7 +392,7 @@ void ProfileConverter::convertIfcDerivedProfileDef( const shared_ptr<IfcDerivedP
 
 		for( int j=0; j<loop_parent.size(); ++j ) 
 		{
-			const carve::geom::vector<2>& pt = loop_parent.at(j);
+			const carve::geom::vector<2>& pt = loop_parent[j];
 			carve::geom::vector<3> pt3d( carve::geom::VECTOR( pt.x, pt.y, 0 ) );
 			pt3d = transform*pt3d;
 			loop.push_back( carve::geom::VECTOR( pt3d.x, pt3d.y ) );
@@ -419,7 +419,7 @@ void ProfileConverter::convertIfcParameterizedProfileDefWithPosition( const shar
 			std::vector<carve::geom::vector<2> >& path_loop = temp_paths[i];
 			for(int j = 0; j < path_loop.size(); ++j )
 			{
-				carve::geom::vector<2>& pt = path_loop.at(j);
+				carve::geom::vector<2>& pt = path_loop[j];
 				carve::geom::vector<3> pt_3d( carve::geom::VECTOR( pt.x, pt.y, 0 ) );
 				pt_3d = transform*pt_3d;
 				pt.x = pt_3d.x;
@@ -1271,7 +1271,7 @@ void ProfileConverter::mirrorCopyPath( std::vector<carve::geom::vector<2> >& coo
 	double x, y;
 	for( int i = 0; i < points_count; ++i )
 	{
-		carve::geom::vector<2> & p = coords.at(i);
+		carve::geom::vector<2> & p = coords[i];
 		if( mirror_on_y_axis )
 		{
 			x = -p.x;
@@ -1298,7 +1298,7 @@ void ProfileConverter::mirrorCopyPathReverse( std::vector<carve::geom::vector<2>
 	double x, y;
 	for( int i = points_count-1; i >= 0; --i )
 	{
-		carve::geom::vector<2> & p = coords.at(i);
+		carve::geom::vector<2> & p = coords[i];
 		if( mirror_on_y_axis )
 		{
 			x = -p.x;

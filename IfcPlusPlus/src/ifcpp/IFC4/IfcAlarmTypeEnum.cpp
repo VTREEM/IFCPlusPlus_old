@@ -64,7 +64,7 @@ shared_ptr<IfcAlarmTypeEnum> IfcAlarmTypeEnum::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAlarmTypeEnum>(); }
-	shared_ptr<IfcAlarmTypeEnum> type_object( new IfcAlarmTypeEnum() );
+	auto type_object = std::make_shared<IfcAlarmTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BELL." ) == 0 )
 	{
 		type_object->m_enum = IfcAlarmTypeEnum::ENUM_BELL;

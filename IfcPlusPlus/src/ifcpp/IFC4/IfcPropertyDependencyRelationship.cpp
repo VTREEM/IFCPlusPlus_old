@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPropertyDependencyRelationship 
-IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship() { m_entity_enum = IFCPROPERTYDEPENDENCYRELATIONSHIP; }
-IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship( int id ) { m_id = id; m_entity_enum = IFCPROPERTYDEPENDENCYRELATIONSHIP; }
+IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship() {}
+IfcPropertyDependencyRelationship::IfcPropertyDependencyRelationship( int id ) { m_id = id; }
 IfcPropertyDependencyRelationship::~IfcPropertyDependencyRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -65,6 +66,16 @@ void IfcPropertyDependencyRelationship::readStepArguments( const std::vector<std
 	readEntityReference( args[2], m_DependingProperty, map );
 	readEntityReference( args[3], m_DependantProperty, map );
 	m_Expression = IfcText::createObjectFromStepData( args[4] );
+}
+void IfcPropertyDependencyRelationship::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcResourceLevelRelationship::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "DependingProperty", m_DependingProperty ) );
+	vec_attributes.push_back( std::make_pair( "DependantProperty", m_DependantProperty ) );
+	vec_attributes.push_back( std::make_pair( "Expression", m_Expression ) );
+}
+void IfcPropertyDependencyRelationship::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPropertyDependencyRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

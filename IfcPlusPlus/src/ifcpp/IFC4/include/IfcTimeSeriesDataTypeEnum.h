@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTimeSeriesDataTypeEnum = ENUMERATION OF	(CONTINUOUS	,DISCRETE	,DISCRETEBINARY	,PIECEWISEBINARY	,PIECEWISECONSTANT	,PIECEWISECONTINUOUS	,NOTDEFINED);
-class IfcTimeSeriesDataTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTimeSeriesDataTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTimeSeriesDataTypeEnumEnum

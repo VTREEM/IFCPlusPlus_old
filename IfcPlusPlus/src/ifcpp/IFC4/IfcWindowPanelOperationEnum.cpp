@@ -88,7 +88,7 @@ shared_ptr<IfcWindowPanelOperationEnum> IfcWindowPanelOperationEnum::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWindowPanelOperationEnum>(); }
-	shared_ptr<IfcWindowPanelOperationEnum> type_object( new IfcWindowPanelOperationEnum() );
+	auto type_object = std::make_shared<IfcWindowPanelOperationEnum>();
 	if( _stricmp( arg.c_str(), ".SIDEHUNGRIGHTHAND." ) == 0 )
 	{
 		type_object->m_enum = IfcWindowPanelOperationEnum::ENUM_SIDEHUNGRIGHTHAND;

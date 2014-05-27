@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcTrimmingSelect.h"
 
 // ENTITY IfcTrimmedCurve 
-IfcTrimmedCurve::IfcTrimmedCurve() { m_entity_enum = IFCTRIMMEDCURVE; }
-IfcTrimmedCurve::IfcTrimmedCurve( int id ) { m_id = id; m_entity_enum = IFCTRIMMEDCURVE; }
+IfcTrimmedCurve::IfcTrimmedCurve() {}
+IfcTrimmedCurve::IfcTrimmedCurve( int id ) { m_id = id; }
 IfcTrimmedCurve::~IfcTrimmedCurve() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -69,6 +70,22 @@ void IfcTrimmedCurve::readStepArguments( const std::vector<std::string>& args, c
 	if( _stricmp( args[3].c_str(), ".F." ) == 0 ) { m_SenseAgreement = false; }
 	else if( _stricmp( args[3].c_str(), ".T." ) == 0 ) { m_SenseAgreement = true; }
 	m_MasterRepresentation = IfcTrimmingPreference::createObjectFromStepData( args[4] );
+}
+void IfcTrimmedCurve::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundedCurve::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "BasisCurve", m_BasisCurve ) );
+	shared_ptr<IfcPPAttributeObjectVector> Trim1_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Trim1.begin(), m_Trim1.end(), std::back_inserter( Trim1_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Trim1", Trim1_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> Trim2_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Trim2.begin(), m_Trim2.end(), std::back_inserter( Trim2_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Trim2", Trim2_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "SenseAgreement", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SenseAgreement ) ) ) );
+	vec_attributes.push_back( std::make_pair( "MasterRepresentation", m_MasterRepresentation ) );
+}
+void IfcTrimmedCurve::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTrimmedCurve::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

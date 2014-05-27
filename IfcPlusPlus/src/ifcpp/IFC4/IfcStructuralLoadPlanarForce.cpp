@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcStructuralLoadPlanarForce.h"
 
 // ENTITY IfcStructuralLoadPlanarForce 
-IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce() { m_entity_enum = IFCSTRUCTURALLOADPLANARFORCE; }
-IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADPLANARFORCE; }
+IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce() {}
+IfcStructuralLoadPlanarForce::IfcStructuralLoadPlanarForce( int id ) { m_id = id; }
 IfcStructuralLoadPlanarForce::~IfcStructuralLoadPlanarForce() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -60,6 +61,16 @@ void IfcStructuralLoadPlanarForce::readStepArguments( const std::vector<std::str
 	m_PlanarForceX = IfcPlanarForceMeasure::createObjectFromStepData( args[1] );
 	m_PlanarForceY = IfcPlanarForceMeasure::createObjectFromStepData( args[2] );
 	m_PlanarForceZ = IfcPlanarForceMeasure::createObjectFromStepData( args[3] );
+}
+void IfcStructuralLoadPlanarForce::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadStatic::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PlanarForceX", m_PlanarForceX ) );
+	vec_attributes.push_back( std::make_pair( "PlanarForceY", m_PlanarForceY ) );
+	vec_attributes.push_back( std::make_pair( "PlanarForceZ", m_PlanarForceZ ) );
+}
+void IfcStructuralLoadPlanarForce::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadPlanarForce::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

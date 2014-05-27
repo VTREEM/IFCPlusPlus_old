@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcLogicalOperatorEnum = ENUMERATION OF	(LOGICALAND	,LOGICALOR	,LOGICALXOR	,LOGICALNOTAND	,LOGICALNOTOR);
-class IfcLogicalOperatorEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcLogicalOperatorEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcLogicalOperatorEnumEnum

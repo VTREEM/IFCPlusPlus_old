@@ -48,7 +48,7 @@ shared_ptr<IfcConstructionProductResourceTypeEnum> IfcConstructionProductResourc
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcConstructionProductResourceTypeEnum>(); }
-	shared_ptr<IfcConstructionProductResourceTypeEnum> type_object( new IfcConstructionProductResourceTypeEnum() );
+	auto type_object = std::make_shared<IfcConstructionProductResourceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ASSEMBLY." ) == 0 )
 	{
 		type_object->m_enum = IfcConstructionProductResourceTypeEnum::ENUM_ASSEMBLY;

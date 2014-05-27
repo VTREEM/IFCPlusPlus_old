@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcJunctionBoxTypeEnum = ENUMERATION OF	(DATA	,POWER	,USERDEFINED	,NOTDEFINED);
-class IfcJunctionBoxTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcJunctionBoxTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcJunctionBoxTypeEnumEnum

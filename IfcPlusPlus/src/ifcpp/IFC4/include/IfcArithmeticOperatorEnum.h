@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcArithmeticOperatorEnum = ENUMERATION OF	(ADD	,DIVIDE	,MULTIPLY	,SUBTRACT);
-class IfcArithmeticOperatorEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcArithmeticOperatorEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcArithmeticOperatorEnumEnum

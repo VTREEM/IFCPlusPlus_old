@@ -68,7 +68,7 @@ shared_ptr<IfcStructuralCurveActivityTypeEnum> IfcStructuralCurveActivityTypeEnu
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStructuralCurveActivityTypeEnum>(); }
-	shared_ptr<IfcStructuralCurveActivityTypeEnum> type_object( new IfcStructuralCurveActivityTypeEnum() );
+	auto type_object = std::make_shared<IfcStructuralCurveActivityTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONST." ) == 0 )
 	{
 		type_object->m_enum = IfcStructuralCurveActivityTypeEnum::ENUM_CONST;

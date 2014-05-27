@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcGeographicElementTypeEnum = ENUMERATION OF	(TERRAIN	,USERDEFINED	,NOTDEFINED);
-class IfcGeographicElementTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcGeographicElementTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcGeographicElementTypeEnumEnum

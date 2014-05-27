@@ -72,7 +72,7 @@ shared_ptr<IfcDistributionChamberElementTypeEnum> IfcDistributionChamberElementT
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDistributionChamberElementTypeEnum>(); }
-	shared_ptr<IfcDistributionChamberElementTypeEnum> type_object( new IfcDistributionChamberElementTypeEnum() );
+	auto type_object = std::make_shared<IfcDistributionChamberElementTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FORMEDDUCT." ) == 0 )
 	{
 		type_object->m_enum = IfcDistributionChamberElementTypeEnum::ENUM_FORMEDDUCT;

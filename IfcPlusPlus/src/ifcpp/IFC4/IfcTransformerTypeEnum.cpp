@@ -60,7 +60,7 @@ shared_ptr<IfcTransformerTypeEnum> IfcTransformerTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTransformerTypeEnum>(); }
-	shared_ptr<IfcTransformerTypeEnum> type_object( new IfcTransformerTypeEnum() );
+	auto type_object = std::make_shared<IfcTransformerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CURRENT." ) == 0 )
 	{
 		type_object->m_enum = IfcTransformerTypeEnum::ENUM_CURRENT;

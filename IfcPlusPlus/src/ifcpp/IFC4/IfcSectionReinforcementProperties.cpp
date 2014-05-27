@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcSectionReinforcementProperties.h"
 
 // ENTITY IfcSectionReinforcementProperties 
-IfcSectionReinforcementProperties::IfcSectionReinforcementProperties() { m_entity_enum = IFCSECTIONREINFORCEMENTPROPERTIES; }
-IfcSectionReinforcementProperties::IfcSectionReinforcementProperties( int id ) { m_id = id; m_entity_enum = IFCSECTIONREINFORCEMENTPROPERTIES; }
+IfcSectionReinforcementProperties::IfcSectionReinforcementProperties() {}
+IfcSectionReinforcementProperties::IfcSectionReinforcementProperties( int id ) { m_id = id; }
 IfcSectionReinforcementProperties::~IfcSectionReinforcementProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -71,6 +72,18 @@ void IfcSectionReinforcementProperties::readStepArguments( const std::vector<std
 	m_ReinforcementRole = IfcReinforcingBarRoleEnum::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_SectionDefinition, map );
 	readEntityReferenceList( args[5], m_CrossSectionReinforcementDefinitions, map );
+}
+void IfcSectionReinforcementProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedProperties::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LongitudinalStartPosition", m_LongitudinalStartPosition ) );
+	vec_attributes.push_back( std::make_pair( "LongitudinalEndPosition", m_LongitudinalEndPosition ) );
+	vec_attributes.push_back( std::make_pair( "TransversePosition", m_TransversePosition ) );
+	vec_attributes.push_back( std::make_pair( "ReinforcementRole", m_ReinforcementRole ) );
+	vec_attributes.push_back( std::make_pair( "SectionDefinition", m_SectionDefinition ) );
+}
+void IfcSectionReinforcementProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSectionReinforcementProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

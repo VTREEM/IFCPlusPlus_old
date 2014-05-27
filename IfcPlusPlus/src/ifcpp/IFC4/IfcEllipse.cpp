@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcEllipse 
-IfcEllipse::IfcEllipse() { m_entity_enum = IFCELLIPSE; }
-IfcEllipse::IfcEllipse( int id ) { m_id = id; m_entity_enum = IFCELLIPSE; }
+IfcEllipse::IfcEllipse() {}
+IfcEllipse::IfcEllipse( int id ) { m_id = id; }
 IfcEllipse::~IfcEllipse() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,15 @@ void IfcEllipse::readStepArguments( const std::vector<std::string>& args, const 
 	m_Position = IfcAxis2Placement::createObjectFromStepData( args[0], map );
 	m_SemiAxis1 = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
 	m_SemiAxis2 = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
+}
+void IfcEllipse::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConic::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "SemiAxis1", m_SemiAxis1 ) );
+	vec_attributes.push_back( std::make_pair( "SemiAxis2", m_SemiAxis2 ) );
+}
+void IfcEllipse::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcEllipse::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

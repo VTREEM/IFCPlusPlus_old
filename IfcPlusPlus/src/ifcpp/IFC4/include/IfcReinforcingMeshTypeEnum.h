@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcReinforcingMeshTypeEnum = ENUMERATION OF	(USERDEFINED	,NOTDEFINED);
-class IfcReinforcingMeshTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcReinforcingMeshTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcReinforcingMeshTypeEnumEnum

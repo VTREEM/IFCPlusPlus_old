@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcLuminousFluxMeasure = REAL;
-class IfcLuminousFluxMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcLuminousFluxMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcLuminousFluxMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcLuminousFluxMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcLuminousFluxMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

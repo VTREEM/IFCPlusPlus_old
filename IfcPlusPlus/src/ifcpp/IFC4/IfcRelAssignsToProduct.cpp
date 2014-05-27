@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -29,8 +30,8 @@
 #include "include/IfcTypeProduct.h"
 
 // ENTITY IfcRelAssignsToProduct 
-IfcRelAssignsToProduct::IfcRelAssignsToProduct() { m_entity_enum = IFCRELASSIGNSTOPRODUCT; }
-IfcRelAssignsToProduct::IfcRelAssignsToProduct( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTOPRODUCT; }
+IfcRelAssignsToProduct::IfcRelAssignsToProduct() {}
+IfcRelAssignsToProduct::IfcRelAssignsToProduct( int id ) { m_id = id; }
 IfcRelAssignsToProduct::~IfcRelAssignsToProduct() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -79,6 +80,14 @@ void IfcRelAssignsToProduct::readStepArguments( const std::vector<std::string>& 
 	readEntityReferenceList( args[4], m_RelatedObjects, map );
 	m_RelatedObjectsType = IfcObjectTypeEnum::createObjectFromStepData( args[5] );
 	m_RelatingProduct = IfcProductSelect::createObjectFromStepData( args[6], map );
+}
+void IfcRelAssignsToProduct::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelAssigns::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingProduct", m_RelatingProduct ) );
+}
+void IfcRelAssignsToProduct::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelAssignsToProduct::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPermitTypeEnum = ENUMERATION OF	(ACCESS	,BUILDING	,WORK	,USERDEFINED	,NOTDEFINED);
-class IfcPermitTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPermitTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPermitTypeEnumEnum

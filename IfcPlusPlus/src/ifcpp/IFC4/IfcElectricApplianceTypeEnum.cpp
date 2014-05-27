@@ -104,7 +104,7 @@ shared_ptr<IfcElectricApplianceTypeEnum> IfcElectricApplianceTypeEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricApplianceTypeEnum>(); }
-	shared_ptr<IfcElectricApplianceTypeEnum> type_object( new IfcElectricApplianceTypeEnum() );
+	auto type_object = std::make_shared<IfcElectricApplianceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DISHWASHER." ) == 0 )
 	{
 		type_object->m_enum = IfcElectricApplianceTypeEnum::ENUM_DISHWASHER;

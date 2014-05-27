@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -40,8 +41,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcExternalSpatialElement 
-IfcExternalSpatialElement::IfcExternalSpatialElement() { m_entity_enum = IFCEXTERNALSPATIALELEMENT; }
-IfcExternalSpatialElement::IfcExternalSpatialElement( int id ) { m_id = id; m_entity_enum = IFCEXTERNALSPATIALELEMENT; }
+IfcExternalSpatialElement::IfcExternalSpatialElement() {}
+IfcExternalSpatialElement::IfcExternalSpatialElement( int id ) { m_id = id; }
 IfcExternalSpatialElement::~IfcExternalSpatialElement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -98,6 +99,14 @@ void IfcExternalSpatialElement::readStepArguments( const std::vector<std::string
 	readEntityReference( args[6], m_Representation, map );
 	m_LongName = IfcLabel::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcExternalSpatialElementTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcExternalSpatialElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalSpatialStructureElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcExternalSpatialElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcExternalSpatialElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

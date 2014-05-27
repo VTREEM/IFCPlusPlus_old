@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcRotationalStiffnessSelect = SELECT	(IfcBoolean	,IfcRotationalStiffnessMeasure);
-class IfcRotationalStiffnessSelect : public IfcPPAbstractSelect
+class IfcRotationalStiffnessSelect : virtual public IfcPPObject
 {
 public:
 	IfcRotationalStiffnessSelect();
 	~IfcRotationalStiffnessSelect();
 	virtual const char* classname() const { return "IfcRotationalStiffnessSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcRotationalStiffnessSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

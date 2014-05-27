@@ -68,7 +68,7 @@ shared_ptr<IfcProcedureTypeEnum> IfcProcedureTypeEnum::createObjectFromStepData(
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcProcedureTypeEnum>(); }
-	shared_ptr<IfcProcedureTypeEnum> type_object( new IfcProcedureTypeEnum() );
+	auto type_object = std::make_shared<IfcProcedureTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ADVICE_CAUTION." ) == 0 )
 	{
 		type_object->m_enum = IfcProcedureTypeEnum::ENUM_ADVICE_CAUTION;

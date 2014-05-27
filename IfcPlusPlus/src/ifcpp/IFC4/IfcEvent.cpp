@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -38,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcEvent 
-IfcEvent::IfcEvent() { m_entity_enum = IFCEVENT; }
-IfcEvent::IfcEvent( int id ) { m_id = id; m_entity_enum = IFCEVENT; }
+IfcEvent::IfcEvent() {}
+IfcEvent::IfcEvent( int id ) { m_id = id; }
 IfcEvent::~IfcEvent() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -104,6 +105,17 @@ void IfcEvent::readStepArguments( const std::vector<std::string>& args, const st
 	m_EventTriggerType = IfcEventTriggerTypeEnum::createObjectFromStepData( args[8] );
 	m_UserDefinedEventTriggerType = IfcLabel::createObjectFromStepData( args[9] );
 	readEntityReference( args[10], m_EventOccurenceTime, map );
+}
+void IfcEvent::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProcess::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "EventTriggerType", m_EventTriggerType ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedEventTriggerType", m_UserDefinedEventTriggerType ) );
+	vec_attributes.push_back( std::make_pair( "EventOccurenceTime", m_EventOccurenceTime ) );
+}
+void IfcEvent::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcEvent::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

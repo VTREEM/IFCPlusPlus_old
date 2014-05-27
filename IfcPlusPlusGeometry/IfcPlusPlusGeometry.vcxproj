@@ -161,6 +161,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <DisableSpecificWarnings>4267</DisableSpecificWarnings>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -278,6 +279,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\ifcppgeometry\ConverterOSG.cpp" />
+    <ClCompile Include="src\ifcppgeometry\CSG_Adapter.cpp" />
     <ClCompile Include="src\ifcppgeometry\CurveConverter.cpp" />
     <ClCompile Include="src\ifcppgeometry\DebugViewerCallback.cpp" />
     <ClCompile Include="src\ifcppgeometry\FaceConverter.cpp" />
@@ -294,6 +296,7 @@
     <ClCompile Include="src\ifcppgeometry\ProfileCache.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ifcppgeometry\CSG_Adapter.h" />
     <ClInclude Include="src\ifcppgeometry\DebugViewerCallback.h" />
     <ClInclude Include="src\ifcppgeometry\GeometryInputData.h" />
     <ClInclude Include="src\ifcppgeometry\ConverterOSG.h" />
@@ -305,7 +308,6 @@
     <ClInclude Include="src\ifcppgeometry\PlacementConverter.h" />
     <ClInclude Include="src\ifcppgeometry\ProfileConverter.h" />
     <ClInclude Include="src\ifcppgeometry\ReaderWriterIFC.h" />
-    <ClInclude Include="src\ifcppgeometry\RecursiveCallException.h" />
     <ClInclude Include="src\ifcppgeometry\RepresentationConverter.h" />
     <ClInclude Include="src\ifcppgeometry\SolidModelConverter.h" />
     <ClInclude Include="src\ifcppgeometry\StylesConverter.h" />

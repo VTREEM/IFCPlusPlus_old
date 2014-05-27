@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcUnitaryControlElementTypeEnum.h"
 
 // ENTITY IfcUnitaryControlElement 
-IfcUnitaryControlElement::IfcUnitaryControlElement() { m_entity_enum = IFCUNITARYCONTROLELEMENT; }
-IfcUnitaryControlElement::IfcUnitaryControlElement( int id ) { m_id = id; m_entity_enum = IFCUNITARYCONTROLELEMENT; }
+IfcUnitaryControlElement::IfcUnitaryControlElement() {}
+IfcUnitaryControlElement::IfcUnitaryControlElement( int id ) { m_id = id; }
 IfcUnitaryControlElement::~IfcUnitaryControlElement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcUnitaryControlElement::readStepArguments( const std::vector<std::string>
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcUnitaryControlElementTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcUnitaryControlElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDistributionControlElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcUnitaryControlElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcUnitaryControlElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

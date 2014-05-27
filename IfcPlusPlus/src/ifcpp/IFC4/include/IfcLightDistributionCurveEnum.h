@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcLightDistributionCurveEnum = ENUMERATION OF	(TYPE_A	,TYPE_B	,TYPE_C	,NOTDEFINED);
-class IfcLightDistributionCurveEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcLightDistributionCurveEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcLightDistributionCurveEnumEnum

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFlowInstrumentTypeEnum = ENUMERATION OF	(PRESSUREGAUGE	,THERMOMETER	,AMMETER	,FREQUENCYMETER	,POWERFACTORMETER	,PHASEANGLEMETER	,VOLTMETER_PEAK	,VOLTMETER_RMS	,USERDEFINED	,NOTDEFINED);
-class IfcFlowInstrumentTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFlowInstrumentTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFlowInstrumentTypeEnumEnum

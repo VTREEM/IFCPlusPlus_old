@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCsgSolid 
-IfcCsgSolid::IfcCsgSolid() { m_entity_enum = IFCCSGSOLID; }
-IfcCsgSolid::IfcCsgSolid( int id ) { m_id = id; m_entity_enum = IFCCSGSOLID; }
+IfcCsgSolid::IfcCsgSolid() {}
+IfcCsgSolid::IfcCsgSolid( int id ) { m_id = id; }
 IfcCsgSolid::~IfcCsgSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,14 @@ void IfcCsgSolid::readStepArguments( const std::vector<std::string>& args, const
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcCsgSolid, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	m_TreeRootExpression = IfcCsgSelect::createObjectFromStepData( args[0], map );
+}
+void IfcCsgSolid::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSolidModel::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TreeRootExpression", m_TreeRootExpression ) );
+}
+void IfcCsgSolid::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCsgSolid::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

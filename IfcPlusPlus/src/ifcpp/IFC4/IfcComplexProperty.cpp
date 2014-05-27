@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcComplexProperty 
-IfcComplexProperty::IfcComplexProperty() { m_entity_enum = IFCCOMPLEXPROPERTY; }
-IfcComplexProperty::IfcComplexProperty( int id ) { m_id = id; m_entity_enum = IFCCOMPLEXPROPERTY; }
+IfcComplexProperty::IfcComplexProperty() {}
+IfcComplexProperty::IfcComplexProperty( int id ) { m_id = id; }
 IfcComplexProperty::~IfcComplexProperty() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -64,6 +65,14 @@ void IfcComplexProperty::readStepArguments( const std::vector<std::string>& args
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	m_UsageName = IfcIdentifier::createObjectFromStepData( args[2] );
 	readEntityReferenceList( args[3], m_HasProperties, map );
+}
+void IfcComplexProperty::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProperty::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "UsageName", m_UsageName ) );
+}
+void IfcComplexProperty::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcComplexProperty::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

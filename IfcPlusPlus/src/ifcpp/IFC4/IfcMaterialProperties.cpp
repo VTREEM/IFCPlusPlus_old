@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMaterialProperties 
-IfcMaterialProperties::IfcMaterialProperties() { m_entity_enum = IFCMATERIALPROPERTIES; }
-IfcMaterialProperties::IfcMaterialProperties( int id ) { m_id = id; m_entity_enum = IFCMATERIALPROPERTIES; }
+IfcMaterialProperties::IfcMaterialProperties() {}
+IfcMaterialProperties::IfcMaterialProperties( int id ) { m_id = id; }
 IfcMaterialProperties::~IfcMaterialProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -63,6 +64,14 @@ void IfcMaterialProperties::readStepArguments( const std::vector<std::string>& a
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReferenceList( args[2], m_Properties, map );
 	readEntityReference( args[3], m_Material, map );
+}
+void IfcMaterialProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExtendedProperties::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Material", m_Material ) );
+}
+void IfcMaterialProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCableCarrierSegmentTypeEnum = ENUMERATION OF	(CABLELADDERSEGMENT	,CABLETRAYSEGMENT	,CABLETRUNKINGSEGMENT	,CONDUITSEGMENT	,USERDEFINED	,NOTDEFINED);
-class IfcCableCarrierSegmentTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCableCarrierSegmentTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCableCarrierSegmentTypeEnumEnum

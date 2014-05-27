@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcModulusOfElasticityMeasure = REAL;
-class IfcModulusOfElasticityMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcModulusOfElasticityMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcModulusOfElasticityMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcModulusOfElasticityMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcModulusOfElasticityMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

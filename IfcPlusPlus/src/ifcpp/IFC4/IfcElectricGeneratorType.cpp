@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcElectricGeneratorType 
-IfcElectricGeneratorType::IfcElectricGeneratorType() { m_entity_enum = IFCELECTRICGENERATORTYPE; }
-IfcElectricGeneratorType::IfcElectricGeneratorType( int id ) { m_id = id; m_entity_enum = IFCELECTRICGENERATORTYPE; }
+IfcElectricGeneratorType::IfcElectricGeneratorType() {}
+IfcElectricGeneratorType::IfcElectricGeneratorType( int id ) { m_id = id; }
 IfcElectricGeneratorType::~IfcElectricGeneratorType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcElectricGeneratorType::readStepArguments( const std::vector<std::string>
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcElectricGeneratorTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcElectricGeneratorType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEnergyConversionDeviceType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcElectricGeneratorType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcElectricGeneratorType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcCompositeProfileDef 
-IfcCompositeProfileDef::IfcCompositeProfileDef() { m_entity_enum = IFCCOMPOSITEPROFILEDEF; }
-IfcCompositeProfileDef::IfcCompositeProfileDef( int id ) { m_id = id; m_entity_enum = IFCCOMPOSITEPROFILEDEF; }
+IfcCompositeProfileDef::IfcCompositeProfileDef() {}
+IfcCompositeProfileDef::IfcCompositeProfileDef( int id ) { m_id = id; }
 IfcCompositeProfileDef::~IfcCompositeProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -63,6 +64,14 @@ void IfcCompositeProfileDef::readStepArguments( const std::vector<std::string>& 
 	m_ProfileName = IfcLabel::createObjectFromStepData( args[1] );
 	readEntityReferenceList( args[2], m_Profiles, map );
 	m_Label = IfcLabel::createObjectFromStepData( args[3] );
+}
+void IfcCompositeProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Label", m_Label ) );
+}
+void IfcCompositeProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCompositeProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

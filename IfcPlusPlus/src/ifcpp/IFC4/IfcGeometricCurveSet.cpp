@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcGeometricCurveSet 
-IfcGeometricCurveSet::IfcGeometricCurveSet() { m_entity_enum = IFCGEOMETRICCURVESET; }
-IfcGeometricCurveSet::IfcGeometricCurveSet( int id ) { m_id = id; m_entity_enum = IFCGEOMETRICCURVESET; }
+IfcGeometricCurveSet::IfcGeometricCurveSet() {}
+IfcGeometricCurveSet::IfcGeometricCurveSet( int id ) { m_id = id; }
 IfcGeometricCurveSet::~IfcGeometricCurveSet() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,13 @@ void IfcGeometricCurveSet::readStepArguments( const std::vector<std::string>& ar
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcGeometricCurveSet, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readSelectList( args[0], m_Elements, map );
+}
+void IfcGeometricCurveSet::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricSet::getAttributes( vec_attributes );
+}
+void IfcGeometricCurveSet::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcGeometricCurveSet::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,8 +48,8 @@
 #include "include/IfcWallTypeEnum.h"
 
 // ENTITY IfcWallStandardCase 
-IfcWallStandardCase::IfcWallStandardCase() { m_entity_enum = IFCWALLSTANDARDCASE; }
-IfcWallStandardCase::IfcWallStandardCase( int id ) { m_id = id; m_entity_enum = IFCWALLSTANDARDCASE; }
+IfcWallStandardCase::IfcWallStandardCase() {}
+IfcWallStandardCase::IfcWallStandardCase( int id ) { m_id = id; }
 IfcWallStandardCase::~IfcWallStandardCase() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -105,6 +106,13 @@ void IfcWallStandardCase::readStepArguments( const std::vector<std::string>& arg
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcWallTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcWallStandardCase::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcWall::getAttributes( vec_attributes );
+}
+void IfcWallStandardCase::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWallStandardCase::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

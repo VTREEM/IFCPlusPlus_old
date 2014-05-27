@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,8 +50,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcReinforcingBar 
-IfcReinforcingBar::IfcReinforcingBar() { m_entity_enum = IFCREINFORCINGBAR; }
-IfcReinforcingBar::IfcReinforcingBar( int id ) { m_id = id; m_entity_enum = IFCREINFORCINGBAR; }
+IfcReinforcingBar::IfcReinforcingBar() {}
+IfcReinforcingBar::IfcReinforcingBar( int id ) { m_id = id; }
 IfcReinforcingBar::~IfcReinforcingBar() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -127,6 +128,18 @@ void IfcReinforcingBar::readStepArguments( const std::vector<std::string>& args,
 	m_BarLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[11] );
 	m_PredefinedType = IfcReinforcingBarTypeEnum::createObjectFromStepData( args[12] );
 	m_BarSurface = IfcReinforcingBarSurfaceEnum::createObjectFromStepData( args[13] );
+}
+void IfcReinforcingBar::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcReinforcingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "NominalDiameter", m_NominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "CrossSectionArea", m_CrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "BarLength", m_BarLength ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "BarSurface", m_BarSurface ) );
+}
+void IfcReinforcingBar::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcReinforcingBar::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

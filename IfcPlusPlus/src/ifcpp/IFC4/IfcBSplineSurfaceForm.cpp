@@ -76,7 +76,7 @@ shared_ptr<IfcBSplineSurfaceForm> IfcBSplineSurfaceForm::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBSplineSurfaceForm>(); }
-	shared_ptr<IfcBSplineSurfaceForm> type_object( new IfcBSplineSurfaceForm() );
+	auto type_object = std::make_shared<IfcBSplineSurfaceForm>();
 	if( _stricmp( arg.c_str(), ".PLANE_SURF." ) == 0 )
 	{
 		type_object->m_enum = IfcBSplineSurfaceForm::ENUM_PLANE_SURF;

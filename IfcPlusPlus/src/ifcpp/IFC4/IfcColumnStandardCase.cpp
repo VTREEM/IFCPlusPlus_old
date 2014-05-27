@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcColumnStandardCase 
-IfcColumnStandardCase::IfcColumnStandardCase() { m_entity_enum = IFCCOLUMNSTANDARDCASE; }
-IfcColumnStandardCase::IfcColumnStandardCase( int id ) { m_id = id; m_entity_enum = IFCCOLUMNSTANDARDCASE; }
+IfcColumnStandardCase::IfcColumnStandardCase() {}
+IfcColumnStandardCase::IfcColumnStandardCase( int id ) { m_id = id; }
 IfcColumnStandardCase::~IfcColumnStandardCase() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -105,6 +106,13 @@ void IfcColumnStandardCase::readStepArguments( const std::vector<std::string>& a
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcColumnTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcColumnStandardCase::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcColumn::getAttributes( vec_attributes );
+}
+void IfcColumnStandardCase::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcColumnStandardCase::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

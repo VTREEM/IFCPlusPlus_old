@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcSweptAreaSolid.h"
 
 // ENTITY IfcSweptAreaSolid 
-IfcSweptAreaSolid::IfcSweptAreaSolid() { m_entity_enum = IFCSWEPTAREASOLID; }
-IfcSweptAreaSolid::IfcSweptAreaSolid( int id ) { m_id = id; m_entity_enum = IFCSWEPTAREASOLID; }
+IfcSweptAreaSolid::IfcSweptAreaSolid() {}
+IfcSweptAreaSolid::IfcSweptAreaSolid( int id ) { m_id = id; }
 IfcSweptAreaSolid::~IfcSweptAreaSolid() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -54,6 +55,15 @@ void IfcSweptAreaSolid::readStepArguments( const std::vector<std::string>& args,
 	#endif
 	readEntityReference( args[0], m_SweptArea, map );
 	readEntityReference( args[1], m_Position, map );
+}
+void IfcSweptAreaSolid::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSolidModel::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "SweptArea", m_SweptArea ) );
+	vec_attributes.push_back( std::make_pair( "Position", m_Position ) );
+}
+void IfcSweptAreaSolid::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSweptAreaSolid::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcTransitionCode.h"
 
 // ENTITY IfcReparametrisedCompositeCurveSegment 
-IfcReparametrisedCompositeCurveSegment::IfcReparametrisedCompositeCurveSegment() { m_entity_enum = IFCREPARAMETRISEDCOMPOSITECURVESEGMENT; }
-IfcReparametrisedCompositeCurveSegment::IfcReparametrisedCompositeCurveSegment( int id ) { m_id = id; m_entity_enum = IFCREPARAMETRISEDCOMPOSITECURVESEGMENT; }
+IfcReparametrisedCompositeCurveSegment::IfcReparametrisedCompositeCurveSegment() {}
+IfcReparametrisedCompositeCurveSegment::IfcReparametrisedCompositeCurveSegment( int id ) { m_id = id; }
 IfcReparametrisedCompositeCurveSegment::~IfcReparametrisedCompositeCurveSegment() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -66,6 +67,14 @@ void IfcReparametrisedCompositeCurveSegment::readStepArguments( const std::vecto
 	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_SameSense = true; }
 	readEntityReference( args[2], m_ParentCurve, map );
 	m_ParamLength = IfcParameterValue::createObjectFromStepData( args[3] );
+}
+void IfcReparametrisedCompositeCurveSegment::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCompositeCurveSegment::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ParamLength", m_ParamLength ) );
+}
+void IfcReparametrisedCompositeCurveSegment::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcReparametrisedCompositeCurveSegment::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

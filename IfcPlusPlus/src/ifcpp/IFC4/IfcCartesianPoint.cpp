@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCartesianPoint 
-IfcCartesianPoint::IfcCartesianPoint() { m_entity_enum = IFCCARTESIANPOINT; }
-IfcCartesianPoint::IfcCartesianPoint( int id ) { m_id = id; m_entity_enum = IFCCARTESIANPOINT; }
+IfcCartesianPoint::IfcCartesianPoint() {}
+IfcCartesianPoint::IfcCartesianPoint( int id ) { m_id = id; }
 IfcCartesianPoint::~IfcCartesianPoint() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,16 @@ void IfcCartesianPoint::readStepArguments( const std::vector<std::string>& args,
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcCartesianPoint, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readTypeOfRealList( args[0], m_Coordinates );
+}
+void IfcCartesianPoint::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPoint::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> Coordinates_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Coordinates.begin(), m_Coordinates.end(), std::back_inserter( Coordinates_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Coordinates", Coordinates_vec_object ) );
+}
+void IfcCartesianPoint::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCartesianPoint::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -96,7 +96,7 @@ shared_ptr<IfcSIPrefix> IfcSIPrefix::createObjectFromStepData( const std::string
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSIPrefix>(); }
-	shared_ptr<IfcSIPrefix> type_object( new IfcSIPrefix() );
+	auto type_object = std::make_shared<IfcSIPrefix>();
 	if( _stricmp( arg.c_str(), ".EXA." ) == 0 )
 	{
 		type_object->m_enum = IfcSIPrefix::ENUM_EXA;

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCartesianTransformationOperator3DnonUniform 
-IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform() { m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM; }
-IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform( int id ) { m_id = id; m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR3DNONUNIFORM; }
+IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform() {}
+IfcCartesianTransformationOperator3DnonUniform::IfcCartesianTransformationOperator3DnonUniform( int id ) { m_id = id; }
 IfcCartesianTransformationOperator3DnonUniform::~IfcCartesianTransformationOperator3DnonUniform() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -77,6 +78,15 @@ void IfcCartesianTransformationOperator3DnonUniform::readStepArguments( const st
 	readEntityReference( args[4], m_Axis3, map );
 	readRealValue( args[5], m_Scale2 );
 	readRealValue( args[6], m_Scale3 );
+}
+void IfcCartesianTransformationOperator3DnonUniform::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCartesianTransformationOperator3D::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Scale2", shared_ptr<IfcPPAttributeObjectDouble>( new  IfcPPAttributeObjectDouble( m_Scale2 ) ) ) );
+	vec_attributes.push_back( std::make_pair( "Scale3", shared_ptr<IfcPPAttributeObjectDouble>( new  IfcPPAttributeObjectDouble( m_Scale3 ) ) ) );
+}
+void IfcCartesianTransformationOperator3DnonUniform::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCartesianTransformationOperator3DnonUniform::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

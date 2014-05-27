@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -28,8 +29,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMaterialConstituent 
-IfcMaterialConstituent::IfcMaterialConstituent() { m_entity_enum = IFCMATERIALCONSTITUENT; }
-IfcMaterialConstituent::IfcMaterialConstituent( int id ) { m_id = id; m_entity_enum = IFCMATERIALCONSTITUENT; }
+IfcMaterialConstituent::IfcMaterialConstituent() {}
+IfcMaterialConstituent::IfcMaterialConstituent( int id ) { m_id = id; }
 IfcMaterialConstituent::~IfcMaterialConstituent() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -70,6 +71,19 @@ void IfcMaterialConstituent::readStepArguments( const std::vector<std::string>& 
 	readEntityReference( args[2], m_Material, map );
 	m_Fraction = IfcNormalisedRatioMeasure::createObjectFromStepData( args[3] );
 	m_Category = IfcLabel::createObjectFromStepData( args[4] );
+}
+void IfcMaterialConstituent::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcMaterialDefinition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "Material", m_Material ) );
+	vec_attributes.push_back( std::make_pair( "Fraction", m_Fraction ) );
+	vec_attributes.push_back( std::make_pair( "Category", m_Category ) );
+}
+void IfcMaterialConstituent::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "ToMaterialConstituentSet_inverse", shared_ptr<IfcPPEntity>( m_ToMaterialConstituentSet_inverse ) ) );
 }
 void IfcMaterialConstituent::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

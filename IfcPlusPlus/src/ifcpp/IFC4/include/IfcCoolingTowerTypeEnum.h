@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCoolingTowerTypeEnum = ENUMERATION OF	(NATURALDRAFT	,MECHANICALINDUCEDDRAFT	,MECHANICALFORCEDDRAFT	,USERDEFINED	,NOTDEFINED);
-class IfcCoolingTowerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCoolingTowerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCoolingTowerTypeEnumEnum

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcLayerSetDirectionEnum = ENUMERATION OF	(AXIS1	,AXIS2	,AXIS3);
-class IfcLayerSetDirectionEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcLayerSetDirectionEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcLayerSetDirectionEnumEnum

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcPropertyAbstraction.h"
 
 // ENTITY IfcPropertyAbstraction 
-IfcPropertyAbstraction::IfcPropertyAbstraction() { m_entity_enum = IFCPROPERTYABSTRACTION; }
-IfcPropertyAbstraction::IfcPropertyAbstraction( int id ) { m_id = id; m_entity_enum = IFCPROPERTYABSTRACTION; }
+IfcPropertyAbstraction::IfcPropertyAbstraction() {}
+IfcPropertyAbstraction::IfcPropertyAbstraction( int id ) { m_id = id; }
 IfcPropertyAbstraction::~IfcPropertyAbstraction() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -38,6 +39,12 @@ void IfcPropertyAbstraction::getStepLine( std::stringstream& stream ) const
 }
 void IfcPropertyAbstraction::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcPropertyAbstraction::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcPropertyAbstraction::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+}
+void IfcPropertyAbstraction::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcPropertyAbstraction::setInverseCounterparts( shared_ptr<IfcPPEntity> )

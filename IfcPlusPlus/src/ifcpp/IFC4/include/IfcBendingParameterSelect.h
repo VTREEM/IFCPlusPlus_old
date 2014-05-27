@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBendingParameterSelect = SELECT	(IfcLengthMeasure	,IfcPlaneAngleMeasure);
-class IfcBendingParameterSelect : public IfcPPAbstractSelect
+class IfcBendingParameterSelect : virtual public IfcPPObject
 {
 public:
 	IfcBendingParameterSelect();
 	~IfcBendingParameterSelect();
 	virtual const char* classname() const { return "IfcBendingParameterSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcBendingParameterSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

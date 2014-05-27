@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcExternalReference 
-IfcExternalReference::IfcExternalReference() { m_entity_enum = IFCEXTERNALREFERENCE; }
-IfcExternalReference::IfcExternalReference( int id ) { m_id = id; m_entity_enum = IFCEXTERNALREFERENCE; }
+IfcExternalReference::IfcExternalReference() {}
+IfcExternalReference::IfcExternalReference( int id ) { m_id = id; }
 IfcExternalReference::~IfcExternalReference() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,15 @@ void IfcExternalReference::readStepArguments( const std::vector<std::string>& ar
 	m_Location = IfcURIReference::createObjectFromStepData( args[0] );
 	m_Identification = IfcIdentifier::createObjectFromStepData( args[1] );
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+}
+void IfcExternalReference::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Location", m_Location ) );
+	vec_attributes.push_back( std::make_pair( "Identification", m_Identification ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+}
+void IfcExternalReference::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcExternalReference::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

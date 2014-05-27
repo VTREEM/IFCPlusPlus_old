@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -34,8 +35,8 @@
 #include "include/IfcTypeProduct.h"
 
 // ENTITY IfcTypeProduct 
-IfcTypeProduct::IfcTypeProduct() { m_entity_enum = IFCTYPEPRODUCT; }
-IfcTypeProduct::IfcTypeProduct( int id ) { m_id = id; m_entity_enum = IFCTYPEPRODUCT; }
+IfcTypeProduct::IfcTypeProduct() {}
+IfcTypeProduct::IfcTypeProduct( int id ) { m_id = id; }
 IfcTypeProduct::~IfcTypeProduct() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -88,6 +89,14 @@ void IfcTypeProduct::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReferenceList( args[5], m_HasPropertySets, map );
 	readEntityReferenceList( args[6], m_RepresentationMaps, map );
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
+}
+void IfcTypeProduct::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTypeObject::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Tag", m_Tag ) );
+}
+void IfcTypeProduct::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTypeProduct::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

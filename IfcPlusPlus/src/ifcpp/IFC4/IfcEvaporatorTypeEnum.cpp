@@ -64,7 +64,7 @@ shared_ptr<IfcEvaporatorTypeEnum> IfcEvaporatorTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcEvaporatorTypeEnum>(); }
-	shared_ptr<IfcEvaporatorTypeEnum> type_object( new IfcEvaporatorTypeEnum() );
+	auto type_object = std::make_shared<IfcEvaporatorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DIRECTEXPANSION." ) == 0 )
 	{
 		type_object->m_enum = IfcEvaporatorTypeEnum::ENUM_DIRECTEXPANSION;

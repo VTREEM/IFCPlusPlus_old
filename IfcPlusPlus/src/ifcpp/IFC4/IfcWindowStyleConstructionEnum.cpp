@@ -64,7 +64,7 @@ shared_ptr<IfcWindowStyleConstructionEnum> IfcWindowStyleConstructionEnum::creat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWindowStyleConstructionEnum>(); }
-	shared_ptr<IfcWindowStyleConstructionEnum> type_object( new IfcWindowStyleConstructionEnum() );
+	auto type_object = std::make_shared<IfcWindowStyleConstructionEnum>();
 	if( _stricmp( arg.c_str(), ".ALUMINIUM." ) == 0 )
 	{
 		type_object->m_enum = IfcWindowStyleConstructionEnum::ENUM_ALUMINIUM;

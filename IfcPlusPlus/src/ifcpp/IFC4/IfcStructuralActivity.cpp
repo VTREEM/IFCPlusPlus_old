@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -38,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralActivity 
-IfcStructuralActivity::IfcStructuralActivity() { m_entity_enum = IFCSTRUCTURALACTIVITY; }
-IfcStructuralActivity::IfcStructuralActivity( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALACTIVITY; }
+IfcStructuralActivity::IfcStructuralActivity() {}
+IfcStructuralActivity::IfcStructuralActivity( int id ) { m_id = id; }
 IfcStructuralActivity::~IfcStructuralActivity() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -96,6 +97,15 @@ void IfcStructuralActivity::readStepArguments( const std::vector<std::string>& a
 	readEntityReference( args[6], m_Representation, map );
 	readEntityReference( args[7], m_AppliedLoad, map );
 	m_GlobalOrLocal = IfcGlobalOrLocalEnum::createObjectFromStepData( args[8] );
+}
+void IfcStructuralActivity::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProduct::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "AppliedLoad", m_AppliedLoad ) );
+	vec_attributes.push_back( std::make_pair( "GlobalOrLocal", m_GlobalOrLocal ) );
+}
+void IfcStructuralActivity::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralActivity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

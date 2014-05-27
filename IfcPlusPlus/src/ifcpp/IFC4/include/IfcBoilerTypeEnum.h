@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBoilerTypeEnum = ENUMERATION OF	(WATER	,STEAM	,USERDEFINED	,NOTDEFINED);
-class IfcBoilerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcBoilerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcBoilerTypeEnumEnum

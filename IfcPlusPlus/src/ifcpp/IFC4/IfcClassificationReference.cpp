@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -28,8 +29,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcClassificationReference 
-IfcClassificationReference::IfcClassificationReference() { m_entity_enum = IFCCLASSIFICATIONREFERENCE; }
-IfcClassificationReference::IfcClassificationReference( int id ) { m_id = id; m_entity_enum = IFCCLASSIFICATIONREFERENCE; }
+IfcClassificationReference::IfcClassificationReference() {}
+IfcClassificationReference::IfcClassificationReference( int id ) { m_id = id; }
 IfcClassificationReference::~IfcClassificationReference() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -74,6 +75,16 @@ void IfcClassificationReference::readStepArguments( const std::vector<std::strin
 	m_ReferencedSource = IfcClassificationReferenceSelect::createObjectFromStepData( args[3], map );
 	m_Description = IfcText::createObjectFromStepData( args[4] );
 	m_Sort = IfcIdentifier::createObjectFromStepData( args[5] );
+}
+void IfcClassificationReference::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalReference::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ReferencedSource", m_ReferencedSource ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "Sort", m_Sort ) );
+}
+void IfcClassificationReference::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcClassificationReference::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

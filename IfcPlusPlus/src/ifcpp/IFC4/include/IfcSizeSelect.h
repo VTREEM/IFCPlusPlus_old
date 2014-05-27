@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSizeSelect = SELECT	(IfcDescriptiveMeasure	,IfcLengthMeasure	,IfcNormalisedRatioMeasure	,IfcPositiveLengthMeasure	,IfcPositiveRatioMeasure	,IfcRatioMeasure);
-class IfcSizeSelect : public IfcPPAbstractSelect
+class IfcSizeSelect : virtual public IfcPPObject
 {
 public:
 	IfcSizeSelect();
 	~IfcSizeSelect();
 	virtual const char* classname() const { return "IfcSizeSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcSizeSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

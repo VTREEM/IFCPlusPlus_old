@@ -28,7 +28,6 @@ IfcHeatingValueMeasure::~IfcHeatingValueMeasure() {}
 void IfcHeatingValueMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCHEATINGVALUEMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcHeatingValueMeasure> IfcHeatingValueMeasure::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcHeatingValueMeasure>(); }
-	shared_ptr<IfcHeatingValueMeasure> type_object( new IfcHeatingValueMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcHeatingValueMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

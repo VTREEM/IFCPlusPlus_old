@@ -21,7 +21,7 @@
 #include "IfcPresentationStyleSelect.h"
 
 // TYPE IfcNullStyle = ENUMERATION OF	(NULL);
-class IfcNullStyle : public IfcPresentationStyleSelect, public IfcPPType
+class IfcNullStyle : public IfcPresentationStyleSelect
 {
 public:
 	enum IfcNullStyleEnum

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -29,8 +30,8 @@
 #include "include/IfcUnit.h"
 
 // ENTITY IfcRegularTimeSeries 
-IfcRegularTimeSeries::IfcRegularTimeSeries() { m_entity_enum = IFCREGULARTIMESERIES; }
-IfcRegularTimeSeries::IfcRegularTimeSeries( int id ) { m_id = id; m_entity_enum = IFCREGULARTIMESERIES; }
+IfcRegularTimeSeries::IfcRegularTimeSeries() {}
+IfcRegularTimeSeries::IfcRegularTimeSeries( int id ) { m_id = id; }
 IfcRegularTimeSeries::~IfcRegularTimeSeries() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -91,6 +92,14 @@ void IfcRegularTimeSeries::readStepArguments( const std::vector<std::string>& ar
 	m_Unit = IfcUnit::createObjectFromStepData( args[7], map );
 	m_TimeStep = IfcTimeMeasure::createObjectFromStepData( args[8] );
 	readEntityReferenceList( args[9], m_Values, map );
+}
+void IfcRegularTimeSeries::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTimeSeries::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TimeStep", m_TimeStep ) );
+}
+void IfcRegularTimeSeries::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRegularTimeSeries::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

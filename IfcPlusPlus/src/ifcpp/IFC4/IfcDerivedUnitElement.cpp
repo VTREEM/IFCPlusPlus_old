@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcNamedUnit.h"
 
 // ENTITY IfcDerivedUnitElement 
-IfcDerivedUnitElement::IfcDerivedUnitElement() { m_entity_enum = IFCDERIVEDUNITELEMENT; }
-IfcDerivedUnitElement::IfcDerivedUnitElement( int id ) { m_id = id; m_entity_enum = IFCDERIVEDUNITELEMENT; }
+IfcDerivedUnitElement::IfcDerivedUnitElement() {}
+IfcDerivedUnitElement::IfcDerivedUnitElement( int id ) { m_id = id; }
 IfcDerivedUnitElement::~IfcDerivedUnitElement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -52,6 +53,14 @@ void IfcDerivedUnitElement::readStepArguments( const std::vector<std::string>& a
 	#endif
 	readEntityReference( args[0], m_Unit, map );
 	readIntValue( args[1], m_Exponent );
+}
+void IfcDerivedUnitElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Unit", m_Unit ) );
+	vec_attributes.push_back( std::make_pair( "Exponent", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_Exponent ) ) ) );
+}
+void IfcDerivedUnitElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDerivedUnitElement::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

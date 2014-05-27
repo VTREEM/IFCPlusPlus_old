@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCoordinateReferenceSystem 
-IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem() { m_entity_enum = IFCCOORDINATEREFERENCESYSTEM; }
-IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem( int id ) { m_id = id; m_entity_enum = IFCCOORDINATEREFERENCESYSTEM; }
+IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem() {}
+IfcCoordinateReferenceSystem::IfcCoordinateReferenceSystem( int id ) { m_id = id; }
 IfcCoordinateReferenceSystem::~IfcCoordinateReferenceSystem() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -61,6 +62,16 @@ void IfcCoordinateReferenceSystem::readStepArguments( const std::vector<std::str
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	m_GeodeticDatum = IfcIdentifier::createObjectFromStepData( args[2] );
 	m_VerticalDatum = IfcIdentifier::createObjectFromStepData( args[3] );
+}
+void IfcCoordinateReferenceSystem::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "GeodeticDatum", m_GeodeticDatum ) );
+	vec_attributes.push_back( std::make_pair( "VerticalDatum", m_VerticalDatum ) );
+}
+void IfcCoordinateReferenceSystem::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCoordinateReferenceSystem::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

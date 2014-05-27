@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelDefines 
-IfcRelDefines::IfcRelDefines() { m_entity_enum = IFCRELDEFINES; }
-IfcRelDefines::IfcRelDefines( int id ) { m_id = id; m_entity_enum = IFCRELDEFINES; }
+IfcRelDefines::IfcRelDefines() {}
+IfcRelDefines::IfcRelDefines( int id ) { m_id = id; }
 IfcRelDefines::~IfcRelDefines() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -62,6 +63,13 @@ void IfcRelDefines::readStepArguments( const std::vector<std::string>& args, con
 	readEntityReference( args[1], m_OwnerHistory, map );
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
 	m_Description = IfcText::createObjectFromStepData( args[3] );
+}
+void IfcRelDefines::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelationship::getAttributes( vec_attributes );
+}
+void IfcRelDefines::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelDefines::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

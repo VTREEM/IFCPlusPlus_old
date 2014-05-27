@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSurfaceOrFaceSurface = SELECT	(IfcFaceBasedSurfaceModel	,IfcFaceSurface	,IfcSurface);
-class IfcSurfaceOrFaceSurface : public IfcPPAbstractSelect
+class IfcSurfaceOrFaceSurface : virtual public IfcPPObject
 {
 public:
 	IfcSurfaceOrFaceSurface();
 	~IfcSurfaceOrFaceSurface();
 	virtual const char* classname() const { return "IfcSurfaceOrFaceSurface"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcSurfaceOrFaceSurface> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

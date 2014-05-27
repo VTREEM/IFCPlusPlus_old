@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStructuralSurfaceActivityTypeEnum = ENUMERATION OF	(CONST	,BILINEAR	,DISCRETE	,ISOCONTOUR	,USERDEFINED	,NOTDEFINED);
-class IfcStructuralSurfaceActivityTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcStructuralSurfaceActivityTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcStructuralSurfaceActivityTypeEnumEnum

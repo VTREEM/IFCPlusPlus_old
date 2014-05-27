@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcShadingDeviceTypeEnum = ENUMERATION OF	(JALOUSIE	,SHUTTER	,AWNING	,USERDEFINED	,NOTDEFINED);
-class IfcShadingDeviceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcShadingDeviceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcShadingDeviceTypeEnumEnum

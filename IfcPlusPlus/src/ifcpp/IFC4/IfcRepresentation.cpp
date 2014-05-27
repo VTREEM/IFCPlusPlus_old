@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcRepresentationMap.h"
 
 // ENTITY IfcRepresentation 
-IfcRepresentation::IfcRepresentation() { m_entity_enum = IFCREPRESENTATION; }
-IfcRepresentation::IfcRepresentation( int id ) { m_id = id; m_entity_enum = IFCREPRESENTATION; }
+IfcRepresentation::IfcRepresentation() {}
+IfcRepresentation::IfcRepresentation( int id ) { m_id = id; }
 IfcRepresentation::~IfcRepresentation() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -64,6 +65,15 @@ void IfcRepresentation::readStepArguments( const std::vector<std::string>& args,
 	m_RepresentationIdentifier = IfcLabel::createObjectFromStepData( args[1] );
 	m_RepresentationType = IfcLabel::createObjectFromStepData( args[2] );
 	readEntityReferenceList( args[3], m_Items, map );
+}
+void IfcRepresentation::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "ContextOfItems", m_ContextOfItems ) );
+	vec_attributes.push_back( std::make_pair( "RepresentationIdentifier", m_RepresentationIdentifier ) );
+	vec_attributes.push_back( std::make_pair( "RepresentationType", m_RepresentationType ) );
+}
+void IfcRepresentation::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRepresentation::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

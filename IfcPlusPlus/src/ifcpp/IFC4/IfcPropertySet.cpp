@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -30,8 +31,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcPropertySet 
-IfcPropertySet::IfcPropertySet() { m_entity_enum = IFCPROPERTYSET; }
-IfcPropertySet::IfcPropertySet( int id ) { m_id = id; m_entity_enum = IFCPROPERTYSET; }
+IfcPropertySet::IfcPropertySet() {}
+IfcPropertySet::IfcPropertySet( int id ) { m_id = id; }
 IfcPropertySet::~IfcPropertySet() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -72,6 +73,13 @@ void IfcPropertySet::readStepArguments( const std::vector<std::string>& args, co
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readEntityReferenceList( args[4], m_HasProperties, map );
+}
+void IfcPropertySet::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPropertySetDefinition::getAttributes( vec_attributes );
+}
+void IfcPropertySet::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPropertySet::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

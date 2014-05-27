@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -28,8 +29,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelAssociatesDocument 
-IfcRelAssociatesDocument::IfcRelAssociatesDocument() { m_entity_enum = IFCRELASSOCIATESDOCUMENT; }
-IfcRelAssociatesDocument::IfcRelAssociatesDocument( int id ) { m_id = id; m_entity_enum = IFCRELASSOCIATESDOCUMENT; }
+IfcRelAssociatesDocument::IfcRelAssociatesDocument() {}
+IfcRelAssociatesDocument::IfcRelAssociatesDocument( int id ) { m_id = id; }
 IfcRelAssociatesDocument::~IfcRelAssociatesDocument() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -74,6 +75,14 @@ void IfcRelAssociatesDocument::readStepArguments( const std::vector<std::string>
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readSelectList( args[4], m_RelatedObjects, map );
 	m_RelatingDocument = IfcDocumentSelect::createObjectFromStepData( args[5], map );
+}
+void IfcRelAssociatesDocument::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelAssociates::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingDocument", m_RelatingDocument ) );
+}
+void IfcRelAssociatesDocument::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelAssociatesDocument::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

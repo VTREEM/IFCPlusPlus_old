@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -27,8 +28,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcClassification 
-IfcClassification::IfcClassification() { m_entity_enum = IFCCLASSIFICATION; }
-IfcClassification::IfcClassification( int id ) { m_id = id; m_entity_enum = IFCCLASSIFICATION; }
+IfcClassification::IfcClassification() {}
+IfcClassification::IfcClassification( int id ) { m_id = id; }
 IfcClassification::~IfcClassification() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -77,6 +78,22 @@ void IfcClassification::readStepArguments( const std::vector<std::string>& args,
 	m_Description = IfcText::createObjectFromStepData( args[4] );
 	m_Location = IfcURIReference::createObjectFromStepData( args[5] );
 	readTypeList( args[6], m_ReferenceTokens );
+}
+void IfcClassification::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalInformation::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Source", m_Source ) );
+	vec_attributes.push_back( std::make_pair( "Edition", m_Edition ) );
+	vec_attributes.push_back( std::make_pair( "EditionDate", m_EditionDate ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "Location", m_Location ) );
+	shared_ptr<IfcPPAttributeObjectVector> ReferenceTokens_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_ReferenceTokens.begin(), m_ReferenceTokens.end(), std::back_inserter( ReferenceTokens_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "ReferenceTokens", ReferenceTokens_vec_object ) );
+}
+void IfcClassification::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcClassification::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

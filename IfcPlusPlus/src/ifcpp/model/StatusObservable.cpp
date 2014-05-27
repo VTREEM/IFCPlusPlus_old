@@ -49,7 +49,7 @@ StatusObservable::~StatusObservable()
 //	}
 //}
 
-void StatusObservable::setProgressCallBack( void* obj_ptr, void (*func)(void*, double) )
+void StatusObservable::setProgressCallBack( void* obj_ptr, void (*func)(void*, double, const std::string& progress_type) )
 {
 	m_obj_call_on_progress = obj_ptr;
 	m_func_call_on_progress = func;
@@ -60,13 +60,13 @@ void StatusObservable::unsetProgressCallBack()
 	m_func_call_on_progress = 0;
 }
 
-void StatusObservable::progressCallback( double progress_value )
+void StatusObservable::progressCallback( double progress_value, const std::string& progress_type )
 {
 	if( m_func_call_on_progress )
 	{
 		if( m_obj_call_on_progress )
 		{
-			m_func_call_on_progress( m_obj_call_on_progress, progress_value );
+			m_func_call_on_progress( m_obj_call_on_progress, progress_value, progress_type );
 		}
 	}
 }

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcEngineTypeEnum = ENUMERATION OF	(EXTERNALCOMBUSTION	,INTERNALCOMBUSTION	,USERDEFINED	,NOTDEFINED);
-class IfcEngineTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcEngineTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcEngineTypeEnumEnum

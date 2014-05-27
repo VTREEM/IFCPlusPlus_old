@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -46,8 +47,8 @@
 #include "include/IfcVoidingFeatureTypeEnum.h"
 
 // ENTITY IfcVoidingFeature 
-IfcVoidingFeature::IfcVoidingFeature() { m_entity_enum = IFCVOIDINGFEATURE; }
-IfcVoidingFeature::IfcVoidingFeature( int id ) { m_id = id; m_entity_enum = IFCVOIDINGFEATURE; }
+IfcVoidingFeature::IfcVoidingFeature() {}
+IfcVoidingFeature::IfcVoidingFeature( int id ) { m_id = id; }
 IfcVoidingFeature::~IfcVoidingFeature() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -104,6 +105,14 @@ void IfcVoidingFeature::readStepArguments( const std::vector<std::string>& args,
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcVoidingFeatureTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcVoidingFeature::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFeatureElementSubtraction::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcVoidingFeature::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcVoidingFeature::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

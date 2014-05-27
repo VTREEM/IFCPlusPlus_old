@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcUnitaryControlElementTypeEnum = ENUMERATION OF	(ALARMPANEL	,CONTROLPANEL	,GASDETECTIONPANEL	,INDICATORPANEL	,MIMICPANEL	,HUMIDISTAT	,THERMOSTAT	,WEATHERSTATION	,USERDEFINED	,NOTDEFINED);
-class IfcUnitaryControlElementTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcUnitaryControlElementTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcUnitaryControlElementTypeEnumEnum

@@ -68,7 +68,7 @@ shared_ptr<IfcDoorPanelOperationEnum> IfcDoorPanelOperationEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDoorPanelOperationEnum>(); }
-	shared_ptr<IfcDoorPanelOperationEnum> type_object( new IfcDoorPanelOperationEnum() );
+	auto type_object = std::make_shared<IfcDoorPanelOperationEnum>();
 	if( _stricmp( arg.c_str(), ".SWINGING." ) == 0 )
 	{
 		type_object->m_enum = IfcDoorPanelOperationEnum::ENUM_SWINGING;

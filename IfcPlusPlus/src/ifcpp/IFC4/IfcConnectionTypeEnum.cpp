@@ -48,7 +48,7 @@ shared_ptr<IfcConnectionTypeEnum> IfcConnectionTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcConnectionTypeEnum>(); }
-	shared_ptr<IfcConnectionTypeEnum> type_object( new IfcConnectionTypeEnum() );
+	auto type_object = std::make_shared<IfcConnectionTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ATPATH." ) == 0 )
 	{
 		type_object->m_enum = IfcConnectionTypeEnum::ENUM_ATPATH;

@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDocumentSelect = SELECT	(IfcDocumentInformation	,IfcDocumentReference);
-class IfcDocumentSelect : public IfcPPAbstractSelect
+class IfcDocumentSelect : virtual public IfcPPObject
 {
 public:
 	IfcDocumentSelect();
 	~IfcDocumentSelect();
 	virtual const char* classname() const { return "IfcDocumentSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcDocumentSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

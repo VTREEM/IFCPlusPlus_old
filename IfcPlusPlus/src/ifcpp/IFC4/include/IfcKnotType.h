@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcKnotType = ENUMERATION OF	(UNIFORM_KNOTS	,QUASI_UNIFORM_KNOTS	,PIECEWISE_BEZIER_KNOTS	,UNSPECIFIED);
-class IfcKnotType : public IfcPPAbstractEnum, public IfcPPType
+class IfcKnotType : virtual public IfcPPObject
 {
 public:
 	enum IfcKnotTypeEnum

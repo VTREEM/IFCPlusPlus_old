@@ -26,7 +26,6 @@ IfcBoxAlignment::~IfcBoxAlignment() {}
 void IfcBoxAlignment::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCBOXALIGNMENT("; }
-	//supertype as attribute: std::string m_value
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
@@ -34,9 +33,8 @@ shared_ptr<IfcBoxAlignment> IfcBoxAlignment::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBoxAlignment>(); }
-	shared_ptr<IfcBoxAlignment> type_object( new IfcBoxAlignment() );
+	auto type_object = std::make_shared<IfcBoxAlignment>();
 	// read TYPE
-	//supertype as attribute: std::string m_value
-	type_object->m_value = arg;
+	type_object->readArgument( arg );
 	return type_object;
 }

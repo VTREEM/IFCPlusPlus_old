@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcMagneticFluxMeasure = REAL;
-class IfcMagneticFluxMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcMagneticFluxMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcMagneticFluxMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcMagneticFluxMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcMagneticFluxMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

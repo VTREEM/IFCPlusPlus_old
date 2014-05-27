@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcRepresentation.h"
 
 // ENTITY IfcGeometricRepresentationContext 
-IfcGeometricRepresentationContext::IfcGeometricRepresentationContext() { m_entity_enum = IFCGEOMETRICREPRESENTATIONCONTEXT; }
-IfcGeometricRepresentationContext::IfcGeometricRepresentationContext( int id ) { m_id = id; m_entity_enum = IFCGEOMETRICREPRESENTATIONCONTEXT; }
+IfcGeometricRepresentationContext::IfcGeometricRepresentationContext() {}
+IfcGeometricRepresentationContext::IfcGeometricRepresentationContext( int id ) { m_id = id; }
 IfcGeometricRepresentationContext::~IfcGeometricRepresentationContext() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -73,6 +74,17 @@ void IfcGeometricRepresentationContext::readStepArguments( const std::vector<std
 	readRealValue( args[3], m_Precision );
 	m_WorldCoordinateSystem = IfcAxis2Placement::createObjectFromStepData( args[4], map );
 	readEntityReference( args[5], m_TrueNorth, map );
+}
+void IfcGeometricRepresentationContext::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRepresentationContext::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "CoordinateSpaceDimension", m_CoordinateSpaceDimension ) );
+	vec_attributes.push_back( std::make_pair( "Precision", shared_ptr<IfcPPAttributeObjectDouble>( new  IfcPPAttributeObjectDouble( m_Precision ) ) ) );
+	vec_attributes.push_back( std::make_pair( "WorldCoordinateSystem", m_WorldCoordinateSystem ) );
+	vec_attributes.push_back( std::make_pair( "TrueNorth", m_TrueNorth ) );
+}
+void IfcGeometricRepresentationContext::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcGeometricRepresentationContext::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

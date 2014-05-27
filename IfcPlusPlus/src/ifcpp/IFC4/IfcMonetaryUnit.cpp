@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcMonetaryUnit.h"
 
 // ENTITY IfcMonetaryUnit 
-IfcMonetaryUnit::IfcMonetaryUnit() { m_entity_enum = IFCMONETARYUNIT; }
-IfcMonetaryUnit::IfcMonetaryUnit( int id ) { m_id = id; m_entity_enum = IFCMONETARYUNIT; }
+IfcMonetaryUnit::IfcMonetaryUnit() {}
+IfcMonetaryUnit::IfcMonetaryUnit( int id ) { m_id = id; }
 IfcMonetaryUnit::~IfcMonetaryUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -47,6 +48,13 @@ void IfcMonetaryUnit::readStepArguments( const std::vector<std::string>& args, c
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcMonetaryUnit, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	m_Currency = IfcLabel::createObjectFromStepData( args[0] );
+}
+void IfcMonetaryUnit::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Currency", m_Currency ) );
+}
+void IfcMonetaryUnit::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMonetaryUnit::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

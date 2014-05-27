@@ -22,7 +22,7 @@
 #include "IfcSizeSelect.h"
 
 // TYPE IfcDescriptiveMeasure = STRING;
-class IfcDescriptiveMeasure : public IfcMeasureValue, public IfcSizeSelect, public IfcPPType
+class IfcDescriptiveMeasure : public IfcMeasureValue, public IfcSizeSelect, public IfcPPString
 {
 public:
 	IfcDescriptiveMeasure();
@@ -31,6 +31,5 @@ public:
 	virtual const char* classname() const { return "IfcDescriptiveMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcDescriptiveMeasure> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRoot 
-IfcRoot::IfcRoot() { m_entity_enum = IFCROOT; }
-IfcRoot::IfcRoot( int id ) { m_id = id; m_entity_enum = IFCROOT; }
+IfcRoot::IfcRoot() {}
+IfcRoot::IfcRoot( int id ) { m_id = id; }
 IfcRoot::~IfcRoot() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -62,6 +63,16 @@ void IfcRoot::readStepArguments( const std::vector<std::string>& args, const std
 	readEntityReference( args[1], m_OwnerHistory, map );
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
 	m_Description = IfcText::createObjectFromStepData( args[3] );
+}
+void IfcRoot::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "GlobalId", m_GlobalId ) );
+	vec_attributes.push_back( std::make_pair( "OwnerHistory", m_OwnerHistory ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+}
+void IfcRoot::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRoot::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

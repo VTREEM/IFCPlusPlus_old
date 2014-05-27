@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcActuatorTypeEnum = ENUMERATION OF	(ELECTRICACTUATOR	,HANDOPERATEDACTUATOR	,HYDRAULICACTUATOR	,PNEUMATICACTUATOR	,THERMOSTATICACTUATOR	,USERDEFINED	,NOTDEFINED);
-class IfcActuatorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcActuatorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcActuatorTypeEnumEnum

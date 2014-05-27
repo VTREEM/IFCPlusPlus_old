@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -36,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCrewResourceType 
-IfcCrewResourceType::IfcCrewResourceType() { m_entity_enum = IFCCREWRESOURCETYPE; }
-IfcCrewResourceType::IfcCrewResourceType( int id ) { m_id = id; m_entity_enum = IFCCREWRESOURCETYPE; }
+IfcCrewResourceType::IfcCrewResourceType() {}
+IfcCrewResourceType::IfcCrewResourceType( int id ) { m_id = id; }
 IfcCrewResourceType::~IfcCrewResourceType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcCrewResourceType::readStepArguments( const std::vector<std::string>& arg
 	readEntityReferenceList( args[9], m_BaseCosts, map );
 	readEntityReference( args[10], m_BaseQuantity, map );
 	m_PredefinedType = IfcCrewResourceTypeEnum::createObjectFromStepData( args[11] );
+}
+void IfcCrewResourceType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConstructionResourceType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcCrewResourceType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCrewResourceType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

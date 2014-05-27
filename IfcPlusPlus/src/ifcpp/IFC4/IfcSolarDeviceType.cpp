@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSolarDeviceType 
-IfcSolarDeviceType::IfcSolarDeviceType() { m_entity_enum = IFCSOLARDEVICETYPE; }
-IfcSolarDeviceType::IfcSolarDeviceType( int id ) { m_id = id; m_entity_enum = IFCSOLARDEVICETYPE; }
+IfcSolarDeviceType::IfcSolarDeviceType() {}
+IfcSolarDeviceType::IfcSolarDeviceType( int id ) { m_id = id; }
 IfcSolarDeviceType::~IfcSolarDeviceType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcSolarDeviceType::readStepArguments( const std::vector<std::string>& args
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcSolarDeviceTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcSolarDeviceType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEnergyConversionDeviceType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcSolarDeviceType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSolarDeviceType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

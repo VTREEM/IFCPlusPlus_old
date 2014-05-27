@@ -13,8 +13,6 @@
 
 #pragma once
 
-#include "IncludeCarveHeaders.h"
-
 #define GEOM_TOLERANCE  0.0000001
 #ifdef _DEBUG
 	#define HALF_SPACE_BOX_SIZE 100
@@ -36,11 +34,12 @@ public:
 	GeometrySettings();
 	~GeometrySettings();
 	int	m_num_vertices_per_circle;
+	int m_num_vertices_per_circle_default;
 	int m_min_num_vertices_per_arc;
+	bool m_show_text_literals;
 
 	double m_min_colinearity;
 	double m_min_delta_v;
 	double m_min_normal_angle;
 	double m_min_length;
-	carve::csg::CSG::CLASSIFY_TYPE m_classify_type;
 };

@@ -11,19 +11,23 @@
  * OpenSceneGraph Public License for more details.
 */
 
+#define _USE_MATH_DEFINES 
+#include <math.h>
 #include "GeometrySettings.h"
 
 GeometrySettings::GeometrySettings()
 {
-	m_num_vertices_per_circle = 20;
+	m_num_vertices_per_circle_default = 10;
+	m_num_vertices_per_circle = m_num_vertices_per_circle_default;
 	m_min_num_vertices_per_arc = 6;
+	m_show_text_literals = false;
 
 	m_min_colinearity = 0.1;
 	m_min_delta_v = 1.0;
 	m_min_normal_angle = M_PI/180.0;
 	m_min_length = 0.0002;
 
-	m_classify_type = carve::csg::CSG::CLASSIFY_EDGE;
+//	m_classify_type = carve::csg::CSG::CLASSIFY_EDGE;
 }
 
 GeometrySettings::~GeometrySettings()

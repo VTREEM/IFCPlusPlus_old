@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -39,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralSurfaceMemberVarying 
-IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying() { m_entity_enum = IFCSTRUCTURALSURFACEMEMBERVARYING; }
-IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALSURFACEMEMBERVARYING; }
+IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying() {}
+IfcStructuralSurfaceMemberVarying::IfcStructuralSurfaceMemberVarying( int id ) { m_id = id; }
 IfcStructuralSurfaceMemberVarying::~IfcStructuralSurfaceMemberVarying() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,13 @@ void IfcStructuralSurfaceMemberVarying::readStepArguments( const std::vector<std
 	readEntityReference( args[6], m_Representation, map );
 	m_PredefinedType = IfcStructuralSurfaceMemberTypeEnum::createObjectFromStepData( args[7] );
 	m_Thickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[8] );
+}
+void IfcStructuralSurfaceMemberVarying::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralSurfaceMember::getAttributes( vec_attributes );
+}
+void IfcStructuralSurfaceMemberVarying::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralSurfaceMemberVarying::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

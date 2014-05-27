@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcStructuralLoadOrResult.h"
 
 // ENTITY IfcStructuralLoadOrResult 
-IfcStructuralLoadOrResult::IfcStructuralLoadOrResult() { m_entity_enum = IFCSTRUCTURALLOADORRESULT; }
-IfcStructuralLoadOrResult::IfcStructuralLoadOrResult( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADORRESULT; }
+IfcStructuralLoadOrResult::IfcStructuralLoadOrResult() {}
+IfcStructuralLoadOrResult::IfcStructuralLoadOrResult( int id ) { m_id = id; }
 IfcStructuralLoadOrResult::~IfcStructuralLoadOrResult() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -47,6 +48,13 @@ void IfcStructuralLoadOrResult::readStepArguments( const std::vector<std::string
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcStructuralLoadOrResult, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	m_Name = IfcLabel::createObjectFromStepData( args[0] );
+}
+void IfcStructuralLoadOrResult::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoad::getAttributes( vec_attributes );
+}
+void IfcStructuralLoadOrResult::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadOrResult::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

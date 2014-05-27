@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcMaterialClassificationRelationship.h"
 
 // ENTITY IfcMaterialClassificationRelationship 
-IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship() { m_entity_enum = IFCMATERIALCLASSIFICATIONRELATIONSHIP; }
-IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship( int id ) { m_id = id; m_entity_enum = IFCMATERIALCLASSIFICATIONRELATIONSHIP; }
+IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship() {}
+IfcMaterialClassificationRelationship::IfcMaterialClassificationRelationship( int id ) { m_id = id; }
 IfcMaterialClassificationRelationship::~IfcMaterialClassificationRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -52,6 +53,16 @@ void IfcMaterialClassificationRelationship::readStepArguments( const std::vector
 	#endif
 	readSelectList( args[0], m_MaterialClassifications, map );
 	readEntityReference( args[1], m_ClassifiedMaterial, map );
+}
+void IfcMaterialClassificationRelationship::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	shared_ptr<IfcPPAttributeObjectVector> MaterialClassifications_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_MaterialClassifications.begin(), m_MaterialClassifications.end(), std::back_inserter( MaterialClassifications_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "MaterialClassifications", MaterialClassifications_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "ClassifiedMaterial", m_ClassifiedMaterial ) );
+}
+void IfcMaterialClassificationRelationship::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialClassificationRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,8 +50,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDoor 
-IfcDoor::IfcDoor() { m_entity_enum = IFCDOOR; }
-IfcDoor::IfcDoor( int id ) { m_id = id; m_entity_enum = IFCDOOR; }
+IfcDoor::IfcDoor() {}
+IfcDoor::IfcDoor( int id ) { m_id = id; }
 IfcDoor::~IfcDoor() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -123,6 +124,18 @@ void IfcDoor::readStepArguments( const std::vector<std::string>& args, const std
 	m_PredefinedType = IfcDoorTypeEnum::createObjectFromStepData( args[10] );
 	m_OperationType = IfcDoorTypeOperationEnum::createObjectFromStepData( args[11] );
 	m_UserDefinedOperationType = IfcLabel::createObjectFromStepData( args[12] );
+}
+void IfcDoor::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "OverallHeight", m_OverallHeight ) );
+	vec_attributes.push_back( std::make_pair( "OverallWidth", m_OverallWidth ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "OperationType", m_OperationType ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedOperationType", m_UserDefinedOperationType ) );
+}
+void IfcDoor::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDoor::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

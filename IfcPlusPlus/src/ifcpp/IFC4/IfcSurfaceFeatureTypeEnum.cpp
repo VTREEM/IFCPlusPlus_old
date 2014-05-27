@@ -52,7 +52,7 @@ shared_ptr<IfcSurfaceFeatureTypeEnum> IfcSurfaceFeatureTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSurfaceFeatureTypeEnum>(); }
-	shared_ptr<IfcSurfaceFeatureTypeEnum> type_object( new IfcSurfaceFeatureTypeEnum() );
+	auto type_object = std::make_shared<IfcSurfaceFeatureTypeEnum>();
 	if( _stricmp( arg.c_str(), ".MARK." ) == 0 )
 	{
 		type_object->m_enum = IfcSurfaceFeatureTypeEnum::ENUM_MARK;

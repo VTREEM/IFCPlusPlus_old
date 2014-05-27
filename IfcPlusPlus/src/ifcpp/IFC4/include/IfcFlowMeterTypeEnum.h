@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFlowMeterTypeEnum = ENUMERATION OF	(ENERGYMETER	,GASMETER	,OILMETER	,WATERMETER	,USERDEFINED	,NOTDEFINED);
-class IfcFlowMeterTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFlowMeterTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFlowMeterTypeEnumEnum

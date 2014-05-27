@@ -163,8 +163,8 @@ shared_ptr<IfcAppliedValueSelect> IfcAppliedValueSelect::createObjectFromStepDat
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		shared_ptr<IfcPPObject> result_object( NULL );
-		readInlineTypeOrEntity( arg, result_object, map );
+		shared_ptr<IfcPPObject> result_object( nullptr );
+		readInlineTypeOrEntity( keyword, inline_arg, result_object, map );
 		if( result_object )
 		{
 			shared_ptr<IfcPPObject> result_ptr( result_object );
@@ -175,7 +175,7 @@ shared_ptr<IfcAppliedValueSelect> IfcAppliedValueSelect::createObjectFromStepDat
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcAppliedValueSelect::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcAppliedValueSelect::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcAppliedValueSelect>();

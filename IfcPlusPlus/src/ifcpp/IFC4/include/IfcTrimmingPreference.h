@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTrimmingPreference = ENUMERATION OF	(CARTESIAN	,PARAMETER	,UNSPECIFIED);
-class IfcTrimmingPreference : public IfcPPAbstractEnum, public IfcPPType
+class IfcTrimmingPreference : virtual public IfcPPObject
 {
 public:
 	enum IfcTrimmingPreferenceEnum

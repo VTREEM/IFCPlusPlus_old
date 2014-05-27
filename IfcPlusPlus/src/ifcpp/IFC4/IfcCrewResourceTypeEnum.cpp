@@ -48,7 +48,7 @@ shared_ptr<IfcCrewResourceTypeEnum> IfcCrewResourceTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCrewResourceTypeEnum>(); }
-	shared_ptr<IfcCrewResourceTypeEnum> type_object( new IfcCrewResourceTypeEnum() );
+	auto type_object = std::make_shared<IfcCrewResourceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".OFFICE." ) == 0 )
 	{
 		type_object->m_enum = IfcCrewResourceTypeEnum::ENUM_OFFICE;

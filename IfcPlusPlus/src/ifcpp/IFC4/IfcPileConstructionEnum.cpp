@@ -56,7 +56,7 @@ shared_ptr<IfcPileConstructionEnum> IfcPileConstructionEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPileConstructionEnum>(); }
-	shared_ptr<IfcPileConstructionEnum> type_object( new IfcPileConstructionEnum() );
+	auto type_object = std::make_shared<IfcPileConstructionEnum>();
 	if( _stricmp( arg.c_str(), ".CAST_IN_PLACE." ) == 0 )
 	{
 		type_object->m_enum = IfcPileConstructionEnum::ENUM_CAST_IN_PLACE;

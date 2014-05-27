@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcShearModulusMeasure = REAL;
-class IfcShearModulusMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcShearModulusMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcShearModulusMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcShearModulusMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcShearModulusMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

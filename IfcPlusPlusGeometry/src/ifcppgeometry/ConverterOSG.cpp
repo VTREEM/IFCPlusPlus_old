@@ -15,6 +15,7 @@
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/Group>
+#include <osg/Material>
 #include <osg/MatrixTransform>
 #include <osgUtil/Tessellator>
 #include <osgUtil/Optimizer>
@@ -22,6 +23,7 @@
 
 #include <ifcpp/model/IfcPPException.h>
 #include <ifcpp/model/UnitConverter.h>
+#include <ifcpp/model/IfcPPOpenMP.h>
 
 #include "DebugViewerCallback.h"
 #include "GeomUtils.h"
@@ -72,15 +74,6 @@ inline void drawQuads( osg::Vec3Array* vertices, osg::Vec3Array* normals, bool a
 
 	geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS,0,vertices->size()));
 	geode->addDrawable( geometry );
-}
-
-ConverterOSG::ConverterOSG()
-{
-}
-
-ConverterOSG::~ConverterOSG()
-{
-
 }
 
 void ConverterOSG::drawFace( const carve::mesh::Face<3>* face, osg::Geode* geode, bool add_color_array )
@@ -462,14 +455,14 @@ bool ConverterOSG::checkMeshSet( const carve::mesh::MeshSet<3>* mesh_set, std::s
 	if( !mesh_set )
 	{
 #ifdef _DEBUG
-		err_poly << "MeshSet of entity #" << entity_id << " not valid" << std::endl;
+		std::cout << "MeshSet of entity #" << entity_id << " not valid" << std::endl;
 #endif
 		return false;
 	}
 	if( mesh_set->meshes.size() == 0 )
 	{
 #ifdef _DEBUG
-		err_poly << "MeshSet of entity #" << entity_id << " has no meshes" << std::endl;
+		std::cout << "MeshSet of entity #" << entity_id << " has no meshes" << std::endl;
 #endif
 		return false;
 	}
@@ -624,6 +617,11 @@ bool ConverterOSG::checkMeshSet( const carve::mesh::MeshSet<3>* mesh_set, std::s
 
 double ConverterOSG::computeSurfaceAreaOfGroup( const osg::Group* grp )
 {
+	if( !grp )
+	{
+		return 0.0;
+	}
+
 	double surface_area = 0.0;
 	int num_children = grp->getNumChildren();
 	for( int i=0; i<num_children; ++i )
@@ -764,4 +762,127 @@ double ConverterOSG::computeSurfaceAreaOfGroup( const osg::Group* grp )
 		}
 	}
 	return surface_area;
+}
+
+
+//\brief AppearanceManagerOSG: StateSet caching and re-use
+std::vector<osg::ref_ptr<osg::StateSet> > global_vec_existing_statesets;
+#ifdef IFCPP_OPENMP
+	Mutex writelock_appearance_cache;
+#endif
+
+void AppearanceManagerOSG::clearAppearanceCache()
+{
+#ifdef IFCPP_OPENMP
+	ScopedLock lock( writelock_appearance_cache );
+#endif
+	global_vec_existing_statesets.clear();
+}
+
+osg::StateSet* AppearanceManagerOSG::convertToStateSet( shared_ptr<AppearanceData>& appearence )
+{
+	if( !appearence )
+	{
+		return nullptr;
+	}
+	const float shininess = appearence->shininess;
+	const float transparency = appearence->transparency;
+	const bool set_transparent = appearence->set_transparent;
+
+	const float color_ambient_r = appearence->color_ambient.x;
+	const float color_ambient_g = appearence->color_ambient.y;
+	const float color_ambient_b = appearence->color_ambient.z;
+	const float color_ambient_a = appearence->color_ambient.w;
+
+	const float color_diffuse_r = appearence->color_diffuse.x;
+	const float color_diffuse_g = appearence->color_diffuse.y;
+	const float color_diffuse_b = appearence->color_diffuse.z;
+	const float color_diffuse_a = appearence->color_diffuse.w;
+
+	const float color_specular_r = appearence->color_specular.x;
+	const float color_specular_g = appearence->color_specular.y;
+	const float color_specular_b = appearence->color_specular.z;
+	const float color_specular_a = appearence->color_specular.w;
+
+#ifdef IFCPP_OPENMP
+	ScopedLock lock( writelock_appearance_cache );
+#endif
+
+	for( int i=0; i<global_vec_existing_statesets.size(); ++i )
+	{
+		const osg::ref_ptr<osg::StateSet> stateset_existing = global_vec_existing_statesets[i];
+
+		if( !stateset_existing.valid() )
+		{
+			continue;
+		}
+
+		osg::ref_ptr<osg::Material> mat_existing = (osg::Material*)stateset_existing->getAttribute(osg::StateAttribute::MATERIAL);
+		if( !mat_existing )
+		{
+			continue;
+		}
+
+		// compare
+		osg::Vec4f color_ambient_existing = mat_existing->getAmbient( osg::Material::FRONT_AND_BACK );
+		if( abs(color_ambient_existing.r() - color_ambient_r ) > 0.03 ) break;
+		if( abs(color_ambient_existing.g() - color_ambient_g ) > 0.03 ) break;
+		if( abs(color_ambient_existing.b() - color_ambient_b ) > 0.03 ) break;
+		if( abs(color_ambient_existing.a() - color_ambient_a ) > 0.03 ) break;
+
+		osg::Vec4f color_diffuse_existing = mat_existing->getDiffuse( osg::Material::FRONT_AND_BACK );
+		if( abs(color_diffuse_existing.r() - color_diffuse_r ) > 0.03 ) break;
+		if( abs(color_diffuse_existing.g() - color_diffuse_g ) > 0.03 ) break;
+		if( abs(color_diffuse_existing.b() - color_diffuse_b ) > 0.03 ) break;
+		if( abs(color_diffuse_existing.a() - color_diffuse_a ) > 0.03 ) break;
+
+		osg::Vec4f color_specular_existing = mat_existing->getSpecular( osg::Material::FRONT_AND_BACK );
+		if( abs(color_specular_existing.r() - color_specular_r ) > 0.03 ) break;
+		if( abs(color_specular_existing.g() - color_specular_g ) > 0.03 ) break;
+		if( abs(color_specular_existing.b() - color_specular_b ) > 0.03 ) break;
+		if( abs(color_specular_existing.a() - color_specular_a ) > 0.03 ) break;
+
+		float shininess_existing = mat_existing->getShininess( osg::Material::FRONT_AND_BACK );
+		if( abs(shininess_existing - shininess ) > 0.03 ) break;
+
+		bool blend_on_existing = stateset_existing->getMode( GL_BLEND ) == osg::StateAttribute::ON;
+		if( blend_on_existing != set_transparent ) break;
+
+		bool transparent_bin = stateset_existing->getRenderingHint() == osg::StateSet::TRANSPARENT_BIN;
+		if( transparent_bin != set_transparent ) break;
+
+		// if we get here, appearance is same as existing state set
+		return stateset_existing;
+	}
+
+	osg::Vec4f ambientColor(	color_ambient_r,	color_ambient_g,	color_ambient_b,	transparency );
+	osg::Vec4f diffuseColor(	color_diffuse_r,	color_diffuse_g,	color_diffuse_b,	transparency  );
+	osg::Vec4f specularColor(	color_specular_r,	color_specular_g,	color_specular_b,	transparency );
+
+	osg::ref_ptr<osg::Material> mat = new osg::Material();
+	mat->setAmbient( osg::Material::FRONT_AND_BACK, ambientColor );
+	mat->setDiffuse( osg::Material::FRONT_AND_BACK, diffuseColor );
+	mat->setSpecular( osg::Material::FRONT_AND_BACK, specularColor );
+	mat->setShininess( osg::Material::FRONT_AND_BACK, shininess );
+	mat->setColorMode( osg::Material::SPECULAR );
+
+	osg::StateSet* stateset = new osg::StateSet();
+	stateset->setAttribute( mat, osg::StateAttribute::ON );
+	
+	if( appearence->set_transparent )
+	{
+		mat->setTransparency( osg::Material::FRONT_AND_BACK, transparency );	
+		stateset->setMode( GL_BLEND, osg::StateAttribute::ON );
+		stateset->setRenderingHint( osg::StateSet::TRANSPARENT_BIN );
+	}
+
+	if( appearence->specular_exponent != 0.f )
+	{
+		//osg::ref_ptr<osgFX::SpecularHighlights> spec_highlights = new osgFX::SpecularHighlights();
+		//spec_highlights->setSpecularExponent( spec->m_value );
+		// todo: add to scenegraph
+	}
+
+	global_vec_existing_statesets.push_back( stateset );
+	return stateset;
 }

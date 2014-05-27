@@ -56,7 +56,7 @@ shared_ptr<IfcSequenceEnum> IfcSequenceEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSequenceEnum>(); }
-	shared_ptr<IfcSequenceEnum> type_object( new IfcSequenceEnum() );
+	auto type_object = std::make_shared<IfcSequenceEnum>();
 	if( _stricmp( arg.c_str(), ".START_START." ) == 0 )
 	{
 		type_object->m_enum = IfcSequenceEnum::ENUM_START_START;

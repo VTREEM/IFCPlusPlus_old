@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -34,8 +35,8 @@
 #include "include/IfcWindowLiningProperties.h"
 
 // ENTITY IfcWindowLiningProperties 
-IfcWindowLiningProperties::IfcWindowLiningProperties() { m_entity_enum = IFCWINDOWLININGPROPERTIES; }
-IfcWindowLiningProperties::IfcWindowLiningProperties( int id ) { m_id = id; m_entity_enum = IFCWINDOWLININGPROPERTIES; }
+IfcWindowLiningProperties::IfcWindowLiningProperties() {}
+IfcWindowLiningProperties::IfcWindowLiningProperties( int id ) { m_id = id; }
 IfcWindowLiningProperties::~IfcWindowLiningProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -120,6 +121,25 @@ void IfcWindowLiningProperties::readStepArguments( const std::vector<std::string
 	m_LiningOffset = IfcLengthMeasure::createObjectFromStepData( args[13] );
 	m_LiningToPanelOffsetX = IfcLengthMeasure::createObjectFromStepData( args[14] );
 	m_LiningToPanelOffsetY = IfcLengthMeasure::createObjectFromStepData( args[15] );
+}
+void IfcWindowLiningProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedPropertySet::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LiningDepth", m_LiningDepth ) );
+	vec_attributes.push_back( std::make_pair( "LiningThickness", m_LiningThickness ) );
+	vec_attributes.push_back( std::make_pair( "TransomThickness", m_TransomThickness ) );
+	vec_attributes.push_back( std::make_pair( "MullionThickness", m_MullionThickness ) );
+	vec_attributes.push_back( std::make_pair( "FirstTransomOffset", m_FirstTransomOffset ) );
+	vec_attributes.push_back( std::make_pair( "SecondTransomOffset", m_SecondTransomOffset ) );
+	vec_attributes.push_back( std::make_pair( "FirstMullionOffset", m_FirstMullionOffset ) );
+	vec_attributes.push_back( std::make_pair( "SecondMullionOffset", m_SecondMullionOffset ) );
+	vec_attributes.push_back( std::make_pair( "ShapeAspectStyle", m_ShapeAspectStyle ) );
+	vec_attributes.push_back( std::make_pair( "LiningOffset", m_LiningOffset ) );
+	vec_attributes.push_back( std::make_pair( "LiningToPanelOffsetX", m_LiningToPanelOffsetX ) );
+	vec_attributes.push_back( std::make_pair( "LiningToPanelOffsetY", m_LiningToPanelOffsetY ) );
+}
+void IfcWindowLiningProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWindowLiningProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

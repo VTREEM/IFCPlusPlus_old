@@ -30,7 +30,6 @@ IfcLengthMeasure::~IfcLengthMeasure() {}
 void IfcLengthMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCLENGTHMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -38,8 +37,7 @@ shared_ptr<IfcLengthMeasure> IfcLengthMeasure::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLengthMeasure>(); }
-	shared_ptr<IfcLengthMeasure> type_object( new IfcLengthMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcLengthMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

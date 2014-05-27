@@ -44,7 +44,7 @@ shared_ptr<IfcSurfaceSide> IfcSurfaceSide::createObjectFromStepData( const std::
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSurfaceSide>(); }
-	shared_ptr<IfcSurfaceSide> type_object( new IfcSurfaceSide() );
+	auto type_object = std::make_shared<IfcSurfaceSide>();
 	if( _stricmp( arg.c_str(), ".POSITIVE." ) == 0 )
 	{
 		type_object->m_enum = IfcSurfaceSide::ENUM_POSITIVE;

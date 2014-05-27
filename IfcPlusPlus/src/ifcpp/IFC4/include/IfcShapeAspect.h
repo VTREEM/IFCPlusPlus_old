@@ -35,6 +35,8 @@ public:
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	virtual void readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 	virtual void setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self );
+	virtual void getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes );
+	virtual void getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes );
 	virtual void unlinkSelf();
 	virtual const char* classname() const { return "IfcShapeAspect"; }
 
@@ -44,7 +46,7 @@ public:
 	std::vector<shared_ptr<IfcShapeModel> >		m_ShapeRepresentations;
 	shared_ptr<IfcLabel>							m_Name;						//optional
 	shared_ptr<IfcText>							m_Description;				//optional
-	bool											m_ProductDefinitional;
+	LogicalEnum									m_ProductDefinitional;
 	shared_ptr<IfcProductRepresentationSelect>	m_PartOfProductDefinitionShape;	//optional
 };
 

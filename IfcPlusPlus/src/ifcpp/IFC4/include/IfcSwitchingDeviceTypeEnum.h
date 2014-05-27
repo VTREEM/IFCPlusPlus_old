@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSwitchingDeviceTypeEnum = ENUMERATION OF	(CONTACTOR	,DIMMERSWITCH	,EMERGENCYSTOP	,KEYPAD	,MOMENTARYSWITCH	,SELECTORSWITCH	,STARTER	,SWITCHDISCONNECTOR	,TOGGLESWITCH	,USERDEFINED	,NOTDEFINED);
-class IfcSwitchingDeviceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSwitchingDeviceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSwitchingDeviceTypeEnumEnum

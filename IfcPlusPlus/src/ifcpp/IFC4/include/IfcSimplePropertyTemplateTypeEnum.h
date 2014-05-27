@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSimplePropertyTemplateTypeEnum = ENUMERATION OF	(P_SINGLEVALUE	,P_ENUMERATEDVALUE	,P_BOUNDEDVALUE	,P_LISTVALUE	,P_TABLEVALUE	,P_REFERENCEVALUE	,Q_LENGTH	,Q_AREA	,Q_VOLUME	,Q_COUNT	,Q_WEIGHT	,Q_TIME);
-class IfcSimplePropertyTemplateTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSimplePropertyTemplateTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSimplePropertyTemplateTypeEnumEnum

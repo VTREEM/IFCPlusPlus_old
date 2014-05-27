@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcSurface.h"
 
 // ENTITY IfcCurveBoundedSurface 
-IfcCurveBoundedSurface::IfcCurveBoundedSurface() { m_entity_enum = IFCCURVEBOUNDEDSURFACE; }
-IfcCurveBoundedSurface::IfcCurveBoundedSurface( int id ) { m_id = id; m_entity_enum = IFCCURVEBOUNDEDSURFACE; }
+IfcCurveBoundedSurface::IfcCurveBoundedSurface() {}
+IfcCurveBoundedSurface::IfcCurveBoundedSurface( int id ) { m_id = id; }
 IfcCurveBoundedSurface::~IfcCurveBoundedSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -60,6 +61,15 @@ void IfcCurveBoundedSurface::readStepArguments( const std::vector<std::string>& 
 	readEntityReferenceList( args[1], m_Boundaries, map );
 	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_ImplicitOuter = false; }
 	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_ImplicitOuter = true; }
+}
+void IfcCurveBoundedSurface::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundedSurface::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "BasisSurface", m_BasisSurface ) );
+	vec_attributes.push_back( std::make_pair( "ImplicitOuter", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ImplicitOuter ) ) ) );
+}
+void IfcCurveBoundedSurface::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCurveBoundedSurface::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCoilType 
-IfcCoilType::IfcCoilType() { m_entity_enum = IFCCOILTYPE; }
-IfcCoilType::IfcCoilType( int id ) { m_id = id; m_entity_enum = IFCCOILTYPE; }
+IfcCoilType::IfcCoilType() {}
+IfcCoilType::IfcCoilType( int id ) { m_id = id; }
 IfcCoilType::~IfcCoilType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcCoilType::readStepArguments( const std::vector<std::string>& args, const
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcCoilTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcCoilType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEnergyConversionDeviceType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcCoilType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCoilType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

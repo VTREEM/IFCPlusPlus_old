@@ -48,7 +48,7 @@ shared_ptr<IfcTransitionCode> IfcTransitionCode::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTransitionCode>(); }
-	shared_ptr<IfcTransitionCode> type_object( new IfcTransitionCode() );
+	auto type_object = std::make_shared<IfcTransitionCode>();
 	if( _stricmp( arg.c_str(), ".DISCONTINUOUS." ) == 0 )
 	{
 		type_object->m_enum = IfcTransitionCode::ENUM_DISCONTINUOUS;

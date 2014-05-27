@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPhysicalComplexQuantity 
-IfcPhysicalComplexQuantity::IfcPhysicalComplexQuantity() { m_entity_enum = IFCPHYSICALCOMPLEXQUANTITY; }
-IfcPhysicalComplexQuantity::IfcPhysicalComplexQuantity( int id ) { m_id = id; m_entity_enum = IFCPHYSICALCOMPLEXQUANTITY; }
+IfcPhysicalComplexQuantity::IfcPhysicalComplexQuantity() {}
+IfcPhysicalComplexQuantity::IfcPhysicalComplexQuantity( int id ) { m_id = id; }
 IfcPhysicalComplexQuantity::~IfcPhysicalComplexQuantity() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -70,6 +71,16 @@ void IfcPhysicalComplexQuantity::readStepArguments( const std::vector<std::strin
 	m_Discrimination = IfcLabel::createObjectFromStepData( args[3] );
 	m_Quality = IfcLabel::createObjectFromStepData( args[4] );
 	m_Usage = IfcLabel::createObjectFromStepData( args[5] );
+}
+void IfcPhysicalComplexQuantity::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPhysicalQuantity::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Discrimination", m_Discrimination ) );
+	vec_attributes.push_back( std::make_pair( "Quality", m_Quality ) );
+	vec_attributes.push_back( std::make_pair( "Usage", m_Usage ) );
+}
+void IfcPhysicalComplexQuantity::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPhysicalComplexQuantity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

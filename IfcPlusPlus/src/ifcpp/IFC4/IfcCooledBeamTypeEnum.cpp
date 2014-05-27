@@ -48,7 +48,7 @@ shared_ptr<IfcCooledBeamTypeEnum> IfcCooledBeamTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCooledBeamTypeEnum>(); }
-	shared_ptr<IfcCooledBeamTypeEnum> type_object( new IfcCooledBeamTypeEnum() );
+	auto type_object = std::make_shared<IfcCooledBeamTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ACTIVE." ) == 0 )
 	{
 		type_object->m_enum = IfcCooledBeamTypeEnum::ENUM_ACTIVE;

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcUnitEnum.h"
 
 // ENTITY IfcContextDependentUnit 
-IfcContextDependentUnit::IfcContextDependentUnit() { m_entity_enum = IFCCONTEXTDEPENDENTUNIT; }
-IfcContextDependentUnit::IfcContextDependentUnit( int id ) { m_id = id; m_entity_enum = IFCCONTEXTDEPENDENTUNIT; }
+IfcContextDependentUnit::IfcContextDependentUnit() {}
+IfcContextDependentUnit::IfcContextDependentUnit( int id ) { m_id = id; }
 IfcContextDependentUnit::~IfcContextDependentUnit() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,14 @@ void IfcContextDependentUnit::readStepArguments( const std::vector<std::string>&
 	readEntityReference( args[0], m_Dimensions, map );
 	m_UnitType = IfcUnitEnum::createObjectFromStepData( args[1] );
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+}
+void IfcContextDependentUnit::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcNamedUnit::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+}
+void IfcContextDependentUnit::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcContextDependentUnit::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

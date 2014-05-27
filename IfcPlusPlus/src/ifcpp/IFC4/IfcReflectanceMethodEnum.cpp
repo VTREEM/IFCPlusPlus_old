@@ -72,7 +72,7 @@ shared_ptr<IfcReflectanceMethodEnum> IfcReflectanceMethodEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcReflectanceMethodEnum>(); }
-	shared_ptr<IfcReflectanceMethodEnum> type_object( new IfcReflectanceMethodEnum() );
+	auto type_object = std::make_shared<IfcReflectanceMethodEnum>();
 	if( _stricmp( arg.c_str(), ".BLINN." ) == 0 )
 	{
 		type_object->m_enum = IfcReflectanceMethodEnum::ENUM_BLINN;

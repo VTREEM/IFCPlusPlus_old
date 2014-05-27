@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -32,8 +33,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcDocumentInformation 
-IfcDocumentInformation::IfcDocumentInformation() { m_entity_enum = IFCDOCUMENTINFORMATION; }
-IfcDocumentInformation::IfcDocumentInformation( int id ) { m_id = id; m_entity_enum = IFCDOCUMENTINFORMATION; }
+IfcDocumentInformation::IfcDocumentInformation() {}
+IfcDocumentInformation::IfcDocumentInformation( int id ) { m_id = id; }
 IfcDocumentInformation::~IfcDocumentInformation() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -122,6 +123,32 @@ void IfcDocumentInformation::readStepArguments( const std::vector<std::string>& 
 	m_ValidUntil = IfcDate::createObjectFromStepData( args[14] );
 	m_Confidentiality = IfcDocumentConfidentialityEnum::createObjectFromStepData( args[15] );
 	m_Status = IfcDocumentStatusEnum::createObjectFromStepData( args[16] );
+}
+void IfcDocumentInformation::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalInformation::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Identification", m_Identification ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "Location", m_Location ) );
+	vec_attributes.push_back( std::make_pair( "Purpose", m_Purpose ) );
+	vec_attributes.push_back( std::make_pair( "IntendedUse", m_IntendedUse ) );
+	vec_attributes.push_back( std::make_pair( "Scope", m_Scope ) );
+	vec_attributes.push_back( std::make_pair( "Revision", m_Revision ) );
+	vec_attributes.push_back( std::make_pair( "DocumentOwner", m_DocumentOwner ) );
+	shared_ptr<IfcPPAttributeObjectVector> Editors_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Editors.begin(), m_Editors.end(), std::back_inserter( Editors_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Editors", Editors_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "CreationTime", m_CreationTime ) );
+	vec_attributes.push_back( std::make_pair( "LastRevisionTime", m_LastRevisionTime ) );
+	vec_attributes.push_back( std::make_pair( "ElectronicFormat", m_ElectronicFormat ) );
+	vec_attributes.push_back( std::make_pair( "ValidFrom", m_ValidFrom ) );
+	vec_attributes.push_back( std::make_pair( "ValidUntil", m_ValidUntil ) );
+	vec_attributes.push_back( std::make_pair( "Confidentiality", m_Confidentiality ) );
+	vec_attributes.push_back( std::make_pair( "Status", m_Status ) );
+}
+void IfcDocumentInformation::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDocumentInformation::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

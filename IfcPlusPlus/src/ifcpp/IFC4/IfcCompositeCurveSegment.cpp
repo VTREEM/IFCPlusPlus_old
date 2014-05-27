@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcTransitionCode.h"
 
 // ENTITY IfcCompositeCurveSegment 
-IfcCompositeCurveSegment::IfcCompositeCurveSegment() { m_entity_enum = IFCCOMPOSITECURVESEGMENT; }
-IfcCompositeCurveSegment::IfcCompositeCurveSegment( int id ) { m_id = id; m_entity_enum = IFCCOMPOSITECURVESEGMENT; }
+IfcCompositeCurveSegment::IfcCompositeCurveSegment() {}
+IfcCompositeCurveSegment::IfcCompositeCurveSegment( int id ) { m_id = id; }
 IfcCompositeCurveSegment::~IfcCompositeCurveSegment() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -61,6 +62,16 @@ void IfcCompositeCurveSegment::readStepArguments( const std::vector<std::string>
 	if( _stricmp( args[1].c_str(), ".F." ) == 0 ) { m_SameSense = false; }
 	else if( _stricmp( args[1].c_str(), ".T." ) == 0 ) { m_SameSense = true; }
 	readEntityReference( args[2], m_ParentCurve, map );
+}
+void IfcCompositeCurveSegment::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Transition", m_Transition ) );
+	vec_attributes.push_back( std::make_pair( "SameSense", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SameSense ) ) ) );
+	vec_attributes.push_back( std::make_pair( "ParentCurve", m_ParentCurve ) );
+}
+void IfcCompositeCurveSegment::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCompositeCurveSegment::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

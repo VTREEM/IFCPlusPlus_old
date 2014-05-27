@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcVertex.h"
 
 // ENTITY IfcVertex 
-IfcVertex::IfcVertex() { m_entity_enum = IFCVERTEX; }
-IfcVertex::IfcVertex( int id ) { m_id = id; m_entity_enum = IFCVERTEX; }
+IfcVertex::IfcVertex() {}
+IfcVertex::IfcVertex( int id ) { m_id = id; }
 IfcVertex::~IfcVertex() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -39,6 +40,13 @@ void IfcVertex::getStepLine( std::stringstream& stream ) const
 }
 void IfcVertex::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcVertex::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcVertex::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTopologicalRepresentationItem::getAttributes( vec_attributes );
+}
+void IfcVertex::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcVertex::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

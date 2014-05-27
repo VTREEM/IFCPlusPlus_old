@@ -60,7 +60,7 @@ shared_ptr<IfcActionRequestTypeEnum> IfcActionRequestTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcActionRequestTypeEnum>(); }
-	shared_ptr<IfcActionRequestTypeEnum> type_object( new IfcActionRequestTypeEnum() );
+	auto type_object = std::make_shared<IfcActionRequestTypeEnum>();
 	if( _stricmp( arg.c_str(), ".EMAIL." ) == 0 )
 	{
 		type_object->m_enum = IfcActionRequestTypeEnum::ENUM_EMAIL;

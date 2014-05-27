@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -37,8 +38,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcTask 
-IfcTask::IfcTask() { m_entity_enum = IFCTASK; }
-IfcTask::IfcTask( int id ) { m_id = id; m_entity_enum = IFCTASK; }
+IfcTask::IfcTask() {}
+IfcTask::IfcTask( int id ) { m_id = id; }
 IfcTask::~IfcTask() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -114,6 +115,19 @@ void IfcTask::readStepArguments( const std::vector<std::string>& args, const std
 	readIntValue( args[10], m_Priority );
 	readEntityReference( args[11], m_TaskTime, map );
 	m_PredefinedType = IfcTaskTypeEnum::createObjectFromStepData( args[12] );
+}
+void IfcTask::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProcess::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Status", m_Status ) );
+	vec_attributes.push_back( std::make_pair( "WorkMethod", m_WorkMethod ) );
+	vec_attributes.push_back( std::make_pair( "IsMilestone", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_IsMilestone ) ) ) );
+	vec_attributes.push_back( std::make_pair( "Priority", shared_ptr<IfcPPAttributeObjectInt>( new  IfcPPAttributeObjectInt( m_Priority ) ) ) );
+	vec_attributes.push_back( std::make_pair( "TaskTime", m_TaskTime ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcTask::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTask::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

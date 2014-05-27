@@ -28,7 +28,6 @@ IfcAreaMeasure::~IfcAreaMeasure() {}
 void IfcAreaMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCAREAMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcAreaMeasure> IfcAreaMeasure::createObjectFromStepData( const std::
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAreaMeasure>(); }
-	shared_ptr<IfcAreaMeasure> type_object( new IfcAreaMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcAreaMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDoorStyleConstructionEnum = ENUMERATION OF	(ALUMINIUM	,HIGH_GRADE_STEEL	,STEEL	,WOOD	,ALUMINIUM_WOOD	,ALUMINIUM_PLASTIC	,PLASTIC	,USERDEFINED	,NOTDEFINED);
-class IfcDoorStyleConstructionEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDoorStyleConstructionEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDoorStyleConstructionEnumEnum

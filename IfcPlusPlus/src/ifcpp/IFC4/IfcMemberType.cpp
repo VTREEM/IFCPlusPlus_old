@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMemberType 
-IfcMemberType::IfcMemberType() { m_entity_enum = IFCMEMBERTYPE; }
-IfcMemberType::IfcMemberType( int id ) { m_id = id; m_entity_enum = IFCMEMBERTYPE; }
+IfcMemberType::IfcMemberType() {}
+IfcMemberType::IfcMemberType( int id ) { m_id = id; }
 IfcMemberType::~IfcMemberType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcMemberType::readStepArguments( const std::vector<std::string>& args, con
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcMemberTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcMemberType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcMemberType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMemberType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

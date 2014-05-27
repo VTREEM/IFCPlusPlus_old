@@ -48,7 +48,7 @@ shared_ptr<IfcSystemFurnitureElementTypeEnum> IfcSystemFurnitureElementTypeEnum:
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSystemFurnitureElementTypeEnum>(); }
-	shared_ptr<IfcSystemFurnitureElementTypeEnum> type_object( new IfcSystemFurnitureElementTypeEnum() );
+	auto type_object = std::make_shared<IfcSystemFurnitureElementTypeEnum>();
 	if( _stricmp( arg.c_str(), ".PANEL." ) == 0 )
 	{
 		type_object->m_enum = IfcSystemFurnitureElementTypeEnum::ENUM_PANEL;

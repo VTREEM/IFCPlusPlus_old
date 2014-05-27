@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcExternallyDefinedHatchStyle 
-IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle() { m_entity_enum = IFCEXTERNALLYDEFINEDHATCHSTYLE; }
-IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle( int id ) { m_id = id; m_entity_enum = IFCEXTERNALLYDEFINEDHATCHSTYLE; }
+IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle() {}
+IfcExternallyDefinedHatchStyle::IfcExternallyDefinedHatchStyle( int id ) { m_id = id; }
 IfcExternallyDefinedHatchStyle::~IfcExternallyDefinedHatchStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,13 @@ void IfcExternallyDefinedHatchStyle::readStepArguments( const std::vector<std::s
 	m_Location = IfcURIReference::createObjectFromStepData( args[0] );
 	m_Identification = IfcIdentifier::createObjectFromStepData( args[1] );
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
+}
+void IfcExternallyDefinedHatchStyle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcExternalReference::getAttributes( vec_attributes );
+}
+void IfcExternallyDefinedHatchStyle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcExternallyDefinedHatchStyle::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -13,11 +13,8 @@
 
 #pragma once
 
-#ifdef IFCPP_OPENMP
-#include <omp.h>
-#endif
-
 #include <map>
+#include <ifcpp/model/IfcPPOpenMP.h>
 #include <ifcpp/model/shared_ptr.h>
 class GeometrySettings;
 class UnitConverter;
@@ -39,6 +36,6 @@ protected:
 	std::map<int,shared_ptr<ProfileConverter> >	m_profile_cache;
 
 #ifdef IFCPP_OPENMP
-	omp_lock_t m_writelock_profile_cache;
+	Mutex m_writelock_profile_cache;
 #endif
 };

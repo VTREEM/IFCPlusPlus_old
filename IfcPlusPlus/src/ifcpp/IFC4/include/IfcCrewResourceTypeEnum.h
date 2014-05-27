@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCrewResourceTypeEnum = ENUMERATION OF	(OFFICE	,SITE	,USERDEFINED	,NOTDEFINED);
-class IfcCrewResourceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCrewResourceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCrewResourceTypeEnumEnum

@@ -26,14 +26,57 @@ enum IfcPPTypeEnum;
 enum IfcPPEntityEnum;
 #endif
 
+enum LogicalEnum { LOGICAL_TRUE, LOGICAL_FALSE, LOGICAL_UNKNOWN };
+
 class IfcPPObject
 {
 public:
 	virtual const char* classname() const { return "IfcPPObject"; }
-	virtual void getStepData( std::stringstream& ) {};
 };
 
-class IfcPPEntity : public IfcPPObject
+class IfcPPBool : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPBool"; }
+	void readArgument( const std::string& attribute_value );
+	bool m_value;
+};
+
+class IfcPPLogical : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPLogical"; }
+	void readArgument( const std::string& attribute_value );
+	LogicalEnum m_value;
+};
+
+class IfcPPInt : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPInt"; }
+	void readArgument( const std::string& attribute_value );
+	int m_value;
+};
+
+class IfcPPReal : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPReal"; }
+	void readArgument( const std::string& attribute_value );
+	double m_value;
+};
+
+class IfcPPString : virtual public IfcPPObject
+{
+public:
+	virtual const char* classname() const { return "IfcPPString"; }
+	void readArgument( const std::string& attribute_value );
+	std::string m_value;
+};
+
+
+// ENTITY
+class IfcPPEntity : virtual public IfcPPObject
 {
 protected:
 	int m_id;
@@ -46,38 +89,12 @@ public:
 	virtual void getStepLine( std::stringstream& stream ) const;
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	virtual void readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map );
+	virtual void getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes );
+	virtual void getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& map_attributes );
 	virtual void setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self );
 	virtual void unlinkSelf();
 	virtual const int getId() const { return m_id; }
 	void setId( int id );
 	std::string m_entity_argument_str;
 	IfcPPEntityEnum m_entity_enum;
-};
-
-//// class to derive IFC TYPEs from
-class IfcPPType : public IfcPPObject
-{
-public:	
-	IfcPPType();
-	~IfcPPType();
-	virtual const char* classname() const { return "IfcPPType"; }
-	virtual void getStepData( std::stringstream& ) {};
-	virtual void readStepArgument( const std::string& arg );
-	IfcPPTypeEnum m_type_enum;
-};
-
-
-//// pure abstract class to derive IFC TYPEs from
-class IfcPPAbstractSelect
-{
-public:
-	virtual const char* classname() const { return "IfcPPAbstractSelect"; }
-	virtual void getStepData( std::stringstream& ) {};
-};
-
-class IfcPPAbstractEnum
-{
-public:
-	virtual const char* classname() const { return "IfcPPAbstractEnum"; }
-	virtual void getStepData( std::stringstream& ) {};
 };

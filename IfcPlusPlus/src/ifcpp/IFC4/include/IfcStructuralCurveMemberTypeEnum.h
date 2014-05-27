@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStructuralCurveMemberTypeEnum = ENUMERATION OF	(RIGID_JOINED_MEMBER	,PIN_JOINED_MEMBER	,CABLE	,TENSION_MEMBER	,COMPRESSION_MEMBER	,USERDEFINED	,NOTDEFINED);
-class IfcStructuralCurveMemberTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcStructuralCurveMemberTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcStructuralCurveMemberTypeEnumEnum

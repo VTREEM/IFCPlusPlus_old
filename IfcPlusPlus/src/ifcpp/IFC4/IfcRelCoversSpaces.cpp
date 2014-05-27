@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelCoversSpaces 
-IfcRelCoversSpaces::IfcRelCoversSpaces() { m_entity_enum = IFCRELCOVERSSPACES; }
-IfcRelCoversSpaces::IfcRelCoversSpaces( int id ) { m_id = id; m_entity_enum = IFCRELCOVERSSPACES; }
+IfcRelCoversSpaces::IfcRelCoversSpaces() {}
+IfcRelCoversSpaces::IfcRelCoversSpaces( int id ) { m_id = id; }
 IfcRelCoversSpaces::~IfcRelCoversSpaces() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -72,6 +73,14 @@ void IfcRelCoversSpaces::readStepArguments( const std::vector<std::string>& args
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readEntityReference( args[4], m_RelatingSpace, map );
 	readEntityReferenceList( args[5], m_RelatedCoverings, map );
+}
+void IfcRelCoversSpaces::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingSpace", m_RelatingSpace ) );
+}
+void IfcRelCoversSpaces::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelCoversSpaces::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

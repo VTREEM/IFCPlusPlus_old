@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcConstructionMaterialResourceTypeEnum = ENUMERATION OF	(AGGREGATES	,CONCRETE	,DRYWALL	,FUEL	,GYPSUM	,MASONRY	,METAL	,PLASTIC	,WOOD	,NOTDEFINED	,USERDEFINED);
-class IfcConstructionMaterialResourceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcConstructionMaterialResourceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcConstructionMaterialResourceTypeEnumEnum

@@ -56,7 +56,7 @@ shared_ptr<IfcCableCarrierFittingTypeEnum> IfcCableCarrierFittingTypeEnum::creat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCableCarrierFittingTypeEnum>(); }
-	shared_ptr<IfcCableCarrierFittingTypeEnum> type_object( new IfcCableCarrierFittingTypeEnum() );
+	auto type_object = std::make_shared<IfcCableCarrierFittingTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BEND." ) == 0 )
 	{
 		type_object->m_enum = IfcCableCarrierFittingTypeEnum::ENUM_BEND;

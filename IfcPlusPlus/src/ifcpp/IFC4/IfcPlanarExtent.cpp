@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcPlanarExtent 
-IfcPlanarExtent::IfcPlanarExtent() { m_entity_enum = IFCPLANAREXTENT; }
-IfcPlanarExtent::IfcPlanarExtent( int id ) { m_id = id; m_entity_enum = IFCPLANAREXTENT; }
+IfcPlanarExtent::IfcPlanarExtent() {}
+IfcPlanarExtent::IfcPlanarExtent( int id ) { m_id = id; }
 IfcPlanarExtent::~IfcPlanarExtent() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -53,6 +54,15 @@ void IfcPlanarExtent::readStepArguments( const std::vector<std::string>& args, c
 	#endif
 	m_SizeInX = IfcLengthMeasure::createObjectFromStepData( args[0] );
 	m_SizeInY = IfcLengthMeasure::createObjectFromStepData( args[1] );
+}
+void IfcPlanarExtent::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "SizeInX", m_SizeInX ) );
+	vec_attributes.push_back( std::make_pair( "SizeInY", m_SizeInY ) );
+}
+void IfcPlanarExtent::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPlanarExtent::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

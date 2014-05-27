@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcModulusOfSubgradeReactionSelect.h"
 
 // ENTITY IfcBoundaryFaceCondition 
-IfcBoundaryFaceCondition::IfcBoundaryFaceCondition() { m_entity_enum = IFCBOUNDARYFACECONDITION; }
-IfcBoundaryFaceCondition::IfcBoundaryFaceCondition( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYFACECONDITION; }
+IfcBoundaryFaceCondition::IfcBoundaryFaceCondition() {}
+IfcBoundaryFaceCondition::IfcBoundaryFaceCondition( int id ) { m_id = id; }
 IfcBoundaryFaceCondition::~IfcBoundaryFaceCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -60,6 +61,16 @@ void IfcBoundaryFaceCondition::readStepArguments( const std::vector<std::string>
 	m_TranslationalStiffnessByAreaX = IfcModulusOfSubgradeReactionSelect::createObjectFromStepData( args[1], map );
 	m_TranslationalStiffnessByAreaY = IfcModulusOfSubgradeReactionSelect::createObjectFromStepData( args[2], map );
 	m_TranslationalStiffnessByAreaZ = IfcModulusOfSubgradeReactionSelect::createObjectFromStepData( args[3], map );
+}
+void IfcBoundaryFaceCondition::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundaryCondition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TranslationalStiffnessByAreaX", m_TranslationalStiffnessByAreaX ) );
+	vec_attributes.push_back( std::make_pair( "TranslationalStiffnessByAreaY", m_TranslationalStiffnessByAreaY ) );
+	vec_attributes.push_back( std::make_pair( "TranslationalStiffnessByAreaZ", m_TranslationalStiffnessByAreaZ ) );
+}
+void IfcBoundaryFaceCondition::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBoundaryFaceCondition::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

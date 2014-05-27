@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcActorRole 
-IfcActorRole::IfcActorRole() { m_entity_enum = IFCACTORROLE; }
-IfcActorRole::IfcActorRole( int id ) { m_id = id; m_entity_enum = IFCACTORROLE; }
+IfcActorRole::IfcActorRole() {}
+IfcActorRole::IfcActorRole( int id ) { m_id = id; }
 IfcActorRole::~IfcActorRole() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,15 @@ void IfcActorRole::readStepArguments( const std::vector<std::string>& args, cons
 	m_Role = IfcRoleEnum::createObjectFromStepData( args[0] );
 	m_UserDefinedRole = IfcLabel::createObjectFromStepData( args[1] );
 	m_Description = IfcText::createObjectFromStepData( args[2] );
+}
+void IfcActorRole::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Role", m_Role ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedRole", m_UserDefinedRole ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+}
+void IfcActorRole::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcActorRole::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

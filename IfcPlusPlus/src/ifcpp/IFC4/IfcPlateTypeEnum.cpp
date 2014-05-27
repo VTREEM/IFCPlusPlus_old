@@ -48,7 +48,7 @@ shared_ptr<IfcPlateTypeEnum> IfcPlateTypeEnum::createObjectFromStepData( const s
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPlateTypeEnum>(); }
-	shared_ptr<IfcPlateTypeEnum> type_object( new IfcPlateTypeEnum() );
+	auto type_object = std::make_shared<IfcPlateTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CURTAIN_PANEL." ) == 0 )
 	{
 		type_object->m_enum = IfcPlateTypeEnum::ENUM_CURTAIN_PANEL;

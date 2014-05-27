@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcMedicalDeviceTypeEnum = ENUMERATION OF	(AIRSTATION	,FEEDAIRUNIT	,OXYGENGENERATOR	,OXYGENPLANT	,VACUUMSTATION	,USERDEFINED	,NOTDEFINED);
-class IfcMedicalDeviceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcMedicalDeviceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcMedicalDeviceTypeEnumEnum

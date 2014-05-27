@@ -76,7 +76,7 @@ shared_ptr<IfcEvaporativeCoolerTypeEnum> IfcEvaporativeCoolerTypeEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcEvaporativeCoolerTypeEnum>(); }
-	shared_ptr<IfcEvaporativeCoolerTypeEnum> type_object( new IfcEvaporativeCoolerTypeEnum() );
+	auto type_object = std::make_shared<IfcEvaporativeCoolerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DIRECTEVAPORATIVERANDOMMEDIAAIRCOOLER." ) == 0 )
 	{
 		type_object->m_enum = IfcEvaporativeCoolerTypeEnum::ENUM_DIRECTEVAPORATIVERANDOMMEDIAAIRCOOLER;

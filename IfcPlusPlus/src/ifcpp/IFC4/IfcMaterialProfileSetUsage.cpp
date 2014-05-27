@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcRelAssociatesMaterial.h"
 
 // ENTITY IfcMaterialProfileSetUsage 
-IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage() { m_entity_enum = IFCMATERIALPROFILESETUSAGE; }
-IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage( int id ) { m_id = id; m_entity_enum = IFCMATERIALPROFILESETUSAGE; }
+IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage() {}
+IfcMaterialProfileSetUsage::IfcMaterialProfileSetUsage( int id ) { m_id = id; }
 IfcMaterialProfileSetUsage::~IfcMaterialProfileSetUsage() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,16 @@ void IfcMaterialProfileSetUsage::readStepArguments( const std::vector<std::strin
 	readEntityReference( args[0], m_ForProfileSet, map );
 	m_CardinalPoint = IfcCardinalPointReference::createObjectFromStepData( args[1] );
 	m_ReferenceExtent = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
+}
+void IfcMaterialProfileSetUsage::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcMaterialUsageDefinition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ForProfileSet", m_ForProfileSet ) );
+	vec_attributes.push_back( std::make_pair( "CardinalPoint", m_CardinalPoint ) );
+	vec_attributes.push_back( std::make_pair( "ReferenceExtent", m_ReferenceExtent ) );
+}
+void IfcMaterialProfileSetUsage::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialProfileSetUsage::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

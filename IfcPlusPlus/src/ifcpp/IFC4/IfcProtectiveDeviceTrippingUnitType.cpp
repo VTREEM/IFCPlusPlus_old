@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcProtectiveDeviceTrippingUnitType 
-IfcProtectiveDeviceTrippingUnitType::IfcProtectiveDeviceTrippingUnitType() { m_entity_enum = IFCPROTECTIVEDEVICETRIPPINGUNITTYPE; }
-IfcProtectiveDeviceTrippingUnitType::IfcProtectiveDeviceTrippingUnitType( int id ) { m_id = id; m_entity_enum = IFCPROTECTIVEDEVICETRIPPINGUNITTYPE; }
+IfcProtectiveDeviceTrippingUnitType::IfcProtectiveDeviceTrippingUnitType() {}
+IfcProtectiveDeviceTrippingUnitType::IfcProtectiveDeviceTrippingUnitType( int id ) { m_id = id; }
 IfcProtectiveDeviceTrippingUnitType::~IfcProtectiveDeviceTrippingUnitType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcProtectiveDeviceTrippingUnitType::readStepArguments( const std::vector<s
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcProtectiveDeviceTrippingUnitTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcProtectiveDeviceTrippingUnitType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDistributionControlElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcProtectiveDeviceTrippingUnitType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcProtectiveDeviceTrippingUnitType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

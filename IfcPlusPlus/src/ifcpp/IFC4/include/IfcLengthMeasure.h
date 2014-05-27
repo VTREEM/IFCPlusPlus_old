@@ -23,7 +23,7 @@
 #include "IfcSizeSelect.h"
 
 // TYPE IfcLengthMeasure = REAL;
-class IfcLengthMeasure : public IfcBendingParameterSelect, public IfcMeasureValue, public IfcSizeSelect, public IfcPPType
+class IfcLengthMeasure : public IfcBendingParameterSelect, public IfcMeasureValue, public IfcSizeSelect, public IfcPPReal
 {
 public:
 	IfcLengthMeasure();
@@ -32,6 +32,5 @@ public:
 	virtual const char* classname() const { return "IfcLengthMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcLengthMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

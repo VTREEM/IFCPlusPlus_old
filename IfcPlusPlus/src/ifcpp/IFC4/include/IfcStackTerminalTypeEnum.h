@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStackTerminalTypeEnum = ENUMERATION OF	(BIRDCAGE	,COWL	,RAINWATERHOPPER	,USERDEFINED	,NOTDEFINED);
-class IfcStackTerminalTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcStackTerminalTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcStackTerminalTypeEnumEnum

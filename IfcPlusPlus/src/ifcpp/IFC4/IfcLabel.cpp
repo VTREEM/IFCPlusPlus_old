@@ -28,7 +28,6 @@ IfcLabel::~IfcLabel() {}
 void IfcLabel::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCLABEL("; }
-	//supertype as attribute: std::string m_value
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcLabel> IfcLabel::createObjectFromStepData( const std::string& arg 
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLabel>(); }
-	shared_ptr<IfcLabel> type_object( new IfcLabel() );
-	//supertype as attribute: std::string m_value
-	type_object->m_value = arg;
+	auto type_object = std::make_shared<IfcLabel>();
+	type_object->readArgument( arg );
 	return type_object;
 }

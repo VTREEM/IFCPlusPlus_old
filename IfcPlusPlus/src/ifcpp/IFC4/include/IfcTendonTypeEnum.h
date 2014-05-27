@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTendonTypeEnum = ENUMERATION OF	(BAR	,COATED	,STRAND	,WIRE	,USERDEFINED	,NOTDEFINED);
-class IfcTendonTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcTendonTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcTendonTypeEnumEnum

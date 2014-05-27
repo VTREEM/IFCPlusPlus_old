@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSlabTypeEnum = ENUMERATION OF	(FLOOR	,ROOF	,LANDING	,BASESLAB	,USERDEFINED	,NOTDEFINED);
-class IfcSlabTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSlabTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSlabTypeEnumEnum

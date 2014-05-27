@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -30,8 +31,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsStructuralMember 
-IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember() { m_entity_enum = IFCRELCONNECTSSTRUCTURALMEMBER; }
-IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSSTRUCTURALMEMBER; }
+IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember() {}
+IfcRelConnectsStructuralMember::IfcRelConnectsStructuralMember( int id ) { m_id = id; }
 IfcRelConnectsStructuralMember::~IfcRelConnectsStructuralMember() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -92,6 +93,19 @@ void IfcRelConnectsStructuralMember::readStepArguments( const std::vector<std::s
 	readEntityReference( args[7], m_AdditionalConditions, map );
 	m_SupportedLength = IfcLengthMeasure::createObjectFromStepData( args[8] );
 	readEntityReference( args[9], m_ConditionCoordinateSystem, map );
+}
+void IfcRelConnectsStructuralMember::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingStructuralMember", m_RelatingStructuralMember ) );
+	vec_attributes.push_back( std::make_pair( "RelatedStructuralConnection", m_RelatedStructuralConnection ) );
+	vec_attributes.push_back( std::make_pair( "AppliedCondition", m_AppliedCondition ) );
+	vec_attributes.push_back( std::make_pair( "AdditionalConditions", m_AdditionalConditions ) );
+	vec_attributes.push_back( std::make_pair( "SupportedLength", m_SupportedLength ) );
+	vec_attributes.push_back( std::make_pair( "ConditionCoordinateSystem", m_ConditionCoordinateSystem ) );
+}
+void IfcRelConnectsStructuralMember::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelConnectsStructuralMember::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

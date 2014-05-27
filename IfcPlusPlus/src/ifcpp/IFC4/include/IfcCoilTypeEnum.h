@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCoilTypeEnum = ENUMERATION OF	(DXCOOLINGCOIL	,ELECTRICHEATINGCOIL	,GASHEATINGCOIL	,HYDRONICCOIL	,STEAMHEATINGCOIL	,WATERCOOLINGCOIL	,WATERHEATINGCOIL	,USERDEFINED	,NOTDEFINED);
-class IfcCoilTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCoilTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCoilTypeEnumEnum

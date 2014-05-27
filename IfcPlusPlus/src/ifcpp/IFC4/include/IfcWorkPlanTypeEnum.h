@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcWorkPlanTypeEnum = ENUMERATION OF	(ACTUAL	,BASELINE	,PLANNED	,USERDEFINED	,NOTDEFINED);
-class IfcWorkPlanTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcWorkPlanTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcWorkPlanTypeEnumEnum

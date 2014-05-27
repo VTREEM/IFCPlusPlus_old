@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcTimePeriod.h"
 
 // ENTITY IfcTimePeriod 
-IfcTimePeriod::IfcTimePeriod() { m_entity_enum = IFCTIMEPERIOD; }
-IfcTimePeriod::IfcTimePeriod( int id ) { m_id = id; m_entity_enum = IFCTIMEPERIOD; }
+IfcTimePeriod::IfcTimePeriod() {}
+IfcTimePeriod::IfcTimePeriod( int id ) { m_id = id; }
 IfcTimePeriod::~IfcTimePeriod() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -51,6 +52,14 @@ void IfcTimePeriod::readStepArguments( const std::vector<std::string>& args, con
 	#endif
 	m_StartTime = IfcTime::createObjectFromStepData( args[0] );
 	m_EndTime = IfcTime::createObjectFromStepData( args[1] );
+}
+void IfcTimePeriod::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "StartTime", m_StartTime ) );
+	vec_attributes.push_back( std::make_pair( "EndTime", m_EndTime ) );
+}
+void IfcTimePeriod::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTimePeriod::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

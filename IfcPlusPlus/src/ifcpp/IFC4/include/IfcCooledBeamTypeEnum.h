@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCooledBeamTypeEnum = ENUMERATION OF	(ACTIVE	,PASSIVE	,USERDEFINED	,NOTDEFINED);
-class IfcCooledBeamTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCooledBeamTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCooledBeamTypeEnumEnum

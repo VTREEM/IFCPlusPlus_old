@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPileConstructionEnum = ENUMERATION OF	(CAST_IN_PLACE	,COMPOSITE	,PRECAST_CONCRETE	,PREFAB_STEEL	,USERDEFINED	,NOTDEFINED);
-class IfcPileConstructionEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPileConstructionEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPileConstructionEnumEnum

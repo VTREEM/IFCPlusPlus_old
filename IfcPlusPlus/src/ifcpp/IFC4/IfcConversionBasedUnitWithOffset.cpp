@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcUnitEnum.h"
 
 // ENTITY IfcConversionBasedUnitWithOffset 
-IfcConversionBasedUnitWithOffset::IfcConversionBasedUnitWithOffset() { m_entity_enum = IFCCONVERSIONBASEDUNITWITHOFFSET; }
-IfcConversionBasedUnitWithOffset::IfcConversionBasedUnitWithOffset( int id ) { m_id = id; m_entity_enum = IFCCONVERSIONBASEDUNITWITHOFFSET; }
+IfcConversionBasedUnitWithOffset::IfcConversionBasedUnitWithOffset() {}
+IfcConversionBasedUnitWithOffset::IfcConversionBasedUnitWithOffset( int id ) { m_id = id; }
 IfcConversionBasedUnitWithOffset::~IfcConversionBasedUnitWithOffset() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -68,6 +69,14 @@ void IfcConversionBasedUnitWithOffset::readStepArguments( const std::vector<std:
 	m_Name = IfcLabel::createObjectFromStepData( args[2] );
 	readEntityReference( args[3], m_ConversionFactor, map );
 	m_ConversionOffset = IfcReal::createObjectFromStepData( args[4] );
+}
+void IfcConversionBasedUnitWithOffset::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConversionBasedUnit::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ConversionOffset", m_ConversionOffset ) );
+}
+void IfcConversionBasedUnitWithOffset::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConversionBasedUnitWithOffset::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

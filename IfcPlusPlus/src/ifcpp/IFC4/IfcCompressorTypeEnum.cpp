@@ -100,7 +100,7 @@ shared_ptr<IfcCompressorTypeEnum> IfcCompressorTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCompressorTypeEnum>(); }
-	shared_ptr<IfcCompressorTypeEnum> type_object( new IfcCompressorTypeEnum() );
+	auto type_object = std::make_shared<IfcCompressorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DYNAMIC." ) == 0 )
 	{
 		type_object->m_enum = IfcCompressorTypeEnum::ENUM_DYNAMIC;

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcTranslationalStiffnessSelect.h"
 
 // ENTITY IfcBoundaryNodeCondition 
-IfcBoundaryNodeCondition::IfcBoundaryNodeCondition() { m_entity_enum = IFCBOUNDARYNODECONDITION; }
-IfcBoundaryNodeCondition::IfcBoundaryNodeCondition( int id ) { m_id = id; m_entity_enum = IFCBOUNDARYNODECONDITION; }
+IfcBoundaryNodeCondition::IfcBoundaryNodeCondition() {}
+IfcBoundaryNodeCondition::IfcBoundaryNodeCondition( int id ) { m_id = id; }
 IfcBoundaryNodeCondition::~IfcBoundaryNodeCondition() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -73,6 +74,19 @@ void IfcBoundaryNodeCondition::readStepArguments( const std::vector<std::string>
 	m_RotationalStiffnessX = IfcRotationalStiffnessSelect::createObjectFromStepData( args[4], map );
 	m_RotationalStiffnessY = IfcRotationalStiffnessSelect::createObjectFromStepData( args[5], map );
 	m_RotationalStiffnessZ = IfcRotationalStiffnessSelect::createObjectFromStepData( args[6], map );
+}
+void IfcBoundaryNodeCondition::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBoundaryCondition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TranslationalStiffnessX", m_TranslationalStiffnessX ) );
+	vec_attributes.push_back( std::make_pair( "TranslationalStiffnessY", m_TranslationalStiffnessY ) );
+	vec_attributes.push_back( std::make_pair( "TranslationalStiffnessZ", m_TranslationalStiffnessZ ) );
+	vec_attributes.push_back( std::make_pair( "RotationalStiffnessX", m_RotationalStiffnessX ) );
+	vec_attributes.push_back( std::make_pair( "RotationalStiffnessY", m_RotationalStiffnessY ) );
+	vec_attributes.push_back( std::make_pair( "RotationalStiffnessZ", m_RotationalStiffnessZ ) );
+}
+void IfcBoundaryNodeCondition::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBoundaryNodeCondition::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcElementAssembly 
-IfcElementAssembly::IfcElementAssembly() { m_entity_enum = IFCELEMENTASSEMBLY; }
-IfcElementAssembly::IfcElementAssembly( int id ) { m_id = id; m_entity_enum = IFCELEMENTASSEMBLY; }
+IfcElementAssembly::IfcElementAssembly() {}
+IfcElementAssembly::IfcElementAssembly( int id ) { m_id = id; }
 IfcElementAssembly::~IfcElementAssembly() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -109,6 +110,15 @@ void IfcElementAssembly::readStepArguments( const std::vector<std::string>& args
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_AssemblyPlace = IfcAssemblyPlaceEnum::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcElementAssemblyTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcElementAssembly::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "AssemblyPlace", m_AssemblyPlace ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcElementAssembly::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcElementAssembly::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

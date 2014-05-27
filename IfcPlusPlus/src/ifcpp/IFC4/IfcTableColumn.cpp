@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcUnit.h"
 
 // ENTITY IfcTableColumn 
-IfcTableColumn::IfcTableColumn() { m_entity_enum = IFCTABLECOLUMN; }
-IfcTableColumn::IfcTableColumn( int id ) { m_id = id; m_entity_enum = IFCTABLECOLUMN; }
+IfcTableColumn::IfcTableColumn() {}
+IfcTableColumn::IfcTableColumn( int id ) { m_id = id; }
 IfcTableColumn::~IfcTableColumn() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -67,6 +68,17 @@ void IfcTableColumn::readStepArguments( const std::vector<std::string>& args, co
 	m_Description = IfcText::createObjectFromStepData( args[2] );
 	m_Unit = IfcUnit::createObjectFromStepData( args[3], map );
 	readEntityReference( args[4], m_ReferencePath, map );
+}
+void IfcTableColumn::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Identifier", m_Identifier ) );
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	vec_attributes.push_back( std::make_pair( "Unit", m_Unit ) );
+	vec_attributes.push_back( std::make_pair( "ReferencePath", m_ReferencePath ) );
+}
+void IfcTableColumn::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTableColumn::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

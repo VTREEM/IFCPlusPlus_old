@@ -21,7 +21,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcSolidAngleMeasure = REAL;
-class IfcSolidAngleMeasure : public IfcMeasureValue, public IfcPPType
+class IfcSolidAngleMeasure : public IfcMeasureValue, public IfcPPReal
 {
 public:
 	IfcSolidAngleMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcSolidAngleMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcSolidAngleMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

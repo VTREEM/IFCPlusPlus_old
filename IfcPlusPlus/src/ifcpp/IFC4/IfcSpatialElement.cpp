@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -38,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSpatialElement 
-IfcSpatialElement::IfcSpatialElement() { m_entity_enum = IFCSPATIALELEMENT; }
-IfcSpatialElement::IfcSpatialElement( int id ) { m_id = id; m_entity_enum = IFCSPATIALELEMENT; }
+IfcSpatialElement::IfcSpatialElement() {}
+IfcSpatialElement::IfcSpatialElement( int id ) { m_id = id; }
 IfcSpatialElement::~IfcSpatialElement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -92,6 +93,14 @@ void IfcSpatialElement::readStepArguments( const std::vector<std::string>& args,
 	readEntityReference( args[5], m_ObjectPlacement, map );
 	readEntityReference( args[6], m_Representation, map );
 	m_LongName = IfcLabel::createObjectFromStepData( args[7] );
+}
+void IfcSpatialElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcProduct::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LongName", m_LongName ) );
+}
+void IfcSpatialElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSpatialElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

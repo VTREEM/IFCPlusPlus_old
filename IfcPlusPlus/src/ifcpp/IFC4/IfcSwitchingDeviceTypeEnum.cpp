@@ -76,7 +76,7 @@ shared_ptr<IfcSwitchingDeviceTypeEnum> IfcSwitchingDeviceTypeEnum::createObjectF
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSwitchingDeviceTypeEnum>(); }
-	shared_ptr<IfcSwitchingDeviceTypeEnum> type_object( new IfcSwitchingDeviceTypeEnum() );
+	auto type_object = std::make_shared<IfcSwitchingDeviceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONTACTOR." ) == 0 )
 	{
 		type_object->m_enum = IfcSwitchingDeviceTypeEnum::ENUM_CONTACTOR;

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDiscreteAccessoryTypeEnum = ENUMERATION OF	(ANCHORPLATE	,BRACKET	,SHOE	,USERDEFINED	,NOTDEFINED);
-class IfcDiscreteAccessoryTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDiscreteAccessoryTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDiscreteAccessoryTypeEnumEnum

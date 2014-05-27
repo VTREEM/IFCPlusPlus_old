@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelFlowControlElements 
-IfcRelFlowControlElements::IfcRelFlowControlElements() { m_entity_enum = IFCRELFLOWCONTROLELEMENTS; }
-IfcRelFlowControlElements::IfcRelFlowControlElements( int id ) { m_id = id; m_entity_enum = IFCRELFLOWCONTROLELEMENTS; }
+IfcRelFlowControlElements::IfcRelFlowControlElements() {}
+IfcRelFlowControlElements::IfcRelFlowControlElements( int id ) { m_id = id; }
 IfcRelFlowControlElements::~IfcRelFlowControlElements() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -72,6 +73,14 @@ void IfcRelFlowControlElements::readStepArguments( const std::vector<std::string
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	readEntityReferenceList( args[4], m_RelatedControlElements, map );
 	readEntityReference( args[5], m_RelatingFlowElement, map );
+}
+void IfcRelFlowControlElements::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingFlowElement", m_RelatingFlowElement ) );
+}
+void IfcRelFlowControlElements::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelFlowControlElements::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

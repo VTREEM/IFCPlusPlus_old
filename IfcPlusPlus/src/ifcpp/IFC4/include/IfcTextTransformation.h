@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTextTransformation = STRING;
-class IfcTextTransformation : public IfcPPType
+class IfcTextTransformation : public IfcPPString
 {
 public:
 	IfcTextTransformation();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcTextTransformation"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcTextTransformation> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

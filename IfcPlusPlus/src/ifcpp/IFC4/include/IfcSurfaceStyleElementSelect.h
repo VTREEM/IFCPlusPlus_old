@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSurfaceStyleElementSelect = SELECT	(IfcExternallyDefinedSurfaceStyle	,IfcSurfaceStyleLighting	,IfcSurfaceStyleRefraction	,IfcSurfaceStyleShading	,IfcSurfaceStyleWithTextures);
-class IfcSurfaceStyleElementSelect : public IfcPPAbstractSelect
+class IfcSurfaceStyleElementSelect : virtual public IfcPPObject
 {
 public:
 	IfcSurfaceStyleElementSelect();
 	~IfcSurfaceStyleElementSelect();
 	virtual const char* classname() const { return "IfcSurfaceStyleElementSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcSurfaceStyleElementSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

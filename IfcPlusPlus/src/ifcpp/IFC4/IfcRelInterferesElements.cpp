@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -27,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelInterferesElements 
-IfcRelInterferesElements::IfcRelInterferesElements() { m_entity_enum = IFCRELINTERFERESELEMENTS; }
-IfcRelInterferesElements::IfcRelInterferesElements( int id ) { m_id = id; m_entity_enum = IFCRELINTERFERESELEMENTS; }
+IfcRelInterferesElements::IfcRelInterferesElements() {}
+IfcRelInterferesElements::IfcRelInterferesElements( int id ) { m_id = id; }
 IfcRelInterferesElements::~IfcRelInterferesElements() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -65,8 +66,9 @@ void IfcRelInterferesElements::getStepLine( std::stringstream& stream ) const
 	stream << ",";
 	if( m_InterferenceType ) { m_InterferenceType->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_ImpliedOrder == false ) { stream << ".F."; }
-	else if( m_ImpliedOrder == true ) { stream << ".T."; }
+	if( m_ImpliedOrder == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_ImpliedOrder == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_ImpliedOrder == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ");";
 }
 void IfcRelInterferesElements::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
@@ -85,8 +87,21 @@ void IfcRelInterferesElements::readStepArguments( const std::vector<std::string>
 	readEntityReference( args[5], m_RelatedElement, map );
 	readEntityReference( args[6], m_InterferenceGeometry, map );
 	m_InterferenceType = IfcIdentifier::createObjectFromStepData( args[7] );
-	if( _stricmp( args[8].c_str(), ".F." ) == 0 ) { m_ImpliedOrder = false; }
-	else if( _stricmp( args[8].c_str(), ".T." ) == 0 ) { m_ImpliedOrder = true; }
+	if( _stricmp( args[8].c_str(), ".F." ) == 0 ) { m_ImpliedOrder = LOGICAL_FALSE; }
+	else if( _stricmp( args[8].c_str(), ".T." ) == 0 ) { m_ImpliedOrder = LOGICAL_TRUE; }
+	else if( _stricmp( args[8].c_str(), ".U." ) == 0 ) { m_ImpliedOrder = LOGICAL_UNKNOWN; }
+}
+void IfcRelInterferesElements::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingElement", m_RelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "RelatedElement", m_RelatedElement ) );
+	vec_attributes.push_back( std::make_pair( "InterferenceGeometry", m_InterferenceGeometry ) );
+	vec_attributes.push_back( std::make_pair( "InterferenceType", m_InterferenceType ) );
+	vec_attributes.push_back( std::make_pair( "ImpliedOrder", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_ImpliedOrder ) ) ) );
+}
+void IfcRelInterferesElements::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelInterferesElements::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

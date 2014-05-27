@@ -29,7 +29,6 @@ IfcNormalisedRatioMeasure::~IfcNormalisedRatioMeasure() {}
 void IfcNormalisedRatioMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCNORMALISEDRATIOMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -37,9 +36,8 @@ shared_ptr<IfcNormalisedRatioMeasure> IfcNormalisedRatioMeasure::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcNormalisedRatioMeasure>(); }
-	shared_ptr<IfcNormalisedRatioMeasure> type_object( new IfcNormalisedRatioMeasure() );
+	auto type_object = std::make_shared<IfcNormalisedRatioMeasure>();
 	// read TYPE
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	type_object->readArgument( arg );
 	return type_object;
 }

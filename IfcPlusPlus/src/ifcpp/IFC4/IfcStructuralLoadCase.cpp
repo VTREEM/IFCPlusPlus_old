@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -39,8 +40,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralLoadCase 
-IfcStructuralLoadCase::IfcStructuralLoadCase() { m_entity_enum = IFCSTRUCTURALLOADCASE; }
-IfcStructuralLoadCase::IfcStructuralLoadCase( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADCASE; }
+IfcStructuralLoadCase::IfcStructuralLoadCase() {}
+IfcStructuralLoadCase::IfcStructuralLoadCase( int id ) { m_id = id; }
 IfcStructuralLoadCase::~IfcStructuralLoadCase() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -105,6 +106,16 @@ void IfcStructuralLoadCase::readStepArguments( const std::vector<std::string>& a
 	m_Coefficient = IfcRatioMeasure::createObjectFromStepData( args[8] );
 	m_Purpose = IfcLabel::createObjectFromStepData( args[9] );
 	readTypeOfRealList( args[10], m_SelfWeightCoefficients );
+}
+void IfcStructuralLoadCase::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoadGroup::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> SelfWeightCoefficients_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_SelfWeightCoefficients.begin(), m_SelfWeightCoefficients.end(), std::back_inserter( SelfWeightCoefficients_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "SelfWeightCoefficients", SelfWeightCoefficients_vec_object ) );
+}
+void IfcStructuralLoadCase::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadCase::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

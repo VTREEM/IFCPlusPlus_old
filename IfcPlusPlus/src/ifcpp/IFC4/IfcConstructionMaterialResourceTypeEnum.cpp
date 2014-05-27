@@ -76,7 +76,7 @@ shared_ptr<IfcConstructionMaterialResourceTypeEnum> IfcConstructionMaterialResou
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcConstructionMaterialResourceTypeEnum>(); }
-	shared_ptr<IfcConstructionMaterialResourceTypeEnum> type_object( new IfcConstructionMaterialResourceTypeEnum() );
+	auto type_object = std::make_shared<IfcConstructionMaterialResourceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AGGREGATES." ) == 0 )
 	{
 		type_object->m_enum = IfcConstructionMaterialResourceTypeEnum::ENUM_AGGREGATES;

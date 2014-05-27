@@ -48,7 +48,7 @@ shared_ptr<IfcJunctionBoxTypeEnum> IfcJunctionBoxTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcJunctionBoxTypeEnum>(); }
-	shared_ptr<IfcJunctionBoxTypeEnum> type_object( new IfcJunctionBoxTypeEnum() );
+	auto type_object = std::make_shared<IfcJunctionBoxTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DATA." ) == 0 )
 	{
 		type_object->m_enum = IfcJunctionBoxTypeEnum::ENUM_DATA;

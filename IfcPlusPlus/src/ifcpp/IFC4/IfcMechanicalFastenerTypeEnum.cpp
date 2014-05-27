@@ -80,7 +80,7 @@ shared_ptr<IfcMechanicalFastenerTypeEnum> IfcMechanicalFastenerTypeEnum::createO
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcMechanicalFastenerTypeEnum>(); }
-	shared_ptr<IfcMechanicalFastenerTypeEnum> type_object( new IfcMechanicalFastenerTypeEnum() );
+	auto type_object = std::make_shared<IfcMechanicalFastenerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ANCHORBOLT." ) == 0 )
 	{
 		type_object->m_enum = IfcMechanicalFastenerTypeEnum::ENUM_ANCHORBOLT;

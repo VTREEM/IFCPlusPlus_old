@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFireSuppressionTerminalTypeEnum = ENUMERATION OF	(BREECHINGINLET	,FIREHYDRANT	,HOSEREEL	,SPRINKLER	,SPRINKLERDEFLECTOR	,USERDEFINED	,NOTDEFINED);
-class IfcFireSuppressionTerminalTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFireSuppressionTerminalTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFireSuppressionTerminalTypeEnumEnum

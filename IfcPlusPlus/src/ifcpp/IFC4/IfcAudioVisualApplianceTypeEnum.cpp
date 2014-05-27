@@ -84,7 +84,7 @@ shared_ptr<IfcAudioVisualApplianceTypeEnum> IfcAudioVisualApplianceTypeEnum::cre
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAudioVisualApplianceTypeEnum>(); }
-	shared_ptr<IfcAudioVisualApplianceTypeEnum> type_object( new IfcAudioVisualApplianceTypeEnum() );
+	auto type_object = std::make_shared<IfcAudioVisualApplianceTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AMPLIFIER." ) == 0 )
 	{
 		type_object->m_enum = IfcAudioVisualApplianceTypeEnum::ENUM_AMPLIFIER;

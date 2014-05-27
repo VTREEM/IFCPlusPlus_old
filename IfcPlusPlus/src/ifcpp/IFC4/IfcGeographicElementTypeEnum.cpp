@@ -44,7 +44,7 @@ shared_ptr<IfcGeographicElementTypeEnum> IfcGeographicElementTypeEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcGeographicElementTypeEnum>(); }
-	shared_ptr<IfcGeographicElementTypeEnum> type_object( new IfcGeographicElementTypeEnum() );
+	auto type_object = std::make_shared<IfcGeographicElementTypeEnum>();
 	if( _stricmp( arg.c_str(), ".TERRAIN." ) == 0 )
 	{
 		type_object->m_enum = IfcGeographicElementTypeEnum::ENUM_TERRAIN;

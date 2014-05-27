@@ -48,7 +48,7 @@ shared_ptr<IfcCurveInterpolationEnum> IfcCurveInterpolationEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCurveInterpolationEnum>(); }
-	shared_ptr<IfcCurveInterpolationEnum> type_object( new IfcCurveInterpolationEnum() );
+	auto type_object = std::make_shared<IfcCurveInterpolationEnum>();
 	if( _stricmp( arg.c_str(), ".LINEAR." ) == 0 )
 	{
 		type_object->m_enum = IfcCurveInterpolationEnum::ENUM_LINEAR;

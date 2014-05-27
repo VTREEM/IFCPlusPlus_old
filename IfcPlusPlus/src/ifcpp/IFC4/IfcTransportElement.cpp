@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -46,8 +47,8 @@
 #include "include/IfcTransportElementTypeEnum.h"
 
 // ENTITY IfcTransportElement 
-IfcTransportElement::IfcTransportElement() { m_entity_enum = IFCTRANSPORTELEMENT; }
-IfcTransportElement::IfcTransportElement( int id ) { m_id = id; m_entity_enum = IFCTRANSPORTELEMENT; }
+IfcTransportElement::IfcTransportElement() {}
+IfcTransportElement::IfcTransportElement( int id ) { m_id = id; }
 IfcTransportElement::~IfcTransportElement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -104,6 +105,14 @@ void IfcTransportElement::readStepArguments( const std::vector<std::string>& arg
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcTransportElementTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcTransportElement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcTransportElement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTransportElement::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

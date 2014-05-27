@@ -48,7 +48,7 @@ shared_ptr<IfcKnotType> IfcKnotType::createObjectFromStepData( const std::string
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcKnotType>(); }
-	shared_ptr<IfcKnotType> type_object( new IfcKnotType() );
+	auto type_object = std::make_shared<IfcKnotType>();
 	if( _stricmp( arg.c_str(), ".UNIFORM_KNOTS." ) == 0 )
 	{
 		type_object->m_enum = IfcKnotType::ENUM_UNIFORM_KNOTS;

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcGridTypeEnum = ENUMERATION OF	(RECTANGULAR	,RADIAL	,TRIANGULAR	,IRREGULAR	,USERDEFINED	,NOTDEFINED);
-class IfcGridTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcGridTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcGridTypeEnumEnum

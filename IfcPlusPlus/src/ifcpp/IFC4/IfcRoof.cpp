@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRoof 
-IfcRoof::IfcRoof() { m_entity_enum = IFCROOF; }
-IfcRoof::IfcRoof( int id ) { m_id = id; m_entity_enum = IFCROOF; }
+IfcRoof::IfcRoof() {}
+IfcRoof::IfcRoof( int id ) { m_id = id; }
 IfcRoof::~IfcRoof() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -105,6 +106,14 @@ void IfcRoof::readStepArguments( const std::vector<std::string>& args, const std
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcRoofTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcRoof::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcRoof::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRoof::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

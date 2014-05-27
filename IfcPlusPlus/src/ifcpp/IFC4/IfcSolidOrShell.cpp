@@ -53,8 +53,8 @@ shared_ptr<IfcSolidOrShell> IfcSolidOrShell::createObjectFromStepData( const std
 		std::string keyword;
 		std::string inline_arg;
 		tokenizeInlineArgument( arg, keyword, inline_arg );
-		shared_ptr<IfcPPObject> result_object( NULL );
-		readInlineTypeOrEntity( arg, result_object, map );
+		shared_ptr<IfcPPObject> result_object( nullptr );
+		readInlineTypeOrEntity( keyword, inline_arg, result_object, map );
 		if( result_object )
 		{
 			shared_ptr<IfcPPObject> result_ptr( result_object );
@@ -65,7 +65,7 @@ shared_ptr<IfcSolidOrShell> IfcSolidOrShell::createObjectFromStepData( const std
 			}
 		}
 		std::stringstream strs;
-		strs << "unhandled inline argument: " << arg << " in function IFC4::IfcSolidOrShell::readStepData" << std::endl;
+		strs << "unhandled inline argument: " << arg << " in function IfcSolidOrShell::readStepData" << std::endl;
 		throw IfcPPException( strs.str() );
 	}
 	return shared_ptr<IfcSolidOrShell>();

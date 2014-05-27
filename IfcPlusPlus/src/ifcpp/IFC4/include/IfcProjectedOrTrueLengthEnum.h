@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProjectedOrTrueLengthEnum = ENUMERATION OF	(PROJECTED_LENGTH	,TRUE_LENGTH);
-class IfcProjectedOrTrueLengthEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcProjectedOrTrueLengthEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcProjectedOrTrueLengthEnumEnum

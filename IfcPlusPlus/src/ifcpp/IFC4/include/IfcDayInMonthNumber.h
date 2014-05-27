@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDayInMonthNumber = INTEGER;
-class IfcDayInMonthNumber : public IfcPPType
+class IfcDayInMonthNumber : public IfcPPInt
 {
 public:
 	IfcDayInMonthNumber();
@@ -29,6 +29,5 @@ public:
 	virtual const char* classname() const { return "IfcDayInMonthNumber"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcDayInMonthNumber> createObjectFromStepData( const std::string& arg );
-	int m_value;
 };
 

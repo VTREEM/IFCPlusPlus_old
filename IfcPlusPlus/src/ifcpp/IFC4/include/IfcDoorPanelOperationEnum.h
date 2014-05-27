@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDoorPanelOperationEnum = ENUMERATION OF	(SWINGING	,DOUBLE_ACTING	,SLIDING	,FOLDING	,REVOLVING	,ROLLINGUP	,FIXEDPANEL	,USERDEFINED	,NOTDEFINED);
-class IfcDoorPanelOperationEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDoorPanelOperationEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDoorPanelOperationEnumEnum

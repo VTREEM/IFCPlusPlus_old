@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSectionTypeEnum = ENUMERATION OF	(UNIFORM	,TAPERED);
-class IfcSectionTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSectionTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSectionTypeEnumEnum

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProjectOrderTypeEnum = ENUMERATION OF	(CHANGEORDER	,MAINTENANCEWORKORDER	,MOVEORDER	,PURCHASEORDER	,WORKORDER	,USERDEFINED	,NOTDEFINED);
-class IfcProjectOrderTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcProjectOrderTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcProjectOrderTypeEnumEnum

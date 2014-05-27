@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,8 +50,8 @@
 #include "include/IfcWindowTypePartitioningEnum.h"
 
 // ENTITY IfcWindow 
-IfcWindow::IfcWindow() { m_entity_enum = IFCWINDOW; }
-IfcWindow::IfcWindow( int id ) { m_id = id; m_entity_enum = IFCWINDOW; }
+IfcWindow::IfcWindow() {}
+IfcWindow::IfcWindow( int id ) { m_id = id; }
 IfcWindow::~IfcWindow() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -123,6 +124,18 @@ void IfcWindow::readStepArguments( const std::vector<std::string>& args, const s
 	m_PredefinedType = IfcWindowTypeEnum::createObjectFromStepData( args[10] );
 	m_PartitioningType = IfcWindowTypePartitioningEnum::createObjectFromStepData( args[11] );
 	m_UserDefinedPartitioningType = IfcLabel::createObjectFromStepData( args[12] );
+}
+void IfcWindow::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "OverallHeight", m_OverallHeight ) );
+	vec_attributes.push_back( std::make_pair( "OverallWidth", m_OverallWidth ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "PartitioningType", m_PartitioningType ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedPartitioningType", m_UserDefinedPartitioningType ) );
+}
+void IfcWindow::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWindow::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcSweptDiskSolidPolygonal.h"
 
 // ENTITY IfcSweptDiskSolidPolygonal 
-IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal() { m_entity_enum = IFCSWEPTDISKSOLIDPOLYGONAL; }
-IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal( int id ) { m_id = id; m_entity_enum = IFCSWEPTDISKSOLIDPOLYGONAL; }
+IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal() {}
+IfcSweptDiskSolidPolygonal::IfcSweptDiskSolidPolygonal( int id ) { m_id = id; }
 IfcSweptDiskSolidPolygonal::~IfcSweptDiskSolidPolygonal() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -71,6 +72,14 @@ void IfcSweptDiskSolidPolygonal::readStepArguments( const std::vector<std::strin
 	m_StartParam = IfcParameterValue::createObjectFromStepData( args[3] );
 	m_EndParam = IfcParameterValue::createObjectFromStepData( args[4] );
 	m_FilletRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[5] );
+}
+void IfcSweptDiskSolidPolygonal::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSweptDiskSolid::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "FilletRadius", m_FilletRadius ) );
+}
+void IfcSweptDiskSolidPolygonal::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSweptDiskSolidPolygonal::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

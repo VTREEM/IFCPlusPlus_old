@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcBooleanClippingResult 
-IfcBooleanClippingResult::IfcBooleanClippingResult() { m_entity_enum = IFCBOOLEANCLIPPINGRESULT; }
-IfcBooleanClippingResult::IfcBooleanClippingResult( int id ) { m_id = id; m_entity_enum = IFCBOOLEANCLIPPINGRESULT; }
+IfcBooleanClippingResult::IfcBooleanClippingResult() {}
+IfcBooleanClippingResult::IfcBooleanClippingResult( int id ) { m_id = id; }
 IfcBooleanClippingResult::~IfcBooleanClippingResult() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,13 @@ void IfcBooleanClippingResult::readStepArguments( const std::vector<std::string>
 	m_Operator = IfcBooleanOperator::createObjectFromStepData( args[0] );
 	m_FirstOperand = IfcBooleanOperand::createObjectFromStepData( args[1], map );
 	m_SecondOperand = IfcBooleanOperand::createObjectFromStepData( args[2], map );
+}
+void IfcBooleanClippingResult::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBooleanResult::getAttributes( vec_attributes );
+}
+void IfcBooleanClippingResult::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcBooleanClippingResult::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

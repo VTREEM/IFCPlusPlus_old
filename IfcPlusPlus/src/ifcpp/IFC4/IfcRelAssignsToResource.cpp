@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -29,8 +30,8 @@
 #include "include/IfcTypeResource.h"
 
 // ENTITY IfcRelAssignsToResource 
-IfcRelAssignsToResource::IfcRelAssignsToResource() { m_entity_enum = IFCRELASSIGNSTORESOURCE; }
-IfcRelAssignsToResource::IfcRelAssignsToResource( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTORESOURCE; }
+IfcRelAssignsToResource::IfcRelAssignsToResource() {}
+IfcRelAssignsToResource::IfcRelAssignsToResource( int id ) { m_id = id; }
 IfcRelAssignsToResource::~IfcRelAssignsToResource() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -79,6 +80,14 @@ void IfcRelAssignsToResource::readStepArguments( const std::vector<std::string>&
 	readEntityReferenceList( args[4], m_RelatedObjects, map );
 	m_RelatedObjectsType = IfcObjectTypeEnum::createObjectFromStepData( args[5] );
 	m_RelatingResource = IfcResourceSelect::createObjectFromStepData( args[6], map );
+}
+void IfcRelAssignsToResource::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelAssigns::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingResource", m_RelatingResource ) );
+}
+void IfcRelAssignsToResource::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelAssignsToResource::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

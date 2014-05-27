@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -30,8 +31,8 @@
 #include "include/IfcTypeProcess.h"
 
 // ENTITY IfcRelAssignsToProcess 
-IfcRelAssignsToProcess::IfcRelAssignsToProcess() { m_entity_enum = IFCRELASSIGNSTOPROCESS; }
-IfcRelAssignsToProcess::IfcRelAssignsToProcess( int id ) { m_id = id; m_entity_enum = IFCRELASSIGNSTOPROCESS; }
+IfcRelAssignsToProcess::IfcRelAssignsToProcess() {}
+IfcRelAssignsToProcess::IfcRelAssignsToProcess( int id ) { m_id = id; }
 IfcRelAssignsToProcess::~IfcRelAssignsToProcess() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -84,6 +85,15 @@ void IfcRelAssignsToProcess::readStepArguments( const std::vector<std::string>& 
 	m_RelatedObjectsType = IfcObjectTypeEnum::createObjectFromStepData( args[5] );
 	m_RelatingProcess = IfcProcessSelect::createObjectFromStepData( args[6], map );
 	readEntityReference( args[7], m_QuantityInProcess, map );
+}
+void IfcRelAssignsToProcess::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelAssigns::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingProcess", m_RelatingProcess ) );
+	vec_attributes.push_back( std::make_pair( "QuantityInProcess", m_QuantityInProcess ) );
+}
+void IfcRelAssignsToProcess::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelAssignsToProcess::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

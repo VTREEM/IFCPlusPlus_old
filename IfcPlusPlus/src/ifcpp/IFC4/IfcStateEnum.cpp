@@ -52,7 +52,7 @@ shared_ptr<IfcStateEnum> IfcStateEnum::createObjectFromStepData( const std::stri
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStateEnum>(); }
-	shared_ptr<IfcStateEnum> type_object( new IfcStateEnum() );
+	auto type_object = std::make_shared<IfcStateEnum>();
 	if( _stricmp( arg.c_str(), ".READWRITE." ) == 0 )
 	{
 		type_object->m_enum = IfcStateEnum::ENUM_READWRITE;

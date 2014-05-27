@@ -56,7 +56,7 @@ shared_ptr<IfcAirTerminalTypeEnum> IfcAirTerminalTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcAirTerminalTypeEnum>(); }
-	shared_ptr<IfcAirTerminalTypeEnum> type_object( new IfcAirTerminalTypeEnum() );
+	auto type_object = std::make_shared<IfcAirTerminalTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DIFFUSER." ) == 0 )
 	{
 		type_object->m_enum = IfcAirTerminalTypeEnum::ENUM_DIFFUSER;

@@ -152,7 +152,7 @@ shared_ptr<IfcSIUnitName> IfcSIUnitName::createObjectFromStepData( const std::st
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSIUnitName>(); }
-	shared_ptr<IfcSIUnitName> type_object( new IfcSIUnitName() );
+	auto type_object = std::make_shared<IfcSIUnitName>();
 	if( _stricmp( arg.c_str(), ".AMPERE." ) == 0 )
 	{
 		type_object->m_enum = IfcSIUnitName::ENUM_AMPERE;

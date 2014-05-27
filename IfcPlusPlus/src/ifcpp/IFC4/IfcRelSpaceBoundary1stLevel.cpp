@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -29,8 +30,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelSpaceBoundary1stLevel 
-IfcRelSpaceBoundary1stLevel::IfcRelSpaceBoundary1stLevel() { m_entity_enum = IFCRELSPACEBOUNDARY1STLEVEL; }
-IfcRelSpaceBoundary1stLevel::IfcRelSpaceBoundary1stLevel( int id ) { m_id = id; m_entity_enum = IFCRELSPACEBOUNDARY1STLEVEL; }
+IfcRelSpaceBoundary1stLevel::IfcRelSpaceBoundary1stLevel() {}
+IfcRelSpaceBoundary1stLevel::IfcRelSpaceBoundary1stLevel( int id ) { m_id = id; }
 IfcRelSpaceBoundary1stLevel::~IfcRelSpaceBoundary1stLevel() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -91,6 +92,14 @@ void IfcRelSpaceBoundary1stLevel::readStepArguments( const std::vector<std::stri
 	m_PhysicalOrVirtualBoundary = IfcPhysicalOrVirtualEnum::createObjectFromStepData( args[7] );
 	m_InternalOrExternalBoundary = IfcInternalOrExternalEnum::createObjectFromStepData( args[8] );
 	readEntityReference( args[9], m_ParentBoundary, map );
+}
+void IfcRelSpaceBoundary1stLevel::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelSpaceBoundary::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ParentBoundary", m_ParentBoundary ) );
+}
+void IfcRelSpaceBoundary1stLevel::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelSpaceBoundary1stLevel::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

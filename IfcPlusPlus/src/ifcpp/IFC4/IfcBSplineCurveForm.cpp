@@ -56,7 +56,7 @@ shared_ptr<IfcBSplineCurveForm> IfcBSplineCurveForm::createObjectFromStepData( c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBSplineCurveForm>(); }
-	shared_ptr<IfcBSplineCurveForm> type_object( new IfcBSplineCurveForm() );
+	auto type_object = std::make_shared<IfcBSplineCurveForm>();
 	if( _stricmp( arg.c_str(), ".POLYLINE_FORM." ) == 0 )
 	{
 		type_object->m_enum = IfcBSplineCurveForm::ENUM_POLYLINE_FORM;

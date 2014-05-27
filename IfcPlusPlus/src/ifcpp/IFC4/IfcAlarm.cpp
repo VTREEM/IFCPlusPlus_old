@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAlarm 
-IfcAlarm::IfcAlarm() { m_entity_enum = IFCALARM; }
-IfcAlarm::IfcAlarm( int id ) { m_id = id; m_entity_enum = IFCALARM; }
+IfcAlarm::IfcAlarm() {}
+IfcAlarm::IfcAlarm( int id ) { m_id = id; }
 IfcAlarm::~IfcAlarm() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcAlarm::readStepArguments( const std::vector<std::string>& args, const st
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcAlarmTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcAlarm::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDistributionControlElement::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcAlarm::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAlarm::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

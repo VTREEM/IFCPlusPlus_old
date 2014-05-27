@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcVoidingFeatureTypeEnum = ENUMERATION OF	(CUTOUT	,NOTCH	,HOLE	,MITER	,CHAMFER	,EDGE	,USERDEFINED	,NOTDEFINED);
-class IfcVoidingFeatureTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcVoidingFeatureTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcVoidingFeatureTypeEnumEnum

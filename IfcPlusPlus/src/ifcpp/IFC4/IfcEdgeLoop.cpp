@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcEdgeLoop 
-IfcEdgeLoop::IfcEdgeLoop() { m_entity_enum = IFCEDGELOOP; }
-IfcEdgeLoop::IfcEdgeLoop( int id ) { m_id = id; m_entity_enum = IFCEDGELOOP; }
+IfcEdgeLoop::IfcEdgeLoop() {}
+IfcEdgeLoop::IfcEdgeLoop( int id ) { m_id = id; }
 IfcEdgeLoop::~IfcEdgeLoop() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,13 @@ void IfcEdgeLoop::readStepArguments( const std::vector<std::string>& args, const
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcEdgeLoop, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReferenceList( args[0], m_EdgeList, map );
+}
+void IfcEdgeLoop::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcLoop::getAttributes( vec_attributes );
+}
+void IfcEdgeLoop::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcEdgeLoop::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

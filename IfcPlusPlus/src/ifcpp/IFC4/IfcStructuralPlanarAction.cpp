@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -40,8 +41,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcStructuralPlanarAction 
-IfcStructuralPlanarAction::IfcStructuralPlanarAction() { m_entity_enum = IFCSTRUCTURALPLANARACTION; }
-IfcStructuralPlanarAction::IfcStructuralPlanarAction( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALPLANARACTION; }
+IfcStructuralPlanarAction::IfcStructuralPlanarAction() {}
+IfcStructuralPlanarAction::IfcStructuralPlanarAction( int id ) { m_id = id; }
 IfcStructuralPlanarAction::~IfcStructuralPlanarAction() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -112,6 +113,13 @@ void IfcStructuralPlanarAction::readStepArguments( const std::vector<std::string
 	else if( _stricmp( args[9].c_str(), ".T." ) == 0 ) { m_DestabilizingLoad = true; }
 	m_ProjectedOrTrue = IfcProjectedOrTrueLengthEnum::createObjectFromStepData( args[10] );
 	m_PredefinedType = IfcStructuralSurfaceActivityTypeEnum::createObjectFromStepData( args[11] );
+}
+void IfcStructuralPlanarAction::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralSurfaceAction::getAttributes( vec_attributes );
+}
+void IfcStructuralPlanarAction::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralPlanarAction::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -28,8 +29,8 @@
 #include "include/IfcRepresentation.h"
 
 // ENTITY IfcGeometricRepresentationSubContext 
-IfcGeometricRepresentationSubContext::IfcGeometricRepresentationSubContext() { m_entity_enum = IFCGEOMETRICREPRESENTATIONSUBCONTEXT; }
-IfcGeometricRepresentationSubContext::IfcGeometricRepresentationSubContext( int id ) { m_id = id; m_entity_enum = IFCGEOMETRICREPRESENTATIONSUBCONTEXT; }
+IfcGeometricRepresentationSubContext::IfcGeometricRepresentationSubContext() {}
+IfcGeometricRepresentationSubContext::IfcGeometricRepresentationSubContext( int id ) { m_id = id; }
 IfcGeometricRepresentationSubContext::~IfcGeometricRepresentationSubContext() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -91,6 +92,17 @@ void IfcGeometricRepresentationSubContext::readStepArguments( const std::vector<
 	m_TargetScale = IfcPositiveRatioMeasure::createObjectFromStepData( args[7] );
 	m_TargetView = IfcGeometricProjectionEnum::createObjectFromStepData( args[8] );
 	m_UserDefinedTargetView = IfcLabel::createObjectFromStepData( args[9] );
+}
+void IfcGeometricRepresentationSubContext::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationContext::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ParentContext", m_ParentContext ) );
+	vec_attributes.push_back( std::make_pair( "TargetScale", m_TargetScale ) );
+	vec_attributes.push_back( std::make_pair( "TargetView", m_TargetView ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedTargetView", m_UserDefinedTargetView ) );
+}
+void IfcGeometricRepresentationSubContext::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcGeometricRepresentationSubContext::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

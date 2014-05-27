@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStructuralSurfaceMemberTypeEnum = ENUMERATION OF	(BENDING_ELEMENT	,MEMBRANE_ELEMENT	,SHELL	,USERDEFINED	,NOTDEFINED);
-class IfcStructuralSurfaceMemberTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcStructuralSurfaceMemberTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcStructuralSurfaceMemberTypeEnumEnum

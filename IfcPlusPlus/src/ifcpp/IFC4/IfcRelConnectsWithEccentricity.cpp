@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -31,8 +32,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsWithEccentricity 
-IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity() { m_entity_enum = IFCRELCONNECTSWITHECCENTRICITY; }
-IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSWITHECCENTRICITY; }
+IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity() {}
+IfcRelConnectsWithEccentricity::IfcRelConnectsWithEccentricity( int id ) { m_id = id; }
 IfcRelConnectsWithEccentricity::~IfcRelConnectsWithEccentricity() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcRelConnectsWithEccentricity::readStepArguments( const std::vector<std::s
 	m_SupportedLength = IfcLengthMeasure::createObjectFromStepData( args[8] );
 	readEntityReference( args[9], m_ConditionCoordinateSystem, map );
 	readEntityReference( args[10], m_ConnectionConstraint, map );
+}
+void IfcRelConnectsWithEccentricity::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnectsStructuralMember::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ConnectionConstraint", m_ConnectionConstraint ) );
+}
+void IfcRelConnectsWithEccentricity::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelConnectsWithEccentricity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcCompressor 
-IfcCompressor::IfcCompressor() { m_entity_enum = IFCCOMPRESSOR; }
-IfcCompressor::IfcCompressor( int id ) { m_id = id; m_entity_enum = IFCCOMPRESSOR; }
+IfcCompressor::IfcCompressor() {}
+IfcCompressor::IfcCompressor( int id ) { m_id = id; }
 IfcCompressor::~IfcCompressor() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcCompressor::readStepArguments( const std::vector<std::string>& args, con
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcCompressorTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcCompressor::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowMovingDevice::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcCompressor::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCompressor::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

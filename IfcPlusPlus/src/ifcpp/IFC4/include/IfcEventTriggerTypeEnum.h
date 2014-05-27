@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcEventTriggerTypeEnum = ENUMERATION OF	(EVENTRULE	,EVENTMESSAGE	,EVENTTIME	,EVENTCOMPLEX	,USERDEFINED	,NOTDEFINED);
-class IfcEventTriggerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcEventTriggerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcEventTriggerTypeEnumEnum

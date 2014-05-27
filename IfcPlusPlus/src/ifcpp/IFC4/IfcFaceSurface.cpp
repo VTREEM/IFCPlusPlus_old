@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcTextureMap.h"
 
 // ENTITY IfcFaceSurface 
-IfcFaceSurface::IfcFaceSurface() { m_entity_enum = IFCFACESURFACE; }
-IfcFaceSurface::IfcFaceSurface( int id ) { m_id = id; m_entity_enum = IFCFACESURFACE; }
+IfcFaceSurface::IfcFaceSurface() {}
+IfcFaceSurface::IfcFaceSurface( int id ) { m_id = id; }
 IfcFaceSurface::~IfcFaceSurface() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -61,6 +62,15 @@ void IfcFaceSurface::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReference( args[1], m_FaceSurface, map );
 	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SameSense = false; }
 	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SameSense = true; }
+}
+void IfcFaceSurface::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFace::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "FaceSurface", m_FaceSurface ) );
+	vec_attributes.push_back( std::make_pair( "SameSense", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_SameSense ) ) ) );
+}
+void IfcFaceSurface::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFaceSurface::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

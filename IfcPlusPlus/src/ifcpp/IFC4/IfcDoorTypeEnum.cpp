@@ -52,7 +52,7 @@ shared_ptr<IfcDoorTypeEnum> IfcDoorTypeEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDoorTypeEnum>(); }
-	shared_ptr<IfcDoorTypeEnum> type_object( new IfcDoorTypeEnum() );
+	auto type_object = std::make_shared<IfcDoorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DOOR." ) == 0 )
 	{
 		type_object->m_enum = IfcDoorTypeEnum::ENUM_DOOR;

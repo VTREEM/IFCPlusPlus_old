@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcRelAssociatesMaterial.h"
 
 // ENTITY IfcMaterialUsageDefinition 
-IfcMaterialUsageDefinition::IfcMaterialUsageDefinition() { m_entity_enum = IFCMATERIALUSAGEDEFINITION; }
-IfcMaterialUsageDefinition::IfcMaterialUsageDefinition( int id ) { m_id = id; m_entity_enum = IFCMATERIALUSAGEDEFINITION; }
+IfcMaterialUsageDefinition::IfcMaterialUsageDefinition() {}
+IfcMaterialUsageDefinition::IfcMaterialUsageDefinition( int id ) { m_id = id; }
 IfcMaterialUsageDefinition::~IfcMaterialUsageDefinition() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -38,6 +39,12 @@ void IfcMaterialUsageDefinition::getStepLine( std::stringstream& stream ) const
 }
 void IfcMaterialUsageDefinition::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcMaterialUsageDefinition::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcMaterialUsageDefinition::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+}
+void IfcMaterialUsageDefinition::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcMaterialUsageDefinition::setInverseCounterparts( shared_ptr<IfcPPEntity> )

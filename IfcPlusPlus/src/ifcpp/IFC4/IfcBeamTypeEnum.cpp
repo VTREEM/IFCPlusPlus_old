@@ -64,7 +64,7 @@ shared_ptr<IfcBeamTypeEnum> IfcBeamTypeEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBeamTypeEnum>(); }
-	shared_ptr<IfcBeamTypeEnum> type_object( new IfcBeamTypeEnum() );
+	auto type_object = std::make_shared<IfcBeamTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BEAM." ) == 0 )
 	{
 		type_object->m_enum = IfcBeamTypeEnum::ENUM_BEAM;

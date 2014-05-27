@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcRightCircularCone 
-IfcRightCircularCone::IfcRightCircularCone() { m_entity_enum = IFCRIGHTCIRCULARCONE; }
-IfcRightCircularCone::IfcRightCircularCone( int id ) { m_id = id; m_entity_enum = IFCRIGHTCIRCULARCONE; }
+IfcRightCircularCone::IfcRightCircularCone() {}
+IfcRightCircularCone::IfcRightCircularCone( int id ) { m_id = id; }
 IfcRightCircularCone::~IfcRightCircularCone() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -58,6 +59,15 @@ void IfcRightCircularCone::readStepArguments( const std::vector<std::string>& ar
 	readEntityReference( args[0], m_Position, map );
 	m_Height = IfcPositiveLengthMeasure::createObjectFromStepData( args[1] );
 	m_BottomRadius = IfcPositiveLengthMeasure::createObjectFromStepData( args[2] );
+}
+void IfcRightCircularCone::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCsgPrimitive3D::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Height", m_Height ) );
+	vec_attributes.push_back( std::make_pair( "BottomRadius", m_BottomRadius ) );
+}
+void IfcRightCircularCone::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRightCircularCone::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

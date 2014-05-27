@@ -21,7 +21,7 @@
 #include "IfcSpecularHighlightSelect.h"
 
 // TYPE IfcSpecularRoughness = REAL;
-class IfcSpecularRoughness : public IfcSpecularHighlightSelect, public IfcPPType
+class IfcSpecularRoughness : public IfcSpecularHighlightSelect, public IfcPPReal
 {
 public:
 	IfcSpecularRoughness();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcSpecularRoughness"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcSpecularRoughness> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

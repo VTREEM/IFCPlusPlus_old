@@ -56,7 +56,7 @@ shared_ptr<IfcExternalSpatialElementTypeEnum> IfcExternalSpatialElementTypeEnum:
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcExternalSpatialElementTypeEnum>(); }
-	shared_ptr<IfcExternalSpatialElementTypeEnum> type_object( new IfcExternalSpatialElementTypeEnum() );
+	auto type_object = std::make_shared<IfcExternalSpatialElementTypeEnum>();
 	if( _stricmp( arg.c_str(), ".EXTERNAL." ) == 0 )
 	{
 		type_object->m_enum = IfcExternalSpatialElementTypeEnum::ENUM_EXTERNAL;

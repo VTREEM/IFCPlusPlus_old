@@ -48,7 +48,7 @@ shared_ptr<IfcHeatExchangerTypeEnum> IfcHeatExchangerTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcHeatExchangerTypeEnum>(); }
-	shared_ptr<IfcHeatExchangerTypeEnum> type_object( new IfcHeatExchangerTypeEnum() );
+	auto type_object = std::make_shared<IfcHeatExchangerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".PLATE." ) == 0 )
 	{
 		type_object->m_enum = IfcHeatExchangerTypeEnum::ENUM_PLATE;

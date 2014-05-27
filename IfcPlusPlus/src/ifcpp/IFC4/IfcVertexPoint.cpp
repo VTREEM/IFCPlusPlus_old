@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcVertexPoint.h"
 
 // ENTITY IfcVertexPoint 
-IfcVertexPoint::IfcVertexPoint() { m_entity_enum = IFCVERTEXPOINT; }
-IfcVertexPoint::IfcVertexPoint( int id ) { m_id = id; m_entity_enum = IFCVERTEXPOINT; }
+IfcVertexPoint::IfcVertexPoint() {}
+IfcVertexPoint::IfcVertexPoint( int id ) { m_id = id; }
 IfcVertexPoint::~IfcVertexPoint() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,14 @@ void IfcVertexPoint::readStepArguments( const std::vector<std::string>& args, co
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcVertexPoint, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_VertexGeometry, map );
+}
+void IfcVertexPoint::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcVertex::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "VertexGeometry", m_VertexGeometry ) );
+}
+void IfcVertexPoint::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcVertexPoint::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

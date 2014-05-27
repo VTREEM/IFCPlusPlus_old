@@ -68,7 +68,7 @@ shared_ptr<IfcPipeFittingTypeEnum> IfcPipeFittingTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPipeFittingTypeEnum>(); }
-	shared_ptr<IfcPipeFittingTypeEnum> type_object( new IfcPipeFittingTypeEnum() );
+	auto type_object = std::make_shared<IfcPipeFittingTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BEND." ) == 0 )
 	{
 		type_object->m_enum = IfcPipeFittingTypeEnum::ENUM_BEND;

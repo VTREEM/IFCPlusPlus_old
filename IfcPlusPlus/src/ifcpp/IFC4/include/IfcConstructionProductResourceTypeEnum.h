@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcConstructionProductResourceTypeEnum = ENUMERATION OF	(ASSEMBLY	,FORMWORK	,USERDEFINED	,NOTDEFINED);
-class IfcConstructionProductResourceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcConstructionProductResourceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcConstructionProductResourceTypeEnumEnum

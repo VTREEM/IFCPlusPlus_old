@@ -48,7 +48,7 @@ shared_ptr<IfcBuildingElementPartTypeEnum> IfcBuildingElementPartTypeEnum::creat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBuildingElementPartTypeEnum>(); }
-	shared_ptr<IfcBuildingElementPartTypeEnum> type_object( new IfcBuildingElementPartTypeEnum() );
+	auto type_object = std::make_shared<IfcBuildingElementPartTypeEnum>();
 	if( _stricmp( arg.c_str(), ".INSULATION." ) == 0 )
 	{
 		type_object->m_enum = IfcBuildingElementPartTypeEnum::ENUM_INSULATION;

@@ -22,7 +22,7 @@
 #include "IfcMeasureValue.h"
 
 // TYPE IfcPlaneAngleMeasure = REAL;
-class IfcPlaneAngleMeasure : public IfcBendingParameterSelect, public IfcMeasureValue, public IfcPPType
+class IfcPlaneAngleMeasure : public IfcBendingParameterSelect, public IfcMeasureValue, public IfcPPReal
 {
 public:
 	IfcPlaneAngleMeasure();
@@ -31,6 +31,5 @@ public:
 	virtual const char* classname() const { return "IfcPlaneAngleMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcPlaneAngleMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

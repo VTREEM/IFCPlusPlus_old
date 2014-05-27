@@ -124,7 +124,7 @@ shared_ptr<IfcRoleEnum> IfcRoleEnum::createObjectFromStepData( const std::string
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcRoleEnum>(); }
-	shared_ptr<IfcRoleEnum> type_object( new IfcRoleEnum() );
+	auto type_object = std::make_shared<IfcRoleEnum>();
 	if( _stricmp( arg.c_str(), ".SUPPLIER." ) == 0 )
 	{
 		type_object->m_enum = IfcRoleEnum::ENUM_SUPPLIER;

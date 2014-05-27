@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcElectricFlowStorageDeviceTypeEnum = ENUMERATION OF	(BATTERY	,CAPACITORBANK	,HARMONICFILTER	,INDUCTORBANK	,UPS	,USERDEFINED	,NOTDEFINED);
-class IfcElectricFlowStorageDeviceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcElectricFlowStorageDeviceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcElectricFlowStorageDeviceTypeEnumEnum

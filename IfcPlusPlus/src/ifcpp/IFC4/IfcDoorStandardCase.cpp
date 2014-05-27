@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -49,8 +50,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDoorStandardCase 
-IfcDoorStandardCase::IfcDoorStandardCase() { m_entity_enum = IFCDOORSTANDARDCASE; }
-IfcDoorStandardCase::IfcDoorStandardCase( int id ) { m_id = id; m_entity_enum = IFCDOORSTANDARDCASE; }
+IfcDoorStandardCase::IfcDoorStandardCase() {}
+IfcDoorStandardCase::IfcDoorStandardCase( int id ) { m_id = id; }
 IfcDoorStandardCase::~IfcDoorStandardCase() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -123,6 +124,13 @@ void IfcDoorStandardCase::readStepArguments( const std::vector<std::string>& arg
 	m_PredefinedType = IfcDoorTypeEnum::createObjectFromStepData( args[10] );
 	m_OperationType = IfcDoorTypeOperationEnum::createObjectFromStepData( args[11] );
 	m_UserDefinedOperationType = IfcLabel::createObjectFromStepData( args[12] );
+}
+void IfcDoorStandardCase::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDoor::getAttributes( vec_attributes );
+}
+void IfcDoorStandardCase::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDoorStandardCase::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -30,8 +31,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcObjective 
-IfcObjective::IfcObjective() { m_entity_enum = IFCOBJECTIVE; }
-IfcObjective::IfcObjective( int id ) { m_id = id; m_entity_enum = IFCOBJECTIVE; }
+IfcObjective::IfcObjective() {}
+IfcObjective::IfcObjective( int id ) { m_id = id; }
 IfcObjective::~IfcObjective() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -96,6 +97,16 @@ void IfcObjective::readStepArguments( const std::vector<std::string>& args, cons
 	m_LogicalAggregator = IfcLogicalOperatorEnum::createObjectFromStepData( args[8] );
 	m_ObjectiveQualifier = IfcObjectiveEnum::createObjectFromStepData( args[9] );
 	m_UserDefinedQualifier = IfcLabel::createObjectFromStepData( args[10] );
+}
+void IfcObjective::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConstraint::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LogicalAggregator", m_LogicalAggregator ) );
+	vec_attributes.push_back( std::make_pair( "ObjectiveQualifier", m_ObjectiveQualifier ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedQualifier", m_UserDefinedQualifier ) );
+}
+void IfcObjective::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcObjective::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

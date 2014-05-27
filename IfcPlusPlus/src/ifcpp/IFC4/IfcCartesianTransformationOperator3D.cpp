@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcCartesianTransformationOperator3D 
-IfcCartesianTransformationOperator3D::IfcCartesianTransformationOperator3D() { m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR3D; }
-IfcCartesianTransformationOperator3D::IfcCartesianTransformationOperator3D( int id ) { m_id = id; m_entity_enum = IFCCARTESIANTRANSFORMATIONOPERATOR3D; }
+IfcCartesianTransformationOperator3D::IfcCartesianTransformationOperator3D() {}
+IfcCartesianTransformationOperator3D::IfcCartesianTransformationOperator3D( int id ) { m_id = id; }
 IfcCartesianTransformationOperator3D::~IfcCartesianTransformationOperator3D() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -67,6 +68,14 @@ void IfcCartesianTransformationOperator3D::readStepArguments( const std::vector<
 	readEntityReference( args[2], m_LocalOrigin, map );
 	readRealValue( args[3], m_Scale );
 	readEntityReference( args[4], m_Axis3, map );
+}
+void IfcCartesianTransformationOperator3D::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCartesianTransformationOperator::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Axis3", m_Axis3 ) );
+}
+void IfcCartesianTransformationOperator3D::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCartesianTransformationOperator3D::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

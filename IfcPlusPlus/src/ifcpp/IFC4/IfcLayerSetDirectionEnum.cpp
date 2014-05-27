@@ -44,7 +44,7 @@ shared_ptr<IfcLayerSetDirectionEnum> IfcLayerSetDirectionEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLayerSetDirectionEnum>(); }
-	shared_ptr<IfcLayerSetDirectionEnum> type_object( new IfcLayerSetDirectionEnum() );
+	auto type_object = std::make_shared<IfcLayerSetDirectionEnum>();
 	if( _stricmp( arg.c_str(), ".AXIS1." ) == 0 )
 	{
 		type_object->m_enum = IfcLayerSetDirectionEnum::ENUM_AXIS1;

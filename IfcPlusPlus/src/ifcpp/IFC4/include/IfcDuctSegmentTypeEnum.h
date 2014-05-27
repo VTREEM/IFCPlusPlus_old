@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDuctSegmentTypeEnum = ENUMERATION OF	(RIGIDSEGMENT	,FLEXIBLESEGMENT	,USERDEFINED	,NOTDEFINED);
-class IfcDuctSegmentTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDuctSegmentTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDuctSegmentTypeEnumEnum

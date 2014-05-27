@@ -28,7 +28,6 @@ IfcPressureMeasure::~IfcPressureMeasure() {}
 void IfcPressureMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCPRESSUREMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcPressureMeasure> IfcPressureMeasure::createObjectFromStepData( con
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPressureMeasure>(); }
-	shared_ptr<IfcPressureMeasure> type_object( new IfcPressureMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcPressureMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

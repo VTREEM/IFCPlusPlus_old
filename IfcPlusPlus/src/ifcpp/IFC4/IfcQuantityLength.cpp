@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcQuantityLength 
-IfcQuantityLength::IfcQuantityLength() { m_entity_enum = IFCQUANTITYLENGTH; }
-IfcQuantityLength::IfcQuantityLength( int id ) { m_id = id; m_entity_enum = IFCQUANTITYLENGTH; }
+IfcQuantityLength::IfcQuantityLength() {}
+IfcQuantityLength::IfcQuantityLength( int id ) { m_id = id; }
 IfcQuantityLength::~IfcQuantityLength() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -68,6 +69,15 @@ void IfcQuantityLength::readStepArguments( const std::vector<std::string>& args,
 	readEntityReference( args[2], m_Unit, map );
 	m_LengthValue = IfcLengthMeasure::createObjectFromStepData( args[3] );
 	m_Formula = IfcLabel::createObjectFromStepData( args[4] );
+}
+void IfcQuantityLength::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPhysicalSimpleQuantity::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "LengthValue", m_LengthValue ) );
+	vec_attributes.push_back( std::make_pair( "Formula", m_Formula ) );
+}
+void IfcQuantityLength::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcQuantityLength::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

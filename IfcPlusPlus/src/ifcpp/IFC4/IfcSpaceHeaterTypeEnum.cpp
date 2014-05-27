@@ -48,7 +48,7 @@ shared_ptr<IfcSpaceHeaterTypeEnum> IfcSpaceHeaterTypeEnum::createObjectFromStepD
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSpaceHeaterTypeEnum>(); }
-	shared_ptr<IfcSpaceHeaterTypeEnum> type_object( new IfcSpaceHeaterTypeEnum() );
+	auto type_object = std::make_shared<IfcSpaceHeaterTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONVECTOR." ) == 0 )
 	{
 		type_object->m_enum = IfcSpaceHeaterTypeEnum::ENUM_CONVECTOR;

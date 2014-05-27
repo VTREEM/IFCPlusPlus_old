@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsElements 
-IfcRelConnectsElements::IfcRelConnectsElements() { m_entity_enum = IFCRELCONNECTSELEMENTS; }
-IfcRelConnectsElements::IfcRelConnectsElements( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSELEMENTS; }
+IfcRelConnectsElements::IfcRelConnectsElements() {}
+IfcRelConnectsElements::IfcRelConnectsElements( int id ) { m_id = id; }
 IfcRelConnectsElements::~IfcRelConnectsElements() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -76,6 +77,16 @@ void IfcRelConnectsElements::readStepArguments( const std::vector<std::string>& 
 	readEntityReference( args[4], m_ConnectionGeometry, map );
 	readEntityReference( args[5], m_RelatingElement, map );
 	readEntityReference( args[6], m_RelatedElement, map );
+}
+void IfcRelConnectsElements::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ConnectionGeometry", m_ConnectionGeometry ) );
+	vec_attributes.push_back( std::make_pair( "RelatingElement", m_RelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "RelatedElement", m_RelatedElement ) );
+}
+void IfcRelConnectsElements::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelConnectsElements::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

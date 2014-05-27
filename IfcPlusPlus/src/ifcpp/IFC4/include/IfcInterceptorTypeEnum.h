@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcInterceptorTypeEnum = ENUMERATION OF	(CYCLONIC	,GREASE	,OIL	,PETROL	,USERDEFINED	,NOTDEFINED);
-class IfcInterceptorTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcInterceptorTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcInterceptorTypeEnumEnum

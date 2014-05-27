@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcVertex.h"
 
 // ENTITY IfcEdge 
-IfcEdge::IfcEdge() { m_entity_enum = IFCEDGE; }
-IfcEdge::IfcEdge( int id ) { m_id = id; m_entity_enum = IFCEDGE; }
+IfcEdge::IfcEdge() {}
+IfcEdge::IfcEdge( int id ) { m_id = id; }
 IfcEdge::~IfcEdge() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -53,6 +54,15 @@ void IfcEdge::readStepArguments( const std::vector<std::string>& args, const std
 	#endif
 	readEntityReference( args[0], m_EdgeStart, map );
 	readEntityReference( args[1], m_EdgeEnd, map );
+}
+void IfcEdge::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcTopologicalRepresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "EdgeStart", m_EdgeStart ) );
+	vec_attributes.push_back( std::make_pair( "EdgeEnd", m_EdgeEnd ) );
+}
+void IfcEdge::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcEdge::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

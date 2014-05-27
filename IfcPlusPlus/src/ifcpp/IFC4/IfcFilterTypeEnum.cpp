@@ -64,7 +64,7 @@ shared_ptr<IfcFilterTypeEnum> IfcFilterTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcFilterTypeEnum>(); }
-	shared_ptr<IfcFilterTypeEnum> type_object( new IfcFilterTypeEnum() );
+	auto type_object = std::make_shared<IfcFilterTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AIRPARTICLEFILTER." ) == 0 )
 	{
 		type_object->m_enum = IfcFilterTypeEnum::ENUM_AIRPARTICLEFILTER;

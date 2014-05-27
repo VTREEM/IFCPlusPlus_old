@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcWorkTime.h"
 
 // ENTITY IfcWorkTime 
-IfcWorkTime::IfcWorkTime() { m_entity_enum = IFCWORKTIME; }
-IfcWorkTime::IfcWorkTime( int id ) { m_id = id; m_entity_enum = IFCWORKTIME; }
+IfcWorkTime::IfcWorkTime() {}
+IfcWorkTime::IfcWorkTime( int id ) { m_id = id; }
 IfcWorkTime::~IfcWorkTime() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -70,6 +71,16 @@ void IfcWorkTime::readStepArguments( const std::vector<std::string>& args, const
 	readEntityReference( args[3], m_RecurrencePattern, map );
 	m_Start = IfcDate::createObjectFromStepData( args[4] );
 	m_Finish = IfcDate::createObjectFromStepData( args[5] );
+}
+void IfcWorkTime::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSchedulingTime::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RecurrencePattern", m_RecurrencePattern ) );
+	vec_attributes.push_back( std::make_pair( "Start", m_Start ) );
+	vec_attributes.push_back( std::make_pair( "Finish", m_Finish ) );
+}
+void IfcWorkTime::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWorkTime::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -28,7 +28,6 @@ IfcTimeMeasure::~IfcTimeMeasure() {}
 void IfcTimeMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCTIMEMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcTimeMeasure> IfcTimeMeasure::createObjectFromStepData( const std::
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTimeMeasure>(); }
-	shared_ptr<IfcTimeMeasure> type_object( new IfcTimeMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcTimeMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

@@ -48,7 +48,7 @@ shared_ptr<IfcLightDistributionCurveEnum> IfcLightDistributionCurveEnum::createO
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLightDistributionCurveEnum>(); }
-	shared_ptr<IfcLightDistributionCurveEnum> type_object( new IfcLightDistributionCurveEnum() );
+	auto type_object = std::make_shared<IfcLightDistributionCurveEnum>();
 	if( _stricmp( arg.c_str(), ".TYPE_A." ) == 0 )
 	{
 		type_object->m_enum = IfcLightDistributionCurveEnum::ENUM_TYPE_A;

@@ -84,7 +84,7 @@ shared_ptr<IfcDamperTypeEnum> IfcDamperTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDamperTypeEnum>(); }
-	shared_ptr<IfcDamperTypeEnum> type_object( new IfcDamperTypeEnum() );
+	auto type_object = std::make_shared<IfcDamperTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BACKDRAFTDAMPER." ) == 0 )
 	{
 		type_object->m_enum = IfcDamperTypeEnum::ENUM_BACKDRAFTDAMPER;

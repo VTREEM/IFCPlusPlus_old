@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcRelAssociatesMaterial.h"
 
 // ENTITY IfcMaterialLayerSetUsage 
-IfcMaterialLayerSetUsage::IfcMaterialLayerSetUsage() { m_entity_enum = IFCMATERIALLAYERSETUSAGE; }
-IfcMaterialLayerSetUsage::IfcMaterialLayerSetUsage( int id ) { m_id = id; m_entity_enum = IFCMATERIALLAYERSETUSAGE; }
+IfcMaterialLayerSetUsage::IfcMaterialLayerSetUsage() {}
+IfcMaterialLayerSetUsage::IfcMaterialLayerSetUsage( int id ) { m_id = id; }
 IfcMaterialLayerSetUsage::~IfcMaterialLayerSetUsage() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -68,6 +69,18 @@ void IfcMaterialLayerSetUsage::readStepArguments( const std::vector<std::string>
 	m_DirectionSense = IfcDirectionSenseEnum::createObjectFromStepData( args[2] );
 	m_OffsetFromReferenceLine = IfcLengthMeasure::createObjectFromStepData( args[3] );
 	m_ReferenceExtent = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
+}
+void IfcMaterialLayerSetUsage::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcMaterialUsageDefinition::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ForLayerSet", m_ForLayerSet ) );
+	vec_attributes.push_back( std::make_pair( "LayerSetDirection", m_LayerSetDirection ) );
+	vec_attributes.push_back( std::make_pair( "DirectionSense", m_DirectionSense ) );
+	vec_attributes.push_back( std::make_pair( "OffsetFromReferenceLine", m_OffsetFromReferenceLine ) );
+	vec_attributes.push_back( std::make_pair( "ReferenceExtent", m_ReferenceExtent ) );
+}
+void IfcMaterialLayerSetUsage::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMaterialLayerSetUsage::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

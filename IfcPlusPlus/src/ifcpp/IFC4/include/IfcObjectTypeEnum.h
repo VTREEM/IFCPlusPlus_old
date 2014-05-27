@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcObjectTypeEnum = ENUMERATION OF	(PRODUCT	,PROCESS	,CONTROL	,RESOURCE	,ACTOR	,GROUP	,PROJECT	,NOTDEFINED);
-class IfcObjectTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcObjectTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcObjectTypeEnumEnum

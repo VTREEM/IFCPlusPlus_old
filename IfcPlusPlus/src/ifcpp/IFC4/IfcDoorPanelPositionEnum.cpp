@@ -48,7 +48,7 @@ shared_ptr<IfcDoorPanelPositionEnum> IfcDoorPanelPositionEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDoorPanelPositionEnum>(); }
-	shared_ptr<IfcDoorPanelPositionEnum> type_object( new IfcDoorPanelPositionEnum() );
+	auto type_object = std::make_shared<IfcDoorPanelPositionEnum>();
 	if( _stricmp( arg.c_str(), ".LEFT." ) == 0 )
 	{
 		type_object->m_enum = IfcDoorPanelPositionEnum::ENUM_LEFT;

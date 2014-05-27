@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSpaceHeater 
-IfcSpaceHeater::IfcSpaceHeater() { m_entity_enum = IFCSPACEHEATER; }
-IfcSpaceHeater::IfcSpaceHeater( int id ) { m_id = id; m_entity_enum = IFCSPACEHEATER; }
+IfcSpaceHeater::IfcSpaceHeater() {}
+IfcSpaceHeater::IfcSpaceHeater( int id ) { m_id = id; }
 IfcSpaceHeater::~IfcSpaceHeater() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcSpaceHeater::readStepArguments( const std::vector<std::string>& args, co
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcSpaceHeaterTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcSpaceHeater::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowTerminal::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcSpaceHeater::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSpaceHeater::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

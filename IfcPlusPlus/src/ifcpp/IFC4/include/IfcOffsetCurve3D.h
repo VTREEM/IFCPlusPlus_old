@@ -35,6 +35,8 @@ public:
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	virtual void readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 	virtual void setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self );
+	virtual void getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes );
+	virtual void getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes );
 	virtual void unlinkSelf();
 	virtual const char* classname() const { return "IfcOffsetCurve3D"; }
 
@@ -52,7 +54,7 @@ public:
 	// attributes:
 	shared_ptr<IfcCurve>							m_BasisCurve;
 	shared_ptr<IfcLengthMeasure>					m_Distance;
-	bool											m_SelfIntersect;
+	LogicalEnum									m_SelfIntersect;
 	shared_ptr<IfcDirection>						m_RefDirection;
 };
 

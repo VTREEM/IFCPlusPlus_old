@@ -28,7 +28,6 @@ IfcDateTime::~IfcDateTime() {}
 void IfcDateTime::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCDATETIME("; }
-	//supertype as attribute: std::string m_value
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcDateTime> IfcDateTime::createObjectFromStepData( const std::string
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDateTime>(); }
-	shared_ptr<IfcDateTime> type_object( new IfcDateTime() );
-	//supertype as attribute: std::string m_value
-	type_object->m_value = arg;
+	auto type_object = std::make_shared<IfcDateTime>();
+	type_object->readArgument( arg );
 	return type_object;
 }

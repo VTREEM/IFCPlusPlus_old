@@ -68,7 +68,7 @@ shared_ptr<IfcDoorStyleConstructionEnum> IfcDoorStyleConstructionEnum::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDoorStyleConstructionEnum>(); }
-	shared_ptr<IfcDoorStyleConstructionEnum> type_object( new IfcDoorStyleConstructionEnum() );
+	auto type_object = std::make_shared<IfcDoorStyleConstructionEnum>();
 	if( _stricmp( arg.c_str(), ".ALUMINIUM." ) == 0 )
 	{
 		type_object->m_enum = IfcDoorStyleConstructionEnum::ENUM_ALUMINIUM;

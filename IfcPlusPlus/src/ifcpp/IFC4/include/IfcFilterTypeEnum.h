@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFilterTypeEnum = ENUMERATION OF	(AIRPARTICLEFILTER	,COMPRESSEDAIRFILTER	,ODORFILTER	,OILFILTER	,STRAINER	,WATERFILTER	,USERDEFINED	,NOTDEFINED);
-class IfcFilterTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFilterTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFilterTypeEnumEnum

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -47,8 +48,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMechanicalFastener 
-IfcMechanicalFastener::IfcMechanicalFastener() { m_entity_enum = IFCMECHANICALFASTENER; }
-IfcMechanicalFastener::IfcMechanicalFastener( int id ) { m_id = id; m_entity_enum = IFCMECHANICALFASTENER; }
+IfcMechanicalFastener::IfcMechanicalFastener() {}
+IfcMechanicalFastener::IfcMechanicalFastener( int id ) { m_id = id; }
 IfcMechanicalFastener::~IfcMechanicalFastener() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -113,6 +114,16 @@ void IfcMechanicalFastener::readStepArguments( const std::vector<std::string>& a
 	m_NominalDiameter = IfcPositiveLengthMeasure::createObjectFromStepData( args[8] );
 	m_NominalLength = IfcPositiveLengthMeasure::createObjectFromStepData( args[9] );
 	m_PredefinedType = IfcMechanicalFastenerTypeEnum::createObjectFromStepData( args[10] );
+}
+void IfcMechanicalFastener::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcElementComponent::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "NominalDiameter", m_NominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "NominalLength", m_NominalLength ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcMechanicalFastener::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMechanicalFastener::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

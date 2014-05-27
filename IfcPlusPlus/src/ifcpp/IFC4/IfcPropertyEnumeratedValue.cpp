@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -28,8 +29,8 @@
 #include "include/IfcValue.h"
 
 // ENTITY IfcPropertyEnumeratedValue 
-IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue() { m_entity_enum = IFCPROPERTYENUMERATEDVALUE; }
-IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue( int id ) { m_id = id; m_entity_enum = IFCPROPERTYENUMERATEDVALUE; }
+IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue() {}
+IfcPropertyEnumeratedValue::IfcPropertyEnumeratedValue( int id ) { m_id = id; }
 IfcPropertyEnumeratedValue::~IfcPropertyEnumeratedValue() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -66,6 +67,17 @@ void IfcPropertyEnumeratedValue::readStepArguments( const std::vector<std::strin
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readSelectList( args[2], m_EnumerationValues, map );
 	readEntityReference( args[3], m_EnumerationReference, map );
+}
+void IfcPropertyEnumeratedValue::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSimpleProperty::getAttributes( vec_attributes );
+	shared_ptr<IfcPPAttributeObjectVector> EnumerationValues_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_EnumerationValues.begin(), m_EnumerationValues.end(), std::back_inserter( EnumerationValues_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "EnumerationValues", EnumerationValues_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "EnumerationReference", m_EnumerationReference ) );
+}
+void IfcPropertyEnumeratedValue::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPropertyEnumeratedValue::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

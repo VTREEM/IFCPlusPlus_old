@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -40,8 +41,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDistributionPort 
-IfcDistributionPort::IfcDistributionPort() { m_entity_enum = IFCDISTRIBUTIONPORT; }
-IfcDistributionPort::IfcDistributionPort( int id ) { m_id = id; m_entity_enum = IFCDISTRIBUTIONPORT; }
+IfcDistributionPort::IfcDistributionPort() {}
+IfcDistributionPort::IfcDistributionPort( int id ) { m_id = id; }
 IfcDistributionPort::~IfcDistributionPort() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -102,6 +103,16 @@ void IfcDistributionPort::readStepArguments( const std::vector<std::string>& arg
 	m_FlowDirection = IfcFlowDirectionEnum::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcDistributionPortTypeEnum::createObjectFromStepData( args[8] );
 	m_SystemType = IfcDistributionSystemEnum::createObjectFromStepData( args[9] );
+}
+void IfcDistributionPort::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPort::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "FlowDirection", m_FlowDirection ) );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "SystemType", m_SystemType ) );
+}
+void IfcDistributionPort::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDistributionPort::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

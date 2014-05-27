@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcTimeSeries.h"
 
 // ENTITY IfcExternalReferenceRelationship 
-IfcExternalReferenceRelationship::IfcExternalReferenceRelationship() { m_entity_enum = IFCEXTERNALREFERENCERELATIONSHIP; }
-IfcExternalReferenceRelationship::IfcExternalReferenceRelationship( int id ) { m_id = id; m_entity_enum = IFCEXTERNALREFERENCERELATIONSHIP; }
+IfcExternalReferenceRelationship::IfcExternalReferenceRelationship() {}
+IfcExternalReferenceRelationship::IfcExternalReferenceRelationship( int id ) { m_id = id; }
 IfcExternalReferenceRelationship::~IfcExternalReferenceRelationship() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -73,6 +74,17 @@ void IfcExternalReferenceRelationship::readStepArguments( const std::vector<std:
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readEntityReference( args[2], m_RelatingReference, map );
 	readSelectList( args[3], m_RelatedResourceObjects, map );
+}
+void IfcExternalReferenceRelationship::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcResourceLevelRelationship::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingReference", m_RelatingReference ) );
+	shared_ptr<IfcPPAttributeObjectVector> RelatedResourceObjects_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_RelatedResourceObjects.begin(), m_RelatedResourceObjects.end(), std::back_inserter( RelatedResourceObjects_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "RelatedResourceObjects", RelatedResourceObjects_vec_object ) );
+}
+void IfcExternalReferenceRelationship::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcExternalReferenceRelationship::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

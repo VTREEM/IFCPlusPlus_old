@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPresentationLayerAssignment 
-IfcPresentationLayerAssignment::IfcPresentationLayerAssignment() { m_entity_enum = IFCPRESENTATIONLAYERASSIGNMENT; }
-IfcPresentationLayerAssignment::IfcPresentationLayerAssignment( int id ) { m_id = id; m_entity_enum = IFCPRESENTATIONLAYERASSIGNMENT; }
+IfcPresentationLayerAssignment::IfcPresentationLayerAssignment() {}
+IfcPresentationLayerAssignment::IfcPresentationLayerAssignment( int id ) { m_id = id; }
 IfcPresentationLayerAssignment::~IfcPresentationLayerAssignment() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -64,6 +65,18 @@ void IfcPresentationLayerAssignment::readStepArguments( const std::vector<std::s
 	m_Description = IfcText::createObjectFromStepData( args[1] );
 	readSelectList( args[2], m_AssignedItems, map );
 	m_Identifier = IfcIdentifier::createObjectFromStepData( args[3] );
+}
+void IfcPresentationLayerAssignment::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "Name", m_Name ) );
+	vec_attributes.push_back( std::make_pair( "Description", m_Description ) );
+	shared_ptr<IfcPPAttributeObjectVector> AssignedItems_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_AssignedItems.begin(), m_AssignedItems.end(), std::back_inserter( AssignedItems_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "AssignedItems", AssignedItems_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "Identifier", m_Identifier ) );
+}
+void IfcPresentationLayerAssignment::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPresentationLayerAssignment::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

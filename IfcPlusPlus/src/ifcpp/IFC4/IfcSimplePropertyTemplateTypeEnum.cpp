@@ -80,7 +80,7 @@ shared_ptr<IfcSimplePropertyTemplateTypeEnum> IfcSimplePropertyTemplateTypeEnum:
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSimplePropertyTemplateTypeEnum>(); }
-	shared_ptr<IfcSimplePropertyTemplateTypeEnum> type_object( new IfcSimplePropertyTemplateTypeEnum() );
+	auto type_object = std::make_shared<IfcSimplePropertyTemplateTypeEnum>();
 	if( _stricmp( arg.c_str(), ".P_SINGLEVALUE." ) == 0 )
 	{
 		type_object->m_enum = IfcSimplePropertyTemplateTypeEnum::ENUM_P_SINGLEVALUE;

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcHumidifier 
-IfcHumidifier::IfcHumidifier() { m_entity_enum = IFCHUMIDIFIER; }
-IfcHumidifier::IfcHumidifier( int id ) { m_id = id; m_entity_enum = IFCHUMIDIFIER; }
+IfcHumidifier::IfcHumidifier() {}
+IfcHumidifier::IfcHumidifier( int id ) { m_id = id; }
 IfcHumidifier::~IfcHumidifier() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcHumidifier::readStepArguments( const std::vector<std::string>& args, con
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcHumidifierTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcHumidifier::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEnergyConversionDevice::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcHumidifier::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcHumidifier::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

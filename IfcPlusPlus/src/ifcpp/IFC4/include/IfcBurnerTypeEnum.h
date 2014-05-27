@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcBurnerTypeEnum = ENUMERATION OF	(USERDEFINED	,NOTDEFINED);
-class IfcBurnerTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcBurnerTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcBurnerTypeEnumEnum

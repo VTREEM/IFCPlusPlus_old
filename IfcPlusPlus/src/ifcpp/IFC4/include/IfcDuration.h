@@ -22,7 +22,7 @@
 #include "IfcTimeOrRatioSelect.h"
 
 // TYPE IfcDuration = STRING;
-class IfcDuration : public IfcSimpleValue, public IfcTimeOrRatioSelect, public IfcPPType
+class IfcDuration : public IfcSimpleValue, public IfcTimeOrRatioSelect, public IfcPPString
 {
 public:
 	IfcDuration();
@@ -31,6 +31,5 @@ public:
 	virtual const char* classname() const { return "IfcDuration"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcDuration> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

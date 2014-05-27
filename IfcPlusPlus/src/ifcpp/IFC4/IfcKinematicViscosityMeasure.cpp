@@ -28,7 +28,6 @@ IfcKinematicViscosityMeasure::~IfcKinematicViscosityMeasure() {}
 void IfcKinematicViscosityMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCKINEMATICVISCOSITYMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcKinematicViscosityMeasure> IfcKinematicViscosityMeasure::createObj
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcKinematicViscosityMeasure>(); }
-	shared_ptr<IfcKinematicViscosityMeasure> type_object( new IfcKinematicViscosityMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcKinematicViscosityMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -34,8 +35,8 @@
 #include "include/IfcTypeObject.h"
 
 // ENTITY IfcDoorPanelProperties 
-IfcDoorPanelProperties::IfcDoorPanelProperties() { m_entity_enum = IFCDOORPANELPROPERTIES; }
-IfcDoorPanelProperties::IfcDoorPanelProperties( int id ) { m_id = id; m_entity_enum = IFCDOORPANELPROPERTIES; }
+IfcDoorPanelProperties::IfcDoorPanelProperties() {}
+IfcDoorPanelProperties::IfcDoorPanelProperties( int id ) { m_id = id; }
 IfcDoorPanelProperties::~IfcDoorPanelProperties() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -92,6 +93,18 @@ void IfcDoorPanelProperties::readStepArguments( const std::vector<std::string>& 
 	m_PanelWidth = IfcNormalisedRatioMeasure::createObjectFromStepData( args[6] );
 	m_PanelPosition = IfcDoorPanelPositionEnum::createObjectFromStepData( args[7] );
 	readEntityReference( args[8], m_ShapeAspectStyle, map );
+}
+void IfcDoorPanelProperties::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPreDefinedPropertySet::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PanelDepth", m_PanelDepth ) );
+	vec_attributes.push_back( std::make_pair( "PanelOperation", m_PanelOperation ) );
+	vec_attributes.push_back( std::make_pair( "PanelWidth", m_PanelWidth ) );
+	vec_attributes.push_back( std::make_pair( "PanelPosition", m_PanelPosition ) );
+	vec_attributes.push_back( std::make_pair( "ShapeAspectStyle", m_ShapeAspectStyle ) );
+}
+void IfcDoorPanelProperties::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDoorPanelProperties::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

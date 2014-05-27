@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcSurfaceStyleElementSelect.h"
 
 // ENTITY IfcSurfaceStyle 
-IfcSurfaceStyle::IfcSurfaceStyle() { m_entity_enum = IFCSURFACESTYLE; }
-IfcSurfaceStyle::IfcSurfaceStyle( int id ) { m_id = id; m_entity_enum = IFCSURFACESTYLE; }
+IfcSurfaceStyle::IfcSurfaceStyle() {}
+IfcSurfaceStyle::IfcSurfaceStyle( int id ) { m_id = id; }
 IfcSurfaceStyle::~IfcSurfaceStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -57,6 +58,17 @@ void IfcSurfaceStyle::readStepArguments( const std::vector<std::string>& args, c
 	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	m_Side = IfcSurfaceSide::createObjectFromStepData( args[1] );
 	readSelectList( args[2], m_Styles, map );
+}
+void IfcSurfaceStyle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationStyle::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "Side", m_Side ) );
+	shared_ptr<IfcPPAttributeObjectVector> Styles_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_Styles.begin(), m_Styles.end(), std::back_inserter( Styles_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "Styles", Styles_vec_object ) );
+}
+void IfcSurfaceStyle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSurfaceStyle::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

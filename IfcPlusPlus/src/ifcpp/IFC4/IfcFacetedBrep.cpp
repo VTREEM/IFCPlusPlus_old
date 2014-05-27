@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcFacetedBrep 
-IfcFacetedBrep::IfcFacetedBrep() { m_entity_enum = IFCFACETEDBREP; }
-IfcFacetedBrep::IfcFacetedBrep( int id ) { m_id = id; m_entity_enum = IFCFACETEDBREP; }
+IfcFacetedBrep::IfcFacetedBrep() {}
+IfcFacetedBrep::IfcFacetedBrep( int id ) { m_id = id; }
 IfcFacetedBrep::~IfcFacetedBrep() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -49,6 +50,13 @@ void IfcFacetedBrep::readStepArguments( const std::vector<std::string>& args, co
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcFacetedBrep, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readEntityReference( args[0], m_Outer, map );
+}
+void IfcFacetedBrep::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcManifoldSolidBrep::getAttributes( vec_attributes );
+}
+void IfcFacetedBrep::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcFacetedBrep::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

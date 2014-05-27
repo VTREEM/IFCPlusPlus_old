@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcProfileTypeEnum.h"
 
 // ENTITY IfcCircleHollowProfileDef 
-IfcCircleHollowProfileDef::IfcCircleHollowProfileDef() { m_entity_enum = IFCCIRCLEHOLLOWPROFILEDEF; }
-IfcCircleHollowProfileDef::IfcCircleHollowProfileDef( int id ) { m_id = id; m_entity_enum = IFCCIRCLEHOLLOWPROFILEDEF; }
+IfcCircleHollowProfileDef::IfcCircleHollowProfileDef() {}
+IfcCircleHollowProfileDef::IfcCircleHollowProfileDef( int id ) { m_id = id; }
 IfcCircleHollowProfileDef::~IfcCircleHollowProfileDef() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -68,6 +69,14 @@ void IfcCircleHollowProfileDef::readStepArguments( const std::vector<std::string
 	readEntityReference( args[2], m_Position, map );
 	m_Radius = IfcPositiveLengthMeasure::createObjectFromStepData( args[3] );
 	m_WallThickness = IfcPositiveLengthMeasure::createObjectFromStepData( args[4] );
+}
+void IfcCircleHollowProfileDef::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCircleProfileDef::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "WallThickness", m_WallThickness ) );
+}
+void IfcCircleHollowProfileDef::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCircleHollowProfileDef::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -70,7 +70,7 @@ void findCompleteTag( const char* data, int& begin, int& end )
 
 	// short tag: <keyword />
 	char* pos_closing_tag_short = strchr( pos, '>' );
-	if( pos_closing_tag_short != NULL )
+	if( pos_closing_tag_short != nullptr )
 	{
 		pos = pos_closing_tag_short;
 		--pos;
@@ -91,13 +91,13 @@ void findCompleteTag( const char* data, int& begin, int& end )
 	// long tag: <keyword>...</keyword>
 	char* pos_closing_tag = strstr( pos, "</" );
 
-	if( pos_closing_tag != NULL )
+	if( pos_closing_tag != nullptr )
 	{
 		pos = strstr( pos_closing_tag, keyword.c_str() );
-		if( pos != NULL )
+		if( pos != nullptr )
 		{
 			pos = strchr( pos, '>' );
-			if( pos != NULL )
+			if( pos != nullptr )
 			{
 				end = (int)(pos - pos_begin + 1);
 				return;

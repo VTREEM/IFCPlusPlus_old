@@ -21,7 +21,7 @@
 #include "IfcDerivedMeasureValue.h"
 
 // TYPE IfcCurvatureMeasure = REAL;
-class IfcCurvatureMeasure : public IfcDerivedMeasureValue, public IfcPPType
+class IfcCurvatureMeasure : public IfcDerivedMeasureValue, public IfcPPReal
 {
 public:
 	IfcCurvatureMeasure();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcCurvatureMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcCurvatureMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

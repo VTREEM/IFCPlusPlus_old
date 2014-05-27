@@ -52,7 +52,7 @@ shared_ptr<IfcStackTerminalTypeEnum> IfcStackTerminalTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStackTerminalTypeEnum>(); }
-	shared_ptr<IfcStackTerminalTypeEnum> type_object( new IfcStackTerminalTypeEnum() );
+	auto type_object = std::make_shared<IfcStackTerminalTypeEnum>();
 	if( _stricmp( arg.c_str(), ".BIRDCAGE." ) == 0 )
 	{
 		type_object->m_enum = IfcStackTerminalTypeEnum::ENUM_BIRDCAGE;

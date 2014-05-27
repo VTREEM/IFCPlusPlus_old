@@ -28,7 +28,6 @@ IfcContextDependentMeasure::~IfcContextDependentMeasure() {}
 void IfcContextDependentMeasure::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCCONTEXTDEPENDENTMEASURE("; }
-	//supertype as attribute: double m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -36,8 +35,7 @@ shared_ptr<IfcContextDependentMeasure> IfcContextDependentMeasure::createObjectF
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcContextDependentMeasure>(); }
-	shared_ptr<IfcContextDependentMeasure> type_object( new IfcContextDependentMeasure() );
-	//supertype as attribute: double m_value
-	type_object->m_value = atof( arg.c_str() );
+	auto type_object = std::make_shared<IfcContextDependentMeasure>();
+	type_object->readArgument( arg );
 	return type_object;
 }

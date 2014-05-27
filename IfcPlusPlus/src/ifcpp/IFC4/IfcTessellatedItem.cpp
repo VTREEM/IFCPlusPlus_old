@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcTessellatedItem.h"
 
 // ENTITY IfcTessellatedItem 
-IfcTessellatedItem::IfcTessellatedItem() { m_entity_enum = IFCTESSELLATEDITEM; }
-IfcTessellatedItem::IfcTessellatedItem( int id ) { m_id = id; m_entity_enum = IFCTESSELLATEDITEM; }
+IfcTessellatedItem::IfcTessellatedItem() {}
+IfcTessellatedItem::IfcTessellatedItem( int id ) { m_id = id; }
 IfcTessellatedItem::~IfcTessellatedItem() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -39,6 +40,13 @@ void IfcTessellatedItem::getStepLine( std::stringstream& stream ) const
 }
 void IfcTessellatedItem::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcTessellatedItem::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcTessellatedItem::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+}
+void IfcTessellatedItem::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcTessellatedItem::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )

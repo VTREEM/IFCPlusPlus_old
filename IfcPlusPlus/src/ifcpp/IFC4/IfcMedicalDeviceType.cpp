@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcMedicalDeviceType 
-IfcMedicalDeviceType::IfcMedicalDeviceType() { m_entity_enum = IFCMEDICALDEVICETYPE; }
-IfcMedicalDeviceType::IfcMedicalDeviceType( int id ) { m_id = id; m_entity_enum = IFCMEDICALDEVICETYPE; }
+IfcMedicalDeviceType::IfcMedicalDeviceType() {}
+IfcMedicalDeviceType::IfcMedicalDeviceType( int id ) { m_id = id; }
 IfcMedicalDeviceType::~IfcMedicalDeviceType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcMedicalDeviceType::readStepArguments( const std::vector<std::string>& ar
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcMedicalDeviceTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcMedicalDeviceType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowTerminalType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcMedicalDeviceType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcMedicalDeviceType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

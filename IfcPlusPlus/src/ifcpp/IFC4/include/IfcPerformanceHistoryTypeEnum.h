@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPerformanceHistoryTypeEnum = ENUMERATION OF	(USERDEFINED	,NOTDEFINED);
-class IfcPerformanceHistoryTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPerformanceHistoryTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPerformanceHistoryTypeEnumEnum

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcURIReference.h"
 
 // ENTITY IfcImageTexture 
-IfcImageTexture::IfcImageTexture() { m_entity_enum = IFCIMAGETEXTURE; }
-IfcImageTexture::IfcImageTexture( int id ) { m_id = id; m_entity_enum = IFCIMAGETEXTURE; }
+IfcImageTexture::IfcImageTexture() {}
+IfcImageTexture::IfcImageTexture( int id ) { m_id = id; }
 IfcImageTexture::~IfcImageTexture() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -75,6 +76,14 @@ void IfcImageTexture::readStepArguments( const std::vector<std::string>& args, c
 	readEntityReference( args[3], m_TextureTransform, map );
 	readTypeList( args[4], m_Parameter );
 	m_URLReference = IfcURIReference::createObjectFromStepData( args[5] );
+}
+void IfcImageTexture::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcSurfaceTexture::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "URLReference", m_URLReference ) );
+}
+void IfcImageTexture::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcImageTexture::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

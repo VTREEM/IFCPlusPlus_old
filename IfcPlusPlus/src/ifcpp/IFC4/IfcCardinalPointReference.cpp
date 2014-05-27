@@ -27,7 +27,6 @@ IfcCardinalPointReference::~IfcCardinalPointReference() {}
 void IfcCardinalPointReference::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCCARDINALPOINTREFERENCE("; }
-	//supertype as attribute: int m_value
 	stream << m_value;
 	if( is_select_type ) { stream << ")"; }
 }
@@ -35,8 +34,7 @@ shared_ptr<IfcCardinalPointReference> IfcCardinalPointReference::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCardinalPointReference>(); }
-	shared_ptr<IfcCardinalPointReference> type_object( new IfcCardinalPointReference() );
-	//supertype as attribute: int m_value
-	type_object->m_value = atoi( arg.c_str() );
+	auto type_object = std::make_shared<IfcCardinalPointReference>();
+	type_object->readArgument( arg );
 	return type_object;
 }

@@ -21,7 +21,7 @@
 #include "IfcSimpleValue.h"
 
 // TYPE IfcDateTime = STRING;
-class IfcDateTime : public IfcSimpleValue, public IfcPPType
+class IfcDateTime : public IfcSimpleValue, public IfcPPString
 {
 public:
 	IfcDateTime();
@@ -30,6 +30,5 @@ public:
 	virtual const char* classname() const { return "IfcDateTime"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcDateTime> createObjectFromStepData( const std::string& arg );
-	std::string m_value;
 };
 

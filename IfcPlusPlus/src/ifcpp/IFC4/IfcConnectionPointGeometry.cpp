@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcPointOrVertexPoint.h"
 
 // ENTITY IfcConnectionPointGeometry 
-IfcConnectionPointGeometry::IfcConnectionPointGeometry() { m_entity_enum = IFCCONNECTIONPOINTGEOMETRY; }
-IfcConnectionPointGeometry::IfcConnectionPointGeometry( int id ) { m_id = id; m_entity_enum = IFCCONNECTIONPOINTGEOMETRY; }
+IfcConnectionPointGeometry::IfcConnectionPointGeometry() {}
+IfcConnectionPointGeometry::IfcConnectionPointGeometry( int id ) { m_id = id; }
 IfcConnectionPointGeometry::~IfcConnectionPointGeometry() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -51,6 +52,15 @@ void IfcConnectionPointGeometry::readStepArguments( const std::vector<std::strin
 	#endif
 	m_PointOnRelatingElement = IfcPointOrVertexPoint::createObjectFromStepData( args[0], map );
 	m_PointOnRelatedElement = IfcPointOrVertexPoint::createObjectFromStepData( args[1], map );
+}
+void IfcConnectionPointGeometry::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcConnectionGeometry::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PointOnRelatingElement", m_PointOnRelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "PointOnRelatedElement", m_PointOnRelatedElement ) );
+}
+void IfcConnectionPointGeometry::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcConnectionPointGeometry::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

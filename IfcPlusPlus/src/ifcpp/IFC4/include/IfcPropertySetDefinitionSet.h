@@ -22,7 +22,7 @@
 class IfcPropertySetDefinition;
 
 // TYPE IfcPropertySetDefinitionSet = SET [1:?] OF IfcPropertySetDefinition;
-class IfcPropertySetDefinitionSet : public IfcPropertySetDefinitionSelect, public IfcPPType
+class IfcPropertySetDefinitionSet : public IfcPropertySetDefinitionSelect
 {
 public:
 	IfcPropertySetDefinitionSet();

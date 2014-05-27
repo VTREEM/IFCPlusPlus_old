@@ -56,7 +56,7 @@ shared_ptr<IfcBuildingElementProxyTypeEnum> IfcBuildingElementProxyTypeEnum::cre
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBuildingElementProxyTypeEnum>(); }
-	shared_ptr<IfcBuildingElementProxyTypeEnum> type_object( new IfcBuildingElementProxyTypeEnum() );
+	auto type_object = std::make_shared<IfcBuildingElementProxyTypeEnum>();
 	if( _stricmp( arg.c_str(), ".COMPLEX." ) == 0 )
 	{
 		type_object->m_enum = IfcBuildingElementProxyTypeEnum::ENUM_COMPLEX;

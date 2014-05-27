@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcTimePeriod.h"
 
 // ENTITY IfcRecurrencePattern 
-IfcRecurrencePattern::IfcRecurrencePattern() { m_entity_enum = IFCRECURRENCEPATTERN; }
-IfcRecurrencePattern::IfcRecurrencePattern( int id ) { m_id = id; m_entity_enum = IFCRECURRENCEPATTERN; }
+IfcRecurrencePattern::IfcRecurrencePattern() {}
+IfcRecurrencePattern::IfcRecurrencePattern( int id ) { m_id = id; }
 IfcRecurrencePattern::~IfcRecurrencePattern() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -80,6 +81,25 @@ void IfcRecurrencePattern::readStepArguments( const std::vector<std::string>& ar
 	m_Interval = IfcInteger::createObjectFromStepData( args[5] );
 	m_Occurrences = IfcInteger::createObjectFromStepData( args[6] );
 	readEntityReferenceList( args[7], m_TimePeriods, map );
+}
+void IfcRecurrencePattern::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "RecurrenceType", m_RecurrenceType ) );
+	shared_ptr<IfcPPAttributeObjectVector> DayComponent_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_DayComponent.begin(), m_DayComponent.end(), std::back_inserter( DayComponent_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "DayComponent", DayComponent_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> WeekdayComponent_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_WeekdayComponent.begin(), m_WeekdayComponent.end(), std::back_inserter( WeekdayComponent_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "WeekdayComponent", WeekdayComponent_vec_object ) );
+	shared_ptr<IfcPPAttributeObjectVector> MonthComponent_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_MonthComponent.begin(), m_MonthComponent.end(), std::back_inserter( MonthComponent_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "MonthComponent", MonthComponent_vec_object ) );
+	vec_attributes.push_back( std::make_pair( "Position", m_Position ) );
+	vec_attributes.push_back( std::make_pair( "Interval", m_Interval ) );
+	vec_attributes.push_back( std::make_pair( "Occurrences", m_Occurrences ) );
+}
+void IfcRecurrencePattern::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRecurrencePattern::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

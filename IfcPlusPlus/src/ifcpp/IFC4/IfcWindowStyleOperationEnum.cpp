@@ -76,7 +76,7 @@ shared_ptr<IfcWindowStyleOperationEnum> IfcWindowStyleOperationEnum::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWindowStyleOperationEnum>(); }
-	shared_ptr<IfcWindowStyleOperationEnum> type_object( new IfcWindowStyleOperationEnum() );
+	auto type_object = std::make_shared<IfcWindowStyleOperationEnum>();
 	if( _stricmp( arg.c_str(), ".SINGLE_PANEL." ) == 0 )
 	{
 		type_object->m_enum = IfcWindowStyleOperationEnum::ENUM_SINGLE_PANEL;

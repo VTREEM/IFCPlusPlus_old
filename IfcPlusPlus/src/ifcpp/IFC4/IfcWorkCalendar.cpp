@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -36,8 +37,8 @@
 #include "include/IfcWorkTime.h"
 
 // ENTITY IfcWorkCalendar 
-IfcWorkCalendar::IfcWorkCalendar() { m_entity_enum = IFCWORKCALENDAR; }
-IfcWorkCalendar::IfcWorkCalendar( int id ) { m_id = id; m_entity_enum = IFCWORKCALENDAR; }
+IfcWorkCalendar::IfcWorkCalendar() {}
+IfcWorkCalendar::IfcWorkCalendar( int id ) { m_id = id; }
 IfcWorkCalendar::~IfcWorkCalendar() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -94,6 +95,14 @@ void IfcWorkCalendar::readStepArguments( const std::vector<std::string>& args, c
 	readEntityReferenceList( args[6], m_WorkingTimes, map );
 	readEntityReferenceList( args[7], m_ExceptionTimes, map );
 	m_PredefinedType = IfcWorkCalendarTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcWorkCalendar::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcControl::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcWorkCalendar::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWorkCalendar::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

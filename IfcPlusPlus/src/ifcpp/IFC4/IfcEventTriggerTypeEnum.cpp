@@ -56,7 +56,7 @@ shared_ptr<IfcEventTriggerTypeEnum> IfcEventTriggerTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcEventTriggerTypeEnum>(); }
-	shared_ptr<IfcEventTriggerTypeEnum> type_object( new IfcEventTriggerTypeEnum() );
+	auto type_object = std::make_shared<IfcEventTriggerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".EVENTRULE." ) == 0 )
 	{
 		type_object->m_enum = IfcEventTriggerTypeEnum::ENUM_EVENTRULE;

@@ -44,7 +44,7 @@ shared_ptr<IfcTubeBundleTypeEnum> IfcTubeBundleTypeEnum::createObjectFromStepDat
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTubeBundleTypeEnum>(); }
-	shared_ptr<IfcTubeBundleTypeEnum> type_object( new IfcTubeBundleTypeEnum() );
+	auto type_object = std::make_shared<IfcTubeBundleTypeEnum>();
 	if( _stricmp( arg.c_str(), ".FINNED." ) == 0 )
 	{
 		type_object->m_enum = IfcTubeBundleTypeEnum::ENUM_FINNED;

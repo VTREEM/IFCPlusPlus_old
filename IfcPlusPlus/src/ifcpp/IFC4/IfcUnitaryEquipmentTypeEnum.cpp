@@ -60,7 +60,7 @@ shared_ptr<IfcUnitaryEquipmentTypeEnum> IfcUnitaryEquipmentTypeEnum::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcUnitaryEquipmentTypeEnum>(); }
-	shared_ptr<IfcUnitaryEquipmentTypeEnum> type_object( new IfcUnitaryEquipmentTypeEnum() );
+	auto type_object = std::make_shared<IfcUnitaryEquipmentTypeEnum>();
 	if( _stricmp( arg.c_str(), ".AIRHANDLER." ) == 0 )
 	{
 		type_object->m_enum = IfcUnitaryEquipmentTypeEnum::ENUM_AIRHANDLER;

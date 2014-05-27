@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -21,8 +22,8 @@
 #include "include/IfcSurfaceStyleRefraction.h"
 
 // ENTITY IfcSurfaceStyleRefraction 
-IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction() { m_entity_enum = IFCSURFACESTYLEREFRACTION; }
-IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction( int id ) { m_id = id; m_entity_enum = IFCSURFACESTYLEREFRACTION; }
+IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction() {}
+IfcSurfaceStyleRefraction::IfcSurfaceStyleRefraction( int id ) { m_id = id; }
 IfcSurfaceStyleRefraction::~IfcSurfaceStyleRefraction() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -51,6 +52,15 @@ void IfcSurfaceStyleRefraction::readStepArguments( const std::vector<std::string
 	#endif
 	m_RefractionIndex = IfcReal::createObjectFromStepData( args[0] );
 	m_DispersionFactor = IfcReal::createObjectFromStepData( args[1] );
+}
+void IfcSurfaceStyleRefraction::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationItem::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RefractionIndex", m_RefractionIndex ) );
+	vec_attributes.push_back( std::make_pair( "DispersionFactor", m_DispersionFactor ) );
+}
+void IfcSurfaceStyleRefraction::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSurfaceStyleRefraction::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -23,8 +24,8 @@
 #include "include/IfcStructuralLoadOrResult.h"
 
 // ENTITY IfcStructuralLoadConfiguration 
-IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration() { m_entity_enum = IFCSTRUCTURALLOADCONFIGURATION; }
-IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration( int id ) { m_id = id; m_entity_enum = IFCSTRUCTURALLOADCONFIGURATION; }
+IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration() {}
+IfcStructuralLoadConfiguration::IfcStructuralLoadConfiguration( int id ) { m_id = id; }
 IfcStructuralLoadConfiguration::~IfcStructuralLoadConfiguration() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -57,6 +58,13 @@ void IfcStructuralLoadConfiguration::readStepArguments( const std::vector<std::s
 	m_Name = IfcLabel::createObjectFromStepData( args[0] );
 	readEntityReferenceList( args[1], m_Values, map );
 	readTypeOfRealList2D( args[2], m_Locations );
+}
+void IfcStructuralLoadConfiguration::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcStructuralLoad::getAttributes( vec_attributes );
+}
+void IfcStructuralLoadConfiguration::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcStructuralLoadConfiguration::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

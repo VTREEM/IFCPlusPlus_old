@@ -72,7 +72,7 @@ shared_ptr<IfcReinforcingBarTypeEnum> IfcReinforcingBarTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcReinforcingBarTypeEnum>(); }
-	shared_ptr<IfcReinforcingBarTypeEnum> type_object( new IfcReinforcingBarTypeEnum() );
+	auto type_object = std::make_shared<IfcReinforcingBarTypeEnum>();
 	if( _stricmp( arg.c_str(), ".ANCHORING." ) == 0 )
 	{
 		type_object->m_enum = IfcReinforcingBarTypeEnum::ENUM_ANCHORING;

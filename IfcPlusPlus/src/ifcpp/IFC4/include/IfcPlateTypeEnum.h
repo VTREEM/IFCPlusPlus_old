@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcPlateTypeEnum = ENUMERATION OF	(CURTAIN_PANEL	,SHEET	,USERDEFINED	,NOTDEFINED);
-class IfcPlateTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcPlateTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcPlateTypeEnumEnum

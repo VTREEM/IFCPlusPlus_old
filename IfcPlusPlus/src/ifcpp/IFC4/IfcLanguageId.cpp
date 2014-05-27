@@ -26,7 +26,6 @@ IfcLanguageId::~IfcLanguageId() {}
 void IfcLanguageId::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCLANGUAGEID("; }
-	//supertype as attribute: std::string m_value
 	stream << "'" << encodeStepString( m_value ) << "'";
 	if( is_select_type ) { stream << ")"; }
 }
@@ -34,9 +33,8 @@ shared_ptr<IfcLanguageId> IfcLanguageId::createObjectFromStepData( const std::st
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcLanguageId>(); }
-	shared_ptr<IfcLanguageId> type_object( new IfcLanguageId() );
+	auto type_object = std::make_shared<IfcLanguageId>();
 	// read TYPE
-	//supertype as attribute: std::string m_value
-	type_object->m_value = arg;
+	type_object->readArgument( arg );
 	return type_object;
 }

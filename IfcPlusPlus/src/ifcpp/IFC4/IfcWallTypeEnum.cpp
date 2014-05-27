@@ -76,7 +76,7 @@ shared_ptr<IfcWallTypeEnum> IfcWallTypeEnum::createObjectFromStepData( const std
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcWallTypeEnum>(); }
-	shared_ptr<IfcWallTypeEnum> type_object( new IfcWallTypeEnum() );
+	auto type_object = std::make_shared<IfcWallTypeEnum>();
 	if( _stricmp( arg.c_str(), ".MOVABLE." ) == 0 )
 	{
 		type_object->m_enum = IfcWallTypeEnum::ENUM_MOVABLE;

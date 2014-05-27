@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCostItemTypeEnum = ENUMERATION OF	(USERDEFINED	,NOTDEFINED);
-class IfcCostItemTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCostItemTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCostItemTypeEnumEnum

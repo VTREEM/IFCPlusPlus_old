@@ -44,7 +44,7 @@ shared_ptr<IfcPhysicalOrVirtualEnum> IfcPhysicalOrVirtualEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcPhysicalOrVirtualEnum>(); }
-	shared_ptr<IfcPhysicalOrVirtualEnum> type_object( new IfcPhysicalOrVirtualEnum() );
+	auto type_object = std::make_shared<IfcPhysicalOrVirtualEnum>();
 	if( _stricmp( arg.c_str(), ".PHYSICAL." ) == 0 )
 	{
 		type_object->m_enum = IfcPhysicalOrVirtualEnum::ENUM_PHYSICAL;

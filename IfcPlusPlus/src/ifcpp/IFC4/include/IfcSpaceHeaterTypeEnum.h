@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcSpaceHeaterTypeEnum = ENUMERATION OF	(CONVECTOR	,RADIATOR	,USERDEFINED	,NOTDEFINED);
-class IfcSpaceHeaterTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcSpaceHeaterTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcSpaceHeaterTypeEnumEnum

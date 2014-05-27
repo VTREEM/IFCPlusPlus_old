@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcTubeBundleTypeEnum.h"
 
 // ENTITY IfcTubeBundleType 
-IfcTubeBundleType::IfcTubeBundleType() { m_entity_enum = IFCTUBEBUNDLETYPE; }
-IfcTubeBundleType::IfcTubeBundleType( int id ) { m_id = id; m_entity_enum = IFCTUBEBUNDLETYPE; }
+IfcTubeBundleType::IfcTubeBundleType() {}
+IfcTubeBundleType::IfcTubeBundleType( int id ) { m_id = id; }
 IfcTubeBundleType::~IfcTubeBundleType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcTubeBundleType::readStepArguments( const std::vector<std::string>& args,
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcTubeBundleTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcTubeBundleType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcEnergyConversionDeviceType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcTubeBundleType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTubeBundleType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

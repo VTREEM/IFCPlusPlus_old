@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcConnectionTypeEnum = ENUMERATION OF	(ATPATH	,ATSTART	,ATEND	,NOTDEFINED);
-class IfcConnectionTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcConnectionTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcConnectionTypeEnumEnum

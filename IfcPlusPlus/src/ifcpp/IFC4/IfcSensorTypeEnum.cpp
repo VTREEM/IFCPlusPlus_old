@@ -120,7 +120,7 @@ shared_ptr<IfcSensorTypeEnum> IfcSensorTypeEnum::createObjectFromStepData( const
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcSensorTypeEnum>(); }
-	shared_ptr<IfcSensorTypeEnum> type_object( new IfcSensorTypeEnum() );
+	auto type_object = std::make_shared<IfcSensorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONDUCTANCESENSOR." ) == 0 )
 	{
 		type_object->m_enum = IfcSensorTypeEnum::ENUM_CONDUCTANCESENSOR;

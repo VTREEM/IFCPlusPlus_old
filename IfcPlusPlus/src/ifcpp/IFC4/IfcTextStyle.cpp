@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -24,8 +25,8 @@
 #include "include/IfcTextStyleTextModel.h"
 
 // ENTITY IfcTextStyle 
-IfcTextStyle::IfcTextStyle() { m_entity_enum = IFCTEXTSTYLE; }
-IfcTextStyle::IfcTextStyle( int id ) { m_id = id; m_entity_enum = IFCTEXTSTYLE; }
+IfcTextStyle::IfcTextStyle() {}
+IfcTextStyle::IfcTextStyle( int id ) { m_id = id; }
 IfcTextStyle::~IfcTextStyle() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -68,6 +69,17 @@ void IfcTextStyle::readStepArguments( const std::vector<std::string>& args, cons
 	m_TextFontStyle = IfcTextFontSelect::createObjectFromStepData( args[3], map );
 	if( _stricmp( args[4].c_str(), ".F." ) == 0 ) { m_ModelOrDraughting = false; }
 	else if( _stricmp( args[4].c_str(), ".T." ) == 0 ) { m_ModelOrDraughting = true; }
+}
+void IfcTextStyle::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcPresentationStyle::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "TextCharacterAppearance", m_TextCharacterAppearance ) );
+	vec_attributes.push_back( std::make_pair( "TextStyle", m_TextStyle ) );
+	vec_attributes.push_back( std::make_pair( "TextFontStyle", m_TextFontStyle ) );
+	vec_attributes.push_back( std::make_pair( "ModelOrDraughting", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ModelOrDraughting ) ) ) );
+}
+void IfcTextStyle::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcTextStyle::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

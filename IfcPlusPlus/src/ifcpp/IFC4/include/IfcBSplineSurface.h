@@ -34,6 +34,8 @@ public:
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	virtual void readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 	virtual void setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self );
+	virtual void getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes );
+	virtual void getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes );
 	virtual void unlinkSelf();
 	virtual const char* classname() const { return "IfcBSplineSurface"; }
 
@@ -55,8 +57,8 @@ public:
 	int											m_VDegree;
 	std::vector<std::vector<shared_ptr<IfcCartesianPoint> > >	m_ControlPointsList;
 	shared_ptr<IfcBSplineSurfaceForm>			m_SurfaceForm;
-	bool											m_UClosed;
-	bool											m_VClosed;
-	bool											m_SelfIntersect;
+	LogicalEnum									m_UClosed;
+	LogicalEnum									m_VClosed;
+	LogicalEnum									m_SelfIntersect;
 };
 

@@ -19,10 +19,8 @@
 #include <algorithm>
 #include <locale.h>
 #include <time.h>
-#ifdef IFCPP_OPENMP
-#include <omp.h>
-#endif
 
+#include "ifcpp/model/IfcPPOpenMP.h"
 #include "ifcpp/model/IfcPPModel.h"
 #include "ifcpp/model/IfcPPObject.h"
 #include "ifcpp/model/IfcPPException.h"
@@ -37,7 +35,7 @@ static std::map<std::string,IfcPPTypeEnum> map_string2type_enum(initializers_Ifc
 
 void applyBackwardCompatibility( shared_ptr<IfcPPModel>& ifc_model, IfcPPEntityEnum type_enum, std::vector<std::string>& args );
 void applyBackwardCompatibility( std::string& keyword, std::string& step_line );
-shared_ptr<IfcPPType> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
+shared_ptr<IfcPPObject> createIfcPPType( const IfcPPTypeEnum type_enum, const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map_entities );
 IfcPPEntity* createIfcPPEntity( const IfcPPEntityEnum entity_enum );
 inline void findEndOfString( char*& stream_pos );
 
@@ -164,6 +162,14 @@ void readSingleStepLine( const std::string& line, shared_ptr<IfcPPEntity>& entit
 //////////////////////////////////////////////////////////////////////////////////////////////////
 IfcStepReader::IfcStepReader()
 {
+#ifdef _DEBUG
+	// TODO: use std::wstring for unicode chars 
+	std::vector<std::string> vec_in;
+	std::vector<std::wstring> vec_out;
+	vec_in.push_back( "\\X2\\041A0416\\X0\\-\\X2\\041F041B0418\\X0\\-\\X2\\041F04150420\\X0\\-\\X2\\041104150422041E041D\\X0\\;" );
+	decodeArgumentStrings( vec_in );
+	decodeArgumentStrings( vec_in, vec_out );
+#endif
 }
 IfcStepReader::~IfcStepReader()
 {
@@ -191,6 +197,10 @@ void IfcStepReader::readStreamHeader( const std::string& read_in )
 	
 	file_header_start += 7;
 	std::string file_header = read_in.substr( file_header_start, file_header_end - file_header_start );
+	std::vector<std::string> vec_header;
+	vec_header.push_back( file_header );
+	decodeArgumentStrings( vec_header );
+	file_header = vec_header[0];
 	m_model->setFileHeader( file_header );
 	
 	std::vector<std::string> vec_header_lines;
@@ -295,7 +305,7 @@ void IfcStepReader::splitIntoStepLines( const std::string& read_in, std::vector<
 {
 	// set progress to 0
 	double progress = 0.0;
-	progressCallback( progress );
+	progressCallback( progress, "parse" );
 	const int length = (int)read_in.length();
 
 	// sort out comments like /* ... */
@@ -354,7 +364,7 @@ void IfcStepReader::splitIntoStepLines( const std::string& read_in, std::vector<
 	// find beginning of data lines
 	stream_pos = &buffer[0];
 	stream_pos = strstr( stream_pos, "DATA;" );
-	if( stream_pos != NULL )
+	if( stream_pos != nullptr )
 	{
 		stream_pos += 5;
 		while(isspace(*stream_pos)){++stream_pos;}
@@ -403,7 +413,7 @@ void IfcStepReader::splitIntoStepLines( const std::string& read_in, std::vector<
 				if( progress_since_anchor > 0.03 )
 				{
 					progress = 0.2*(double)(stream_pos-&buffer[0])/double(length);
-					progressCallback( progress );
+					progressCallback( progress, "parse" );
 					progress_anchor = stream_pos;
 				}
 			}
@@ -495,7 +505,7 @@ void IfcStepReader::readStepLines( const std::vector<std::string>& step_lines, s
 					if( omp_get_thread_num() == 0 )
 #endif
 					{
-						progressCallback( progress );
+						progressCallback( progress, "parse" );
 						last_progress = progress;
 					}
 				}
@@ -520,7 +530,7 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 
 	// set progress
 	double progress = 0.3;
-	progressCallback( progress );
+	progressCallback( progress, "parse" );
 	double last_progress = 0.3;
 	const std::map<int,shared_ptr<IfcPPEntity> >* map_ptr = &map_entities;
 	const std::vector<shared_ptr<IfcPPEntity> >* vec_entities_ptr = &vec_entities;
@@ -556,6 +566,9 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 					applyBackwardCompatibility( m_model, entity_enum, arguments );
 				}
 			}
+#ifdef _DEBUG
+			int entity_id = entity->getId();
+#endif
 
 			try
 			{
@@ -579,8 +592,9 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 			{
 #ifdef IFCPP_OPENMP
 #pragma omp critical
-				err << "#" << entity->getId() << "=" << typeid(*entity).name() << " readStepData: error occurred" << std::endl;
 #endif
+				err << "#" << entity->getId() << "=" << typeid(*entity).name() << " readStepData: error occurred" << std::endl;
+
 			}
 
 			if( i%10 == 0 )
@@ -592,7 +606,7 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 					if( omp_get_thread_num() == 0 )
 #endif
 					{
-						progressCallback( progress );
+						progressCallback( progress, "parse" );
 						last_progress = progress;
 					}
 				}
@@ -608,7 +622,7 @@ void IfcStepReader::readEntityArguments( const std::vector<shared_ptr<IfcPPEntit
 
 void IfcStepReader::readStreamData(	const std::string& read_in, std::map<int,shared_ptr<IfcPPEntity> >& target_map )
 {
-	char* current_numeric_locale = setlocale(LC_NUMERIC, NULL);
+	char* current_numeric_locale = setlocale(LC_NUMERIC, nullptr);
 	setlocale(LC_NUMERIC,"C");
 
 	if( m_model->getIfcSchemaVersion()  == IfcPPModel::IFC_VERSION_UNDEFINED || m_model->getIfcSchemaVersion() == IfcPPModel::IFC_VERSION_UNKNOWN )
@@ -617,7 +631,7 @@ void IfcStepReader::readStreamData(	const std::string& read_in, std::map<int,sha
 		error_message.append( "Unsupported IFC version: " );
 		error_message.append( m_model->getFileSchema() );
 		errorCallback( error_message );
-		progressCallback(0.0);
+		progressCallback(0.0, "parse");
 		return;
 	}
 	

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcWorkCalendarTypeEnum = ENUMERATION OF	(FIRSTSHIFT	,SECONDSHIFT	,THIRDSHIFT	,USERDEFINED	,NOTDEFINED);
-class IfcWorkCalendarTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcWorkCalendarTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcWorkCalendarTypeEnumEnum

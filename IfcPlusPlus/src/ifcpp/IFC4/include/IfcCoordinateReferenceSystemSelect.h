@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCoordinateReferenceSystemSelect = SELECT	(IfcCoordinateReferenceSystem	,IfcGeometricRepresentationContext);
-class IfcCoordinateReferenceSystemSelect : public IfcPPAbstractSelect
+class IfcCoordinateReferenceSystemSelect : virtual public IfcPPObject
 {
 public:
 	IfcCoordinateReferenceSystemSelect();
 	~IfcCoordinateReferenceSystemSelect();
 	virtual const char* classname() const { return "IfcCoordinateReferenceSystemSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcCoordinateReferenceSystemSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

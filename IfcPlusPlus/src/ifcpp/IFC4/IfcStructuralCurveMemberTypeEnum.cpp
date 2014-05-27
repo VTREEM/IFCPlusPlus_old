@@ -60,7 +60,7 @@ shared_ptr<IfcStructuralCurveMemberTypeEnum> IfcStructuralCurveMemberTypeEnum::c
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcStructuralCurveMemberTypeEnum>(); }
-	shared_ptr<IfcStructuralCurveMemberTypeEnum> type_object( new IfcStructuralCurveMemberTypeEnum() );
+	auto type_object = std::make_shared<IfcStructuralCurveMemberTypeEnum>();
 	if( _stricmp( arg.c_str(), ".RIGID_JOINED_MEMBER." ) == 0 )
 	{
 		type_object->m_enum = IfcStructuralCurveMemberTypeEnum::ENUM_RIGID_JOINED_MEMBER;

@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -37,8 +38,8 @@
 #include "include/IfcWorkControl.h"
 
 // ENTITY IfcWorkControl 
-IfcWorkControl::IfcWorkControl() { m_entity_enum = IFCWORKCONTROL; }
-IfcWorkControl::IfcWorkControl( int id ) { m_id = id; m_entity_enum = IFCWORKCONTROL; }
+IfcWorkControl::IfcWorkControl() {}
+IfcWorkControl::IfcWorkControl( int id ) { m_id = id; }
 IfcWorkControl::~IfcWorkControl() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -111,6 +112,19 @@ void IfcWorkControl::readStepArguments( const std::vector<std::string>& args, co
 	m_TotalFloat = IfcDuration::createObjectFromStepData( args[10] );
 	m_StartTime = IfcDateTime::createObjectFromStepData( args[11] );
 	m_FinishTime = IfcDateTime::createObjectFromStepData( args[12] );
+}
+void IfcWorkControl::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcControl::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "CreationDate", m_CreationDate ) );
+	vec_attributes.push_back( std::make_pair( "Purpose", m_Purpose ) );
+	vec_attributes.push_back( std::make_pair( "Duration", m_Duration ) );
+	vec_attributes.push_back( std::make_pair( "TotalFloat", m_TotalFloat ) );
+	vec_attributes.push_back( std::make_pair( "StartTime", m_StartTime ) );
+	vec_attributes.push_back( std::make_pair( "FinishTime", m_FinishTime ) );
+}
+void IfcWorkControl::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcWorkControl::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

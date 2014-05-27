@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcStructuralCurveActivityTypeEnum = ENUMERATION OF	(CONST	,LINEAR	,POLYGONAL	,EQUIDISTANT	,SINUS	,PARABOLA	,DISCRETE	,USERDEFINED	,NOTDEFINED);
-class IfcStructuralCurveActivityTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcStructuralCurveActivityTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcStructuralCurveActivityTypeEnumEnum

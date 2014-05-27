@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -46,8 +47,8 @@
 #include "include/IfcVibrationIsolatorTypeEnum.h"
 
 // ENTITY IfcVibrationIsolator 
-IfcVibrationIsolator::IfcVibrationIsolator() { m_entity_enum = IFCVIBRATIONISOLATOR; }
-IfcVibrationIsolator::IfcVibrationIsolator( int id ) { m_id = id; m_entity_enum = IFCVIBRATIONISOLATOR; }
+IfcVibrationIsolator::IfcVibrationIsolator() {}
+IfcVibrationIsolator::IfcVibrationIsolator( int id ) { m_id = id; }
 IfcVibrationIsolator::~IfcVibrationIsolator() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -104,6 +105,14 @@ void IfcVibrationIsolator::readStepArguments( const std::vector<std::string>& ar
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcVibrationIsolatorTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcVibrationIsolator::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcElementComponent::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcVibrationIsolator::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcVibrationIsolator::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

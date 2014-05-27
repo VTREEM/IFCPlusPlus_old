@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -25,8 +26,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcOffsetCurve3D 
-IfcOffsetCurve3D::IfcOffsetCurve3D() { m_entity_enum = IFCOFFSETCURVE3D; }
-IfcOffsetCurve3D::IfcOffsetCurve3D( int id ) { m_id = id; m_entity_enum = IFCOFFSETCURVE3D; }
+IfcOffsetCurve3D::IfcOffsetCurve3D() {}
+IfcOffsetCurve3D::IfcOffsetCurve3D( int id ) { m_id = id; }
 IfcOffsetCurve3D::~IfcOffsetCurve3D() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -46,8 +47,9 @@ void IfcOffsetCurve3D::getStepLine( std::stringstream& stream ) const
 	stream << ",";
 	if( m_Distance ) { m_Distance->getStepParameter( stream ); } else { stream << "$"; }
 	stream << ",";
-	if( m_SelfIntersect == false ) { stream << ".F."; }
-	else if( m_SelfIntersect == true ) { stream << ".T."; }
+	if( m_SelfIntersect == LOGICAL_FALSE ) { stream << ".F."; }
+	else if( m_SelfIntersect == LOGICAL_TRUE ) { stream << ".T."; }
+	else if( m_SelfIntersect == LOGICAL_UNKNOWN ) { stream << ".U."; }
 	stream << ",";
 	if( m_RefDirection ) { stream << "#" << m_RefDirection->getId(); } else { stream << "$"; }
 	stream << ");";
@@ -62,9 +64,21 @@ void IfcOffsetCurve3D::readStepArguments( const std::vector<std::string>& args, 
 	#endif
 	readEntityReference( args[0], m_BasisCurve, map );
 	m_Distance = IfcLengthMeasure::createObjectFromStepData( args[1] );
-	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SelfIntersect = false; }
-	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SelfIntersect = true; }
+	if( _stricmp( args[2].c_str(), ".F." ) == 0 ) { m_SelfIntersect = LOGICAL_FALSE; }
+	else if( _stricmp( args[2].c_str(), ".T." ) == 0 ) { m_SelfIntersect = LOGICAL_TRUE; }
+	else if( _stricmp( args[2].c_str(), ".U." ) == 0 ) { m_SelfIntersect = LOGICAL_UNKNOWN; }
 	readEntityReference( args[3], m_RefDirection, map );
+}
+void IfcOffsetCurve3D::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcCurve::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "BasisCurve", m_BasisCurve ) );
+	vec_attributes.push_back( std::make_pair( "Distance", m_Distance ) );
+	vec_attributes.push_back( std::make_pair( "SelfIntersect", shared_ptr<IfcPPAttributeObjectLogical>( new  IfcPPAttributeObjectLogical( m_SelfIntersect ) ) ) );
+	vec_attributes.push_back( std::make_pair( "RefDirection", m_RefDirection ) );
+}
+void IfcOffsetCurve3D::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcOffsetCurve3D::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

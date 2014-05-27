@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -27,8 +28,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsStructuralActivity 
-IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity() { m_entity_enum = IFCRELCONNECTSSTRUCTURALACTIVITY; }
-IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSSTRUCTURALACTIVITY; }
+IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity() {}
+IfcRelConnectsStructuralActivity::IfcRelConnectsStructuralActivity( int id ) { m_id = id; }
 IfcRelConnectsStructuralActivity::~IfcRelConnectsStructuralActivity() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -73,6 +74,15 @@ void IfcRelConnectsStructuralActivity::readStepArguments( const std::vector<std:
 	m_Description = IfcText::createObjectFromStepData( args[3] );
 	m_RelatingElement = IfcStructuralActivityAssignmentSelect::createObjectFromStepData( args[4], map );
 	readEntityReference( args[5], m_RelatedStructuralActivity, map );
+}
+void IfcRelConnectsStructuralActivity::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnects::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "RelatingElement", m_RelatingElement ) );
+	vec_attributes.push_back( std::make_pair( "RelatedStructuralActivity", m_RelatedStructuralActivity ) );
+}
+void IfcRelConnectsStructuralActivity::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelConnectsStructuralActivity::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

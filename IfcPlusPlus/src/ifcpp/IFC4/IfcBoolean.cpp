@@ -34,7 +34,6 @@ IfcBoolean::~IfcBoolean() {}
 void IfcBoolean::getStepParameter( std::stringstream& stream, bool is_select_type ) const
 {
 	if( is_select_type ) { stream << "IFCBOOLEAN("; }
-	//supertype as attribute: bool m_value
 	if( m_value == false )
 	{
 		stream << ".F.";
@@ -49,15 +48,7 @@ shared_ptr<IfcBoolean> IfcBoolean::createObjectFromStepData( const std::string& 
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcBoolean>(); }
-	shared_ptr<IfcBoolean> type_object( new IfcBoolean() );
-	//supertype as attribute: bool m_value
-	if( _stricmp( arg.c_str(), ".F." ) == 0 )
-	{
-		type_object->m_value = false;
-	}
-	else if( _stricmp( arg.c_str(), ".T." ) == 0 )
-	{
-		type_object->m_value = true;
-	}
+	auto type_object = std::make_shared<IfcBoolean>();
+	type_object->readArgument( arg );
 	return type_object;
 }

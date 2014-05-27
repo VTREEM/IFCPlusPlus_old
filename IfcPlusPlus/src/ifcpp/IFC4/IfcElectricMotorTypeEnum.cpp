@@ -60,7 +60,7 @@ shared_ptr<IfcElectricMotorTypeEnum> IfcElectricMotorTypeEnum::createObjectFromS
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcElectricMotorTypeEnum>(); }
-	shared_ptr<IfcElectricMotorTypeEnum> type_object( new IfcElectricMotorTypeEnum() );
+	auto type_object = std::make_shared<IfcElectricMotorTypeEnum>();
 	if( _stricmp( arg.c_str(), ".DC." ) == 0 )
 	{
 		type_object->m_enum = IfcElectricMotorTypeEnum::ENUM_DC;

@@ -52,7 +52,7 @@ shared_ptr<IfcCoolingTowerTypeEnum> IfcCoolingTowerTypeEnum::createObjectFromSte
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcCoolingTowerTypeEnum>(); }
-	shared_ptr<IfcCoolingTowerTypeEnum> type_object( new IfcCoolingTowerTypeEnum() );
+	auto type_object = std::make_shared<IfcCoolingTowerTypeEnum>();
 	if( _stricmp( arg.c_str(), ".NATURALDRAFT." ) == 0 )
 	{
 		type_object->m_enum = IfcCoolingTowerTypeEnum::ENUM_NATURALDRAFT;

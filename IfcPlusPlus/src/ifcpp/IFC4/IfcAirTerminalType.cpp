@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcAirTerminalType 
-IfcAirTerminalType::IfcAirTerminalType() { m_entity_enum = IFCAIRTERMINALTYPE; }
-IfcAirTerminalType::IfcAirTerminalType( int id ) { m_id = id; m_entity_enum = IFCAIRTERMINALTYPE; }
+IfcAirTerminalType::IfcAirTerminalType() {}
+IfcAirTerminalType::IfcAirTerminalType( int id ) { m_id = id; }
 IfcAirTerminalType::~IfcAirTerminalType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcAirTerminalType::readStepArguments( const std::vector<std::string>& args
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcAirTerminalTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcAirTerminalType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowTerminalType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcAirTerminalType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcAirTerminalType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

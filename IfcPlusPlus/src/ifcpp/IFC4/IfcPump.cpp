@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -48,8 +49,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcPump 
-IfcPump::IfcPump() { m_entity_enum = IFCPUMP; }
-IfcPump::IfcPump( int id ) { m_id = id; m_entity_enum = IFCPUMP; }
+IfcPump::IfcPump() {}
+IfcPump::IfcPump( int id ) { m_id = id; }
 IfcPump::~IfcPump() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -106,6 +107,14 @@ void IfcPump::readStepArguments( const std::vector<std::string>& args, const std
 	readEntityReference( args[6], m_Representation, map );
 	m_Tag = IfcIdentifier::createObjectFromStepData( args[7] );
 	m_PredefinedType = IfcPumpTypeEnum::createObjectFromStepData( args[8] );
+}
+void IfcPump::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcFlowMovingDevice::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcPump::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcPump::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

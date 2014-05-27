@@ -60,7 +60,7 @@ shared_ptr<IfcTimeSeriesDataTypeEnum> IfcTimeSeriesDataTypeEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcTimeSeriesDataTypeEnum>(); }
-	shared_ptr<IfcTimeSeriesDataTypeEnum> type_object( new IfcTimeSeriesDataTypeEnum() );
+	auto type_object = std::make_shared<IfcTimeSeriesDataTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CONTINUOUS." ) == 0 )
 	{
 		type_object->m_enum = IfcTimeSeriesDataTypeEnum::ENUM_CONTINUOUS;

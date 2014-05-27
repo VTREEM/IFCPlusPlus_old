@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcFurnitureTypeEnum = ENUMERATION OF	(CHAIR	,TABLE	,DESK	,BED	,FILECABINET	,SHELF	,SOFA	,USERDEFINED	,NOTDEFINED);
-class IfcFurnitureTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcFurnitureTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcFurnitureTypeEnumEnum

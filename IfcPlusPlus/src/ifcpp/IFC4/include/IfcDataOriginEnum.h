@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcDataOriginEnum = ENUMERATION OF	(MEASURED	,PREDICTED	,SIMULATED	,USERDEFINED	,NOTDEFINED);
-class IfcDataOriginEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcDataOriginEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcDataOriginEnumEnum

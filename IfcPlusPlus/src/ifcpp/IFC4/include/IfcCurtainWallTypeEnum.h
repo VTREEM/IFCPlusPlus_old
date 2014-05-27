@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCurtainWallTypeEnum = ENUMERATION OF	(USERDEFINED	,NOTDEFINED);
-class IfcCurtainWallTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCurtainWallTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCurtainWallTypeEnumEnum

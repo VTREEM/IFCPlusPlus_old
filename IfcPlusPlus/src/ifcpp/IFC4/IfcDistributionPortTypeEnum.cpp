@@ -56,7 +56,7 @@ shared_ptr<IfcDistributionPortTypeEnum> IfcDistributionPortTypeEnum::createObjec
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcDistributionPortTypeEnum>(); }
-	shared_ptr<IfcDistributionPortTypeEnum> type_object( new IfcDistributionPortTypeEnum() );
+	auto type_object = std::make_shared<IfcDistributionPortTypeEnum>();
 	if( _stricmp( arg.c_str(), ".CABLE." ) == 0 )
 	{
 		type_object->m_enum = IfcDistributionPortTypeEnum::ENUM_CABLE;

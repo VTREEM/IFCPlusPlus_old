@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -38,8 +39,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcReinforcingMeshType 
-IfcReinforcingMeshType::IfcReinforcingMeshType() { m_entity_enum = IFCREINFORCINGMESHTYPE; }
-IfcReinforcingMeshType::IfcReinforcingMeshType( int id ) { m_id = id; m_entity_enum = IFCREINFORCINGMESHTYPE; }
+IfcReinforcingMeshType::IfcReinforcingMeshType() {}
+IfcReinforcingMeshType::IfcReinforcingMeshType( int id ) { m_id = id; }
 IfcReinforcingMeshType::~IfcReinforcingMeshType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -140,6 +141,26 @@ void IfcReinforcingMeshType::readStepArguments( const std::vector<std::string>& 
 	m_TransverseBarSpacing = IfcPositiveLengthMeasure::createObjectFromStepData( args[17] );
 	m_BendingShapeCode = IfcLabel::createObjectFromStepData( args[18] );
 	readSelectList( args[19], m_BendingParameters, map );
+}
+void IfcReinforcingMeshType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcReinforcingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "MeshLength", m_MeshLength ) );
+	vec_attributes.push_back( std::make_pair( "MeshWidth", m_MeshWidth ) );
+	vec_attributes.push_back( std::make_pair( "LongitudinalBarNominalDiameter", m_LongitudinalBarNominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "TransverseBarNominalDiameter", m_TransverseBarNominalDiameter ) );
+	vec_attributes.push_back( std::make_pair( "LongitudinalBarCrossSectionArea", m_LongitudinalBarCrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "TransverseBarCrossSectionArea", m_TransverseBarCrossSectionArea ) );
+	vec_attributes.push_back( std::make_pair( "LongitudinalBarSpacing", m_LongitudinalBarSpacing ) );
+	vec_attributes.push_back( std::make_pair( "TransverseBarSpacing", m_TransverseBarSpacing ) );
+	vec_attributes.push_back( std::make_pair( "BendingShapeCode", m_BendingShapeCode ) );
+	shared_ptr<IfcPPAttributeObjectVector> BendingParameters_vec_object( new  IfcPPAttributeObjectVector() );
+	std::copy( m_BendingParameters.begin(), m_BendingParameters.end(), std::back_inserter( BendingParameters_vec_object->m_vec ) );
+	vec_attributes.push_back( std::make_pair( "BendingParameters", BendingParameters_vec_object ) );
+}
+void IfcReinforcingMeshType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcReinforcingMeshType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

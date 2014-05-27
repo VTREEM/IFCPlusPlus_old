@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcMotorConnectionTypeEnum = ENUMERATION OF	(BELTDRIVE	,COUPLING	,DIRECTDRIVE	,USERDEFINED	,NOTDEFINED);
-class IfcMotorConnectionTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcMotorConnectionTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcMotorConnectionTypeEnumEnum

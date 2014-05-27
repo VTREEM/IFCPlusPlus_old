@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcCommunicationsApplianceTypeEnum = ENUMERATION OF	(ANTENNA	,COMPUTER	,FAX	,GATEWAY	,MODEM	,NETWORKAPPLIANCE	,NETWORKBRIDGE	,NETWORKHUB	,PRINTER	,REPEATER	,ROUTER	,SCANNER	,USERDEFINED	,NOTDEFINED);
-class IfcCommunicationsApplianceTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcCommunicationsApplianceTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcCommunicationsApplianceTypeEnumEnum

@@ -19,13 +19,14 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcProductRepresentationSelect = SELECT	(IfcProductDefinitionShape	,IfcRepresentationMap);
-class IfcProductRepresentationSelect : public IfcPPAbstractSelect
+class IfcProductRepresentationSelect : virtual public IfcPPObject
 {
 public:
 	IfcProductRepresentationSelect();
 	~IfcProductRepresentationSelect();
 	virtual const char* classname() const { return "IfcProductRepresentationSelect"; }
-	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const = 0; // abstract class
+		virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const {
+	}; // overwritten, abstract class
 	static shared_ptr<IfcProductRepresentationSelect> createObjectFromStepData( const std::string& arg, const std::map<int,shared_ptr<IfcPPEntity> >& map );
 };
 

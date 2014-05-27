@@ -23,7 +23,7 @@
 #include "IfcTimeOrRatioSelect.h"
 
 // TYPE IfcRatioMeasure = REAL;
-class IfcRatioMeasure : public IfcMeasureValue, public IfcSizeSelect, public IfcTimeOrRatioSelect, public IfcPPType
+class IfcRatioMeasure : public IfcMeasureValue, public IfcSizeSelect, public IfcTimeOrRatioSelect, public IfcPPReal
 {
 public:
 	IfcRatioMeasure();
@@ -32,6 +32,5 @@ public:
 	virtual const char* classname() const { return "IfcRatioMeasure"; }
 	virtual void getStepParameter( std::stringstream& stream, bool is_select_type = false ) const;
 	static shared_ptr<IfcRatioMeasure> createObjectFromStepData( const std::string& arg );
-	double m_value;
 };
 

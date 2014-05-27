@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -26,8 +27,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcRelConnectsWithRealizingElements 
-IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements() { m_entity_enum = IFCRELCONNECTSWITHREALIZINGELEMENTS; }
-IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements( int id ) { m_id = id; m_entity_enum = IFCRELCONNECTSWITHREALIZINGELEMENTS; }
+IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements() {}
+IfcRelConnectsWithRealizingElements::IfcRelConnectsWithRealizingElements( int id ) { m_id = id; }
 IfcRelConnectsWithRealizingElements::~IfcRelConnectsWithRealizingElements() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -84,6 +85,14 @@ void IfcRelConnectsWithRealizingElements::readStepArguments( const std::vector<s
 	readEntityReference( args[6], m_RelatedElement, map );
 	readEntityReferenceList( args[7], m_RealizingElements, map );
 	m_ConnectionType = IfcLabel::createObjectFromStepData( args[8] );
+}
+void IfcRelConnectsWithRealizingElements::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcRelConnectsElements::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "ConnectionType", m_ConnectionType ) );
+}
+void IfcRelConnectsWithRealizingElements::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcRelConnectsWithRealizingElements::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

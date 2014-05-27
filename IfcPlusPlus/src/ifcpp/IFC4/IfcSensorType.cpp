@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -35,8 +36,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcSensorType 
-IfcSensorType::IfcSensorType() { m_entity_enum = IFCSENSORTYPE; }
-IfcSensorType::IfcSensorType( int id ) { m_id = id; m_entity_enum = IFCSENSORTYPE; }
+IfcSensorType::IfcSensorType() {}
+IfcSensorType::IfcSensorType( int id ) { m_id = id; }
 IfcSensorType::~IfcSensorType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -97,6 +98,14 @@ void IfcSensorType::readStepArguments( const std::vector<std::string>& args, con
 	m_Tag = IfcLabel::createObjectFromStepData( args[7] );
 	m_ElementType = IfcLabel::createObjectFromStepData( args[8] );
 	m_PredefinedType = IfcSensorTypeEnum::createObjectFromStepData( args[9] );
+}
+void IfcSensorType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcDistributionControlElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+}
+void IfcSensorType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcSensorType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

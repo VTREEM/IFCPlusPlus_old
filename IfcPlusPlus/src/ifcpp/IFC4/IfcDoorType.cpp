@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -36,8 +37,8 @@
 #include "include/IfcText.h"
 
 // ENTITY IfcDoorType 
-IfcDoorType::IfcDoorType() { m_entity_enum = IFCDOORTYPE; }
-IfcDoorType::IfcDoorType( int id ) { m_id = id; m_entity_enum = IFCDOORTYPE; }
+IfcDoorType::IfcDoorType() {}
+IfcDoorType::IfcDoorType( int id ) { m_id = id; }
 IfcDoorType::~IfcDoorType() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -112,6 +113,17 @@ void IfcDoorType::readStepArguments( const std::vector<std::string>& args, const
 	if( _stricmp( args[11].c_str(), ".F." ) == 0 ) { m_ParameterTakesPrecedence = false; }
 	else if( _stricmp( args[11].c_str(), ".T." ) == 0 ) { m_ParameterTakesPrecedence = true; }
 	m_UserDefinedOperationType = IfcLabel::createObjectFromStepData( args[12] );
+}
+void IfcDoorType::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcBuildingElementType::getAttributes( vec_attributes );
+	vec_attributes.push_back( std::make_pair( "PredefinedType", m_PredefinedType ) );
+	vec_attributes.push_back( std::make_pair( "OperationType", m_OperationType ) );
+	vec_attributes.push_back( std::make_pair( "ParameterTakesPrecedence", shared_ptr<IfcPPAttributeObjectBool>( new  IfcPPAttributeObjectBool( m_ParameterTakesPrecedence ) ) ) );
+	vec_attributes.push_back( std::make_pair( "UserDefinedOperationType", m_UserDefinedOperationType ) );
+}
+void IfcDoorType::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDoorType::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

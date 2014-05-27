@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcProduct.h"
 
 // ENTITY IfcObjectPlacement 
-IfcObjectPlacement::IfcObjectPlacement() { m_entity_enum = IFCOBJECTPLACEMENT; }
-IfcObjectPlacement::IfcObjectPlacement( int id ) { m_id = id; m_entity_enum = IFCOBJECTPLACEMENT; }
+IfcObjectPlacement::IfcObjectPlacement() {}
+IfcObjectPlacement::IfcObjectPlacement( int id ) { m_id = id; }
 IfcObjectPlacement::~IfcObjectPlacement() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -39,6 +40,12 @@ void IfcObjectPlacement::getStepLine( std::stringstream& stream ) const
 }
 void IfcObjectPlacement::getStepParameter( std::stringstream& stream, bool ) const { stream << "#" << m_id; }
 void IfcObjectPlacement::readStepArguments( const std::vector<std::string>& args, const std::map<int,shared_ptr<IfcPPEntity> >& map )
+{
+}
+void IfcObjectPlacement::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+}
+void IfcObjectPlacement::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
 {
 }
 void IfcObjectPlacement::setInverseCounterparts( shared_ptr<IfcPPEntity> )

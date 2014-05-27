@@ -72,7 +72,7 @@ shared_ptr<IfcReinforcingBarRoleEnum> IfcReinforcingBarRoleEnum::createObjectFro
 {
 	// read TYPE
 	if( arg.compare( "$" ) == 0 ) { return shared_ptr<IfcReinforcingBarRoleEnum>(); }
-	shared_ptr<IfcReinforcingBarRoleEnum> type_object( new IfcReinforcingBarRoleEnum() );
+	auto type_object = std::make_shared<IfcReinforcingBarRoleEnum>();
 	if( _stricmp( arg.c_str(), ".MAIN." ) == 0 )
 	{
 		type_object->m_enum = IfcReinforcingBarRoleEnum::ENUM_MAIN;

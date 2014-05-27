@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcCoordinateReferenceSystemSelect.h"
 
 // ENTITY IfcCoordinateOperation 
-IfcCoordinateOperation::IfcCoordinateOperation() { m_entity_enum = IFCCOORDINATEOPERATION; }
-IfcCoordinateOperation::IfcCoordinateOperation( int id ) { m_id = id; m_entity_enum = IFCCOORDINATEOPERATION; }
+IfcCoordinateOperation::IfcCoordinateOperation() {}
+IfcCoordinateOperation::IfcCoordinateOperation( int id ) { m_id = id; }
 IfcCoordinateOperation::~IfcCoordinateOperation() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -52,6 +53,14 @@ void IfcCoordinateOperation::readStepArguments( const std::vector<std::string>& 
 	#endif
 	m_SourceCRS = IfcCoordinateReferenceSystemSelect::createObjectFromStepData( args[0], map );
 	readEntityReference( args[1], m_TargetCRS, map );
+}
+void IfcCoordinateOperation::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	vec_attributes.push_back( std::make_pair( "SourceCRS", m_SourceCRS ) );
+	vec_attributes.push_back( std::make_pair( "TargetCRS", m_TargetCRS ) );
+}
+void IfcCoordinateOperation::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcCoordinateOperation::setInverseCounterparts( shared_ptr<IfcPPEntity> )
 {

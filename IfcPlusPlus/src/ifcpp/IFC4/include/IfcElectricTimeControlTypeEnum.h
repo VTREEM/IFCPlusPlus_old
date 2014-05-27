@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcElectricTimeControlTypeEnum = ENUMERATION OF	(TIMECLOCK	,TIMEDELAY	,RELAY	,USERDEFINED	,NOTDEFINED);
-class IfcElectricTimeControlTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcElectricTimeControlTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcElectricTimeControlTypeEnumEnum

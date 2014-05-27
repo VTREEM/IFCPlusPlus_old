@@ -14,6 +14,7 @@
 #include <limits>
 
 #include "ifcpp/model/IfcPPException.h"
+#include "ifcpp/model/IfcPPAttributeObject.h"
 #include "ifcpp/reader/ReaderUtil.h"
 #include "ifcpp/writer/WriterUtil.h"
 #include "ifcpp/IfcPPEntityEnums.h"
@@ -22,8 +23,8 @@
 #include "include/IfcStyledItem.h"
 
 // ENTITY IfcDirection 
-IfcDirection::IfcDirection() { m_entity_enum = IFCDIRECTION; }
-IfcDirection::IfcDirection( int id ) { m_id = id; m_entity_enum = IFCDIRECTION; }
+IfcDirection::IfcDirection() {}
+IfcDirection::IfcDirection( int id ) { m_id = id; }
 IfcDirection::~IfcDirection() {}
 
 // method setEntity takes over all attributes from another instance of the class
@@ -48,6 +49,13 @@ void IfcDirection::readStepArguments( const std::vector<std::string>& args, cons
 	if( num_args>1 ){ std::cout << "Wrong parameter count for entity IfcDirection, expecting 1, having " << num_args << ". Object id: " << getId() << std::endl; }
 	#endif
 	readDoubleList( args[0], m_DirectionRatios );
+}
+void IfcDirection::getAttributes( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
+	IfcGeometricRepresentationItem::getAttributes( vec_attributes );
+}
+void IfcDirection::getAttributesInverse( std::vector<std::pair<std::string, shared_ptr<IfcPPObject> > >& vec_attributes )
+{
 }
 void IfcDirection::setInverseCounterparts( shared_ptr<IfcPPEntity> ptr_self_entity )
 {

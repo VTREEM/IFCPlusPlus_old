@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcColumnTypeEnum = ENUMERATION OF	(COLUMN	,PILASTER	,USERDEFINED	,NOTDEFINED);
-class IfcColumnTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcColumnTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcColumnTypeEnumEnum

@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcTextPath = ENUMERATION OF	(LEFT	,RIGHT	,UP	,DOWN);
-class IfcTextPath : public IfcPPAbstractEnum, public IfcPPType
+class IfcTextPath : virtual public IfcPPObject
 {
 public:
 	enum IfcTextPathEnum

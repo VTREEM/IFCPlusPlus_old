@@ -20,7 +20,7 @@
 #include "ifcpp/model/IfcPPObject.h"
 
 // TYPE IfcInventoryTypeEnum = ENUMERATION OF	(ASSETINVENTORY	,SPACEINVENTORY	,FURNITUREINVENTORY	,USERDEFINED	,NOTDEFINED);
-class IfcInventoryTypeEnum : public IfcPPAbstractEnum, public IfcPPType
+class IfcInventoryTypeEnum : virtual public IfcPPObject
 {
 public:
 	enum IfcInventoryTypeEnumEnum
