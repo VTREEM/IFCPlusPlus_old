@@ -13,6 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYP
 
 set(IFCPPGEOMETRY_HEADER_FILES 
   src/ifcppgeometry/ConverterOSG.h
+  src/ifcppgeometry/CSG_Adapter.h
   src/ifcppgeometry/CurveConverter.h
   src/ifcppgeometry/FaceConverter.h
   src/ifcppgeometry/GeometryInputData.h
@@ -23,7 +24,6 @@ set(IFCPPGEOMETRY_HEADER_FILES
   src/ifcppgeometry/ProfileCache.h
   src/ifcppgeometry/ProfileConverter.h
   src/ifcppgeometry/ReaderWriterIFC.h
-  src/ifcppgeometry/RecursiveCallException.h
   src/ifcppgeometry/RepresentationConverter.h
   src/ifcppgeometry/SolidModelConverter.h
   src/ifcppgeometry/StylesConverter.h
@@ -32,6 +32,7 @@ set(IFCPPGEOMETRY_HEADER_FILES
 
 set(IFCPPGEOMETRY_SOURCE_FILES 
   src/ifcppgeometry/ConverterOSG.cpp
+  src/ifcppgeometry/CSG_Adapter.cpp
   src/ifcppgeometry/CurveConverter.cpp
   src/ifcppgeometry/FaceConverter.cpp
   src/ifcppgeometry/GeometrySettings.cpp
