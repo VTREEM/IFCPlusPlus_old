@@ -1476,7 +1476,7 @@ void GeomUtils::sweepArea( const std::vector<carve::geom::vector<3> >& curve_poi
 	}
 	if( !item_data_solid->isEmpty() )
 	{
-		std::cout << __FUNC__ ": ItemData should be empty" << std::endl;
+		std::cout << __FUNC__ << ": ItemData should be empty" << std::endl;
 		return;
 	}
 
