@@ -241,8 +241,6 @@ void removeThinCSGRemainings( shared_ptr<carve::mesh::MeshSet<3> >& meshset )
 			vec_faces_same_distance.push_back( face );
 			set_unhandled_faces.insert( face );
 		}
-
-		std::vector<carve::mesh::Vertex<3>*[3] > vec_additional_triangles;
 		
 		//for( size_t i2 = 0; i2 < vec_faces.size(); ++i2 )
 		for( std::map<double, std::vector<carve::mesh::Face<3>* > >::iterator it = map_face_distances.begin(); it != map_face_distances.end(); ++it )
