@@ -116,7 +116,8 @@ int main(int argc, char *argv[])
 
 			if( file_type.compare( "IFC" ) == 0 || file_type.compare( "STP" ) == 0  )
 			{
-				window->getTabReadWrite()->slotLoadIfcFile( QString(arg1.c_str()) );
+				QString path(arg1.c_str());
+				window->getTabReadWrite()->slotLoadIfcFile( path );
 			}
 		}
 	}
