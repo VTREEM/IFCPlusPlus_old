@@ -263,7 +263,7 @@ void TabReadWrite::slotLoadIfcFile( QString& path_in )
 		m_system->getReaderWriterIFC()->setMessageCallBack( this, &TabReadWrite::slotMessageWrapper );
 		m_system->getReaderWriterIFC()->setErrorCallBack( this, &TabReadWrite::slotErrorWrapper );
 
-		std::string path_str = path_in.toLocal8Bit();
+		std::string path_str = path_in.toLocal8Bit().constData();
 		cmd_load->setFilePath( path_str );
 		m_system->getCommandManager()->executeCommand( cmd_load );
 	}
