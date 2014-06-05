@@ -675,6 +675,7 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 							if( *(stream_pos+2) == '\\' )
 							{
 								wchar_t wc = Hex2Wchar(*(stream_pos+3), *(stream_pos+4));
+#ifdef _WIN32
 								char char_ascii = wctob(wc);
 										
 								if( char_ascii < 0)
@@ -689,7 +690,10 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 								{
 									arg_str_new += char_ascii;
 								}
-
+#else
+								unsigned char char_ascii = wctob(wc);
+								arg_str_new += char_ascii;
+#endif
 								stream_pos += 4;
 								continue;
 							}
@@ -714,6 +718,7 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 									do
 									{
 										wchar_t wc = Hex4Wchar(*(stream_pos), *(stream_pos+1), *(stream_pos+2), *(stream_pos+3));
+#ifdef _WIN32
 										char char_ascii = wctob(wc);
 
 										if( char_ascii < 0 )
@@ -728,6 +733,10 @@ void decodeArgumentStrings( std::vector<std::string>& entity_arguments )
 										{
 											arg_str_new+= char_ascii;
 										}
+#else
+										unsigned char char_ascii = wctob(wc);
+										arg_str_new+= char_ascii;
+#endif
 										stream_pos += 4;
 
 									} while (( *stream_pos != '\0' ) && ( *stream_pos != '\\' ));
@@ -1132,7 +1141,7 @@ void readInlineTypeOrEntity( const std::string& arg, shared_ptr<IfcPPObject>& re
 	}
 
 	IfcPPEntityEnum entity_enum = findEntityEnumForString( keyword );
-	if( entity_enum != IfcPPEntityEnum::IFC_ENTITY_UNDEFINED )
+	if( entity_enum != IFC_ENTITY_UNDEFINED )
 	{
 		shared_ptr<IfcPPEntity> entity_instance( createIfcPPEntity( entity_enum ) );
 		if( entity_instance )
@@ -1158,7 +1167,7 @@ void readInlineTypeOrEntity( const std::string& keyword, const std::string& inli
 	}
 
 	IfcPPTypeEnum type_enum = findTypeEnumForString( keyword );
-	if( type_enum != IfcPPTypeEnum::IFC_TYPE_UNDEFINED )
+	if( type_enum != IFC_TYPE_UNDEFINED )
 	{
 		shared_ptr<IfcPPObject> type_instance = createIfcPPType( type_enum, inline_arg, map_entities );
 		if( type_instance )
