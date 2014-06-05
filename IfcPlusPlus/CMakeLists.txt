@@ -44,6 +44,7 @@ set(IFCPP_HEADER_FILES
   src/ifcpp/IfcPPTypeMap.h
   src/ifcpp/IfcPPTypes.h
   src/ifcpp/guid/CreateGuid_64.h
+  src/ifcpp/model/IfcPPAttributeObject.h
   src/ifcpp/model/IfcPPException.h
   src/ifcpp/model/IfcPPModel.h
   src/ifcpp/model/IfcPPObject.h
@@ -70,6 +71,7 @@ set(IFCPP_SOURCE_FILES
   src/ifcpp/IfcPPEntityBroker.cpp
   src/ifcpp/IfcPPTypeBroker.cpp
   src/ifcpp/guid/CreateGuid_64.cpp
+  src/ifcpp/model/IfcPPAttributeObject.cpp
   src/ifcpp/model/IfcPPException.cpp
   src/ifcpp/model/IfcPPModel.cpp
   src/ifcpp/model/IfcPPObject.cpp
