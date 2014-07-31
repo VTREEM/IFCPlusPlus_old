@@ -1,4 +1,5 @@
-This is fork from [IFCPlusPlus](https://code.google.com/p/ifcplusplus/), tweaked to compile with Clang using the CMake build system.  
+This is fork from [IFCPlusPlus](https://code.google.com/p/ifcplusplus/), "First wave" (commits up to the repository mysterious reset which happened in 2014-06-01).  
+The main changes are meant to make it compile with Clang using the CMake build system.  
 
 IFCPlusPlus requires Carve, Boost, and OpenSceneGraph.  
 Carve is included with this repository but compiling against the [official repository](https://github.com/VTREEM/Carve) is preferred.  
